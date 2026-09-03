@@ -10,4 +10,8 @@ rules/*.txt
 # Les pages de regles ingerees SONT versionnees : le site publie sur GitHub
 # Pages est construit depuis le depot, il doit donc les contenir. Elles sont
 # regenerables a tout moment par `npm run ingest`.
+
+# Aperçus produits par `npm run extract` : intermédiaires de travail.
+.extract/
+
 tsconfig.tsbuildinfo

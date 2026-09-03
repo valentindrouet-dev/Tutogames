@@ -94,8 +94,45 @@ de recouper avec le livret.
 
 ### Étape 5 — Découper les visuels
 
-Lancez l'application, bouton **Studio de découpe** en bas de l'accueil.
-Naviguez jusqu'à la page, tracez un rectangle au doigt ou à la souris, copiez le
+Deux voies, à utiliser dans cet ordre.
+
+**a) Extraction automatique — à faire en premier.**
+
+```bash
+npm run extract -- rules/mon-jeu.pdf mon-jeu
+```
+
+Le script produit des rectangles de découpe candidats dans `.extract/mon-jeu/`,
+par deux méthodes complémentaires :
+
+- **Images intégrées.** Il lit la liste d'opérateurs de chaque page pour
+  retrouver les bitmaps (`paintImageXObject`) et la matrice qui les place. Les
+  rendus 3D de matériel d'un livret de règles sont presque toujours des images
+  distinctes : on obtient donc le rectangle *exact* de chaque composant, au
+  pixel près. Ces candidats sont marqués `"kind": "image"`.
+- **Régions d'encre.** Pour les illustrations vectorielles (schémas, cartes
+  d'exemple, plateau annoté), aucune image n'existe dans le PDF. Le script rend
+  alors la page et isole les amas de pixels non blancs séparés par des
+  gouttières de blanc. Ces candidats sont marqués `"kind": "region"`.
+
+Chaque candidat vient avec un aperçu PNG. On ouvre le dossier, on identifie le
+composant, et on copie le champ `crop` correspondant dans le tutoriel — il est
+déjà au bon format.
+
+Options utiles :
+
+| Option | Effet |
+|---|---|
+| `--pages 2-3,9,24-26` | N'analyse que ces pages du fichier. Le matériel est en général sur 2 ou 3 pages : ciblez-les. |
+| `--min-size 0.05` | Ignore les candidats plus petits que 5 % de la page (puces, icônes de texte). |
+| `--no-regions` | N'extrait que les images intégrées, sans analyse de pixels. |
+| `--dpi 200` | Analyse plus fine, aperçus plus nets. |
+
+**b) Studio de découpe — pour le reste.**
+
+Ce que l'extraction n'a pas isolé proprement se trace à la main : lancez
+l'application, bouton **Studio de découpe** en bas de l'accueil. Naviguez
+jusqu'à la page, tracez un rectangle au doigt ou à la souris, copiez le
 littéral et collez-le dans le tutoriel.
 
 La découpe se dégrade proprement, en trois niveaux :
@@ -263,6 +300,11 @@ npm run build        # typecheck + build de production
 npm run dev          # relecture à l'écran
 ```
 
+Le site est publié automatiquement par `.github/workflows/deploy.yml` à chaque
+push sur la branche par défaut. Ce workflow publie **uniquement `dist/`** : la
+racine du dépôt ne doit jamais être servie telle quelle, son `index.html`
+pointe vers `/src/main.tsx` et donnerait une page blanche.
+
 - [ ] Le tutoriel se déroule du début à la fin sans étape vide.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.
 - [ ] Aucun texte ne répète le libellé d'un bouton.
@@ -289,3 +331,4 @@ créditer la source, et il est affiché au joueur dans la fiche du jeu.
 | Date | Version app | Modification |
 |---|---|---|
 | 2026-09-03 | v0.01 | Création du guide, en même temps que le tutoriel Nemesis. |
+| 2026-09-03 | v0.02 | Ajout de `npm run extract` (images intégrées + régions d'encre) en amont du Studio, et de la section « Publication ». |

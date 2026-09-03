@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.01** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.02** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -49,10 +49,16 @@ Les pages de règles ne sont pas dans le dépôt : chacun ingère son propre PDF
 
 ```bash
 cp mon-jeu.pdf rules/
-npm run ingest -- rules/mon-jeu.pdf nemesis
+npm run ingest  -- rules/mon-jeu.pdf nemesis   # pages -> images
+npm run extract -- rules/mon-jeu.pdf nemesis   # découpes candidates
 ```
 
-Sans cette étape, le tutoriel reste entièrement jouable : les visuels sont
+`ingest` rend chaque page ; `extract` retrouve les visuels de chaque composant
+— d'abord les images bitmap intégrées au PDF, avec leur rectangle exact, puis
+les illustrations vectorielles par détection des régions d'encre. Il produit
+des rectangles normalisés directement collables dans le tutoriel.
+
+Sans ces étapes, le tutoriel reste entièrement jouable : les visuels sont
 remplacés par des pictogrammes. Voir [GUIDE_CREATION_TUTO.md](GUIDE_CREATION_TUTO.md).
 
 ## Ajouter un jeu
@@ -82,7 +88,8 @@ version.json    source unique du numéro de version
 | `npm run dev` | Serveur de développement |
 | `npm run build` | Typecheck puis build de production dans `dist/` |
 | `npm run preview` | Sert le build de production |
-| `npm run ingest -- <pdf> <id>` | Ingère un PDF de règles |
+| `npm run ingest -- <pdf> <id>` | Rend les pages d'un PDF de règles |
+| `npm run extract -- <pdf> <id>` | Extrait les découpes candidates du PDF |
 
 ## Crédits
 

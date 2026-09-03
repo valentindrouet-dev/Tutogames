@@ -16,6 +16,29 @@ comme complète.
 
 ---
 
+## v0.02 — 2026-09-03
+
+### Corrigé
+
+- **Page blanche sur GitHub Pages.** Pages servait la racine du dépôt, donc
+  l'`index.html` de développement dont le script pointe vers `/src/main.tsx` :
+  le navigateur ne sait pas exécuter du TypeScript, la page restait vide sans
+  erreur visible. Un workflow construit désormais `dist/` et publie ce seul
+  dossier. Les réglages Pages du dépôt doivent rester sur « GitHub Actions ».
+- Les pages de règles ingérées sont maintenant versionnées : le site étant
+  construit depuis le dépôt, il doit les contenir pour afficher les visuels.
+
+### Ajouté
+
+- `npm run extract` : extraction des visuels d'un PDF de règles, par deux
+  méthodes complémentaires. Les images bitmap intégrées sont retrouvées via la
+  liste d'opérateurs et leur matrice de placement, ce qui donne le rectangle
+  exact de chaque composant ; les illustrations vectorielles sont isolées par
+  détection des régions d'encre. Les deux produisent des rectangles normalisés
+  collables tels quels dans un tutoriel.
+
+---
+
 ## v0.01 — 2026-09-03
 
 Première version.
