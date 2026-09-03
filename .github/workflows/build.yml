@@ -1,0 +1,55 @@
+# Construit le site et le commite à la racine du dépôt.
+#
+# GitHub Pages est réglé sur « Deploy from a branch » : il publie la racine
+# de la branche telle quelle. Ce workflow garantit que cette racine contient
+# toujours le dernier build — index.html et assets/ — sans qu'on ait à lancer
+# `npm run build` à la main avant chaque push.
+#
+# Le commit du bot porte [skip ci] et ne touche que index.html et assets/,
+# donc il ne relance pas ce workflow. Pages, lui, republie à chaque commit.
+
+name: Construire le site
+
+on:
+  push:
+    branches: [claude/board-game-tutorial-app-di0kt0]
+    paths-ignore:
+      - 'index.html'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Construire
+        run: npm run build
+
+      - name: Commiter le build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A index.html assets
+          if git diff --cached --quiet; then
+            echo "Le build est déjà à jour, rien à commiter."
+            exit 0
+          fi
+          git commit -m "Construire le site [skip ci]"
+          git push

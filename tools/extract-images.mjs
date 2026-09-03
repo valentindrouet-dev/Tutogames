@@ -20,7 +20,7 @@
  * directement collables dans le champ `crop` d'un tutoriel. Aucun changement
  * du moteur n'est nécessaire.
  *
- * Sorties, hors de public/ pour ne pas alourdir le site publié :
+ * Sorties, hors du site publié (dossier de travail ignoré par git) :
  *   .extract/<id>/candidates.json          rectangles + métadonnées
  *   .extract/<id>/p03-img02.png            aperçu de chaque candidat
  */

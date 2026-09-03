@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import type { Tutorial } from './engine/types'
 import { TUTORIALS } from './games'
 import { Home } from './ui/Home'
 import { Runner } from './ui/Runner'
-import { Studio } from './ui/Studio'
+
+// Le Studio ne sert qu'à la création de contenu : il sort du bundle
+// principal et ne se charge que si on l'ouvre.
+const Studio = lazy(() => import('./ui/Studio').then((m) => ({ default: m.Studio })))
 
 type Screen =
   | { view: 'home' }
@@ -24,7 +27,11 @@ export default function App() {
         />
       )
     case 'studio':
-      return <Studio tutorials={TUTORIALS} onExit={() => setScreen({ view: 'home' })} />
+      return (
+        <Suspense fallback={<div className="app" />}>
+          <Studio tutorials={TUTORIALS} onExit={() => setScreen({ view: 'home' })} />
+        </Suspense>
+      )
     default:
       return (
         <Home

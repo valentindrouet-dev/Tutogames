@@ -16,6 +16,36 @@ comme complète.
 
 ---
 
+## v0.05 — 2026-09-03
+
+### Corrigé
+
+- **Publication depuis la branche, sans écran blanc.** GitHub Pages reste en
+  « Deploy from a branch » et sert la racine du dépôt ; la racine est
+  désormais le site construit. `index.html` et `assets/` sont générés par
+  `npm run build` et versionnés, les statiques (`games/`, icônes, manifeste,
+  service worker) vivent à la racine, l'entrée de développement est dans
+  `app/`. Un `.nojekyll` désactive le traitement Jekyll. Plus aucun réglage à
+  changer côté GitHub, et plus de course entre deux publieurs.
+- Le workflow `build.yml` reconstruit et commite `index.html` + `assets/` à
+  chaque push : le site suit les sources sans build manuel.
+
+### Optimisé
+
+- **Images.** Pages ingérées en WebP 200 dpi : 15 Mo au lieu de 25 Mo en
+  JPEG, plus nettes. Surtout, `npm run crops` pré-découpe les 43 visuels
+  référencés par le tutoriel Nemesis (1,1 Mo au total) : une étape charge
+  désormais ~40 Ko d'images au lieu d'une page entière de ~1 Mo.
+- **Connexions.** Les visuels de l'étape suivante sont préchargés pendant la
+  lecture de l'étape courante. Le service worker sépare un cache de coque,
+  purgé à chaque version, d'un cache média durable pour `games/` : une mise à
+  jour de l'app ne fait plus retélécharger les règles sur la tablette. Le
+  manifeste `pages.json` est toujours pris sur le réseau quand il est là.
+- **Bundle.** Le Studio de découpe est chargé à la demande (chunk séparé de
+  4,5 Ko) ; le bundle principal ne le contient plus.
+
+---
+
 ## v0.04 — 2026-09-03
 
 ### Corrigé

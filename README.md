@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.04** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.05** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -23,27 +23,23 @@ npm run dev
 
 ## Publication
 
-Le site est publié sur GitHub Pages par
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), à chaque push
-sur la branche par défaut.
+GitHub Pages est réglé sur **Deploy from a branch** et publie la **racine du
+dépôt** telle quelle. La racine *est* donc le site :
 
-Le workflow construit `dist/` avec Vite et publie **uniquement ce dossier**.
+```
+index.html, assets/        générés par `npm run build`, versionnés
+games/                     pages de règles et découpes, versionnées
+icon-*.png, manifest.webmanifest, sw.js, .nojekyll
+app/index.html             entrée de développement (source du build)
+```
 
-> **Réglage obligatoire, une seule fois.**
-> Dans **Settings › Pages** du dépôt, **Source** doit être sur
-> **GitHub Actions**, et non sur *Deploy from a branch*.
->
-> Tant que la source reste sur une branche, GitHub lance en parallèle son
-> propre publieur Jekyll (`pages build and deployment`), qui publie la
-> **racine du dépôt**. Les deux se courent après, et c'est le dernier arrivé
-> qui gagne — souvent Jekyll, à quelques secondes près. Or la racine contient
-> l'`index.html` de développement, dont le script pointe vers
-> `/src/main.tsx` : le navigateur ne sait pas exécuter du TypeScript, donc la
-> page reste blanche.
->
-> Ce cas n'est plus silencieux : servie telle quelle, la racine affiche
-> maintenant un message qui nomme la cause et le correctif. Si vous voyez
-> « SOURCE NON CONSTRUITE » à l'écran, c'est ce réglage qu'il faut changer.
+Le workflow [`.github/workflows/build.yml`](.github/workflows/build.yml)
+reconstruit `index.html` et `assets/` à chaque push et les commite s'ils ont
+changé — vous n'avez donc pas à lancer le build avant de pousser. Ce commit du
+bot arrive quelques secondes après le vôtre : faites un `git pull` avant de
+pousser la fois suivante.
+
+`npm run build` reste utilisable en local ; il écrit directement à la racine.
 
 ## Installer sur l'iPad
 
@@ -57,18 +53,18 @@ fonctionne hors ligne. La progression et le chronomètre restent sur la tablette
 
 ## Ajouter les visuels des règles
 
-Les pages de règles ne sont pas dans le dépôt : chacun ingère son propre PDF.
-
 ```bash
 cp mon-jeu.pdf rules/
-npm run ingest  -- rules/mon-jeu.pdf nemesis   # pages -> images
-npm run extract -- rules/mon-jeu.pdf nemesis   # découpes candidates
+npm run ingest  -- rules/mon-jeu.pdf mon-jeu   # pages -> games/mon-jeu/pages/*.webp
+npm run extract -- rules/mon-jeu.pdf mon-jeu   # découpes candidates, à coller dans le tutoriel
+npm run crops                                   # pré-découpe ce que le tutoriel référence
 ```
 
-`ingest` rend chaque page ; `extract` retrouve les visuels de chaque composant
-— d'abord les images bitmap intégrées au PDF, avec leur rectangle exact, puis
-les illustrations vectorielles par détection des régions d'encre. Il produit
-des rectangles normalisés directement collables dans le tutoriel.
+`ingest` rend chaque page en WebP ; `extract` retrouve les visuels de chaque
+composant — d'abord les images bitmap intégrées au PDF, avec leur rectangle
+exact, puis les illustrations vectorielles par détection des régions d'encre ;
+`crops` produit un petit fichier par découpe référencée, que l'application
+charge à la place de la page entière (quelques dizaines de Ko au lieu de ~1 Mo).
 
 Sans ces étapes, le tutoriel reste entièrement jouable : les visuels sont
 remplacés par des pictogrammes. Voir [GUIDE_CREATION_TUTO.md](GUIDE_CREATION_TUTO.md).
@@ -89,7 +85,7 @@ src/engine/     modèle de données, navigation, sauvegarde, accès aux pages
 src/ui/         écrans et composants — génériques
 src/games/      un fichier par jeu : tout le contenu
 tools/ingest.mjs  PDF de règles → images de pages + manifeste
-public/games/   pages ingérées (hors dépôt)
+games/          pages de règles et découpes pré-calculées
 version.json    source unique du numéro de version
 ```
 
@@ -98,10 +94,11 @@ version.json    source unique du numéro de version
 | Commande | Effet |
 |---|---|
 | `npm run dev` | Serveur de développement |
-| `npm run build` | Typecheck puis build de production dans `dist/` |
+| `npm run build` | Typecheck puis build à la racine du dépôt |
 | `npm run preview` | Sert le build de production |
 | `npm run ingest -- <pdf> <id>` | Rend les pages d'un PDF de règles |
 | `npm run extract -- <pdf> <id>` | Extrait les découpes candidates du PDF |
+| `npm run crops` | Pré-découpe les visuels référencés par les tutoriels |
 
 ## Crédits
 

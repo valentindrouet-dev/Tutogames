@@ -1,17 +1,17 @@
 node_modules/
-dist/
 .DS_Store
 *.log
+tsconfig.tsbuildinfo
 
-# PDF de regles : propriete des editeurs, chacun fournit le sien.
+# Ancien dossier de build : le site est maintenant construit à la racine
+# (index.html et assets/ sont versionnés, c'est la racine qui est publiée).
+dist/
+
+# PDF de règles : propriété des éditeurs. Le PDF Nemesis a été ajouté
+# volontairement par le propriétaire du dépôt ; les autres restent locaux.
 rules/*.pdf
+!rules/Nemesis\ -\ Regles.pdf
 rules/*.txt
 
-# Les pages de regles ingerees SONT versionnees : le site publie sur GitHub
-# Pages est construit depuis le depot, il doit donc les contenir. Elles sont
-# regenerables a tout moment par `npm run ingest`.
-
-# Aperçus produits par `npm run extract` : intermédiaires de travail.
+# Aperçus et bundle temporaire produits par `npm run extract` / `npm run crops`.
 .extract/
-
-tsconfig.tsbuildinfo

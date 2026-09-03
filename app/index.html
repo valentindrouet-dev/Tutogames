@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>TutoGames</title>
+    <meta name="description" content="Tutoriels interactifs de jeux de société, guidés pas à pas depuis les règles officielles." />
+    <meta name="theme-color" content="#0b0e14" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TutoGames" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <!--
+      Entrée de développement et de build. Vite a pour racine le dossier app/,
+      d'où le chemin relatif vers les sources. Le build écrit index.html et
+      assets/ à la racine du dépôt, qui est le site publié.
+    -->
+    <script type="module" src="../src/main.tsx"></script>
+  </body>
+</html>

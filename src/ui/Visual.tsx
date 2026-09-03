@@ -1,27 +1,29 @@
 /**
  * Affichage d'une découpe de page de règles.
  *
- * La page complète sert d'image de fond ; `background-size` et
- * `background-position` cadrent le rectangle demande. Un seul fichier par
- * page couvre donc toutes ses découpes, sans pre-découpage ni requête
- * supplémentaire.
+ * Deux rendus possibles :
  *
- * Formule de cadrage, pour un rectangle normalisé (x, y, w, h) :
- *   background-size     : 100/w % sur X, 100/h % sur Y
- *     -> l'image est agrandie pour que la découpe occupe toute la boîte.
- *   background-position : 100*x/(1-w) % sur X, 100*y/(1-h) % sur Y
- *     -> déduit de la définition CSS du positionnement en pourcentage,
- *        offset = (boîte - image) * p, qu'on résout pour offset = -x * image.
+ *  - Pré-découpé : le fichier `crops/<clé>.webp` existe, on l'affiche dans un
+ *    <img>. C'est le cas normal après `npm run crops` — quelques dizaines de
+ *    Ko, chargement paresseux, décodage hors du fil principal.
+ *
+ *  - Cadré en CSS : la page complète sert d'image de fond, cadrée par
+ *    `background-size` / `background-position`. Universel, mais ~1 Mo par
+ *    page. Formule, pour un rectangle normalisé (x, y, w, h) :
+ *      background-size     : 100/w % sur X, 100/h % sur Y
+ *      background-position : 100*x/(1-w) % sur X, 100*y/(1-h) % sur Y
+ *    (déduit de la définition CSS du positionnement en pourcentage,
+ *    offset = (boîte - image) * p, qu'on résout pour offset = -x * image).
  */
 
 import type { CSSProperties } from 'react'
 import { rectOf, type Crop, type Glyph } from '../engine/types'
-import { pageUrl, useManifest, type PageManifest } from '../engine/assets'
+import { pageUrl, precut, useManifest, type PageManifest } from '../engine/assets'
 import { GlyphIcon } from './icons'
 
 /** Position en pourcentage cadrant le bord `start` de la découpe. */
 function axisPosition(start: number, size: number): number {
-  // Une découpe pleine largeur (ou pleine hauteur) n'à rien à decaler.
+  // Une découpe pleine largeur (ou pleine hauteur) n'a rien à décaler.
   if (size >= 1) return 0
   return (100 * start) / (1 - size)
 }
@@ -33,8 +35,8 @@ interface Framed {
 }
 
 /**
- * Traduit une découpe en styles CSS, ou null si la page n'à pas été ingérée.
- * `pageOffset` convertit le numéro imprimé sur le livret en index de fichier.
+ * Traduit une découpe en styles CSS de cadrage, ou null si la page n'a pas
+ * été ingérée. `pageOffset` convertit le numéro imprimé en index de fichier.
  */
 export function frame(crop: Crop, m: PageManifest, pageOffset: number): Framed | null {
   const page = m.pages.find((p) => p.n === crop.page + pageOffset)
@@ -60,7 +62,7 @@ interface Props {
   pageOffset: number
   crop?: Crop
   glyph: Glyph
-  /** Nom affiche par le visuel de secours. */
+  /** Nom affiché par le visuel de secours. */
   name: string
   tint?: string
 }
@@ -69,6 +71,20 @@ export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) 
   const manifest = useManifest(assetId)
 
   if (crop && manifest) {
+    const pre = precut(manifest, crop, pageOffset)
+    if (pre) {
+      return (
+        <img
+          className="crop-img"
+          src={pre.url}
+          width={pre.w}
+          height={pre.h}
+          alt={name}
+          decoding="async"
+        />
+      )
+    }
+
     const f = frame(crop, manifest, pageOffset)
     if (f) {
       return (
@@ -97,9 +113,14 @@ export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) 
 export function Thumb({ assetId, pageOffset, crop, glyph, name }: Props) {
   const manifest = useManifest(assetId)
 
-  // Une page entière réduite à 46 px est illisible : la vignette garde le
-  // pictogramme tant que la découpe n'à pas été précisée dans le Studio.
   if (crop && manifest) {
+    const pre = precut(manifest, crop, pageOffset)
+    if (pre) {
+      return <img className="thumb-img" src={pre.url} width={pre.w} height={pre.h} alt={name} loading="lazy" decoding="async" />
+    }
+
+    // Une page entière réduite à 46 px est illisible : la vignette garde le
+    // pictogramme tant que la découpe n'a pas de rectangle.
     const f = frame(crop, manifest, pageOffset)
     if (f && !f.wholePage) {
       return (

@@ -5,12 +5,16 @@
  * l'application utilisé pour cadrer les découpes déclarées dans les
  * tutoriels (src/games/*.ts).
  *
- *   npm run ingest -- rules/nemesis-regles-fr.pdf nemesis
- *   npm run ingest -- <chemin-du-pdf> <assetId> [--dpi 150] [--jpeg]
+ *   npm run ingest -- "rules/Nemesis - Regles.pdf" nemesis
+ *   npm run ingest -- <chemin-du-pdf> <assetId> [--dpi 200] [--jpeg|--png]
  *
- * Produit :
- *   public/games/<assetId>/pages.json
- *   public/games/<assetId>/pages/p001.png ...
+ * Produit, à la racine du dépôt (c'est la racine qui est publiée) :
+ *   games/<assetId>/pages.json
+ *   games/<assetId>/pages/p01.webp ...
+ *
+ * WebP par défaut : à qualité égale, un tiers plus léger que le JPEG, et
+ * lisible par Safari iPadOS depuis 2020. Après l'ingestion, lancez
+ * `npm run crops` pour pré-découper les visuels référencés par le tutoriel.
  *
  * Le manifeste contient la taille réelle de chaque page : c'est ce qui
  * permet à l'application de respecter le rapport de forme des découpes
@@ -46,16 +50,17 @@ if (!pdfArg) {
   console.error(`
 Usage : npm run ingest -- <chemin-du-pdf> [assetId] [options]
 
-  assetId   Dossier de sortie sous public/games/. Par défaut, le nom du
-            fichier PDF sans extension.
+  assetId   Dossier de sortie sous games/. Par défaut, le nom du fichier
+            PDF sans extension.
 
 Options :
-  --dpi <n>   Résolution de rendu. Défaut 150. 200+ pour des gros plans nets.
-  --jpeg      Sortie en JPEG (fichiers plus légers) au lieu de PNG.
-  --quality   Qualité JPEG de 1 à 100. Défaut 82.
+  --dpi <n>   Résolution de rendu. Défaut 200.
+  --jpeg      Sortie en JPEG au lieu de WebP.
+  --png       Sortie en PNG sans perte (lourd, pour vérification).
+  --quality   Qualité WebP/JPEG de 1 à 100. Défaut 80.
 
 Exemple :
-  npm run ingest -- rules/nemesis-regles-fr.pdf nemesis --dpi 180 --jpeg
+  npm run ingest -- "rules/Nemesis - Regles.pdf" nemesis
 `)
   process.exit(1)
 }
@@ -67,9 +72,10 @@ if (!existsSync(pdfPath)) {
 }
 
 const assetId = assetArg || basename(pdfPath).replace(/\.pdf$/i, '').toLowerCase().replace(/[^a-z0-9-]+/g, '-')
-const dpi = Number(flags.get('dpi') ?? 150)
-const jpeg = flags.has('jpeg')
-const quality = Number(flags.get('quality') ?? 82)
+const dpi = Number(flags.get('dpi') ?? 200)
+const format = flags.has('png') ? 'png' : flags.has('jpeg') ? 'jpeg' : 'webp'
+const ext = { png: 'png', jpeg: 'jpg', webp: 'webp' }[format]
+const quality = Number(flags.get('quality') ?? 80)
 
 // pdf.js rend à 72 dpi par défaut : l'échelle est le rapport à la cible.
 const scale = dpi / 72
@@ -79,7 +85,7 @@ const scale = dpi / 72
 // Le build « legacy » de pdf.js est celui qui fonctionne sous Node sans DOM.
 const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
 
-const outDir = resolve(ROOT, 'public/games', assetId)
+const outDir = resolve(ROOT, 'games', assetId)
 const pagesDir = resolve(outDir, 'pages')
 rmSync(pagesDir, { recursive: true, force: true })
 mkdirSync(pagesDir, { recursive: true })
@@ -113,8 +119,8 @@ for (let n = 1; n <= doc.numPages; n++) {
 
   await page.render({ canvasContext: ctx, viewport, canvas }).promise
 
-  const file = `p${String(n).padStart(pad, '0')}.${jpeg ? 'jpg' : 'png'}`
-  const buffer = jpeg ? await canvas.encode('jpeg', quality) : await canvas.encode('png')
+  const file = `p${String(n).padStart(pad, '0')}.${ext}`
+  const buffer = format === 'png' ? await canvas.encode('png') : await canvas.encode(format, quality)
   writeFileSync(resolve(pagesDir, file), buffer)
 
   pages.push({ n, w, h, file })
@@ -127,18 +133,22 @@ const manifest = {
   assetId,
   pdf: basename(pdfPath),
   dpi,
+  format,
   generatedAt: new Date().toISOString(),
   pages,
 }
 
 writeFileSync(resolve(outDir, 'pages.json'), JSON.stringify(manifest, null, 2))
 
-console.log(`\nEcrit dans public/games/${assetId}/`)
+console.log(`\nÉcrit dans games/${assetId}/`)
 console.log(`  pages.json + ${pages.length} images`)
 console.log(`
 Étapes suivantes :
   1. Vérifiez source.pageOffset dans src/games/<jeu>.ts.
      C'est l'écart entre le numéro imprimé sur le livret et l'index de page
      du fichier. Si la page « 2 » du livret est la 3e page du PDF, mettez 1.
-  2. Ouvrez l'application, bouton « Studio », pour tracer les découpes.
+  2. npm run extract -- <pdf> ${assetId}   pour trouver les découpes,
+     puis le Studio de l'application pour celles qui restent.
+  3. npm run crops                          pour pré-découper les visuels
+     référencés par le tutoriel (fichiers légers, chargement rapide).
      Voir GUIDE_CREATION_TUTO.md.`)

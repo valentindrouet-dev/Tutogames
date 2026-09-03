@@ -163,7 +163,7 @@ export interface Tutorial {
   source: {
     /** Nom du fichier PDF ingéré. */
     pdf: string
-    /** Identifiant du dossier d'assets : public/games/<assetId>/pages/ */
+    /** Identifiant du dossier d'assets : games/<assetId>/pages/ */
     assetId: string
     /**
      * Écart entre le numéro imprimé sur la page et son index dans le PDF.

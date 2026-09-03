@@ -15,6 +15,7 @@ import {
   clearSave, elapsedOf, formatClock, loadSave, newSave, writeSave, type Save,
 } from '../engine/progress'
 import { Thumb, Visual } from './Visual'
+import { useManifest, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
@@ -58,6 +59,23 @@ export function Runner({ tutorial, restart, onExit }: Props) {
   const total = useMemo(() => totalSteps(tutorial), [tutorial])
   const position = indexOf(tutorial, save.chapter, save.step)
   const parts = useMemo(() => (step ? componentsOf(tutorial, step) : []), [tutorial, step])
+
+  // Précharge les visuels de l'étape suivante pendant que le joueur lit
+  // celle-ci : au tap sur « Fait », l'image est déjà là.
+  const manifest = useManifest(tutorial.source.assetId)
+  useEffect(() => {
+    if (!manifest) return
+    const target = next(tutorial, save.chapter, save.step)
+    if (!target) return
+    const s = tutorial.chapters[target.chapter]?.steps[target.step]
+    if (!s) return
+    const off = tutorial.source.pageOffset
+    const nextParts = componentsOf(tutorial, s)
+    warm([
+      visualUrl(manifest, s.crop ?? nextParts[0]?.crop, off),
+      ...nextParts.map((c) => visualUrl(manifest, c.crop, off)),
+    ])
+  }, [manifest, tutorial, save.chapter, save.step])
 
   const goNext = useCallback(() => {
     if (!step) return

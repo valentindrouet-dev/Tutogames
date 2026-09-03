@@ -19,7 +19,7 @@ Un tutoriel est **de la donnée**, pas du code.
 src/engine/     moteur générique — ne connaît aucun jeu
 src/ui/         interface générique — ne connaît aucun jeu
 src/games/      un fichier par jeu — tout le contenu est ici
-public/games/   les pages de règles ingérées, une image par page
+games/          les pages de règles ingérées et leurs découpes, à la racine du dépôt
 ```
 
 Ajouter un jeu, c'est ajouter **un fichier** dans `src/games/` et l'inscrire dans
@@ -53,11 +53,12 @@ Déposez le PDF dans `rules/`, puis :
 npm run ingest -- rules/mon-jeu.pdf mon-jeu
 ```
 
-Options : `--dpi 200 --jpeg --quality 84` est le bon réglage par défaut —
-plus net qu'un PNG 150 dpi, pour un poids divisé par trois. Le livret Nemesis
-passe ainsi de 78 Mo à 25 Mo.
+Par défaut : 200 dpi, WebP qualité 80 — net à l'écran, un tiers plus léger
+que le JPEG. Le livret Nemesis (28 pages) pèse ainsi 15 Mo. `--jpeg` ou
+`--png` si nécessaire, `--dpi` et `--quality` pour ajuster.
 
-Produit `public/games/mon-jeu/pages.json` et une image par page. Les coordonnées
+Produit `games/mon-jeu/pages.json` et une image par page, **à la racine du
+dépôt** : c'est la racine qui est publiée par GitHub Pages. Les coordonnées
 de découpe étant **normalisées entre 0 et 1**, on peut ré-ingérer à une autre
 résolution sans retoucher une seule découpe.
 
@@ -66,7 +67,7 @@ résolution sans retoucher une seule découpe.
 Les livrets ont presque toujours une couverture qui décale la numérotation :
 la page « 2 » imprimée est souvent la 3ᵉ page du fichier.
 
-Ouvrez `public/games/mon-jeu/pages/`, trouvez la page portant le numéro 2, et
+Ouvrez `games/mon-jeu/pages/`, trouvez la page portant le numéro 2, et
 renseignez l'écart dans `source.pageOffset`. **Une seule valeur corrige toutes
 les découpes du tutoriel.** Vérifiez dans le Studio : le compteur affiche à la
 fois le numéro du livret et l'index du fichier.
@@ -137,13 +138,28 @@ l'application, bouton **Studio de découpe** en bas de l'accueil. Naviguez
 jusqu'à la page, tracez un rectangle au doigt ou à la souris, copiez le
 littéral et collez-le dans le tutoriel.
 
-La découpe se dégrade proprement, en trois niveaux :
+**c) Pré-découper — une fois les rectangles posés.**
 
-| État | Ce que le joueur voit |
-|---|---|
-| Pas de `crop` | Pictogramme + nom |
-| `crop: { page: 9 }` | La page de règles entière, avec le badge « Règles p.9 » |
-| `crop: { page: 9, x, y, w, h }` | Le gros plan sur l'élément |
+```bash
+npm run crops
+```
+
+Pour chaque `crop` à rectangle du tutoriel, l'outil découpe la zone dans la
+page ingérée et écrit un WebP dans `games/mon-jeu/crops/`, puis liste les
+découpes disponibles dans `pages.json`. L'application charge ce petit fichier
+(quelques dizaines de Ko) au lieu de la page entière (~1 Mo) ; elle retombe
+sur la page si la découpe manque. **À relancer après toute modification d'un
+rectangle**, et après une ré-ingestion. Les découpes orphelines sont
+supprimées automatiquement.
+
+La découpe se dégrade proprement, en quatre niveaux :
+
+| État | Ce que le joueur voit | Chargé |
+|---|---|---|
+| Pas de `crop` | Pictogramme + nom | rien |
+| `crop: { page: 9 }` | La page de règles entière, avec le badge « Règles p.9 » | la page, ~1 Mo |
+| `crop: { page: 9, x, y, w, h }` sans `npm run crops` | Le gros plan, cadré en CSS dans la page | la page, ~1 Mo |
+| `crop: { page: 9, x, y, w, h }` après `npm run crops` | Le gros plan, fichier dédié | ~30 Ko |
 
 **Un tutoriel sans aucune découpe reste entièrement jouable.** Commencez par
 renseigner les numéros de page — c'est déjà utile — et affinez ensuite.
@@ -284,7 +300,7 @@ Deux numéros distincts, à ne pas confondre :
 
 **Application** — `version.json` est la source unique. Format `0.01`, `0.02`…
 La version est affichée sous le titre sur l'accueil et sert de nom de cache au
-service worker (`public/sw.js`), qu'il faut aligner à chaque publication.
+service worker (`sw.js`, à la racine), qu'il faut aligner à chaque publication.
 Chaque changement est consigné dans `CHANGELOG.md`.
 
 **Contenu** — incrémentez `contentVersion` dès que vous modifiez des étapes.
@@ -302,10 +318,10 @@ npm run build        # typecheck + build de production
 npm run dev          # relecture à l'écran
 ```
 
-Le site est publié automatiquement par `.github/workflows/deploy.yml` à chaque
-push sur la branche par défaut. Ce workflow publie **uniquement `dist/`** : la
-racine du dépôt ne doit jamais être servie telle quelle, son `index.html`
-pointe vers `/src/main.tsx` et donnerait une page blanche.
+GitHub Pages publie la **racine du dépôt** (« Deploy from a branch »). Le
+workflow `.github/workflows/build.yml` y reconstruit `index.html` et `assets/`
+à chaque push et les commite : pas de build manuel avant de pousser, mais un
+`git pull` avant le push suivant pour récupérer le commit du bot.
 
 - [ ] Le tutoriel se déroule du début à la fin sans étape vide.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.
@@ -315,16 +331,20 @@ pointe vers `/src/main.tsx` et donnerait une page blanche.
 - [ ] `scope.skipped` est rempli.
 - [ ] Accents et guillemets français vérifiés.
 - [ ] `contentVersion` incrémentée si le contenu a changé.
+- [ ] `npm run crops` relancé si un rectangle a changé.
 - [ ] `CHANGELOG.md` et ce guide mis à jour.
 
 ---
 
 ## 9. Droits sur les visuels
 
-Les pages ingérées sont l'œuvre de l'éditeur. `public/games/` est **exclu du
-dépôt** (voir `.gitignore`) : chacun ingère son propre PDF. Ne redistribuez pas
-les pages de règles sans l'accord de l'éditeur ; `source.credit` doit toujours
-créditer la source, et il est affiché au joueur dans la fiche du jeu.
+Les pages ingérées et leurs découpes sont l'œuvre de l'éditeur. Elles sont
+**versionnées dans `games/`** parce que le site est publié depuis la racine du
+dépôt : sans elles, la tablette n'aurait rien à afficher. Cela signifie qu'un
+dépôt public les rend téléchargeables par n'importe qui. Pour un jeu dont
+l'éditeur n'a pas donné son accord, passez le dépôt en privé (Pages continue
+de fonctionner) ou ne poussez pas les visuels. `source.credit` doit toujours
+créditer la source ; il est affiché au joueur dans la fiche du jeu.
 
 ---
 
@@ -334,4 +354,5 @@ créditer la source, et il est affiché au joueur dans la fiche du jeu.
 |---|---|---|
 | 2026-09-03 | v0.01 | Création du guide, en même temps que le tutoriel Nemesis. |
 | 2026-09-03 | v0.02 | Ajout de `npm run extract` (images intégrées + régions d'encre) en amont du Studio, et de la section « Publication ». |
+| 2026-09-03 | v0.05 | Les visuels vivent dans `games/` à la racine (plus `public/`). Ajout de `npm run crops` (étape 5c) et du niveau « fichier dédié » dans le tableau de dégradation. Publication depuis la branche, build automatique. |
 | 2026-09-03 | v0.03 | Première application réelle sur Nemesis : 36 découpes de matériel et 10 schémas d'exemple. Ingestion recommandée en JPEG 200 dpi. |

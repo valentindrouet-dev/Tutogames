@@ -69,10 +69,10 @@ function draw(size, maskable) {
 }
 
 const targets = [
-  ['public/icon-192.png', 192, false],
-  ['public/icon-512.png', 512, false],
-  ['public/icon-180.png', 180, false],
-  ['public/icon-maskable-512.png', 512, true],
+  ['icon-192.png', 192, false],
+  ['icon-512.png', 512, false],
+  ['icon-180.png', 180, false],
+  ['icon-maskable-512.png', 512, true],
 ]
 
 for (const [rel, size, maskable] of targets) {
