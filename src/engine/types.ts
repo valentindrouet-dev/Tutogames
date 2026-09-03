@@ -197,6 +197,20 @@ export interface Theme {
   titleSpacing?: string
   /** Rayon d'arrondi général : anguleux pour un vaisseau, doux pour un conte. */
   radius?: string
+  /**
+   * Sombre par défaut. `'light'` bascule l'interface en fond clair : les
+   * voiles neutres, les ascenseurs et les teintes d'étape s'inversent, et
+   * la couleur de fond de la page suit le thème jusque dans le rebond de
+   * défilement. Un thème clair doit fournir ses `ok` / `warn` / `danger` :
+   * les valeurs par défaut sont réglées pour un fond sombre.
+   */
+  scheme?: 'light' | 'dark'
+  /** Vert de validation. Défaut réglé pour un fond sombre. */
+  ok?: string
+  /** Jaune d'avertissement. Défaut réglé pour un fond sombre. */
+  warn?: string
+  /** Rouge d'abandon. Défaut réglé pour un fond sombre. */
+  danger?: string
 }
 
 /** Effectifs jouables et leurs particularités. */

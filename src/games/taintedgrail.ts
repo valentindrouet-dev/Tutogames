@@ -37,20 +37,25 @@ export const taintedgrail: Tutorial = {
   },
   minutes: 120,
 
-  // Parchemin et pierre : nuit celte, or des cadrans, rouille du sang.
-  // Titres en capitales serif, angles à peine adoucis.
+  // Le livret lui-même : parchemin vieilli, encre sépia, titres au rouge de
+  // rubrique. Les découpes des règles sont sur ce même fond clair — elles se
+  // posent dans la page au lieu d'y flotter en rectangles lumineux.
   theme: {
-    bg: '#0c1113',
-    bg2: '#141b1e',
-    bg3: '#1d2629',
-    stroke: '#31403f',
-    strokeSoft: '#263133',
-    fg: '#f1e9da',
-    fgDim: '#a89e8c',
-    fgFaint: '#71695c',
-    accent: '#d3a34d',
-    accent2: '#9d3220',
-    accentInk: '#171104',
+    scheme: 'light',
+    bg: '#e7dcc3',
+    bg2: '#f3ebd8',
+    bg3: '#fbf5e7',
+    stroke: '#c0a97f',
+    strokeSoft: '#d6c5a1',
+    fg: '#2b2118',
+    fgDim: '#5e4f3c',
+    fgFaint: '#695c49',
+    accent: '#82190f',
+    accent2: '#a8551a',
+    accentInk: '#fdf6e6',
+    ok: '#3f6b2f',
+    warn: '#8a5a10',
+    danger: '#9d2418',
     titleFont:
       "'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, ui-serif, serif",
     bodyFont: "Georgia, 'Iowan Old Style', 'Times New Roman', ui-serif, serif",

@@ -37,8 +37,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
  */
 const TARGET_PX = 1800
 
-/** Garde-fou : au-delà, une découpe minuscule ferait exploser le rendu. */
-const MAX_SCALE = 44
+/**
+ * Garde-fou. Le rendu ne coûte que la surface de la découpe, pas celle de la
+ * page : une vignette de 4 % de page rendue à 120 tient dans 2700 px de côté.
+ */
+const MAX_SCALE = 120
 
 const QUALITY = 88
 

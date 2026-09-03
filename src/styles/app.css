@@ -45,6 +45,10 @@
   --title-weight: 780;
   --title-spacing: -0.025em;
 
+  /* Voile neutre et assombrissement des teintes : pilotes par le theme. */
+  --veil: rgba(255, 255, 255, 0.09);
+  --tint-pct: 100%;
+
   color-scheme: dark;
 }
 
@@ -140,7 +144,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .btn-icon { min-width: var(--tap); padding: 0 18px; }
 .btn-block { width: 100%; }
 
-.btn-danger { color: var(--danger); border-color: #4a2733; }
+.btn-danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 38%, transparent); }
 
 /* ---------------------------------------------------------------- accueil */
 
@@ -362,9 +366,12 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   display: grid; place-items: center;
   width: 24px; height: 24px; border-radius: 50%;
   font-size: 13px; font-weight: 750;
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--veil);
 }
-.chapter-pill.active .chapter-pill-num { background: rgba(0, 0, 0, 0.22); }
+/* Sur la pastille active, le voile suit l'encre posee sur l'accent. */
+.chapter-pill.active .chapter-pill-num {
+  background: color-mix(in srgb, var(--accent-ink) 20%, transparent);
+}
 
 /* -------------------------------------------------------------- progression */
 
@@ -412,7 +419,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: color-mix(in srgb, var(--kind, var(--accent)) 15%, transparent);
-  color: var(--kind, var(--accent));
+  color: color-mix(in srgb, var(--kind, var(--accent)) var(--tint-pct), #000);
   border: 1px solid color-mix(in srgb, var(--kind, var(--accent)) 32%, transparent);
 }
 .step-kind svg { width: 17px; height: 17px; }
@@ -431,7 +438,8 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   display: flex;
   gap: 14px;
   font-size: 18px;
-  color: #dde4ef;
+  /* Un cran en retrait du titre, sans jamais passer sous le contraste utile. */
+  color: color-mix(in srgb, var(--fg) 88%, var(--bg));
   line-height: 1.4;
 }
 .step-line::before {
@@ -457,7 +465,8 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .callout-warn {
   background: color-mix(in srgb, var(--warn) 11%, transparent);
   border-color: color-mix(in srgb, var(--warn) 34%, transparent);
-  color: #f6e2b4;
+  /* Le texte du piege prend la chaleur de l'avertissement, pas sa clarte. */
+  color: color-mix(in srgb, var(--warn) 28%, var(--fg));
 }
 .callout-warn svg { color: var(--warn); }
 .callout-tip {
@@ -545,7 +554,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--fg-dim);
-  background: rgba(11, 14, 20, 0.86);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
   border: 1px solid var(--stroke);
   pointer-events: none;
 }
@@ -628,6 +637,8 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   font-size: 20px; font-weight: 800;
   text-align: center; line-height: 1.1;
   background: var(--face-tint, var(--accent));
+  /* Les `tint` de faces sont, par convention, des couleurs vives : l'encre
+     du badge est donc toujours sombre. Voir GUIDE_CREATION_TUTO.md. */
   color: #06121b;
 }
 .roll-face-effect { font-size: 17px; line-height: 1.35; }
@@ -925,7 +936,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   place-items: center;
   width: 34px; height: 34px;
   border-radius: 10px;
-  color: var(--kind, var(--accent));
+  color: color-mix(in srgb, var(--kind, var(--accent)) var(--tint-pct), #000);
   background: color-mix(in srgb, var(--kind, var(--accent)) 15%, transparent);
 }
 .jump-icon svg { width: 18px; height: 18px; }

@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.06** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.07** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -18,8 +18,9 @@ identifié par des images découpées dans le PDF des règles officielles.
 Le nombre d'étapes est celui de l'effectif conseillé : le tutoriel demande
 combien vous êtes au démarrage, et adapte son contenu.
 
-Chaque jeu a son habillage — couleurs, polices, arrondis — mais la mise en page
-ne change jamais : un joueur qui a suivi un tutoriel sait déjà lire les autres.
+Chaque jeu a son habillage — couleurs, polices, arrondis, fond clair ou
+sombre — mais la mise en page ne change jamais : un joueur qui a suivi un
+tutoriel sait déjà lire les autres.
 
 ## Démarrer
 

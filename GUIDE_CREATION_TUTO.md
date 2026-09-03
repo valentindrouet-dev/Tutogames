@@ -120,10 +120,12 @@ qu'un joueur qui a suivi un tutoriel sache déjà lire les autres.
 
 ```ts
 theme: {
-  bg: '#0c1113', bg2: '#141b1e', bg3: '#1d2629',
-  stroke: '#31403f', strokeSoft: '#263133',
-  fg: '#f1e9da', fgDim: '#a89e8c', fgFaint: '#71695c',
-  accent: '#d3a34d', accent2: '#9d3220', accentInk: '#171104',
+  scheme: 'light',                       // fond clair ; 'dark' par défaut
+  bg: '#e7dcc3', bg2: '#f3ebd8', bg3: '#fbf5e7',
+  stroke: '#c0a97f', strokeSoft: '#d6c5a1',
+  fg: '#2b2118', fgDim: '#5e4f3c', fgFaint: '#695c49',
+  accent: '#82190f', accent2: '#a8551a', accentInk: '#fdf6e6',
+  ok: '#3f6b2f', warn: '#8a5a10', danger: '#9d2418',
   titleFont: "'Iowan Old Style', Palatino, Georgia, ui-serif, serif",
   bodyFont: "Georgia, 'Times New Roman', ui-serif, serif",
   titleTransform: 'uppercase', titleWeight: 600, titleSpacing: '0.02em',
@@ -133,12 +135,23 @@ theme: {
 
 - **Piles système uniquement.** Aucune police n'est téléchargée : l'application
   doit rester lisible hors ligne, sur la table de jeu.
+- **`scheme: 'light'` bascule l'interface en fond clair.** Il inverse les
+  voiles neutres, assombrit les teintes d'étape, règle `color-scheme` et fait
+  suivre le fond de la page jusque dans le rebond de défilement de l'iPad. Un
+  thème clair **doit** alors fournir ses `ok` / `warn` / `danger` : les valeurs
+  par défaut sont réglées pour un fond sombre et disparaissent sur du papier.
+- **Regardez d'abord les découpes.** Si les pages du livret sont sur fond
+  clair, un thème clair les fait entrer dans la page au lieu de les y faire
+  flotter en rectangles lumineux. C'est la vraie raison du parchemin de
+  *Tainted Grail*, pas le décor.
 - **Contraste avant cachet.** Le texte se lit à 60 cm, de biais, sous une
   lumière de salon. `fg` sur `bg` ne descend jamais sous 7:1.
 - **Deux couleurs d'accent**, la seconde servant aux dégradés de boutons.
   `accentInk` est le texte posé sur un aplat d'accent : il doit être lisible.
 - `radius` porte beaucoup de caractère : anguleux pour un vaisseau, arrondi
   pour un conte.
+- Les `tint` de faces de dé (widget `roller`) restent, par convention, des
+  couleurs **vives** : le badge y pose toujours une encre sombre.
 
 Comparez toujours les deux jeux côte à côte sur l'accueil : si on ne les
 distingue pas d'un coup d'œil, le thème ne sert à rien.
@@ -228,6 +241,23 @@ supprimées automatiquement.
 > la page ne fait que 92 px de large dans un rendu à 200 dpi : agrandi à
 > l'écran, il est illisible. En repartant du PDF, la même découpe sort à
 > 1800 px. C'est la seule raison d'être de cet outil.
+
+> **Mais une découpe ne sera jamais plus nette que le PDF.** L'outil monte
+> l'échelle jusqu'à 1800 px ; si l'image intégrée au fichier n'en fait que
+> 300, il ne fait qu'agrandir du flou. Quand les visuels restent mous après
+> `npm run crops`, cherchez une meilleure édition du PDF plutôt qu'un réglage :
+> le livret Nemesis a été remplacé pour cette raison, et les mêmes rectangles
+> ont donné des découpes nettes sans qu'une seule ligne du tutoriel change.
+
+Ré-ingérer et re-découper après un changement de PDF :
+
+```bash
+npm run ingest -- "rules/Mon jeu - Regles.pdf" mon-jeu
+npm run crops -- mon-jeu --force      # --force réécrit les découpes existantes
+```
+
+Les coordonnées étant normalisées, elles restent valables tant que la mise en
+page du livret n'a pas bougé. Vérifiez-le en planche contact (étape d).
 
 La découpe se dégrade proprement, en quatre niveaux :
 
@@ -484,3 +514,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-03 | v0.05 | Les visuels vivent dans `games/` à la racine (plus `public/`). Ajout de `npm run crops` (étape 5c) et du niveau « fichier dédié » dans le tableau de dégradation. Publication depuis la branche, build automatique. |
 | 2026-09-03 | v0.03 | Première application réelle sur Nemesis : 36 découpes de matériel et 10 schémas d'exemple. Ingestion recommandée en JPEG 200 dpi. |
 | 2026-09-03 | v0.06 | Deux étapes nouvelles : « Déclarer les effectifs jouables » (`players`, filtres `only`, vue filtrée) et « Habiller le jeu » (`theme`). Les découpes sont rendues depuis le PDF à 1800 px et non plus taillées dans la page. Ajout de la relecture en planche contact, de la section « Ce que le joueur peut faire », et de l'encadré sur les `.js` émis par TypeScript. Volumétrie revue à 6-10 chapitres et 60-95 étapes. Deuxième tutoriel : *Tainted Grail — La Chute d'Avalon*. |
+| 2026-09-03 | v0.07 | `scheme: 'light'` et couleurs sémantiques (`ok` / `warn` / `danger`) par jeu : l'interface accepte un fond clair, appliqué au parchemin de *Tainted Grail*. Nouvelle édition du PDF Nemesis, découpes refaites à l'identique avec `--force`. Encadré sur la qualité de la source d'une découpe, et la marche à suivre après un changement de PDF. |

@@ -151,6 +151,15 @@ export function Runner({ tutorial, players, restart, onExit }: Props) {
   // Les panneaux modaux ont leur propre fond : on ne leur passe pas celui du thème.
   const panel = themePanel(tutorial.theme)
 
+  // Le rebond de défilement de l'iPad laisse voir le fond de la page, pas
+  // celui de l'application : sans cela, un tutoriel clair clignoterait noir
+  // à chaque à-coup du doigt.
+  useEffect(() => {
+    const { background } = document.body.style
+    document.body.style.background = tutorial.theme.bg
+    return () => { document.body.style.background = background }
+  }, [tutorial.theme.bg])
+
   if (finished) {
     return (
       <div className="app" style={theme}>

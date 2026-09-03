@@ -17,6 +17,33 @@ comme complète.
 
 ---
 
+## v0.07 — 2026-09-03
+
+### Ajouté
+
+- **Fond clair pour Tainted Grail.** Le tutoriel prend l'aspect du livret :
+  parchemin vieilli, encre sépia, titres au rouge de rubrique. Les découpes
+  des règles, elles aussi sur fond clair, entrent enfin dans la page au lieu
+  d'y flotter en rectangles lumineux.
+- Le modèle de thème accepte `scheme: 'light'` et ses couleurs sémantiques
+  `ok` / `warn` / `danger`. Un thème clair inverse les voiles neutres,
+  assombrit les teintes d'étape, règle `color-scheme`, et fait suivre le fond
+  de la page jusque dans le rebond de défilement de l'iPad.
+
+### Corrigé
+
+- **Nouvelle édition du PDF Nemesis, bien plus définie.** Les 43 découpes ont
+  été refaites depuis ce fichier : les cartes d'exemple, jusque-là illisibles
+  au-delà du titre, se lisent maintenant en entier.
+- Le plafond d'échelle des découpes passe de 44 à 120 : les plus petites
+  vignettes atteignent désormais elles aussi 1800 px de grand côté, au lieu
+  de plafonner à 1463 px.
+- Quatre couleurs étaient écrites en dur dans la feuille de style — texte des
+  étapes, texte des avertissements, pastille de chapitre, badge de page. Elles
+  suivent maintenant le thème, sans quoi un fond clair les rendait illisibles.
+
+---
+
 ## v0.06 — 2026-09-03
 
 ### Ajouté

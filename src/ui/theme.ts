@@ -11,6 +11,7 @@ import type { Theme } from '../engine/types'
 
 /** Les variables seules. Ne peint rien : c'est la feuille de style qui décide. */
 function vars(t: Theme): CSSProperties {
+  const light = t.scheme === 'light'
   return {
     '--bg': t.bg,
     '--bg-2': t.bg2,
@@ -29,6 +30,16 @@ function vars(t: Theme): CSSProperties {
     '--title-weight': String(t.titleWeight ?? 780),
     '--title-spacing': t.titleSpacing ?? '-0.025em',
     '--r-lg': t.radius ?? '24px',
+    // Voile neutre des pastilles et des fonds discrets : de l'encre sur un
+    // thème clair, de la lumière sur un thème sombre.
+    '--veil': light ? 'rgba(0, 0, 0, 0.07)' : 'rgba(255, 255, 255, 0.09)',
+    // Les teintes d'étape sont réglées pour un fond sombre : sur du clair,
+    // on les assombrit d'un tiers pour qu'elles restent lisibles.
+    '--tint-pct': light ? '62%' : '100%',
+    ...(t.ok ? { '--ok': t.ok } : null),
+    ...(t.warn ? { '--warn': t.warn } : null),
+    ...(t.danger ? { '--danger': t.danger } : null),
+    colorScheme: light ? 'light' : 'dark',
   } as CSSProperties
 }
 
