@@ -12,7 +12,7 @@
 /**
  * Zone rectangulaire découpée dans une page de règles, en coordonnées
  * normalisées (0 à 1) relatives à la page. Indépendant de la résolution :
- * on peut re-générer les pages en 300 dpi sans toucher aux découpes.
+ * `npm run crops` rend chaque découpe depuis le PDF à l'échelle qu'il faut.
  *
  * Le rectangle est optionnel. Un `Crop` réduit à son numéro de page affiche
  * la page entière : c'est déjà la bonne référence visuelle, et le rectangle
@@ -43,6 +43,16 @@ export type Glyph =
   | 'marker' | 'bag' | 'figure' | 'egg' | 'door' | 'fire'
 
 /**
+ * Effectifs pour lesquels un élément de contenu s'applique.
+ *
+ * Absent = tous les effectifs. Sinon, la liste exacte : `[1]` pour une étape
+ * qui ne concerne que le solo, `[2, 3]` pour une variante à deux ou trois
+ * joueurs. C'est ce qui permet à un même tutoriel de couvrir le solo et la
+ * partie à cinq sans dire au joueur « si vous êtes 3, ignorez ce qui suit ».
+ */
+export type PlayerFilter = number[]
+
+/**
  * Un élément de matériel du jeu. C'est ce que le joueur doit reconnaître
  * physiquement sur sa table : on l'illustre par une découpe du PDF.
  */
@@ -64,7 +74,7 @@ export interface Component {
 
 /** Faces d'un dé simulé, pour les séquences didactiques. */
 export interface DieFace {
-  /** Libellé court affiche sur la face. */
+  /** Libellé court affiché sur la face. */
   label: string
   /** Explication d'une ligne du résultat. */
   effect: string
@@ -91,7 +101,7 @@ export interface Choice {
   options: { label: string; outcome: string; tint?: string }[]
 }
 
-/** Compteur manipule par le joueur (cartes en main, munitions, dégâts...). */
+/** Compteur manipulé par le joueur (cartes en main, munitions, dégâts...). */
 export interface Counter {
   kind: 'counter'
   title: string
@@ -120,9 +130,9 @@ export interface Step {
   kind: StepKind
   /** Détail. Chaque entrée est une ligne courte, jamais un pavé. */
   body?: string[]
-  /** Matériel concerne : affiche en vignettes cliquables sous l'étape. */
+  /** Matériel concerné : affiché en vignettes cliquables sous l'étape. */
   components?: string[]
-  /** Conseil optionnel, replié par défaut. */
+  /** Conseil optionnel. */
   tip?: string
   /** Piège de règle à ne pas rater. Toujours visible. */
   warn?: string
@@ -132,6 +142,8 @@ export interface Step {
   widget?: Widget
   /** Page des règles officielles, affichée en petit pour recouper. */
   ref?: string
+  /** Effectifs concernés. Absent = tous. */
+  only?: PlayerFilter
 }
 
 export type ChapterKind = 'brief' | 'setup' | 'play' | 'debrief'
@@ -143,6 +155,62 @@ export interface Chapter {
   /** Une phrase : ce que le joueur saura faire à la fin du chapitre. */
   goal: string
   steps: Step[]
+  /** Effectifs concernés. Absent = tous. */
+  only?: PlayerFilter
+}
+
+/**
+ * Habillage visuel propre au jeu.
+ *
+ * Chaque jeu a son ambiance : Nemesis est une alerte orange dans un vaisseau,
+ * Tainted Grail une brume verte sur un parchemin. Seules les variables CSS
+ * listées ici changent — la mise en page, elle, reste la même partout, pour
+ * qu'un joueur qui connaît un tutoriel sache déjà lire les autres.
+ *
+ * Les polices sont des piles système : aucune police n'est téléchargée, donc
+ * l'application reste utilisable hors ligne sur la table de jeu.
+ */
+export interface Theme {
+  /** Fond général, du plus sombre au plus clair. */
+  bg: string
+  bg2: string
+  bg3: string
+  /** Filets et bordures. */
+  stroke: string
+  strokeSoft: string
+  /** Textes, du plus lisible au plus discret. */
+  fg: string
+  fgDim: string
+  fgFaint: string
+  /** Couleur dominante, et sa variante pour les dégradés. */
+  accent: string
+  accent2: string
+  /** Texte posé sur un aplat d'accent. */
+  accentInk: string
+  /** Pile de polices des titres. */
+  titleFont?: string
+  /** Pile de polices du texte courant. */
+  bodyFont?: string
+  /** Casse des titres d'étape. */
+  titleTransform?: 'none' | 'uppercase'
+  titleWeight?: number
+  titleSpacing?: string
+  /** Rayon d'arrondi général : anguleux pour un vaisseau, doux pour un conte. */
+  radius?: string
+}
+
+/** Effectifs jouables et leurs particularités. */
+export interface Players {
+  min: number
+  max: number
+  /** Libellé d'un effectif particulier, ex. `{ 1: 'Solo' }`. */
+  labels?: Record<number, string>
+  /**
+   * Effectif conseillé pour une première partie. Présélectionné à l'ouverture.
+   */
+  recommended?: number
+  /** Une phrase par effectif : ce qui change. Affiché au moment du choix. */
+  notes?: Record<number, string>
 }
 
 export interface Tutorial {
@@ -154,16 +222,14 @@ export interface Tutorial {
   contentVersion: string
   publisher: string
   author: string
-  players: string
+  players: Players
   /** Durée annoncée de la partie tutorielle, en minutes. */
   minutes: number
-  /** Couleur dominante du jeu, utilisée pour tout l'habillage. */
-  accent: string
-  accent2: string
+  theme: Theme
   source: {
-    /** Nom du fichier PDF ingéré. */
+    /** Nom du fichier PDF ingéré, tel qu'il est dans rules/. */
     pdf: string
-    /** Identifiant du dossier d'assets : games/<assetId>/pages/ */
+    /** Identifiant du dossier d'assets : games/<assetId>/ */
     assetId: string
     /**
      * Écart entre le numéro imprimé sur la page et son index dans le PDF.
@@ -177,4 +243,19 @@ export interface Tutorial {
   scope: { covered: string[]; skipped: string[] }
   components: Component[]
   chapters: Chapter[]
+}
+
+/** Un contenu s'applique-t-il à cet effectif ? */
+export function appliesTo(only: PlayerFilter | undefined, players: number): boolean {
+  return !only || only.includes(players)
+}
+
+/** Libellé d'un effectif, ex. « Solo » ou « 3 joueurs ». */
+export function playerLabel(p: Players, n: number): string {
+  return p.labels?.[n] ?? (n === 1 ? '1 joueur' : `${n} joueurs`)
+}
+
+/** Effectifs jouables, dans l'ordre. */
+export function playerRange(p: Players): number[] {
+  return Array.from({ length: p.max - p.min + 1 }, (_, i) => p.min + i)
 }

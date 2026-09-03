@@ -72,7 +72,78 @@ renseignez l'écart dans `source.pageOffset`. **Une seule valeur corrige toutes
 les découpes du tutoriel.** Vérifiez dans le Studio : le compteur affiche à la
 fois le numéro du livret et l'index du fichier.
 
-### Étape 4 — Recenser le matériel
+### Étape 4 — Déclarer les effectifs jouables
+
+Avant d'écrire une étape, dites au moteur pour combien de joueurs le tutoriel
+existe. L'application pose la question au démarrage et **filtre le contenu** :
+c'est ce qui évite d'écrire « si vous êtes 3, ignorez ce qui suit » partout.
+
+```ts
+players: {
+  min: 1,
+  max: 4,
+  recommended: 1,               // présélectionné à l'ouverture
+  labels: { 1: 'Solo' },        // libellé particulier d'un effectif
+  notes: {                      // une phrase : ce qui change à cet effectif
+    1: 'Le livret conseille d’apprendre le jeu en solitaire.',
+    4: 'À quatre, vos mains de combat tombent à 2 cartes.',
+  },
+}
+```
+
+Ensuite, tout `Chapter` et tout `Step` accepte un filtre `only` :
+
+```ts
+{ id: 'w2-1', title: 'Réglez le cadran sur 8', only: [1],       … }
+{ id: 'w2-2', title: 'Réglez le cadran sur 7', only: [2],       … }
+{ id: 'a7',   title: 'Établissez votre stratégie', only: [2, 3, 4], … }
+```
+
+Absent = tous les effectifs. Le moteur construit une **vue** filtrée
+(`viewFor(tutorial, players)`) et toute la navigation travaille dessus :
+numérotation, saut d'étape, sauvegarde. Aucun autre code n'a de cas particulier
+à traiter.
+
+Trois usages qui reviennent presque toujours :
+
+- une **valeur de mise en place** qui dépend du nombre de joueurs → une étape
+  par valeur, chacune avec son `only`, plutôt qu'un tableau à lire ;
+- une **règle propre au solo** (mort, objectifs, absence de discussion) →
+  `only: [1]` d'un côté, `only: [2, 3, …]` de l'autre ;
+- une **étape de concertation** qui n'a pas de sens seul → `only: [2, 3, …]`.
+
+### Étape 5 — Habiller le jeu
+
+Chaque jeu a son ambiance. Le champ `theme` fournit les valeurs, la feuille de
+style ne connaît que des variables : **la mise en page ne change jamais**, pour
+qu'un joueur qui a suivi un tutoriel sache déjà lire les autres.
+
+```ts
+theme: {
+  bg: '#0c1113', bg2: '#141b1e', bg3: '#1d2629',
+  stroke: '#31403f', strokeSoft: '#263133',
+  fg: '#f1e9da', fgDim: '#a89e8c', fgFaint: '#71695c',
+  accent: '#d3a34d', accent2: '#9d3220', accentInk: '#171104',
+  titleFont: "'Iowan Old Style', Palatino, Georgia, ui-serif, serif",
+  bodyFont: "Georgia, 'Times New Roman', ui-serif, serif",
+  titleTransform: 'uppercase', titleWeight: 600, titleSpacing: '0.02em',
+  radius: '6px',
+}
+```
+
+- **Piles système uniquement.** Aucune police n'est téléchargée : l'application
+  doit rester lisible hors ligne, sur la table de jeu.
+- **Contraste avant cachet.** Le texte se lit à 60 cm, de biais, sous une
+  lumière de salon. `fg` sur `bg` ne descend jamais sous 7:1.
+- **Deux couleurs d'accent**, la seconde servant aux dégradés de boutons.
+  `accentInk` est le texte posé sur un aplat d'accent : il doit être lisible.
+- `radius` porte beaucoup de caractère : anguleux pour un vaisseau, arrondi
+  pour un conte.
+
+Comparez toujours les deux jeux côte à côte sur l'accueil : si on ne les
+distingue pas d'un coup d'œil, le thème ne sert à rien.
+
+### Étape 6 — Recenser le matériel
 
 Un `Component` par élément que le joueur doit **reconnaître physiquement** sur
 la table. Reprenez le **nom exact des règles** : c'est ce qui permet au joueur
@@ -95,7 +166,7 @@ de recouper avec le livret.
   disent déjà. Si vous paraphrasez, supprimez la note.
 - `glyph` est le pictogramme de secours affiché tant que la découpe n'existe pas.
 
-### Étape 5 — Découper les visuels
+### Étape 7 — Découper les visuels
 
 Deux voies, à utiliser dans cet ordre.
 
@@ -144,13 +215,19 @@ littéral et collez-le dans le tutoriel.
 npm run crops
 ```
 
-Pour chaque `crop` à rectangle du tutoriel, l'outil découpe la zone dans la
-page ingérée et écrit un WebP dans `games/mon-jeu/crops/`, puis liste les
+Pour chaque `crop` à rectangle du tutoriel, l'outil **rend la zone directement
+depuis le PDF**, à l'échelle qu'il faut pour que son grand côté atteigne
+1800 px, et écrit un WebP dans `games/mon-jeu/crops/`. Il liste ensuite les
 découpes disponibles dans `pages.json`. L'application charge ce petit fichier
 (quelques dizaines de Ko) au lieu de la page entière (~1 Mo) ; elle retombe
 sur la page si la découpe manque. **À relancer après toute modification d'un
 rectangle**, et après une ré-ingestion. Les découpes orphelines sont
 supprimées automatiquement.
+
+> **Ne découpez jamais dans l'image de page.** Un composant qui occupe 4 % de
+> la page ne fait que 92 px de large dans un rendu à 200 dpi : agrandi à
+> l'écran, il est illisible. En repartant du PDF, la même découpe sort à
+> 1800 px. C'est la seule raison d'être de cet outil.
 
 La découpe se dégrade proprement, en quatre niveaux :
 
@@ -164,7 +241,19 @@ La découpe se dégrade proprement, en quatre niveaux :
 **Un tutoriel sans aucune découpe reste entièrement jouable.** Commencez par
 renseigner les numéros de page — c'est déjà utile — et affinez ensuite.
 
-### Étape 6 — Écrire les chapitres
+**d) Relire les découpes, en planche contact.**
+
+Après `npm run crops`, regardez les fichiers produits, tous ensemble. Deux
+défauts ne se voient qu'à l'œil :
+
+- une **légende coupée** en bas ou à droite du rectangle — la découpe perd le
+  nom du composant, qui est justement ce que le joueur cherche ;
+- un **aplat blanc** à la place de l'illustration. Certains masques et images
+  de PDF ne se rendent pas ; c'est le cas des cartes annotées de plusieurs
+  pages du livret *Tainted Grail*. Dans ce cas, changez de source : la photo
+  produit du même élément dans la liste du matériel fait toujours l'affaire.
+
+### Étape 8 — Écrire les chapitres
 
 Découpage recommandé, éprouvé sur Nemesis :
 
@@ -178,10 +267,14 @@ Découpage recommandé, éprouvé sur Nemesis :
 | Fin de manche | `play` | Ce qui se passe quand les joueurs ont fini |
 | Gagner | `debrief` | Conditions de victoire, et ce qu'on n'a pas couvert |
 
-Visez **6 à 9 chapitres** et **50 à 70 étapes**. En dessous, on survole ;
-au-dessus, on abandonne avant la fin.
+Visez **6 à 10 chapitres** et **60 à 95 étapes** — Nemesis en compte 65, le
+tutoriel *Tainted Grail*, qui installe une campagne entière, 92. En dessous,
+on survole ; au-dessus, on abandonne avant la fin.
 
-### Étape 7 — Relire à voix haute
+Comptez ce que voit **un** joueur : `nominalSteps()` calcule le total à
+l'effectif conseillé, filtres `only` appliqués.
+
+### Étape 9 — Relire à voix haute
 
 Lisez le tutoriel comme si vous guidiez quelqu'un. Toute phrase que vous
 n'auriez pas dite à l'oral n'a rien à faire à l'écran.
@@ -278,7 +371,28 @@ pour être compris.
 
 ---
 
-## 6. Portée : dire ce qu'on n'enseigne pas
+## 6. Ce que le joueur peut faire pendant le tutoriel
+
+À connaître en rédigeant : **n'expliquez jamais ces gestes dans une étape**,
+l'interface les porte déjà.
+
+| Geste | Où |
+|---|---|
+| Étape suivante | Bouton principal, flèche droite, **Espace**, Entrée |
+| Étape précédente | Flèche gauche, **Maj + Espace** |
+| Aller à n'importe quelle étape du chapitre | Bouton « Étape *n* / *m* », au-dessus du titre |
+| Changer de chapitre | Le bandeau de chapitres, en haut |
+| Ouvrir la fiche d'un composant | Les vignettes de matériel, sous l'étape |
+| Index complet du matériel | Bouton grille, en haut à droite |
+| Chronomètre | En haut à droite ; il survit à la fermeture de l'application |
+
+Le saut d'étape et les raccourcis clavier sont **génériques** : ils suivent la
+vue filtrée par l'effectif, donc un tutoriel n'a rien à déclarer pour en
+bénéficier.
+
+---
+
+## 7. Portée : dire ce qu'on n'enseigne pas
 
 `scope.covered` et `scope.skipped` sont affichés au joueur avant qu'il commence,
 et rappelés en fin de tutoriel.
@@ -289,7 +403,7 @@ est utilisable : le joueur sait quand ouvrir le livret. **Remplissez toujours
 
 ---
 
-## 7. Versionnement
+## 8. Versionnement
 
 Deux numéros distincts, à ne pas confondre :
 
@@ -311,12 +425,18 @@ jour.
 
 ---
 
-## 8. Contrôle avant publication
+## 9. Contrôle avant publication
 
 ```bash
 npm run build        # typecheck + build de production
 npm run dev          # relecture à l'écran
 ```
+
+> **Ne faites jamais émettre de JavaScript à TypeScript.** `npm run typecheck`
+> et `npm run build` lancent `tsc -b`, qui ne produit aucun fichier. Forcer
+> `--noEmit false` sème des `.js` à côté des sources ; Vite résout `.js` avant
+> `.tsx` et construit alors **du code périmé**, sans rien signaler. Si un
+> changement n'apparaît pas dans le build : `find src -name '*.js' -delete`.
 
 GitHub Pages publie la **racine du dépôt** (« Deploy from a branch »). Le
 workflow `.github/workflows/deploy.yml` y reconstruit `index.html` et `assets/`
@@ -324,7 +444,11 @@ workflow `.github/workflows/deploy.yml` y reconstruit `index.html` et `assets/`
 les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 `git pull` avant le push suivant si le bot a commité.
 
-- [ ] Le tutoriel se déroule du début à la fin sans étape vide.
+- [ ] Le tutoriel se déroule du début à la fin sans étape vide, **à chaque
+      effectif jouable**.
+- [ ] Chaque valeur de mise en place qui dépend du nombre de joueurs a bien
+      sa variante `only`.
+- [ ] Sur l'accueil, le jeu se distingue des autres d'un coup d'œil.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.
 - [ ] Aucun texte ne répète le libellé d'un bouton.
 - [ ] Tous les `components` cités par une étape existent dans la liste.
@@ -332,12 +456,14 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 - [ ] `scope.skipped` est rempli.
 - [ ] Accents et guillemets français vérifiés.
 - [ ] `contentVersion` incrémentée si le contenu a changé.
-- [ ] `npm run crops` relancé si un rectangle a changé.
+- [ ] `npm run crops` relancé si un rectangle a changé, et les découpes
+      relues en planche contact.
+- [ ] Aucun `.js` traîne dans `src/` (voir l'encadré ci-dessus).
 - [ ] `CHANGELOG.md` et ce guide mis à jour.
 
 ---
 
-## 9. Droits sur les visuels
+## 10. Droits sur les visuels
 
 Les pages ingérées et leurs découpes sont l'œuvre de l'éditeur. Elles sont
 **versionnées dans `games/`** parce que le site est publié depuis la racine du
@@ -349,7 +475,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 
 ---
 
-## 10. Journal du guide
+## 11. Journal du guide
 
 | Date | Version app | Modification |
 |---|---|---|
@@ -357,3 +483,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-03 | v0.02 | Ajout de `npm run extract` (images intégrées + régions d'encre) en amont du Studio, et de la section « Publication ». |
 | 2026-09-03 | v0.05 | Les visuels vivent dans `games/` à la racine (plus `public/`). Ajout de `npm run crops` (étape 5c) et du niveau « fichier dédié » dans le tableau de dégradation. Publication depuis la branche, build automatique. |
 | 2026-09-03 | v0.03 | Première application réelle sur Nemesis : 36 découpes de matériel et 10 schémas d'exemple. Ingestion recommandée en JPEG 200 dpi. |
+| 2026-09-03 | v0.06 | Deux étapes nouvelles : « Déclarer les effectifs jouables » (`players`, filtres `only`, vue filtrée) et « Habiller le jeu » (`theme`). Les découpes sont rendues depuis le PDF à 1800 px et non plus taillées dans la page. Ajout de la relecture en planche contact, de la section « Ce que le joueur peut faire », et de l'encadré sur les `.js` émis par TypeScript. Volumétrie revue à 6-10 chapitres et 60-95 étapes. Deuxième tutoriel : *Tainted Grail — La Chute d'Avalon*. |

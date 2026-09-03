@@ -1,6 +1,9 @@
 /**
  * Déroulement d'un tutoriel : une étape à l'écran, un gros bouton pour
- * avancer, le matériel concerne toujours visible à côté.
+ * avancer, le matériel concerné toujours visible à côté.
+ *
+ * Tout se lit sur une **vue** — le tutoriel filtré pour l'effectif choisi.
+ * Les étapes qui ne concernent pas cet effectif n'existent pas ici.
  *
  * Règle de conception : le bouton principal dit ce qu'il fait ; on ne
  * répète jamais son libellé dans le corps de l'étape.
@@ -8,8 +11,9 @@
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
 import type { Component, Tutorial } from '../engine/types'
+import { playerLabel } from '../engine/types'
 import {
-  clampPosition, componentsOf, indexOf, next, prev, totalSteps,
+  clampPosition, componentsOf, indexOf, next, prev, stepAt, totalSteps, viewFor,
 } from '../engine/tutorial'
 import {
   clearSave, elapsedOf, formatClock, loadSave, newSave, writeSave, type Save,
@@ -19,29 +23,34 @@ import { useManifest, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
+import { themePanel, themeStyle } from './theme'
 import {
-  Alert, ArrowLeft, ArrowRight, Bulb, Check, CheckCircle, Circle, Grid, Home, Trophy, STEP_KIND,
+  Alert, ArrowLeft, ArrowRight, Bulb, Check, Grid, Home, List, Trophy, STEP_KIND,
 } from './icons'
 
 interface Props {
   tutorial: Tutorial
-  /** true pour répartir de zéro, false pour reprendre la sauvegarde. */
+  /** Effectif choisi pour cette partie. */
+  players: number
+  /** true pour repartir de zéro, false pour reprendre la sauvegarde. */
   restart: boolean
   onExit: () => void
 }
 
-export function Runner({ tutorial, restart, onExit }: Props) {
+export function Runner({ tutorial, players, restart, onExit }: Props) {
+  const view = useMemo(() => viewFor(tutorial, players), [tutorial, players])
+
   const [save, setSave] = useState<Save>(() => {
     const existing = restart ? null : loadSave(tutorial.id)
-    if (!existing) return newSave(tutorial)
-    // Le contenu à pu changer depuis la dernière session : on ramène la
+    if (!existing || existing.players !== players) return newSave(tutorial, players)
+    // Le contenu a pu changer depuis la dernière session : on ramène la
     // position sur une étape qui existe encore.
-    const pos = clampPosition(tutorial, existing.chapter, existing.step)
-    return { ...existing, ...pos }
+    return { ...existing, ...clampPosition(view, existing.chapter, existing.step) }
   })
 
   const [part, setPart] = useState<Component | null>(null)
   const [index, setIndex] = useState(false)
+  const [jump, setJump] = useState(false)
   const [finished, setFinished] = useState(false)
 
   // Toute mutation de l'état passe par ici : la sauvegarde suit la
@@ -54,10 +63,10 @@ export function Runner({ tutorial, restart, onExit }: Props) {
     })
   }, [])
 
-  const chapter = tutorial.chapters[save.chapter]
-  const step = chapter?.steps[save.step]
-  const total = useMemo(() => totalSteps(tutorial), [tutorial])
-  const position = indexOf(tutorial, save.chapter, save.step)
+  const chapter = view.chapters[save.chapter]
+  const step = stepAt(view, save)
+  const total = useMemo(() => totalSteps(view), [view])
+  const position = indexOf(view, save.chapter, save.step)
   const parts = useMemo(() => (step ? componentsOf(tutorial, step) : []), [tutorial, step])
 
   // Précharge les visuels de l'étape suivante pendant que le joueur lit
@@ -65,9 +74,9 @@ export function Runner({ tutorial, restart, onExit }: Props) {
   const manifest = useManifest(tutorial.source.assetId)
   useEffect(() => {
     if (!manifest) return
-    const target = next(tutorial, save.chapter, save.step)
+    const target = next(view, save.chapter, save.step)
     if (!target) return
-    const s = tutorial.chapters[target.chapter]?.steps[target.step]
+    const s = stepAt(view, target)
     if (!s) return
     const off = tutorial.source.pageOffset
     const nextParts = componentsOf(tutorial, s)
@@ -75,29 +84,25 @@ export function Runner({ tutorial, restart, onExit }: Props) {
       visualUrl(manifest, s.crop ?? nextParts[0]?.crop, off),
       ...nextParts.map((c) => visualUrl(manifest, c.crop, off)),
     ])
-  }, [manifest, tutorial, save.chapter, save.step])
+  }, [manifest, view, tutorial, save.chapter, save.step])
 
   const goNext = useCallback(() => {
     if (!step) return
     const done = save.done.includes(step.id) ? save.done : [...save.done, step.id]
-    const target = next(tutorial, save.chapter, save.step)
+    const target = next(view, save.chapter, save.step)
     if (!target) {
       // Fin du tutoriel : on arrête le chronomètre pour figer le temps final.
-      update({
-        done,
-        elapsedMs: elapsedOf(save, Date.now()),
-        runningSince: null,
-      })
+      update({ done, elapsedMs: elapsedOf(save, Date.now()), runningSince: null })
       setFinished(true)
       return
     }
     update({ done, ...target })
-  }, [save, step, tutorial, update])
+  }, [save, step, view, update])
 
   const goPrev = useCallback(() => {
-    const target = prev(tutorial, save.chapter, save.step)
+    const target = prev(view, save.chapter, save.step)
     if (target) update(target)
-  }, [save.chapter, save.step, tutorial, update])
+  }, [save.chapter, save.step, view, update])
 
   const toggleTimer = useCallback(() => {
     if (save.runningSince) {
@@ -108,28 +113,43 @@ export function Runner({ tutorial, restart, onExit }: Props) {
   }, [save, update])
 
   // Le chronomètre démarre au premier pas du joueur, pas à l'ouverture de
-  // l'écran : on ne compte pas le temps passe à lire la présentation.
+  // l'écran : on ne compte pas le temps passé à lire la présentation.
   useEffect(() => {
     if (position > 0 && save.runningSince === null && save.elapsedMs === 0) {
       update({ runningSince: Date.now() })
     }
   }, [position, save.runningSince, save.elapsedMs, update])
 
-  // Navigation au clavier : utile pour tester au bureau, inoffensif sur iPad.
+  /*
+   * Clavier, pour l'ordinateur : ESPACE avance, Maj+ESPACE recule. Les
+   * flèches et Entrée font de même. Sans effet sur iPad, et désactivé quand
+   * un panneau est ouvert pour ne pas naviguer derrière lui.
+   */
   useEffect(() => {
-    if (finished || part || index) return
+    if (finished || part || index || jump) return
     const onKey = (e: KeyboardEvent) => {
+      // Ne pas voler l'espace à un bouton ou un champ qui a le focus.
+      const el = document.activeElement
+      const typing = el instanceof HTMLElement &&
+        (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(el.tagName))
+
+      if (e.key === ' ' || e.code === 'Space') {
+        if (typing) return
+        e.preventDefault()
+        if (e.shiftKey) goPrev()
+        else goNext()
+        return
+      }
       if (e.key === 'ArrowRight' || e.key === 'Enter') goNext()
       if (e.key === 'ArrowLeft') goPrev()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [finished, part, index, goNext, goPrev])
+  }, [finished, part, index, jump, goNext, goPrev])
 
-  const theme = {
-    '--accent': tutorial.accent,
-    '--accent-2': tutorial.accent2,
-  } as CSSProperties
+  const theme = themeStyle(tutorial.theme)
+  // Les panneaux modaux ont leur propre fond : on ne leur passe pas celui du thème.
+  const panel = themePanel(tutorial.theme)
 
   if (finished) {
     return (
@@ -138,10 +158,12 @@ export function Runner({ tutorial, restart, onExit }: Props) {
           <div className="done-badge"><Trophy aria-hidden /></div>
           <div>
             <div className="done-title">Partie tutorielle terminée</div>
-            <div className="done-time">{formatClock(save.elapsedMs)} — {tutorial.title}</div>
+            <div className="done-time">
+              {formatClock(save.elapsedMs)} — {tutorial.title}, {playerLabel(tutorial.players, players).toLowerCase()}
+            </div>
           </div>
           <p className="brand-tag" style={{ maxWidth: '52ch' }}>
-            Vous connaissez la mise en place, le tour de jeu et la phase Événement.
+            Vous connaissez la mise en place, le tour de jeu et la fin de manche.
             Rejouez maintenant une partie complète avec les règles officielles.
           </p>
           <div className="done-actions">
@@ -150,7 +172,7 @@ export function Runner({ tutorial, restart, onExit }: Props) {
               className="btn btn-lg btn-ghost"
               onClick={() => {
                 clearSave(tutorial.id)
-                setSave(newSave(tutorial))
+                setSave(newSave(tutorial, players))
                 setFinished(false)
               }}
             >
@@ -169,7 +191,7 @@ export function Runner({ tutorial, restart, onExit }: Props) {
     return (
       <div className="app" style={theme}>
         <div className="done-screen">
-          <p className="empty">Ce tutoriel ne contient aucune étape.</p>
+          <p className="empty">Ce tutoriel ne contient aucune étape pour cet effectif.</p>
           <button type="button" className="btn btn-lg btn-primary" onClick={onExit}>
             <Home aria-hidden /> Accueil
           </button>
@@ -179,7 +201,7 @@ export function Runner({ tutorial, restart, onExit }: Props) {
   }
 
   const kind = STEP_KIND[step.kind]
-  const isLast = next(tutorial, save.chapter, save.step) === null
+  const isLast = next(view, save.chapter, save.step) === null
 
   return (
     <div className="app" style={theme}>
@@ -190,7 +212,9 @@ export function Runner({ tutorial, restart, onExit }: Props) {
 
         <div className="topbar-id">
           <span className="topbar-title">{tutorial.title}</span>
-          <span className="topbar-sub">TUTO v{tutorial.contentVersion}</span>
+          <span className="topbar-sub">
+            {playerLabel(tutorial.players, players).toUpperCase()} · TUTO v{tutorial.contentVersion}
+          </span>
         </div>
 
         <div className="topbar-spacer" />
@@ -203,7 +227,7 @@ export function Runner({ tutorial, restart, onExit }: Props) {
       </header>
 
       <nav className="chapters" aria-label="Chapitres">
-        {tutorial.chapters.map((c, i) => (
+        {view.chapters.map((c, i) => (
           <button
             key={c.id}
             type="button"
@@ -221,10 +245,17 @@ export function Runner({ tutorial, restart, onExit }: Props) {
       </div>
 
       <main className="stage">
-        <div className="stage-main scroll">
-          <span className="step-kind" style={{ '--kind': kind.tint } as CSSProperties}>
-            <kind.Icon aria-hidden /> {kind.label}
-          </span>
+        <div className="stage-main">
+          <div className="step-head">
+            <span className="step-kind" style={{ '--kind': kind.tint } as CSSProperties}>
+              <kind.Icon aria-hidden /> {kind.label}
+            </span>
+            {/* Aller directement à n'importe quelle étape du chapitre. */}
+            <button type="button" className="btn btn-ghost step-jump" onClick={() => setJump(true)}>
+              <List aria-hidden />
+              Étape {save.step + 1} / {chapter.steps.length}
+            </button>
+          </div>
 
           <h1 className="step-title">{step.title}</h1>
 
@@ -271,7 +302,7 @@ export function Runner({ tutorial, restart, onExit }: Props) {
                   key={c.id}
                   type="button"
                   className="part"
-                  style={{ '--part-tint': c.tint ?? tutorial.accent } as CSSProperties}
+                  style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
                   onClick={() => setPart(c)}
                 >
                   <span className="part-thumb">
@@ -312,8 +343,34 @@ export function Runner({ tutorial, restart, onExit }: Props) {
         </button>
       </footer>
 
+      {jump && (
+        <Sheet title={chapter.title} onClose={() => setJump(false)} style={panel}>
+          <p className="sheet-lead">{chapter.goal}</p>
+          <ol className="jump-list">
+            {chapter.steps.map((s, i) => {
+              const k = STEP_KIND[s.kind]
+              return (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    className={`jump-item${i === save.step ? ' current' : ''}${save.done.includes(s.id) ? ' done' : ''}`}
+                    onClick={() => { update({ step: i }); setJump(false) }}
+                  >
+                    <span className="jump-num">{i + 1}</span>
+                    <span className="jump-icon" style={{ '--kind': k.tint } as CSSProperties}>
+                      <k.Icon aria-hidden />
+                    </span>
+                    <span className="jump-title">{s.title}</span>
+                  </button>
+                </li>
+              )
+            })}
+          </ol>
+        </Sheet>
+      )}
+
       {part && (
-        <Sheet title="Matériel" onClose={() => setPart(null)}>
+        <Sheet title="Matériel" onClose={() => setPart(null)} style={panel}>
           <div className="part-detail">
             <div className="visual">
               <Visual
@@ -335,24 +392,24 @@ export function Runner({ tutorial, restart, onExit }: Props) {
       )}
 
       {index && (
-        <Sheet title={`Matériel — ${tutorial.title}`} onClose={() => setIndex(false)}>
+        <Sheet title={`Matériel — ${tutorial.title}`} onClose={() => setIndex(false)} style={panel}>
           <div className="parts-index">
             {tutorial.components.map((c) => (
               <button
                 key={c.id}
                 type="button"
                 className="part"
-                style={{ '--part-tint': c.tint ?? tutorial.accent } as CSSProperties}
+                style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
                 onClick={() => { setIndex(false); setPart(c) }}
               >
                 <span className="part-thumb">
                   <Thumb
-                      assetId={tutorial.source.assetId}
-                      pageOffset={tutorial.source.pageOffset}
-                      crop={c.crop}
-                      glyph={c.glyph}
-                      name={c.name}
-                    />
+                    assetId={tutorial.source.assetId}
+                    pageOffset={tutorial.source.pageOffset}
+                    crop={c.crop}
+                    glyph={c.glyph}
+                    name={c.name}
+                  />
                 </span>
                 <span className="part-txt">
                   <span className="part-name">{c.name}</span>
@@ -364,15 +421,5 @@ export function Runner({ tutorial, restart, onExit }: Props) {
         </Sheet>
       )}
     </div>
-  )
-}
-
-/** Puce de chapitre réutilisée par l'écran d'accueil. */
-export function ChapterDots({ done, total }: { done: number; total: number }) {
-  return (
-    <span className="chip">
-      {done >= total ? <CheckCircle aria-hidden width={16} height={16} /> : <Circle aria-hidden width={16} height={16} />}
-      {done}/{total}
-    </span>
   )
 }

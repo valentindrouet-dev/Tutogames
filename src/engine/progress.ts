@@ -1,9 +1,9 @@
 /**
  * Sauvegarde de progression et chronomètre.
  *
- * Tout est en localStorage : la tablette reste utilisable sans reseau, et
- * une partie interrompue se reprend exactement ou elle en était, chronomètre
- * compris. Aucune donnée ne quitte l'iPad.
+ * Tout est en localStorage : la tablette reste utilisable sans réseau, et
+ * une partie interrompue se reprend exactement où elle en était — effectif,
+ * étape et chronomètre compris. Aucune donnée ne quitte l'iPad.
  */
 
 import type { Tutorial } from './types'
@@ -13,6 +13,8 @@ const KEY = 'tutogames.save.v1'
 export interface Save {
   /** Identifiant du tutoriel en cours. */
   tutorialId: string
+  /** Effectif choisi au démarrage : décide des étapes affichées. */
+  players: number
   /** Version du contenu au moment de la sauvegarde, pour détecter un decalage. */
   contentVersion: string
   /** Index du chapitre courant. */
@@ -72,9 +74,10 @@ export function clearSave(tutorialId: string): void {
   writeAll(all)
 }
 
-export function newSave(t: Tutorial): Save {
+export function newSave(t: Tutorial, players: number): Save {
   return {
     tutorialId: t.id,
+    players,
     contentVersion: t.contentVersion,
     chapter: 0,
     step: 0,

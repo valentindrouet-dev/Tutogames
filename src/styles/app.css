@@ -34,8 +34,16 @@
 
   --tap: 60px;
 
-  --font: ui-sans-serif, system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  /* Pile par defaut ; chaque jeu peut fournir la sienne via son theme. */
+  --font-default: ui-sans-serif, system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  --font: var(--font-default);
+  --font-title: var(--font-default);
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+
+  /* Habillage des titres d'etape, pilote par le theme du jeu. */
+  --title-transform: none;
+  --title-weight: 780;
+  --title-spacing: -0.025em;
 
   color-scheme: dark;
 }
@@ -207,9 +215,15 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   position: absolute;
   inset: 0 0 auto 0;
   height: 5px;
-  background: linear-gradient(90deg, var(--card-accent, var(--accent)), var(--card-accent-2, var(--accent-2)));
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
-.game-card-title { font-size: 28px; font-weight: 750; letter-spacing: -0.02em; }
+.game-card-title {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: var(--title-weight);
+  letter-spacing: var(--title-spacing);
+  text-transform: var(--title-transform);
+}
 .game-card-tag { color: var(--fg-dim); font-size: 16px; flex: 1; }
 
 .meta-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -228,9 +242,9 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   color: var(--fg-dim);
 }
 .chip-accent {
-  color: var(--card-accent, var(--accent));
-  border-color: color-mix(in srgb, var(--card-accent, var(--accent)) 40%, transparent);
-  background: color-mix(in srgb, var(--card-accent, var(--accent)) 12%, transparent);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .resume-bar {
@@ -404,10 +418,12 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .step-kind svg { width: 17px; height: 17px; }
 
 .step-title {
+  font-family: var(--font-title);
   font-size: clamp(26px, 3.1vw, 38px);
-  font-weight: 780;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+  font-weight: var(--title-weight);
+  letter-spacing: var(--title-spacing);
+  text-transform: var(--title-transform);
+  line-height: 1.12;
 }
 
 .step-body { display: flex; flex-direction: column; gap: 12px; }
@@ -849,3 +865,106 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   background: var(--bg-3);
   color: var(--accent);
 }
+
+
+/* -------------------------------------------- en-tete d'etape et saut */
+
+.step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.step-jump {
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 620;
+  color: var(--fg-dim);
+  border-radius: 999px;
+}
+.step-jump svg { width: 17px; height: 17px; }
+
+.sheet-lead { color: var(--fg-dim); font-size: 16px; line-height: 1.45; }
+
+.jump-list { display: flex; flex-direction: column; gap: 8px; }
+
+.jump-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 16px;
+  border-radius: var(--r);
+  background: var(--bg-2);
+  border: 1px solid var(--stroke);
+  text-align: left;
+}
+.jump-item:active { transform: scale(0.99); }
+.jump-item.current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-2));
+}
+.jump-item.done .jump-num { color: var(--ok); }
+
+.jump-num {
+  flex: 0 0 auto;
+  width: 30px;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+.jump-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  color: var(--kind, var(--accent));
+  background: color-mix(in srgb, var(--kind, var(--accent)) 15%, transparent);
+}
+.jump-icon svg { width: 18px; height: 18px; }
+.jump-title { font-size: 16px; font-weight: 620; line-height: 1.3; }
+
+/* ------------------------------------------------- choix de l'effectif */
+
+.count-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.count-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 96px;
+  padding: 12px;
+  border-radius: var(--r);
+  background: var(--bg-2);
+  border: 1px solid var(--stroke);
+  transition: transform 90ms ease, border-color 120ms ease, background 120ms ease;
+}
+.count-btn:active { transform: scale(0.97); }
+.count-btn.picked {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--bg-2));
+}
+.count-n {
+  font-family: var(--mono);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.count-btn.picked .count-n { color: var(--accent); }
+.count-label { font-size: 13px; color: var(--fg-dim); text-align: center; }
+
+.count-summary { display: flex; flex-wrap: wrap; gap: 8px; }

@@ -11,7 +11,7 @@ const Studio = lazy(() => import('./ui/Studio').then((m) => ({ default: m.Studio
 type Screen =
   | { view: 'home' }
   | { view: 'studio' }
-  | { view: 'runner'; tutorial: Tutorial; restart: boolean }
+  | { view: 'runner'; tutorial: Tutorial; players: number; restart: boolean }
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ view: 'home' })
@@ -20,8 +20,9 @@ export default function App() {
     case 'runner':
       return (
         <Runner
-          key={screen.tutorial.id}
+          key={`${screen.tutorial.id}-${screen.players}`}
           tutorial={screen.tutorial}
+          players={screen.players}
           restart={screen.restart}
           onExit={() => setScreen({ view: 'home' })}
         />
@@ -36,7 +37,7 @@ export default function App() {
       return (
         <Home
           tutorials={TUTORIALS}
-          onStart={(tutorial, restart) => setScreen({ view: 'runner', tutorial, restart })}
+          onStart={(tutorial, players, restart) => setScreen({ view: 'runner', tutorial, players, restart })}
           onStudio={() => setScreen({ view: 'studio' })}
         />
       )

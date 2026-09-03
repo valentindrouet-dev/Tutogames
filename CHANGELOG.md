@@ -9,10 +9,60 @@ comme complète.
 À chaque publication :
 
 1. Mettre à jour `version` et `date` dans `version.json`.
-2. Aligner `VERSION` dans `public/sw.js` (le nom du cache porte la version, ce
-   qui purge automatiquement l'ancienne sur les tablettes déjà installées).
+2. Aligner `SHELL` dans [`sw.js`](sw.js), à la racine (le nom du cache porte
+   la version, ce qui purge automatiquement l'ancienne sur les tablettes déjà
+   installées).
 3. Ajouter une entrée ici.
 4. Mettre à jour `GUIDE_CREATION_TUTO.md` si la démarche de création change.
+
+---
+
+## v0.06 — 2026-09-03
+
+### Ajouté
+
+- **Deuxième tutoriel : Tainted Grail — La Chute d'Avalon.** 10 chapitres,
+  92 étapes en solo, 96 à plusieurs, 27 éléments de matériel et 49 découpes
+  tirées du livret officiel. Il installe la campagne entière — personnages
+  puis monde —, fait jouer un jour complet, déroule l'exemple de combat du
+  livret coup par coup, couvre la diplomatie et l'aube du jour 2.
+- **Le tutoriel demande le nombre de joueurs avant de commencer.** L'effectif
+  choisi filtre le contenu : mise en place, variantes et étapes propres au
+  solo ou à un effectif donné. Le moteur travaille sur une vue filtrée, donc
+  la numérotation, le saut d'étape et la sauvegarde en tiennent compte. Le
+  cadran du menhir de départ de *Tainted Grail* (8 jours en solo, 5 à quatre)
+  est le cas d'école.
+- **Habillage visuel par jeu.** Chaque tutoriel fournit ses couleurs, ses
+  polices, sa graisse de titre et ses arrondis. Nemesis garde son alerte
+  orange sur métal ; Tainted Grail passe au parchemin, à l'or et aux
+  capitales serif. La mise en page, elle, ne change pas d'un jeu à l'autre.
+- **Raccourcis clavier.** **Espace** avance d'une étape, **Maj + Espace**
+  recule. Les flèches et Entrée fonctionnent aussi. Sans effet quand on
+  saisit du texte.
+- **Saut d'étape.** Le bouton « Étape *n* / *m* », au-dessus du titre, ouvre
+  la liste des étapes du chapitre et permet d'aller directement à l'une
+  d'elles.
+
+### Corrigé
+
+- **Qualité des visuels.** Les découpes étaient taillées dans l'image de page
+  rendue à 200 dpi : un composant occupant 4 % de la page ne faisait que
+  92 px de large, illisible une fois agrandi. `npm run crops` rend désormais
+  chaque découpe **directement depuis le PDF**, à l'échelle nécessaire pour
+  atteindre 1800 px de grand côté. Le plus petit visuel de Nemesis passe de
+  92 à 1463 px.
+- Les panneaux modaux (choix de l'effectif, fiche matériel, index, saut
+  d'étape) portent les couleurs du jeu, et plus celles de l'application.
+- `npm run typecheck` ne produit plus de fichiers `.js` à côté des sources.
+  Vite résolvant `.js` avant `.tsx`, ces fichiers faisaient construire du
+  code périmé sans le moindre message.
+
+### Documentation
+
+- `GUIDE_CREATION_TUTO.md` : deux étapes nouvelles dans la démarche
+  (« Déclarer les effectifs jouables », « Habiller le jeu »), une section
+  « Ce que le joueur peut faire pendant le tutoriel », la relecture des
+  découpes en planche contact, et l'encadré sur les `.js` émis par TypeScript.
 
 ---
 

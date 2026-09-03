@@ -1,6 +1,6 @@
 /** Panneau modal générique (fiche matériel, index, réglages). */
 
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, type CSSProperties, type ReactNode } from 'react'
 import { Close } from './icons'
 
 interface Props {
@@ -8,9 +8,11 @@ interface Props {
   onClose: () => void
   children: ReactNode
   footer?: ReactNode
+  /** Habillage du jeu : le panneau entier doit porter les couleurs du jeu. */
+  style?: CSSProperties
 }
 
-export function Sheet({ title, onClose, children, footer }: Props) {
+export function Sheet({ title, onClose, children, footer, style }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -31,7 +33,7 @@ export function Sheet({ title, onClose, children, footer }: Props) {
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="sheet">
+      <div className="sheet" style={style}>
         <div className="sheet-head">
           <h2>{title}</h2>
           <button type="button" className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Fermer">

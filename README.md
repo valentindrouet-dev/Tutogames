@@ -6,13 +6,20 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.05** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.06** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
 | Jeu | Éditeur | Joueurs | Chapitres | Étapes |
 |---|---|---|---|---|
-| Nemesis | Awaken Realms | 1 à 5 | 8 | 65 |
+| Nemesis | Awaken Realms | 1 à 5 | 9 | 65 |
+| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 10 | 92 |
+
+Le nombre d'étapes est celui de l'effectif conseillé : le tutoriel demande
+combien vous êtes au démarrage, et adapte son contenu.
+
+Chaque jeu a son habillage — couleurs, polices, arrondis — mais la mise en page
+ne change jamais : un joueur qui a suivi un tutoriel sait déjà lire les autres.
 
 ## Démarrer
 
@@ -52,6 +59,10 @@ suivante.
 
 L'application s'ouvre alors en plein écran, sans barre de navigateur, et
 fonctionne hors ligne. La progression et le chronomètre restent sur la tablette.
+
+Sur ordinateur, **Espace** passe à l'étape suivante et **Maj + Espace** revient
+à la précédente. Le bouton « Étape *n* / *m* » ouvre la liste du chapitre pour
+sauter directement où l'on veut.
 
 ## Ajouter les visuels des règles
 
@@ -107,3 +118,6 @@ version.json    source unique du numéro de version
 Les règles, textes et illustrations des jeux appartiennent à leurs éditeurs.
 Nemesis est un jeu d'Adam Kwapiński édité par Awaken Realms ; le tutoriel
 s'appuie sur les règles françaises (traduction Antoine Prono, relecture Funforge).
+Tainted Grail : La Chute d'Avalon est un jeu de Krzysztof Piskorski et Marcin
+Świerkot édité par Awaken Realms ; le tutoriel s'appuie sur les règles
+françaises éditées par Edge Entertainment.

@@ -126,3 +126,10 @@ export const STEP_KIND: Record<StepKind, { label: string; tint: string; Icon: (p
 export const Crop = (p: P) => (
   <svg {...base} {...p}><path d="M6.5 2.5v15h15" /><path d="M2.5 6.5h15v15" /></svg>
 )
+
+export const List = (p: P) => (
+  <svg {...base} {...p}><path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12" /><circle cx="4.2" cy="6.5" r="1.1" fill="currentColor" stroke="none" /><circle cx="4.2" cy="12" r="1.1" fill="currentColor" stroke="none" /><circle cx="4.2" cy="17.5" r="1.1" fill="currentColor" stroke="none" /></svg>
+)
+export const Users = (p: P) => (
+  <svg {...base} {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /><path d="M16 5.6a3.2 3.2 0 0 1 0 6" /><path d="M17.5 14.9c1.9.5 3.2 2.2 3.2 4.6" /></svg>
+)

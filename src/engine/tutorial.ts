@@ -1,25 +1,56 @@
 /**
- * Navigation dans un tutoriel : aplatissement des chapitres en une liste
- * linéaire d'étapes, et conversion entre position (chapitre, étape) et
- * index global. Le moteur ne connait aucun jeu en particulier.
+ * Navigation dans un tutoriel.
+ *
+ * Tout passe par une **vue** : le tutoriel filtré pour un effectif donné.
+ * Une étape marquée `only: [1]` n'existe simplement pas dans la vue à trois
+ * joueurs — la navigation, la numérotation et la barre de progression n'ont
+ * donc aucun cas particulier à gérer, et le joueur ne voit jamais une
+ * consigne qui ne le concerne pas.
+ *
+ * Le moteur ne connaît aucun jeu en particulier.
  */
 
-import type { Chapter, Component, Step, Tutorial } from './types'
+import { appliesTo, type Chapter, type Component, type Step, type Tutorial } from './types'
+
+/** Position dans un tutoriel : index de chapitre et d'étape, dans la vue. */
+export interface Position {
+  chapter: number
+  step: number
+}
+
+/** Tutoriel filtré pour un effectif. */
+export interface View {
+  tutorial: Tutorial
+  players: number
+  chapters: Chapter[]
+}
+
+/**
+ * Construit la vue d'un tutoriel pour un effectif. Les chapitres et étapes
+ * hors effectif sont retirés ; un chapitre vidé de toutes ses étapes
+ * disparaît aussi.
+ */
+export function viewFor(tutorial: Tutorial, players: number): View {
+  const chapters = tutorial.chapters
+    .filter((c) => appliesTo(c.only, players))
+    .map((c) => ({ ...c, steps: c.steps.filter((s) => appliesTo(s.only, players)) }))
+    .filter((c) => c.steps.length > 0)
+
+  return { tutorial, players, chapters }
+}
 
 export interface FlatStep {
   step: Step
   chapter: Chapter
-  /** Index du chapitre dans le tutoriel. */
   chapterIndex: number
-  /** Index de l'étape dans son chapitre. */
   stepIndex: number
-  /** Index de l'étape dans le tutoriel entier. */
+  /** Index de l'étape dans la vue entière. */
   globalIndex: number
 }
 
-export function flatten(t: Tutorial): FlatStep[] {
+export function flatten(v: View): FlatStep[] {
   const out: FlatStep[] = []
-  t.chapters.forEach((chapter, chapterIndex) => {
+  v.chapters.forEach((chapter, chapterIndex) => {
     chapter.steps.forEach((step, stepIndex) => {
       out.push({ step, chapter, chapterIndex, stepIndex, globalIndex: out.length })
     })
@@ -27,41 +58,45 @@ export function flatten(t: Tutorial): FlatStep[] {
   return out
 }
 
+export function stepAt(v: View, pos: Position): Step | undefined {
+  return v.chapters[pos.chapter]?.steps[pos.step]
+}
+
 /**
  * Ramène une position potentiellement invalide (contenu mis à jour depuis la
- * sauvegarde, chapitre supprimé) sur l'étape valide la plus proche.
+ * sauvegarde, effectif changé) sur l'étape valide la plus proche.
  */
-export function clampPosition(t: Tutorial, chapter: number, step: number) {
-  const c = Math.min(Math.max(chapter, 0), Math.max(t.chapters.length - 1, 0))
-  const steps = t.chapters[c]?.steps ?? []
+export function clampPosition(v: View, chapter: number, step: number): Position {
+  const c = Math.min(Math.max(chapter, 0), Math.max(v.chapters.length - 1, 0))
+  const steps = v.chapters[c]?.steps ?? []
   const s = Math.min(Math.max(step, 0), Math.max(steps.length - 1, 0))
   return { chapter: c, step: s }
 }
 
-export function indexOf(t: Tutorial, chapter: number, step: number): number {
+export function indexOf(v: View, chapter: number, step: number): number {
   let n = 0
-  for (let c = 0; c < chapter && c < t.chapters.length; c++) n += t.chapters[c].steps.length
+  for (let c = 0; c < chapter && c < v.chapters.length; c++) n += v.chapters[c].steps.length
   return n + step
 }
 
-export function totalSteps(t: Tutorial): number {
-  return t.chapters.reduce((n, c) => n + c.steps.length, 0)
+export function totalSteps(v: View): number {
+  return v.chapters.reduce((n, c) => n + c.steps.length, 0)
 }
 
 /** Étape suivante, ou null si on est à la fin du tutoriel. */
-export function next(t: Tutorial, chapter: number, step: number) {
-  const steps = t.chapters[chapter]?.steps ?? []
+export function next(v: View, chapter: number, step: number): Position | null {
+  const steps = v.chapters[chapter]?.steps ?? []
   if (step + 1 < steps.length) return { chapter, step: step + 1 }
-  if (chapter + 1 < t.chapters.length) return { chapter: chapter + 1, step: 0 }
+  if (chapter + 1 < v.chapters.length) return { chapter: chapter + 1, step: 0 }
   return null
 }
 
-/** Étape précédente, ou null si on est au tout debut. */
-export function prev(t: Tutorial, chapter: number, step: number) {
+/** Étape précédente, ou null si on est au tout début. */
+export function prev(v: View, chapter: number, step: number): Position | null {
   if (step > 0) return { chapter, step: step - 1 }
   if (chapter > 0) {
     const c = chapter - 1
-    return { chapter: c, step: Math.max(t.chapters[c].steps.length - 1, 0) }
+    return { chapter: c, step: Math.max(v.chapters[c].steps.length - 1, 0) }
   }
   return null
 }
@@ -70,9 +105,17 @@ export function componentMap(t: Tutorial): Map<string, Component> {
   return new Map(t.components.map((c) => [c.id, c]))
 }
 
-/** Composants cites par une étape, dans l'ordre déclaré, sans les inconnus. */
+/** Composants cités par une étape, dans l'ordre déclaré, sans les inconnus. */
 export function componentsOf(t: Tutorial, step: Step): Component[] {
   if (!step.components?.length) return []
   const map = componentMap(t)
   return step.components.map((id) => map.get(id)).filter((c): c is Component => Boolean(c))
+}
+
+/**
+ * Nombre d'étapes d'un tutoriel pour son effectif conseillé — sert à annoncer
+ * une taille sur l'écran d'accueil, avant que le joueur ait choisi.
+ */
+export function nominalSteps(t: Tutorial): number {
+  return totalSteps(viewFor(t, t.players.recommended ?? t.players.min))
 }

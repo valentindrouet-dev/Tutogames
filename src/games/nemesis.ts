@@ -21,13 +21,41 @@ export const nemesis: Tutorial = {
   contentVersion: '1.0',
   publisher: 'Awaken Realms',
   author: 'Adam Kwapinski',
-  players: '1 à 5 joueurs',
+  players: {
+    min: 1,
+    max: 5,
+    recommended: 3,
+    labels: { 1: 'Solo' },
+    notes: {
+      1: 'Le mode solo a son propre paquet d’objectifs, et les salles contiennent moitié moins d’objets. Le tutoriel le signale au bon moment.',
+      2: 'À deux, le sac Intrus est plus clément : 2 jetons Adulte ajoutés au lieu de 5.',
+      5: 'À cinq, quatre nacelles de secours et un sac Intrus nettement plus dense.',
+    },
+  },
   minutes: 90,
-  accent: '#f97316',
-  accent2: '#ef4444',
+
+  // Alerte orange sur métal froid : la couleur des voyants d'urgence du
+  // vaisseau. Sans-serif technique, angles marqués.
+  theme: {
+    bg: '#0b0e14',
+    bg2: '#121722',
+    bg3: '#1a2130',
+    stroke: '#2a3446',
+    strokeSoft: '#202939',
+    fg: '#eef2f8',
+    fgDim: '#98a4b8',
+    fgFaint: '#64708a',
+    accent: '#f97316',
+    accent2: '#ef4444',
+    accentInk: '#180701',
+    titleFont: "ui-sans-serif, system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
+    titleWeight: 800,
+    titleSpacing: '-0.03em',
+    radius: '18px',
+  },
 
   source: {
-    pdf: 'nemesis-regles-fr.pdf',
+    pdf: 'Nemesis - Regles.pdf',
     assetId: 'nemesis',
     // Renseigné après ingestion : écart entre le numéro imprimé et l'index
     // de page dans le fichier. Voir GUIDE_CREATION_TUTO.md.
@@ -492,12 +520,39 @@ export const nemesis: Tutorial = {
           ref: 'Mise en place, étape 6 — p.6',
         },
         {
-          id: 's7',
+          id: 's7-2',
           kind: 'place',
-          title: 'Placez les nacelles de secours',
+          title: 'Placez 2 nacelles de secours',
+          only: [1, 2],
           body: [
-            '1 ou 2 joueurs : 2 nacelles. 3 ou 4 joueurs : 3 nacelles. 5 joueurs : 4 nacelles.',
-            'Tirez-les au hasard, puis placez celle qui porte le plus petit numéro en section A, la suivante en section B, et ainsi de suite.',
+            'Tirez 2 nacelles au hasard.',
+            'La plus petit numéro en section A, l’autre en section B.',
+            'Toutes deux face « verrouillé » visible. Les autres restent dans la boîte.',
+          ],
+          components: ['nacelles'],
+          ref: 'Mise en place, étape 7 — p.6',
+        },
+        {
+          id: 's7-3',
+          kind: 'place',
+          title: 'Placez 3 nacelles de secours',
+          only: [3, 4],
+          body: [
+            'Tirez 3 nacelles au hasard.',
+            'La plus petit numéro en section A, la suivante en section B, la dernière ensuite.',
+            'Toutes face « verrouillé » visible. La quatrième reste dans la boîte.',
+          ],
+          components: ['nacelles'],
+          ref: 'Mise en place, étape 7 — p.6',
+        },
+        {
+          id: 's7-4',
+          kind: 'place',
+          title: 'Placez les 4 nacelles de secours',
+          only: [5],
+          body: [
+            'À cinq joueurs, les 4 nacelles sont en jeu.',
+            'Placez-les par numéro croissant : la plus petite en section A, puis la suivante, et ainsi de suite.',
             'Toutes face « verrouillé » visible.',
           ],
           components: ['nacelles'],
@@ -536,6 +591,7 @@ export const nemesis: Tutorial = {
           body: [
             'Dans le sac : 1 vierge, 4 Larves, 1 Rôdeur, 1 Reine, 3 Adultes.',
             'Ajoutez ensuite 1 jeton Adulte supplémentaire par joueur.',
+            'C’est ce dernier ajout qui rend le vaisseau plus dangereux à mesure que vous êtes nombreux.',
             'Le reste des jetons Intrus, et les jetons Carcasse, restent à portée de main à côté du plateau.',
           ],
           components: ['sac', 'jetons-intrus', 'carcasses'],
@@ -605,9 +661,23 @@ export const nemesis: Tutorial = {
           ref: 'Mise en place, étape 15 — p.8',
         },
         {
+          id: 's16-solo',
+          kind: 'take',
+          title: 'Piochez 2 objectifs Solo',
+          only: [1],
+          body: [
+            'En solo, on utilise le paquet Objectif Solo/Coop, pas les paquets Corporation et Personnel.',
+            'Piochez-en 2 et gardez-les face cachée devant vous.',
+          ],
+          warn: 'Vous choisirez lequel garder au moment de votre première rencontre avec un Intrus, comme en partie normale.',
+          components: ['objectifs'],
+          ref: 'Modes de jeu, mode solo — p.27',
+        },
+        {
           id: 's16',
           kind: 'take',
           title: 'Distribuez les objectifs',
+          only: [2, 3, 4, 5],
           body: [
             'Retirez des deux paquets tous les objectifs qui impliquent plus de joueurs que vous n’êtes.',
             'Mélangez séparément Corporation et Personnel.',
@@ -649,6 +719,7 @@ export const nemesis: Tutorial = {
           id: 's19',
           kind: 'take',
           title: 'Le joueur 1 prend le jeton Premier joueur',
+          only: [2, 3, 4, 5],
           components: ['premier-joueur'],
           ref: 'Mise en place, étape 19 — p.8',
         },
@@ -803,9 +874,25 @@ export const nemesis: Tutorial = {
           ref: 'Déplacement — p.14',
         },
         {
+          id: 'e3-solo',
+          kind: 'action',
+          title: 'Réglez le compteur d’objets, moitié moins',
+          only: [1],
+          body: [
+            'Le jeton porte un chiffre. En solo, la salle contient moitié moins d’objets, arrondi au supérieur.',
+            'Jeton marqué 1 ou 2 : réglez le compteur sur 1.',
+            'Jeton marqué 3 ou 4 : réglez le compteur sur 2.',
+            'Faites pivoter la tuile Salle pour amener ce chiffre en face de la flèche rouge.',
+          ],
+          warn: 'C’est la seule règle de mise en place qui change en cours de partie en solo. Elle s’applique à chaque salle que vous découvrez.',
+          components: ['salles1', 'exploration'],
+          ref: 'Modes de jeu, mode solo — p.27',
+        },
+        {
           id: 'e3',
           kind: 'action',
           title: 'Réglez le compteur d’objets',
+          only: [2, 3, 4, 5],
           body: [
             'Le jeton porte un chiffre : c’est le nombre d’objets que la salle contient.',
             'Faites pivoter la tuile Salle pour amener ce chiffre en face de la flèche rouge.',
@@ -894,9 +981,21 @@ export const nemesis: Tutorial = {
           ref: 'Actions de base — p.13',
         },
         {
+          id: 'e9-solo',
+          kind: 'action',
+          title: 'Enchaînez vos tours',
+          only: [1],
+          body: [
+            'Vous jouez 2 actions, puis un nouveau tour de 2 actions, jusqu’à ce que vous passiez.',
+            'Quand vous passez, la manche s’arrête et la phase Événement commence.',
+          ],
+          tip: 'Ne videz pas votre main. Vos cartes restantes décident si une rencontre vous surprend.',
+        },
+        {
           id: 'e9',
           kind: 'action',
           title: 'Continuez le tour de table',
+          only: [2, 3, 4, 5],
           body: [
             'Chaque joueur joue ses 2 actions, dans le sens horaire.',
             'Puis un nouveau tour de 2 actions, jusqu’à ce que tout le monde ait passé.',

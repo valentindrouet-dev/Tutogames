@@ -1,27 +1,31 @@
 /**
- * Écran d'accueil : bibliothèque de jeux et reprise de la partie en cours.
+ * Écran d'accueil : bibliothèque de jeux, choix de l'effectif, reprise de la
+ * partie en cours.
  *
- * Le numéro de version de l'application est affiche juste sous le titre,
+ * Le numéro de version de l'application est affiché juste sous le titre,
  * conformément au système de versionnement décrit dans CHANGELOG.md.
  */
 
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useMemo, useState } from 'react'
 import type { Tutorial } from '../engine/types'
+import { playerLabel, playerRange } from '../engine/types'
 import { clearSave, formatClock, listSaves } from '../engine/progress'
-import { totalSteps } from '../engine/tutorial'
+import { nominalSteps, totalSteps, viewFor } from '../engine/tutorial'
 import { Sheet } from './Sheet'
-import { Check, CheckCircle, Circle, Crop, Info, Play } from './icons'
+import { themePanel, themeStyle } from './theme'
+import { Check, CheckCircle, Circle, Crop, Info, Play, Users } from './icons'
 import version from '../../version.json'
 
 interface Props {
   tutorials: Tutorial[]
-  onStart: (tutorial: Tutorial, restart: boolean) => void
+  onStart: (tutorial: Tutorial, players: number, restart: boolean) => void
   /** Ouvre l'outil de découpe des visuels de règles. */
   onStudio: () => void
 }
 
 export function Home({ tutorials, onStart, onStudio }: Props) {
   const [about, setAbout] = useState<Tutorial | null>(null)
+  const [setup, setSetup] = useState<Tutorial | null>(null)
   const [saveTick, setSaveTick] = useState(0)
 
   // Recalculé après chaque abandon de partie, pour que la barre de reprise
@@ -38,7 +42,7 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
         <header className="brand">
           <div className="brand-mark">
             <h1 className="brand-title">TutoGames</h1>
-            {/* Version demandee, visible sous le titre. */}
+            {/* Version, visible sous le titre. */}
             <span className="brand-version">v<b>{version.version}</b> · {version.date}</span>
           </div>
           <p className="brand-tag">
@@ -48,14 +52,13 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
         </header>
 
         {resumable && (
-          <div
-            className="resume-bar"
-            style={{ '--accent': resumable.tutorial.accent } as CSSProperties}
-          >
+          <div className="resume-bar" style={themeStyle(resumable.tutorial.theme)}>
             <div className="resume-text">
               <div className="resume-title">Reprendre {resumable.tutorial.title}</div>
               <div className="resume-sub">
-                Étape {resumable.save.done.length} sur {totalSteps(resumable.tutorial)} ·{' '}
+                {playerLabel(resumable.tutorial.players, resumable.save.players)} ·
+                {' '}Étape {resumable.save.done.length} sur{' '}
+                {totalSteps(viewFor(resumable.tutorial, resumable.save.players))} ·{' '}
                 {formatClock(resumable.save.elapsedMs)} de jeu
               </div>
             </div>
@@ -72,7 +75,7 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
             <button
               type="button"
               className="btn btn-lg btn-primary"
-              onClick={() => onStart(resumable.tutorial, false)}
+              onClick={() => onStart(resumable.tutorial, resumable.save.players, false)}
             >
               <Play aria-hidden /> Continuer
             </button>
@@ -85,27 +88,21 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
             {tutorials.map((t) => {
               const save = saves.find((s) => s.tutorialId === t.id)
               return (
-                <div
-                  key={t.id}
-                  className="game-card"
-                  style={{
-                    '--card-accent': t.accent,
-                    '--card-accent-2': t.accent2,
-                    '--accent': t.accent,
-                    '--accent-2': t.accent2,
-                  } as CSSProperties}
-                >
+                <div key={t.id} className="game-card" style={themeStyle(t.theme)}>
                   <div className="game-card-title">{t.title}</div>
                   <p className="game-card-tag">{t.tagline}</p>
 
                   <div className="meta-row">
-                    <span className="chip">{t.players}</span>
+                    <span className="chip">
+                      <Users aria-hidden />
+                      {t.players.min} à {t.players.max} joueurs
+                    </span>
                     <span className="chip">~{t.minutes} min</span>
-                    <span className="chip chip-accent">{totalSteps(t)} étapes</span>
+                    <span className="chip chip-accent">{nominalSteps(t)} étapes</span>
                     {save && save.done.length > 0 && (
                       <span className="chip chip-accent">
-                        <CheckCircle aria-hidden width={15} height={15} />
-                        {save.done.length}/{totalSteps(t)}
+                        <CheckCircle aria-hidden />
+                        {save.done.length}/{totalSteps(viewFor(t, save.players))}
                       </span>
                     )}
                   </div>
@@ -118,7 +115,7 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
                       type="button"
                       className="btn btn-primary"
                       style={{ flex: 1 }}
-                      onClick={() => onStart(t, true)}
+                      onClick={() => setSetup(t)}
                     >
                       <Play aria-hidden /> {save && save.done.length > 0 ? 'Recommencer' : 'Commencer'}
                     </button>
@@ -144,15 +141,18 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
         </footer>
       </div>
 
+      {setup && <PlayerCount tutorial={setup} onClose={() => setSetup(null)} onStart={onStart} />}
+
       {about && (
         <Sheet
           title={about.title}
           onClose={() => setAbout(null)}
+          style={themePanel(about.theme)}
           footer={
             <button
               type="button"
               className="btn btn-lg btn-primary btn-block"
-              onClick={() => { setAbout(null); onStart(about, true) }}
+              onClick={() => { setSetup(about); setAbout(null) }}
             >
               <Play aria-hidden /> Commencer le tutoriel
             </button>
@@ -163,7 +163,7 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
           <dl className="kv">
             <div className="kv-row"><dt>Éditeur</dt><dd>{about.publisher}</dd></div>
             <div className="kv-row"><dt>Auteur</dt><dd>{about.author}</dd></div>
-            <div className="kv-row"><dt>Joueurs</dt><dd>{about.players}</dd></div>
+            <div className="kv-row"><dt>Joueurs</dt><dd>{about.players.min} à {about.players.max}</dd></div>
             <div className="kv-row"><dt>Durée du tutoriel</dt><dd>~{about.minutes} min</dd></div>
             <div className="kv-row"><dt>Version du contenu</dt><dd>v{about.contentVersion}</dd></div>
             <div className="kv-row"><dt>Source</dt><dd>{about.source.credit}</dd></div>
@@ -179,7 +179,7 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
           </div>
 
           <div>
-            <div className="section-label">Laisse de côté pour cette première partie</div>
+            <div className="section-label">Laissé de côté pour cette première partie</div>
             <ul className="list-check">
               {about.scope.skipped.map((s) => (
                 <li className="no" key={s}><Circle aria-hidden /> <span>{s}</span></li>
@@ -189,5 +189,75 @@ export function Home({ tutorials, onStart, onStudio }: Props) {
         </Sheet>
       )}
     </div>
+  )
+}
+
+/**
+ * Choix de l'effectif avant de commencer.
+ *
+ * Ce n'est pas une formalité : le nombre de joueurs change la mise en place
+ * (combien de nacelles, combien de cartes) et parfois les règles elles-mêmes.
+ * Le demander une fois évite d'écrire « si vous êtes 3, ignorez ceci » à
+ * chaque étape.
+ */
+function PlayerCount({
+  tutorial,
+  onClose,
+  onStart,
+}: {
+  tutorial: Tutorial
+  onClose: () => void
+  onStart: (t: Tutorial, players: number, restart: boolean) => void
+}) {
+  const counts = playerRange(tutorial.players)
+  const [picked, setPicked] = useState(tutorial.players.recommended ?? counts[0])
+  const steps = totalSteps(viewFor(tutorial, picked))
+  const note = tutorial.players.notes?.[picked]
+
+  return (
+    <Sheet
+      title={`${tutorial.title} — combien de joueurs ?`}
+      onClose={onClose}
+      style={themePanel(tutorial.theme)}
+      footer={
+        <button
+          type="button"
+          className="btn btn-lg btn-primary btn-block"
+          onClick={() => onStart(tutorial, picked, true)}
+        >
+          {/* « en solo », mais « à 3 joueurs » : la préposition suit l'effectif. */}
+          <Play aria-hidden /> {picked === 1 ? 'Commencer en solo' : `Commencer à ${picked} joueurs`}
+        </button>
+      }
+    >
+      <div>
+        <p className="sheet-lead">
+          Le tutoriel s'adapte : mise en place, variantes et étapes propres à cet effectif.
+        </p>
+
+        <div className="count-grid">
+          {counts.map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={`count-btn${n === picked ? ' picked' : ''}`}
+              onClick={() => setPicked(n)}
+            >
+              <span className="count-n">{n}</span>
+              <span className="count-label">{playerLabel(tutorial.players, n)}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="count-summary">
+          <span className="chip chip-accent">{steps} étapes</span>
+          {tutorial.players.recommended === picked && (
+            <span className="chip">Conseillé pour découvrir</span>
+          )}
+        </div>
+
+        {note && <p className="part-detail-note">{note}</p>}
+      </div>
+    </Sheet>
   )
 }
