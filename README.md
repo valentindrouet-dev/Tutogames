@@ -21,12 +21,24 @@ npm install
 npm run dev
 ```
 
+## Publication
+
+Le site est publié sur GitHub Pages par
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), à chaque push
+sur la branche par défaut.
+
+Le workflow construit `dist/` avec Vite et publie **uniquement ce dossier**.
+La racine du dépôt ne doit jamais être servie telle quelle : son `index.html`
+pointe vers `/src/main.tsx`, un fichier TypeScript que le navigateur ne sait
+pas exécuter — c'est une page blanche garantie. Dans les réglages Pages du
+dépôt, la source doit donc rester **GitHub Actions**.
+
 ## Installer sur l'iPad
 
-1. `npm run build`, puis servez le dossier `dist/` sur le réseau local
-   (`npm run preview -- --host` suffit pour un essai).
-2. Ouvrez l'adresse dans Safari sur l'iPad.
-3. **Partager → Sur l'écran d'accueil**.
+1. Ouvrez <https://valentindrouet-dev.github.io/Tutogames/> dans Safari sur
+   l'iPad. Pour un essai en local : `npm run build` puis
+   `npm run preview -- --host`.
+2. **Partager → Sur l'écran d'accueil**.
 
 L'application s'ouvre alors en plein écran, sans barre de navigateur, et
 fonctionne hors ligne. La progression et le chronomètre restent sur la tablette.
