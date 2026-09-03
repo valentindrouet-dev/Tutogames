@@ -1,0 +1,51 @@
+# Journal des versions
+
+Le numéro de version de l'application est affiché **sous le titre** sur l'écran
+d'accueil. Sa source unique est [`version.json`](version.json).
+
+Format : `0.01`, `0.02`, … `0.10`, puis `1.00` à la première version considérée
+comme complète.
+
+À chaque publication :
+
+1. Mettre à jour `version` et `date` dans `version.json`.
+2. Aligner `VERSION` dans `public/sw.js` (le nom du cache porte la version, ce
+   qui purge automatiquement l'ancienne sur les tablettes déjà installées).
+3. Ajouter une entrée ici.
+4. Mettre à jour `GUIDE_CREATION_TUTO.md` si la démarche de création change.
+
+---
+
+## v0.01 — 2026-09-03
+
+Première version.
+
+### Application
+
+- Écran d'accueil : bibliothèque de jeux, reprise de la partie en cours,
+  numéro de version affiché sous le titre.
+- Déroulement d'un tutoriel : une étape à l'écran, gros boutons tactiles,
+  matériel concerné affiché à côté, navigation libre entre chapitres.
+- Sauvegarde de progression : étape courante, étapes validées et chronomètre,
+  conservées sur la tablette. Reprise exacte après fermeture de l'application.
+- Chronomètre intégré : compte le temps réel autour de la table, survit à une
+  mise en veille, se met en pause et reprend.
+- Éléments interactifs : dé simulé (`roller`), choix à conséquence (`choice`),
+  compteur (`counter`).
+- Fiche matériel et index complet du matériel du jeu.
+- PWA installable sur l'écran d'accueil iPad, utilisable hors ligne.
+
+### Contenu
+
+- Tutoriel **Nemesis** (Awaken Realms), contenu v1.0 : 8 chapitres, 65 étapes,
+  36 éléments de matériel. Couvre la mise en place complète (20 étapes
+  officielles), la structure de la manche, l'exploration et le jet de bruit,
+  la rencontre et l'attaque-surprise, le combat et la fuite, la phase
+  Événement et le sac Intrus, les conditions de victoire.
+
+### Outils
+
+- `npm run ingest` : rend les pages d'un PDF de règles en images et écrit le
+  manifeste utilisé par l'application.
+- Studio de découpe intégré : trace les rectangles de découpe au doigt et
+  produit le littéral TypeScript à coller dans le tutoriel.
