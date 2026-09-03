@@ -319,9 +319,10 @@ npm run dev          # relecture à l'écran
 ```
 
 GitHub Pages publie la **racine du dépôt** (« Deploy from a branch »). Le
-workflow `.github/workflows/build.yml` y reconstruit `index.html` et `assets/`
-à chaque push et les commite : pas de build manuel avant de pousser, mais un
-`git pull` avant le push suivant pour récupérer le commit du bot.
+workflow `.github/workflows/deploy.yml` y reconstruit `index.html` et `assets/`
+à chaque push, les commite, et publie aussi l'artefact Pages (il couvre donc
+les deux modes de Pages). Pas de build manuel avant de pousser, mais un
+`git pull` avant le push suivant si le bot a commité.
 
 - [ ] Le tutoriel se déroule du début à la fin sans étape vide.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.

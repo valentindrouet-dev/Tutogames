@@ -27,8 +27,10 @@ comme complète.
   service worker) vivent à la racine, l'entrée de développement est dans
   `app/`. Un `.nojekyll` désactive le traitement Jekyll. Plus aucun réglage à
   changer côté GitHub, et plus de course entre deux publieurs.
-- Le workflow `build.yml` reconstruit et commite `index.html` + `assets/` à
-  chaque push : le site suit les sources sans build manuel.
+- Le workflow `deploy.yml` reconstruit et commite `index.html` + `assets/` à
+  chaque push, et publie aussi l'artefact Pages : il fonctionne dans les deux
+  modes de Pages (branche ou Actions) et publie le même contenu dans les deux.
+  Le site suit les sources sans build manuel.
 
 ### Optimisé
 

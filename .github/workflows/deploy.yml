@@ -1,0 +1,89 @@
+# Construit le site, le commite à la racine et le publie sur GitHub Pages.
+#
+# Ce workflow fonctionne quel que soit le réglage « Source » de Pages :
+#
+#  - « Deploy from a branch » : Pages publie la racine de la branche. Le
+#    build y est commité (index.html et assets/), donc la racine est toujours
+#    le site à jour. Le commit du bot déclenche la publication Pages.
+#
+#  - « GitHub Actions » : le job deploy publie l'artefact assemblé à partir
+#    de cette même racine.
+#
+# Dans les deux cas, ce qui est publié est identique : plus de course entre
+# deux publieurs qui serviraient des contenus différents.
+#
+# Pas de boucle : un push effectué avec GITHUB_TOKEN ne relance aucun
+# workflow, et paths-ignore exclut de toute façon les fichiers du build.
+
+name: Construire et publier
+
+on:
+  push:
+    branches: [claude/board-game-tutorial-app-di0kt0]
+    paths-ignore:
+      - 'index.html'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Construire
+        run: npm run build
+
+      - name: Commiter le build à la racine
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A index.html assets
+          if git diff --cached --quiet; then
+            echo "Le build est déjà à jour, rien à commiter."
+          else
+            git commit -m "Construire le site"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin HEAD:"${GITHUB_REF_NAME}"
+          fi
+
+      - name: Assembler le site
+        # Uniquement ce que le site sert : ni sources, ni outils, ni PDF.
+        run: |
+          mkdir -p _site
+          cp -r index.html assets games icon-180.png icon-192.png icon-512.png icon-maskable-512.png manifest.webmanifest sw.js .nojekyll _site/
+          du -sh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # En mode « Deploy from a branch », cette publication est simplement
+    # doublée par celle de Pages ; elle ne doit jamais bloquer le build.
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

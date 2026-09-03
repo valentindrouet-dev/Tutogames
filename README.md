@@ -33,11 +33,13 @@ icon-*.png, manifest.webmanifest, sw.js, .nojekyll
 app/index.html             entrée de développement (source du build)
 ```
 
-Le workflow [`.github/workflows/build.yml`](.github/workflows/build.yml)
-reconstruit `index.html` et `assets/` à chaque push et les commite s'ils ont
-changé — vous n'avez donc pas à lancer le build avant de pousser. Ce commit du
-bot arrive quelques secondes après le vôtre : faites un `git pull` avant de
-pousser la fois suivante.
+Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+reconstruit `index.html` et `assets/` à chaque push, les commite s'ils ont
+changé, et publie aussi l'artefact Pages — il fonctionne donc que la source
+de Pages soit sur *Deploy from a branch* ou sur *GitHub Actions*, et publie le
+même contenu dans les deux cas. Vous n'avez pas à lancer le build avant de
+pousser. Quand le bot a commité, faites un `git pull` avant de pousser la fois
+suivante.
 
 `npm run build` reste utilisable en local ; il écrit directement à la racine.
 
