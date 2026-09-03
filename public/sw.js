@@ -10,7 +10,7 @@
  * automatiquement l'ancienne.
  */
 
-const VERSION = 'tutogames-v0.03'
+const VERSION = 'tutogames-v0.04'
 const SHELL = './'
 
 self.addEventListener('install', (event) => {

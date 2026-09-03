@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.03** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.04** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -28,10 +28,22 @@ Le site est publié sur GitHub Pages par
 sur la branche par défaut.
 
 Le workflow construit `dist/` avec Vite et publie **uniquement ce dossier**.
-La racine du dépôt ne doit jamais être servie telle quelle : son `index.html`
-pointe vers `/src/main.tsx`, un fichier TypeScript que le navigateur ne sait
-pas exécuter — c'est une page blanche garantie. Dans les réglages Pages du
-dépôt, la source doit donc rester **GitHub Actions**.
+
+> **Réglage obligatoire, une seule fois.**
+> Dans **Settings › Pages** du dépôt, **Source** doit être sur
+> **GitHub Actions**, et non sur *Deploy from a branch*.
+>
+> Tant que la source reste sur une branche, GitHub lance en parallèle son
+> propre publieur Jekyll (`pages build and deployment`), qui publie la
+> **racine du dépôt**. Les deux se courent après, et c'est le dernier arrivé
+> qui gagne — souvent Jekyll, à quelques secondes près. Or la racine contient
+> l'`index.html` de développement, dont le script pointe vers
+> `/src/main.tsx` : le navigateur ne sait pas exécuter du TypeScript, donc la
+> page reste blanche.
+>
+> Ce cas n'est plus silencieux : servie telle quelle, la racine affiche
+> maintenant un message qui nomme la cause et le correctif. Si vous voyez
+> « SOURCE NON CONSTRUITE » à l'écran, c'est ce réglage qu'il faut changer.
 
 ## Installer sur l'iPad
 

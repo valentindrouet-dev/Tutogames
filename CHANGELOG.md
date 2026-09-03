@@ -16,6 +16,28 @@ comme complète.
 
 ---
 
+## v0.04 — 2026-09-03
+
+### Corrigé
+
+- **Écran blanc persistant en ligne, cause identifiée.** La source de Pages
+  était restée sur *Deploy from a branch*. GitHub lançait donc son publieur
+  Jekyll en parallèle du workflow, sur chaque push : Jekyll publie la racine
+  du dépôt, et terminait quelques secondes après le workflow, écrasant sa
+  publication. La racine contenant l'`index.html` de développement, la page
+  restait blanche. Les quatre déploiements du workflow étaient pourtant tous
+  au vert — d'où le diagnostic trompeur.
+  Le correctif est un réglage du dépôt : **Settings › Pages › Source →
+  GitHub Actions**. Il ne peut pas être fait depuis le code.
+
+### Ajouté
+
+- La racine servie telle quelle n'affiche plus un écran blanc muet mais un
+  message nommant la cause et le correctif. Un greffon Vite retire ce bloc du
+  build, où il serait au mieux un flash, au pire un message faux.
+
+---
+
 ## v0.03 — 2026-09-03
 
 ### Ajouté

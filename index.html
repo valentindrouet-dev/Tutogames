@@ -13,7 +13,37 @@
     <meta name="apple-mobile-web-app-title" content="TutoGames" />
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Le contenu de #root est remplace par React des que l'application se
+      monte. Il ne reste donc visible que dans un seul cas : ce fichier a ete
+      servi tel quel, sans passer par le build Vite. C'etait jusqu'ici un
+      ecran blanc muet ; c'est desormais un diagnostic.
+    -->
+    <div id="root">
+      <!--unbuilt-->
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;background:#0b0e14;color:#eef2f8;font:16px/1.55 ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+        <div style="max-width:52ch">
+          <h1 style="margin:0 0 6px;font-size:30px;letter-spacing:-.02em">TutoGames</h1>
+          <p style="margin:0 0 22px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#64708a">SOURCE NON CONSTRUITE</p>
+          <p style="margin:0 0 14px">
+            Cette page est le fichier source de l'application, pas sa version
+            construite. GitHub&nbsp;Pages publie donc la racine du depot au lieu
+            du dossier <code style="color:#38bdf8">dist/</code> produit par Vite.
+          </p>
+          <p style="margin:0 0 14px">
+            Correctif : dans <b>Settings &rsaquo; Pages</b> du depot, mettre
+            <b>Source</b> sur <b>GitHub&nbsp;Actions</b> au lieu de
+            <i>Deploy from a branch</i>, puis relancer le workflow
+            &laquo;&nbsp;Deployer sur GitHub Pages&nbsp;&raquo;.
+          </p>
+          <p style="margin:0;color:#98a4b8;font-size:15px">
+            En local, lancer <code style="color:#38bdf8">npm run dev</code> :
+            ce message disparait des que l'application se monte.
+          </p>
+        </div>
+      </div>
+      <!--/unbuilt-->
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
