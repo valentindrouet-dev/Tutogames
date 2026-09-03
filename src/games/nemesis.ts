@@ -67,7 +67,7 @@ export const nemesis: Tutorial = {
       note: 'Le vaisseau Nemesis. Le côté standard porte une triple flèche rouge en haut à gauche ; le verso est le plateau alternatif, réservé aux parties suivantes.',
       glyph: 'board',
       tint: '#f97316',
-      crop: { page: 9 },
+      crop: { page: 2, x: 0.374, y: 0.157, w: 0.252, h: 0.173 },
     },
     {
       id: 'salles1',
@@ -75,7 +75,7 @@ export const nemesis: Tutorial = {
       qty: '11 tuiles',
       note: 'Les salles de base. Elles sont toutes en jeu à chaque partie : le relais de transmission, le laboratoire et le nid en font partie.',
       glyph: 'tile',
-      crop: { page: 24 },
+      crop: { page: 2, x: 0.374, y: 0.534, w: 0.252, h: 0.102 },
     },
     {
       id: 'salles2',
@@ -83,7 +83,7 @@ export const nemesis: Tutorial = {
       qty: '9 tuiles',
       note: 'Les salles supplémentaires. Seules 5 sont en jeu à chaque partie : vous ne savez jamais lesquelles avant de les découvrir.',
       glyph: 'tile',
-      crop: { page: 25 },
+      crop: { page: 2, x: 0.374, y: 0.664, w: 0.252, h: 0.102 },
     },
     {
       id: 'exploration',
@@ -92,7 +92,7 @@ export const nemesis: Tutorial = {
       note: 'Posés face cachée sur chaque tuile Salle. Ils indiquent le nombre d’objets de la salle et un effet spécial déclenché à la première visite.',
       glyph: 'token',
       tint: '#22d3ee',
-      crop: { page: 14 },
+      crop: { page: 3, x: 0.056, y: 0.704, w: 0.129, h: 0.06 },
     },
     {
       id: 'moteurs',
@@ -101,15 +101,15 @@ export const nemesis: Tutorial = {
       note: '3 « opérationnel » et 3 « endommagé ». Deux moteurs sur trois doivent fonctionner pour que le vaisseau atteigne sa destination.',
       glyph: 'tile',
       tint: '#34d399',
-      crop: { page: 26 },
+      crop: { page: 3, x: 0.052, y: 0.531, w: 0.21, h: 0.079 },
     },
     {
-      id: 'coordonnées',
+      id: 'coordonnees',
       name: 'Cartes Coordonnées',
       qty: '8 cartes',
       note: 'Une seule est en jeu, face cachée dans le cockpit. Elle est révélée en fin de partie et décide de la destination réelle du vaisseau.',
       glyph: 'card',
-      crop: { page: 26 },
+      crop: { page: 3, x: 0.569, y: 0.267, w: 0.172, h: 0.065 },
     },
     {
       id: 'nacelles',
@@ -118,7 +118,7 @@ export const nemesis: Tutorial = {
       note: 'Verrouillées au début. Elles se déverrouillent automatiquement à la première mort d’un personnage.',
       glyph: 'token',
       tint: '#34d399',
-      crop: { page: 26 },
+      crop: { page: 3, x: 0.056, y: 0.633, w: 0.129, h: 0.058 },
     },
     {
       id: 'plateau-intrus',
@@ -127,7 +127,7 @@ export const nemesis: Tutorial = {
       note: 'Accueille les 5 œufs du nid et les 3 cartes Point faible. Il porte aussi la légende des symboles d’Intrus.',
       glyph: 'board',
       tint: '#ef4444',
-      crop: { page: 2 },
+      crop: { page: 2, x: 0.422, y: 0.794, w: 0.135, h: 0.086 },
     },
     {
       id: 'sac',
@@ -136,7 +136,7 @@ export const nemesis: Tutorial = {
       note: 'Contient les jetons Intrus. On y pioche à chaque rencontre et à la fin de chaque manche : c’est le moteur de la menace.',
       glyph: 'bag',
       tint: '#ef4444',
-      crop: { page: 2 },
+      crop: { page: 2, x: 0.566, y: 0.792, w: 0.068, h: 0.067 },
     },
     {
       id: 'jetons-intrus',
@@ -145,7 +145,7 @@ export const nemesis: Tutorial = {
       note: '8 Larves, 12 Adultes, 3 Rôdeurs, 2 Hybrides, 1 Reine, 1 vierge. Le recto donne le type, le verso un chiffre utilisé pour l’attaque-surprise.',
       glyph: 'token',
       tint: '#ef4444',
-      crop: { page: 2 },
+      crop: { page: 3, x: 0.199, y: 0.702, w: 0.129, h: 0.06 },
     },
     {
       id: 'figurines',
@@ -154,7 +154,7 @@ export const nemesis: Tutorial = {
       note: '6 Larves, 8 Adultes, 3 Rôdeurs, 2 Hybrides, 1 Reine. Seuls 8 Adultes existent : au-delà, les Adultes hors combat sont retirés du plateau.',
       glyph: 'figure',
       tint: '#ef4444',
-      crop: { page: 2 },
+      crop: { page: 2, x: 0.668, y: 0.456, w: 0.28, h: 0.134 },
     },
     {
       id: 'oeufs',
@@ -163,7 +163,7 @@ export const nemesis: Tutorial = {
       note: '5 sont placés sur le plateau Intrus : ce sont les œufs du nid. Un œuf est un corps lourd, il occupe une main.',
       glyph: 'egg',
       tint: '#84cc16',
-      crop: { page: 21 },
+      crop: { page: 3, x: 0.207, y: 0.633, w: 0.114, h: 0.055 },
     },
     {
       id: 'carcasses',
@@ -171,7 +171,7 @@ export const nemesis: Tutorial = {
       qty: '8 jetons',
       note: 'Remplacent une figurine d’Intrus tuée. C’est un corps, analysable au laboratoire.',
       glyph: 'token',
-      crop: { page: 21 },
+      crop: { page: 3, x: 0.199, y: 0.812, w: 0.129, h: 0.055 },
     },
     {
       id: 'cadavre-bleu',
@@ -180,7 +180,7 @@ export const nemesis: Tutorial = {
       note: 'Le camarade retrouvé mort dans l’hibernatorium au début de la partie. C’est un corps comme un autre.',
       glyph: 'token',
       tint: '#38bdf8',
-      crop: { page: 21 },
+      crop: { page: 3, x: 0.056, y: 0.779, w: 0.129, h: 0.057 },
     },
     {
       id: 'cadavres-rouges',
@@ -189,7 +189,7 @@ export const nemesis: Tutorial = {
       note: 'Marquent l’endroit où un personnage joueur est mort.',
       glyph: 'token',
       tint: '#ef4444',
-      crop: { page: 2 },
+      crop: { page: 3, x: 0.056, y: 0.779, w: 0.129, h: 0.057 },
     },
     {
       id: 'plateaux-perso',
@@ -197,15 +197,15 @@ export const nemesis: Tutorial = {
       qty: '6 plateaux',
       note: 'Un par personnage. Ils portent la piste de blessures, les cases Slime et Signal, les deux mains et l’emplacement de défausse.',
       glyph: 'board',
-      crop: { page: 8 },
+      crop: { page: 2, x: 0.41, y: 0.358, w: 0.179, h: 0.149 },
     },
     {
       id: 'roles',
-      name: 'Cartes Role',
+      name: 'Cartes Rôle',
       qty: '6 cartes',
       note: 'Servent uniquement à répartir les personnages au début de la partie.',
       glyph: 'card',
-      crop: { page: 8 },
+      crop: { page: 3, x: 0.589, y: 0.853, w: 0.131, h: 0.063 },
     },
     {
       id: 'actions',
@@ -214,7 +214,7 @@ export const nemesis: Tutorial = {
       note: '10 par personnage. Elles servent à la fois de main de jeu et de monnaie : on les défausse pour payer le coût des actions.',
       glyph: 'card',
       tint: '#38bdf8',
-      crop: { page: 13 },
+      crop: { page: 3, x: 0.363, y: 0.18, w: 0.175, h: 0.082 },
     },
     {
       id: 'contamination',
@@ -223,7 +223,7 @@ export const nemesis: Tutorial = {
       note: 'Même dos que les cartes Action mais paquet séparé. Elles encombrent la main et ne peuvent jamais payer une action.',
       glyph: 'card',
       tint: '#a78bfa',
-      crop: { page: 20 },
+      crop: { page: 3, x: 0.363, y: 0.383, w: 0.175, h: 0.079 },
     },
     {
       id: 'objectifs',
@@ -232,7 +232,7 @@ export const nemesis: Tutorial = {
       note: '9 Corporation et 9 Personnel. Chaque joueur en reçoit une de chaque et devra en abandonner une à la première rencontre.',
       glyph: 'card',
       tint: '#fbbf24',
-      crop: { page: 12 },
+      crop: { page: 3, x: 0.363, y: 0.276, w: 0.175, h: 0.082 },
     },
     {
       id: 'attaques',
@@ -241,16 +241,16 @@ export const nemesis: Tutorial = {
       note: 'Servent à deux choses : résoudre les attaques d’Intrus, et vérifier via la tache de sang si un Intrus blessé meurt.',
       glyph: 'card',
       tint: '#ef4444',
-      crop: { page: 20 },
+      crop: { page: 3, x: 0.363, y: 0.509, w: 0.175, h: 0.081 },
     },
     {
-      id: 'événements',
+      id: 'evenements',
       name: 'Cartes Événement',
       qty: '20 cartes',
       note: 'Une par manche. Elles déplacent les Intrus par un couloir numéroté, puis appliquent un effet.',
       glyph: 'card',
       tint: '#f472b6',
-      crop: { page: 10 },
+      crop: { page: 3, x: 0.363, y: 0.694, w: 0.175, h: 0.082 },
     },
     {
       id: 'blessures',
@@ -259,7 +259,7 @@ export const nemesis: Tutorial = {
       note: 'Chaque blessure grave a un effet permanent. Trois blessures graves, et la moindre blessure suivante tue.',
       glyph: 'card',
       tint: '#fb7185',
-      crop: { page: 21 },
+      crop: { page: 3, x: 0.363, y: 0.604, w: 0.175, h: 0.076 },
     },
     {
       id: 'objets',
@@ -268,7 +268,7 @@ export const nemesis: Tutorial = {
       note: 'Militaire, technique, médical, et les objets fabriqués. La couleur de la salle décide de la pioche que vous pouvez fouiller.',
       glyph: 'card',
       tint: '#34d399',
-      crop: { page: 23 },
+      crop: { page: 3, x: 0.579, y: 0.345, w: 0.152, h: 0.074 },
     },
     {
       id: 'inventaires',
@@ -276,7 +276,7 @@ export const nemesis: Tutorial = {
       qty: '5 porte-cartes',
       note: 'Gardent vos objets secrets : les autres voient la couleur du dos, pas la carte.',
       glyph: 'card',
-      crop: { page: 8 },
+      crop: { page: 2, x: 0.672, y: 0.83, w: 0.138, h: 0.067 },
     },
     {
       id: 'de-bruit',
@@ -285,7 +285,7 @@ export const nemesis: Tutorial = {
       note: 'Le dé du jet de bruit. Ses résultats : un numéro de couloir de 1 à 4, Silence, ou Danger.',
       glyph: 'die',
       tint: '#22d3ee',
-      crop: { page: 15 },
+      crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
     },
     {
       id: 'de-combat',
@@ -294,7 +294,7 @@ export const nemesis: Tutorial = {
       note: 'Le dé de combat. Ses faces disent quels types d’Intrus vous pouvez blesser, et combien.',
       glyph: 'die',
       tint: '#ef4444',
-      crop: { page: 18 },
+      crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
     },
     {
       id: 'marqueurs-bruit',
@@ -303,7 +303,7 @@ export const nemesis: Tutorial = {
       note: 'Posés dans les couloirs. Un deuxième marqueur sur le même couloir déclenche une rencontre au lieu d’être posé.',
       glyph: 'marker',
       tint: '#22d3ee',
-      crop: { page: 17 },
+      crop: { page: 3, x: 0.056, y: 0.375, w: 0.129, h: 0.057 },
     },
     {
       id: 'marqueurs-feu',
@@ -312,7 +312,7 @@ export const nemesis: Tutorial = {
       note: 'Blessent qui finit son tour dans la salle, blessent les Intrus, et font exploser le vaisseau s’il faut en poser un 9e.',
       glyph: 'fire',
       tint: '#f97316',
-      crop: { page: 17 },
+      crop: { page: 3, x: 0.199, y: 0.377, w: 0.129, h: 0.057 },
     },
     {
       id: 'marqueurs-panne',
@@ -321,7 +321,7 @@ export const nemesis: Tutorial = {
       note: 'Neutralisent l’action de la salle. Comme le feu, un 9e marqueur à poser fait exploser le vaisseau.',
       glyph: 'marker',
       tint: '#fbbf24',
-      crop: { page: 17 },
+      crop: { page: 3, x: 0.199, y: 0.445, w: 0.129, h: 0.055 },
     },
     {
       id: 'marqueurs-std',
@@ -329,7 +329,7 @@ export const nemesis: Tutorial = {
       qty: '18 marqueurs',
       note: 'Polyvalents : blessures légères, slime, signal, temps, destination, autodestruction.',
       glyph: 'marker',
-      crop: { page: 2 },
+      crop: { page: 3, x: 0.056, y: 0.309, w: 0.129, h: 0.054 },
     },
     {
       id: 'munitions',
@@ -337,7 +337,7 @@ export const nemesis: Tutorial = {
       qty: '50 marqueurs',
       note: 'Munitions sur vos armes, marqueurs de dégâts sur les figurines d’Intrus.',
       glyph: 'marker',
-      crop: { page: 2 },
+      crop: { page: 3, x: 0.199, y: 0.309, w: 0.129, h: 0.054 },
     },
     {
       id: 'portes',
@@ -345,7 +345,7 @@ export const nemesis: Tutorial = {
       qty: '12 pions',
       note: 'Debout = porte fermée, couché = porte détruite. Toutes les portes sont ouvertes au début de la partie.',
       glyph: 'door',
-      crop: { page: 17 },
+      crop: { page: 3, x: 0.056, y: 0.448, w: 0.129, h: 0.062 },
     },
     {
       id: 'scanner',
@@ -354,7 +354,7 @@ export const nemesis: Tutorial = {
       note: 'Le filtre rouge révèle si une carte Contamination porte le mot « infectée ».',
       glyph: 'token',
       tint: '#a78bfa',
-      crop: { page: 20 },
+      crop: { page: 2, x: 0.345, y: 0.775, w: 0.087, h: 0.11 },
     },
     {
       id: 'premier-joueur',
@@ -363,7 +363,7 @@ export const nemesis: Tutorial = {
       note: 'Passe au voisin de gauche au début de chaque manche, sauf la première.',
       glyph: 'token',
       tint: '#fbbf24',
-      crop: { page: 2 },
+      crop: { page: 3, x: 0.097, y: 0.867, w: 0.041, h: 0.04 },
     },
     {
       id: 'aides',
@@ -371,7 +371,7 @@ export const nemesis: Tutorial = {
       qty: '5 cartes',
       note: 'Elles portent votre numéro de joueur et se retournent côté « passé » quand vous passez.',
       glyph: 'card',
-      crop: { page: 8 },
+      crop: { page: 3, x: 0.371, y: 0.789, w: 0.161, h: 0.084 },
     },
   ],
 
@@ -480,7 +480,7 @@ export const nemesis: Tutorial = {
             'Prenez une carte Coordonnées au hasard, face cachée, sur son emplacement du cockpit.',
             'Les autres retournent dans la boîte.',
           ],
-          components: ['coordonnées'],
+          components: ['coordonnees'],
           ref: 'Mise en place, étape 5 — p.6',
         },
         {
@@ -551,7 +551,7 @@ export const nemesis: Tutorial = {
             'Laissez un espace de défausse libre à côté des objets, des événements, des attaques d’Intrus et des blessures graves.',
           ],
           warn: 'Les cartes Action d’Intrus et les objectifs Solo/Coop ne servent pas dans le jeu de base : laissez-les dans la boîte.',
-          components: ['objets', 'événements', 'attaques', 'contamination', 'blessures', 'scanner'],
+          components: ['objets', 'evenements', 'attaques', 'contamination', 'blessures', 'scanner'],
           ref: 'Mise en place, étape 11 — p.6',
         },
         {
@@ -756,6 +756,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 't6',
+          crop: { page: 13, x: 0.356, y: 0.568, w: 0.289, h: 0.361 },
           kind: 'info',
           title: 'Quatre familles d’actions',
           body: [
@@ -790,6 +791,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'e2',
+          crop: { page: 16, x: 0.048, y: 0.155, w: 0.289, h: 0.684 },
           kind: 'action',
           title: 'Révélez la salle et son jeton',
           body: [
@@ -856,6 +858,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'e6',
+          crop: { page: 14, x: 0.356, y: 0.264, w: 0.289, h: 0.586 },
           kind: 'info',
           title: 'Quand ne PAS lancer le dé',
           body: [
@@ -922,6 +925,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'r2',
+          crop: { page: 18, x: 0.356, y: 0.155, w: 0.289, h: 0.62 },
           kind: 'action',
           title: 'Résolvez la rencontre en 4 temps',
           body: [
@@ -1009,6 +1013,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'c2',
+          crop: { page: 19, x: 0.048, y: 0.55, w: 0.289, h: 0.318 },
           kind: 'action',
           title: 'Tirez sur l’Intrus',
           body: [
@@ -1034,6 +1039,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'c3',
+          crop: { page: 20, x: 0.356, y: 0.53, w: 0.289, h: 0.364 },
           kind: 'action',
           title: 'L’Intrus est-il mort ?',
           body: [
@@ -1057,7 +1063,7 @@ export const nemesis: Tutorial = {
             'Piochez une carte Événement et déplacez-le par le couloir indiqué, puis défaussez l’événement.',
             'Il garde ses dégâts — sauf s’il disparaît dans un conduit, auquel cas ils sont perdus.',
           ],
-          components: ['événements'],
+          components: ['evenements'],
           ref: 'Retraite des Intrus — p.20',
         },
         {
@@ -1087,6 +1093,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'c6',
+          crop: { page: 19, x: 0.356, y: 0.425, w: 0.289, h: 0.304 },
           kind: 'action',
           title: 'Fuir',
           body: [
@@ -1155,6 +1162,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'v3',
+          crop: { page: 20, x: 0.356, y: 0.53, w: 0.289, h: 0.364 },
           kind: 'action',
           title: '2. Les Intrus attaquent',
           body: [
@@ -1177,6 +1185,7 @@ export const nemesis: Tutorial = {
         },
         {
           id: 'v5',
+          crop: { page: 10, x: 0.356, y: 0.551, w: 0.289, h: 0.377 },
           kind: 'action',
           title: '4. Piochez une carte Événement',
           body: [
@@ -1186,7 +1195,7 @@ export const nemesis: Tutorial = {
             'Couloir menant à un conduit : retirez la figurine et remettez son jeton dans le sac.',
             'Résolvez ensuite l’effet de la carte, puis défaussez-la.',
           ],
-          components: ['événements', 'portes'],
+          components: ['evenements', 'portes'],
           ref: 'Phase Événement, étape 7 — p.10',
         },
         {
@@ -1267,11 +1276,12 @@ export const nemesis: Tutorial = {
             '4. Objectif : les survivants révèlent leur carte et vérifient qu’elle est remplie.',
           ],
           tip: 'Un marqueur Panne sur un moteur bloque seulement l’action de la salle. Il ne rend pas le moteur endommagé.',
-          components: ['moteurs', 'coordonnées'],
+          components: ['moteurs', 'coordonnees'],
           ref: 'Contrôle de victoire — p.11',
         },
         {
           id: 'w4',
+          crop: { page: 21, x: 0.051, y: 0.293, w: 0.286, h: 0.464 },
           kind: 'info',
           title: 'La contamination tue après coup',
           body: [

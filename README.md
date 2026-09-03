@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.02** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.03** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 

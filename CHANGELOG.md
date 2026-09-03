@@ -16,6 +16,34 @@ comme complète.
 
 ---
 
+## v0.03 — 2026-09-03
+
+### Ajouté
+
+- **Les visuels des règles.** Le PDF officiel est ingéré (28 pages, 200 dpi,
+  JPEG) et les 36 éléments de matériel portent désormais leur photo exacte,
+  découpée dans le livret : plateau, figurines, tuiles Salle, cartes, jetons,
+  marqueurs, dés, sac Intrus.
+- Dix étapes reçoivent le schéma d'exemple correspondant du livret : exemple
+  de déplacement en salle inexplorée, en salle occupée, de rencontre, de
+  combat, de fuite, de carte Attaque d'Intrus, de carte Événement, de carte
+  Action, et de scan d'une carte Contamination.
+
+### Modifié
+
+- Ingestion en JPEG 200 dpi plutôt qu'en PNG 150 dpi : visuels plus nets pour
+  un poids divisé par trois. Seules les pages effectivement référencées par
+  une découpe sont téléchargées par la tablette.
+- Panneau visuel plus haut, pour afficher en entier les encadrés d'exemple du
+  livret, qui sont hauts et étroits.
+
+### Corrigé
+
+- Identifiants de composants normalisés en ASCII (`coordonnees`,
+  `evenements`), et « Cartes Rôle » accentué.
+
+---
+
 ## v0.02 — 2026-09-03
 
 ### Corrigé

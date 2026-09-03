@@ -53,7 +53,9 @@ Déposez le PDF dans `rules/`, puis :
 npm run ingest -- rules/mon-jeu.pdf mon-jeu
 ```
 
-Options : `--dpi 180` pour des gros plans nets, `--jpeg` pour alléger.
+Options : `--dpi 200 --jpeg --quality 84` est le bon réglage par défaut —
+plus net qu'un PNG 150 dpi, pour un poids divisé par trois. Le livret Nemesis
+passe ainsi de 78 Mo à 25 Mo.
 
 Produit `public/games/mon-jeu/pages.json` et une image par page. Les coordonnées
 de découpe étant **normalisées entre 0 et 1**, on peut ré-ingérer à une autre
@@ -332,3 +334,4 @@ créditer la source, et il est affiché au joueur dans la fiche du jeu.
 |---|---|---|
 | 2026-09-03 | v0.01 | Création du guide, en même temps que le tutoriel Nemesis. |
 | 2026-09-03 | v0.02 | Ajout de `npm run extract` (images intégrées + régions d'encre) en amont du Studio, et de la section « Publication ». |
+| 2026-09-03 | v0.03 | Première application réelle sur Nemesis : 36 découpes de matériel et 10 schémas d'exemple. Ingestion recommandée en JPEG 200 dpi. |

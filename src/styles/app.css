@@ -477,7 +477,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   position: relative;
   flex: 0 1 auto;
   min-height: 190px;
-  max-height: 44vh;
+  max-height: 58vh;
   display: flex;
   align-items: center;
   justify-content: center;
