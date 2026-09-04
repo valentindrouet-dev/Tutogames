@@ -48,9 +48,6 @@ export const nemesis: Tutorial = {
     accent: '#f97316',
     accent2: '#ef4444',
     accentInk: '#180701',
-    titleFont: "ui-sans-serif, system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
-    titleWeight: 800,
-    titleSpacing: '-0.03em',
     radius: '18px',
   },
 

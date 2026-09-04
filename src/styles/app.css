@@ -34,16 +34,20 @@
 
   --tap: 60px;
 
-  /* Pile par defaut ; chaque jeu peut fournir la sienne via son theme. */
+  /*
+   * Une seule typographie pour toute l'application : un jeu apporte ses
+   * couleurs, jamais sa police. Un joueur qui a suivi un tutoriel lit les
+   * autres sans reapprendre. Piles systeme : rien n'est telecharge, donc
+   * l'application reste lisible hors ligne sur la table de jeu.
+   */
   --font-default: ui-sans-serif, system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
   --font: var(--font-default);
-  --font-title: var(--font-default);
+  --font-title: ui-sans-serif, system-ui, -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 
-  /* Habillage des titres d'etape, pilote par le theme du jeu. */
   --title-transform: none;
-  --title-weight: 780;
-  --title-spacing: -0.025em;
+  --title-weight: 800;
+  --title-spacing: -0.03em;
 
   /* Voile neutre et assombrissement des teintes : pilotes par le theme. */
   --veil: rgba(255, 255, 255, 0.09);
@@ -202,7 +206,13 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+  /*
+   * Pistes flexibles : la carte s'ajuste, et les quatre boutons carres la
+   * remplissent exactement. Une piste de largeur fixe laisserait un vide a
+   * droite du dernier bouton. Au-dela, auto-fill ajoute une colonne plutot
+   * que d'elargir les cartes.
+   */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 18px;
 }
 
@@ -215,6 +225,11 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   border-radius: var(--r-lg);
   background: var(--bg-2);
   border: 1px solid var(--stroke);
+  /* La carte est bornee, pas la piste : le surplus devient de la gouttiere
+     entre les cartes, jamais un vide a droite du dernier bouton. */
+  width: 100%;
+  max-width: 400px;
+  justify-self: center;
 }
 .game-card::before {
   content: '';
@@ -837,10 +852,10 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .mode-list { display: flex; gap: 8px; }
 
 .mode-btn {
-  /* Plafonne : sur une carte large, trois carres de 86 px suffisent. */
+  /* Sans plafond : les boutons remplissent exactement la largeur de la carte,
+     sinon un vide reste a droite du dernier. C'est la carte qu'on borne. */
   flex: 1 1 0;
   min-width: 0;
-  max-width: 80px;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;

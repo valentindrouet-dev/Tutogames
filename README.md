@@ -6,34 +6,34 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.12** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.13** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
-| Jeu | Éditeur | Joueurs | Découvrir | Installer | Reprendre | Réviser |
+| Jeu | Éditeur | Joueurs | 1re Partie | Reprendre | Mise en Place | Règles |
 |---|---|---|---|---|---|---|
-| Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 21 | 6 | 7 |
-| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 22 | 14 | 8 |
-| Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 13 | 6 | 8 |
+| Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 6 | 21 | 7 |
+| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 14 | 22 | 8 |
+| Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 6 | 13 | 8 |
 
 ## Quatre façons d'ouvrir un jeu
 
-- **Découvrir** — vous ne connaissez pas le jeu. On installe et on joue, pas à
+- **1re Partie** — vous ne connaissez pas le jeu. On installe et on joue, pas à
   pas, matériel identifié par les images des règles.
-- **Installer** — vous connaissez le jeu, vous voulez juste le poser
+- **Mise en Place** — vous connaissez le jeu, vous voulez juste le poser
   correctement. Rien que le placement, avec les illustrations.
 - **Reprendre** — vous remontez une partie déjà commencée. Pour une campagne,
   la remise en place officielle d'une sauvegarde ; pour un jeu d'une séance, le
   contrôle de la table laissée montée.
-- **Réviser** — vous y avez joué, mais il y a longtemps. Les points de règles
+- **Règles** — vous y avez joué, mais il y a longtemps. Les points de règles
   dans l'ordre, résumés.
 
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
 et adapte son contenu.
 
-Chaque jeu a son habillage — couleurs, polices, arrondis, fond clair ou
-sombre — mais la mise en page ne change jamais : un joueur qui a suivi un
+Chaque jeu a ses couleurs — fond clair ou sombre, accent, arrondis — mais la
+mise en page et la typographie ne changent jamais : un joueur qui a suivi un
 tutoriel sait déjà lire les autres.
 
 ## Démarrer

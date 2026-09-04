@@ -72,7 +72,8 @@ export type PlayerFilter = number[]
  */
 export type Mode = 'tuto' | 'setup' | 'reprise' | 'recap'
 
-export const MODES: Mode[] = ['tuto', 'setup', 'reprise', 'recap']
+// L'ordre d'affichage des boutons sur l'accueil.
+export const MODES: Mode[] = ['tuto', 'reprise', 'setup', 'recap']
 
 export interface ModeInfo {
   id: Mode
@@ -87,10 +88,10 @@ export interface ModeInfo {
 }
 
 export const MODE_INFO: Record<Mode, ModeInfo> = {
-  tuto: { id: 'tuto', label: 'Première partie', short: 'Découvrir' },
-  setup: { id: 'setup', label: 'Mise en place', short: 'Installer' },
+  tuto: { id: 'tuto', label: 'Première partie', short: '1re Partie' },
   reprise: { id: 'reprise', label: 'Reprendre', short: 'Reprendre' },
-  recap: { id: 'recap', label: 'Rappel des règles', short: 'Réviser' },
+  setup: { id: 'setup', label: 'Mise en place', short: 'Mise en Place' },
+  recap: { id: 'recap', label: 'Rappel des règles', short: 'Règles' },
 }
 
 /**
@@ -208,12 +209,13 @@ export interface Chapter {
  * Habillage visuel propre au jeu.
  *
  * Chaque jeu a son ambiance : Nemesis est une alerte orange dans un vaisseau,
- * Tainted Grail une brume verte sur un parchemin. Seules les variables CSS
- * listées ici changent — la mise en page, elle, reste la même partout, pour
- * qu'un joueur qui connaît un tutoriel sache déjà lire les autres.
+ * Tainted Grail un parchemin sous une encre sépia. Seules les couleurs et le
+ * rayon d'arrondi changent — la mise en page et la **typographie** restent
+ * les mêmes partout, pour qu'un joueur qui connaît un tutoriel sache déjà
+ * lire les autres.
  *
- * Les polices sont des piles système : aucune police n'est téléchargée, donc
- * l'application reste utilisable hors ligne sur la table de jeu.
+ * La police est une pile système : rien n'est téléchargé, donc l'application
+ * reste utilisable hors ligne sur la table de jeu.
  */
 export interface Theme {
   /** Fond général, du plus sombre au plus clair. */
@@ -232,14 +234,6 @@ export interface Theme {
   accent2: string
   /** Texte posé sur un aplat d'accent. */
   accentInk: string
-  /** Pile de polices des titres. */
-  titleFont?: string
-  /** Pile de polices du texte courant. */
-  bodyFont?: string
-  /** Casse des titres d'étape. */
-  titleTransform?: 'none' | 'uppercase'
-  titleWeight?: number
-  titleSpacing?: string
   /** Rayon d'arrondi général : anguleux pour un vaisseau, doux pour un conte. */
   radius?: string
   /**

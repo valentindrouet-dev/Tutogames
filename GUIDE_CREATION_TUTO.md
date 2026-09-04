@@ -26,10 +26,10 @@ Un jeu propose **trois modes**, et c'est le même fichier qui les porte tous :
 
 | Mode | Bouton | Pour qui | Ce qu'il montre |
 |---|---|---|---|
-| `tuto` | Découvrir | On découvre le jeu | Tout : matériel, mise en place, tour joué pas à pas |
-| `setup` | Installer | On connaît le jeu | Les seuls chapitres de mise en place, sans vignettes ni conseils |
+| `tuto` | 1re Partie | On découvre le jeu | Tout : matériel, mise en place, tour joué pas à pas |
+| `setup` | Mise en Place | On connaît le jeu | Les seuls chapitres de mise en place, sans vignettes ni conseils |
 | `reprise` | Reprendre | On remonte une partie déjà commencée | La remise en place d'une sauvegarde, ou le contrôle d'une table laissée en plan |
-| `recap` | Réviser | On y a joué il y a longtemps | Les règles dans l'ordre, résumées |
+| `recap` | Règles | On y a joué il y a longtemps | Les règles dans l'ordre, résumées |
 
 **Un mode qu'aucun chapitre ne déclare n'apparaît pas.** Un jeu sans règles de
 sauvegarde peut donc n'avoir aucun bouton « Reprendre » — ne l'inventez pas.
@@ -128,8 +128,9 @@ Trois usages qui reviennent presque toujours :
 ### Étape 5 — Habiller le jeu
 
 Chaque jeu a son ambiance. Le champ `theme` fournit les valeurs, la feuille de
-style ne connaît que des variables : **la mise en page ne change jamais**, pour
-qu'un joueur qui a suivi un tutoriel sache déjà lire les autres.
+style ne connaît que des variables : **la mise en page et la typographie ne
+changent jamais**, pour qu'un joueur qui a suivi un tutoriel sache déjà lire
+les autres.
 
 ```ts
 theme: {
@@ -139,15 +140,14 @@ theme: {
   fg: '#2b2118', fgDim: '#5e4f3c', fgFaint: '#695c49',
   accent: '#82190f', accent2: '#a8551a', accentInk: '#fdf6e6',
   ok: '#3f6b2f', warn: '#8a5a10', danger: '#9d2418',
-  titleFont: "'Iowan Old Style', Palatino, Georgia, ui-serif, serif",
-  bodyFont: "Georgia, 'Times New Roman', ui-serif, serif",
-  titleTransform: 'uppercase', titleWeight: 600, titleSpacing: '0.02em',
   radius: '6px',
 }
 ```
 
-- **Piles système uniquement.** Aucune police n'est téléchargée : l'application
-  doit rester lisible hors ligne, sur la table de jeu.
+- **Un jeu n'apporte pas sa police.** La typographie est fixée une fois pour
+  toutes dans la feuille de style — une pile système, rien à télécharger, donc
+  lisible hors ligne. Un jeu apporte ses couleurs et son rayon d'arrondi, c'est
+  tout. Trois polices sur trois écrans faisaient trois applications.
 - **`scheme: 'light'` bascule l'interface en fond clair.** Il inverse les
   voiles neutres, assombrit les teintes d'étape, règle `color-scheme` et fait
   suivre le fond de la page jusque dans le rebond de défilement de l'iPad. Un
@@ -610,3 +610,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.09 | L'accueil ne porte plus de texte libre : le `cover` devient un bandeau de titre au rapport 3/1, qui remplace le titre écrit et le résumé de la carte. Trois cartes tiennent désormais sur un écran d'iPad sans défilement. |
 | 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |
 | 2026-09-04 | v0.12 | Quatrième mode : `reprise`. Section « Écrire la reprise », qui distingue le jeu à sauvegarde officielle du jeu d'une séance. `MODE_INFO` gagne un libellé court d'un mot pour les boutons carrés. |
+| 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |

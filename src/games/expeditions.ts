@@ -49,11 +49,6 @@ export const expeditions: Tutorial = {
     accent: '#e08a2e',
     accent2: '#c2452b',
     accentInk: '#140b02',
-    titleFont:
-      "'Avenir Next Condensed', 'HelveticaNeue-CondensedBold', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif",
-    titleTransform: 'uppercase',
-    titleWeight: 700,
-    titleSpacing: '0.035em',
     radius: '10px',
   },
 

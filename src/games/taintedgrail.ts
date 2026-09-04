@@ -56,12 +56,6 @@ export const taintedgrail: Tutorial = {
     ok: '#3f6b2f',
     warn: '#8a5a10',
     danger: '#9d2418',
-    titleFont:
-      "'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, ui-serif, serif",
-    bodyFont: "Georgia, 'Iowan Old Style', 'Times New Roman', ui-serif, serif",
-    titleTransform: 'uppercase',
-    titleWeight: 600,
-    titleSpacing: '0.02em',
     radius: '6px',
   },
 

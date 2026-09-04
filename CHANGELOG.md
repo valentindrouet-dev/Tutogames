@@ -17,6 +17,24 @@ comme complète.
 
 ---
 
+## v0.13 — 2026-09-04
+
+### Modifié
+
+- **Une seule typographie pour toute l'application**, celle de Nemesis. Un jeu
+  apporte ses couleurs et son rayon d'arrondi, plus sa police : trois polices
+  sur trois écrans faisaient trois applications. Les champs `titleFont`,
+  `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` disparaissent
+  du modèle de thème.
+- **Les boutons remplissent exactement la largeur de la carte.** Ils n'ont plus
+  de largeur maximale ; c'est la carte qui est bornée à 400 px, et le surplus
+  devient de la gouttière entre les cartes au lieu d'un vide à droite du
+  dernier bouton.
+- Libellés et ordre des boutons : **1re Partie · Reprendre · Mise en Place ·
+  Règles**.
+
+---
+
 ## v0.12 — 2026-09-04
 
 ### Ajouté

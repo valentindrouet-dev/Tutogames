@@ -52,11 +52,6 @@ function vars(raw: Theme, prefs: Prefs): CSSProperties {
     '--accent': t.accent,
     '--accent-2': t.accent2,
     '--accent-ink': t.accentInk,
-    '--font': t.bodyFont ?? 'var(--font-default)',
-    '--font-title': t.titleFont ?? t.bodyFont ?? 'var(--font-default)',
-    '--title-transform': t.titleTransform ?? 'none',
-    '--title-weight': String(t.titleWeight ?? 780),
-    '--title-spacing': t.titleSpacing ?? '-0.025em',
     '--r-lg': t.radius ?? '24px',
     // Voile neutre des pastilles et des fonds discrets : de l'encre sur un
     // thème clair, de la lumière sur un thème sombre.
@@ -78,23 +73,19 @@ function vars(raw: Theme, prefs: Prefs): CSSProperties {
  */
 export function themeStyle(t: Theme, prefs: Prefs = DEFAULT_PREFS): CSSProperties {
   const v = vars(t, prefs)
+
   return {
     ...v,
     // Le fond du thème doit peindre toute la page, pas seulement le cadre.
     background: v['--bg' as keyof CSSProperties] as string,
     color: v['--fg' as keyof CSSProperties] as string,
-    fontFamily: t.bodyFont ?? undefined,
   }
 }
 
 /** Idem, pour un élément qui a déjà son propre fond (panneau modal). */
 export function themePanel(t: Theme, prefs: Prefs = DEFAULT_PREFS): CSSProperties {
   const v = vars(t, prefs)
-  return {
-    ...v,
-    color: v['--fg' as keyof CSSProperties] as string,
-    fontFamily: t.bodyFont ?? undefined,
-  }
+  return { ...v, color: v['--fg' as keyof CSSProperties] as string }
 }
 
 /** Fond réellement peint, réglages compris — pour habiller la page entière. */
