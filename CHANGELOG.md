@@ -17,6 +17,39 @@ comme complète.
 
 ---
 
+## v0.14 — 2026-09-04
+
+### Ajouté
+
+- **Frosthaven**, quatrième tutoriel. Le livret est en anglais et livré en
+  trois PDF à numérotation continue : `npm run merge` les fusionne en un seul
+  fichier local (`rules/Frosthaven - Regles.pdf`, non versionné), ingéré
+  avec `pageOffset: 0`. Le texte des étapes est une traduction du livret ;
+  les termes imprimés sur le matériel restent en anglais. Première partie :
+  création d'un personnage de départ, mise en place d'un scénario dans les
+  18 étapes du livret, manche, tour de personnage, attaque, monstres, carte,
+  fin de scénario, phase d'avant-poste. Les étapes sous autocollants scellés
+  (10, 13, 14 et suivantes) renvoient au livret et ne sont pas reconstituées.
+  Reprendre : la campagne remontée depuis la feuille de campagne, les fiches
+  de personnage, le paquet de bâtiments et le plateau-carte, puis où l'on en
+  est. Règles : 17 étapes, scénario puis avant-poste, et les rappels de la
+  page 76.
+- **Bitoku**, cinquième tutoriel, sur les règles françaises. Mise en place du
+  plateau (A à K) et des joueurs (1 à 11), mise en place du Tengu pour le
+  solo, les quatre saisons d'une manche, les cinq régions de la forêt, les
+  Bâtiments, Kodamas, Rochers d'Iwakura, Mitamas, Libellules, Cristaux,
+  Chemins de la sagesse, cartes Bitoku et Vision, l'ascension. Pas de
+  sauvegarde officielle : la reprise est un contrôle de la table. Thème clair,
+  papier crème et orange du livret.
+- `tools/merge-pdf.mjs` et le script `npm run merge`.
+
+### Corrigé
+
+- *Tainted Grail*, mode Reprendre : une étape portait le texte d'Expeditions
+  (cartes sous le pupitre). Remplacée par le contrôle du personnage remonté.
+
+---
+
 ## v0.13 — 2026-09-04
 
 ### Modifié

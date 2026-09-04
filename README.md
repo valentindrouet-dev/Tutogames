@@ -6,15 +6,17 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.13** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.14** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
 | Jeu | Éditeur | Joueurs | 1re Partie | Reprendre | Mise en Place | Règles |
 |---|---|---|---|---|---|---|
 | Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 6 | 21 | 7 |
-| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 14 | 22 | 8 |
+| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 13 | 22 | 8 |
 | Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 6 | 13 | 8 |
+| Frosthaven | Cephalofair Games | 1 à 4 | 106 étapes | 13 | 17 | 17 |
+| Bitoku | Devir / IELLO | 1 à 4 | 81 étapes | 8 | 23 | 11 |
 
 ## Quatre façons d'ouvrir un jeu
 
@@ -129,6 +131,7 @@ version.json    source unique du numéro de version
 | `npm run build` | Typecheck puis build à la racine du dépôt |
 | `npm run preview` | Sert le build de production |
 | `npm run ingest -- <pdf> <id>` | Rend les pages d'un PDF de règles |
+| `npm run merge -- <sortie> <partie>...` | Fusionne un livret livré en plusieurs PDF, dans l'ordre donné |
 | `npm run extract -- <pdf> <id>` | Extrait les découpes candidates du PDF |
 | `npm run crops` | Pré-découpe les visuels référencés par les tutoriels |
 | `npm run grid -- <pdf> <page>` | Rend une page sous une grille de coordonnées, pour repérer les découpes |
@@ -143,3 +146,7 @@ Tainted Grail : La Chute d'Avalon est un jeu de Krzysztof Piskorski et Marcin
 françaises éditées par Edge Entertainment.
 Expeditions : Après Scythe est un jeu de Jamey Stegmaier édité par Stonemaier
 Games ; le tutoriel s'appuie sur les règles françaises des Éditions Matagot.
+Frosthaven est un jeu d'Isaac Childres édité par Cephalofair Games ; le
+tutoriel est une traduction des règles anglaises, livrées en trois PDF.
+Bitoku est un jeu de Germán P. Millán édité par Devir ; le tutoriel s'appuie
+sur les règles françaises de IELLO (traduction MeepleRules.fr).

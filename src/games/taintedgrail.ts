@@ -1714,13 +1714,13 @@ export const taintedgrail: Tutorial = {
         },
         {
           id: 'rp7',
-          kind: 'place',
-          title: 'Glissez vos cartes sous le plateau',
+          kind: 'check',
+          title: 'Votre personnage est remonté',
           body: [
-            'Les quêtes déjà résolues sous le bord supérieur, les améliorations à droite, les météorites fondues en bas.',
+            'Caractéristiques, ressources et pistes Survie aux valeurs de la fiche ; compétences devant vous ; Objets et Secrets sortis du compartiment ; les quatre piles reconstituées.',
+            'Les cartes Secret, Objet, Rencontre ou Événement non utilisées sont restées dans la boîte : elles ne font pas partie de la partie sauvegardée.',
           ],
-          warn: 'Ces cartes comptent pour vos limites : quatre quêtes résolues au maximum, quatre objets, quatre météorites.',
-          ref: 'Résoudre — p.8',
+          ref: 'Sauvegarder la Partie, I et II.6 — p.13',
         },
       ],
     },

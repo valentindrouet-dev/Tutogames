@@ -74,6 +74,36 @@ dépôt** : c'est la racine qui est publiée par GitHub Pages. Les coordonnées
 de découpe étant **normalisées entre 0 et 1**, on peut ré-ingérer à une autre
 résolution sans retoucher une seule découpe.
 
+**Un livret livré en plusieurs PDF.** Un tutoriel ne connaît qu'un seul
+fichier (`source.pdf`). Quand l'éditeur découpe son livret en parties à
+numérotation continue — Frosthaven : pages 1 à 38, 39 à 72, 73 à 84 —
+fusionnez-les d'abord, dans l'ordre de lecture :
+
+```bash
+npm run merge -- "rules/Frosthaven - Regles.pdf" \
+  rules/Frosthaven_Rules_-_Part_1.pdf \
+  rules/Frosthaven_Rules_-_Part_2.pdf \
+  rules/Frosthaven_Rules_-_Part_3.pdf
+```
+
+La commande affiche la plage de pages prise par chaque partie : vérifiez
+qu'elle suit la numérotation imprimée. Le fichier produit n'est pas versionné
+(`rules/*.pdf` est ignoré) : il se refait en une commande à partir des
+parties, qui elles le sont. C'est lui qu'on ingère et que `npm run crops`
+lit ; `source.pdf` porte son nom.
+
+**Un livret en anglais.** On l'ingère comme les autres, et on traduit. Le
+texte des étapes est en français, mais les termes imprimés sur le matériel
+(Move, Attack, Shield, long rest…) sont gardés tels quels après une première
+mention traduite : c'est ce que le joueur lit sur ses cartes. Le champ `ref`
+garde le titre de section anglais, pour retrouver la page. Dites-le dans
+l'en-tête du fichier et dans la première étape du briefing.
+
+**Un livret sous autocollants scellés.** Certaines étapes de Frosthaven sont
+cachées sous des autocollants que la campagne fait décoller plus tard. On ne
+reconstitue jamais leur contenu, même s'il est connu par ailleurs : l'étape
+du tutoriel dit qu'elle est sous autocollant, et renvoie au livret.
+
 ### Étape 3 — Fixer `pageOffset`
 
 Les livrets ont presque toujours une couverture qui décale la numérotation :
@@ -336,7 +366,10 @@ Découpage recommandé, éprouvé sur Nemesis :
 
 Visez **6 à 10 chapitres** et **60 à 95 étapes** — Nemesis en compte 65, le
 tutoriel *Tainted Grail*, qui installe une campagne entière, 92. En dessous,
-on survole ; au-dessus, on abandonne avant la fin.
+on survole ; au-dessus, on abandonne avant la fin. Un livret de 84 pages
+comme celui de *Frosthaven* déborde forcément : on y accepte une centaine
+d'étapes en première partie, mais on ne rogne pas sur les trois autres modes
+pour autant.
 
 Comptez ce que voit **un** joueur : `nominalSteps()` calcule le total à
 l'effectif conseillé, filtres `only` appliqués.
@@ -366,11 +399,17 @@ Salle, on veut savoir où elle va. Les `warn` restent — c'est justement ce
 qu'on rate en installant de mémoire. Vous n'avez donc **rien à réécrire** :
 vos chapitres de mise en place servent les deux modes tels quels.
 
-**Écrire le rappel.** Comptez 6 à 10 étapes, pas plus. Une étape par bloc de
-règles, dans l'ordre où on les rencontre à la table. Des listes de faits, pas
-des explications : celui qui lit connaît déjà le jeu, il cherche à retrouver un
-détail. Les `warn` valent de l'or ici : ce sont les règles qu'on oublie entre
-deux parties.
+**Écrire le rappel.** Comptez 6 à 10 étapes, pas plus — jusqu'à 18 pour un
+jeu à campagne comme *Frosthaven*, où la phase d'avant-poste s'ajoute au
+scénario. Une étape par bloc de règles, dans l'ordre où on les rencontre à la
+table. Des listes de faits, pas des explications : celui qui lit connaît déjà
+le jeu, il cherche à retrouver un détail. Les `warn` valent de l'or ici : ce
+sont les règles qu'on oublie entre deux parties.
+
+Ne déclarez jamais `modes: ['tuto', 'recap']` sur un chapitre didactique pour
+faire le rappel à moindres frais : soixante-dix étapes de première partie
+relues en mode rappel ne sont pas un rappel. Le chapitre de rappel s'écrit à
+part, court, et les chapitres didactiques restent en `tuto` seul.
 
 **Écrire la reprise.** Deux cas très différents, et il faut trancher en lisant
 le livret :
@@ -379,6 +418,13 @@ le livret :
   comme la procédure de sauvegarde à l'envers, en suivant le livret étape par
   étape. C'est ce que fait *Tainted Grail* : fiche de sauvegarde, plateaux,
   paquets, carte, menhirs, cadrans. 12 à 15 étapes.
+  *Frosthaven* est le cas de la campagne **sans** sauvegarde en cours de
+  scénario : le livret dit qu'un scénario se joue en une séance, et la
+  campagne se suit sur des fiches (feuille de campagne, fiches de
+  personnage, paquet de bâtiments, plateau-carte). La reprise remonte ces
+  supports, puis dit où l'on en est : phase d'avant-poste à jouer, ou
+  scénario à choisir. Ne lui faites pas dire comment reprendre au milieu
+  d'un scénario si le livret ne le dit pas.
 - **Le jeu n'en a pas** (partie d'une séance). N'inventez pas de sauvegarde.
   Écrivez un contrôle de la table laissée montée : ce qui a pu bouger, ce qui
   est irrécupérable si on l'a rangé, et où reprendre. 5 à 7 étapes, et dites
@@ -611,3 +657,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |
 | 2026-09-04 | v0.12 | Quatrième mode : `reprise`. Section « Écrire la reprise », qui distingue le jeu à sauvegarde officielle du jeu d'une séance. `MODE_INFO` gagne un libellé court d'un mot pour les boutons carrés. |
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
+| 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |
