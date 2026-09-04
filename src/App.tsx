@@ -1,45 +1,66 @@
-import { lazy, Suspense, useState } from 'react'
-import type { Tutorial } from './engine/types'
+import { useCallback, useState } from 'react'
+import type { Mode, Tutorial } from './engine/types'
+import { loadPrefs, savePrefs, type Prefs } from './engine/prefs'
 import { TUTORIALS } from './games'
 import { Home } from './ui/Home'
 import { Runner } from './ui/Runner'
-
-// Le Studio ne sert qu'à la création de contenu : il sort du bundle
-// principal et ne se charge que si on l'ouvre.
-const Studio = lazy(() => import('./ui/Studio').then((m) => ({ default: m.Studio })))
+import { Settings } from './ui/Settings'
 
 type Screen =
   | { view: 'home' }
-  | { view: 'studio' }
-  | { view: 'runner'; tutorial: Tutorial; players: number; restart: boolean }
+  | { view: 'runner'; tutorial: Tutorial; mode: Mode; players: number; restart: boolean }
+
+/** Habillage neutre des réglages ouverts depuis l'accueil. */
+const NEUTRAL = TUTORIALS[0]?.theme
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ view: 'home' })
+  const [prefs, setPrefs] = useState<Prefs>(loadPrefs)
+  const [settings, setSettings] = useState(false)
 
-  switch (screen.view) {
-    case 'runner':
-      return (
+  const change = useCallback((p: Prefs) => {
+    setPrefs(p)
+    savePrefs(p)
+  }, [])
+
+  const panel = settings && NEUTRAL && (
+    <Settings
+      prefs={prefs}
+      onChange={change}
+      onClose={() => setSettings(false)}
+      theme={screen.view === 'runner' ? screen.tutorial.theme : NEUTRAL}
+    />
+  )
+
+  if (screen.view === 'runner') {
+    return (
+      <>
         <Runner
-          key={`${screen.tutorial.id}-${screen.players}`}
+          key={`${screen.tutorial.id}-${screen.mode}-${screen.players}`}
           tutorial={screen.tutorial}
+          mode={screen.mode}
           players={screen.players}
           restart={screen.restart}
+          prefs={prefs}
+          onOpenSettings={() => setSettings(true)}
           onExit={() => setScreen({ view: 'home' })}
         />
-      )
-    case 'studio':
-      return (
-        <Suspense fallback={<div className="app" />}>
-          <Studio tutorials={TUTORIALS} onExit={() => setScreen({ view: 'home' })} />
-        </Suspense>
-      )
-    default:
-      return (
-        <Home
-          tutorials={TUTORIALS}
-          onStart={(tutorial, players, restart) => setScreen({ view: 'runner', tutorial, players, restart })}
-          onStudio={() => setScreen({ view: 'studio' })}
-        />
-      )
+        {panel}
+      </>
+    )
   }
+
+  return (
+    <>
+      <Home
+        tutorials={TUTORIALS}
+        prefs={prefs}
+        onOpenSettings={() => setSettings(true)}
+        onStart={(tutorial, mode, players, restart) =>
+          setScreen({ view: 'runner', tutorial, mode, players, restart })
+        }
+      />
+      {panel}
+    </>
+  )
 }

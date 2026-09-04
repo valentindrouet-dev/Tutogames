@@ -100,13 +100,14 @@ for (const t of TUTORIALS) {
   const cropsDir = join(dir, 'crops')
   mkdirSync(cropsDir, { recursive: true })
 
-  // Toutes les découpes à rectangle : matériel, puis étapes.
+  // Toutes les découpes à rectangle : couverture, matériel, puis étapes.
   const wanted = new Map()
   const add = (crop) => {
     if (!crop) return
     const key = cropKey(crop, pageOffset)
     if (key && !wanted.has(key)) wanted.set(key, crop)
   }
+  add(t.cover)
   for (const c of t.components) add(c.crop)
   for (const ch of t.chapters) for (const s of ch.steps) add(s.crop)
 

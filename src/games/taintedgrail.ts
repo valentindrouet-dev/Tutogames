@@ -72,6 +72,9 @@ export const taintedgrail: Tutorial = {
     credit: 'Règles officielles FR — Awaken Realms / Edge Entertainment',
   },
 
+  // Couverture du livret : ce que le joueur reconnaît sur l'écran d'accueil.
+  cover: { page: 1, x: 0.02, y: 0.02, w: 0.96, h: 0.6 },
+
   scope: {
     covered: [
       'La mise en place des personnages, des 12 étapes officielles',
@@ -484,6 +487,7 @@ export const taintedgrail: Tutorial = {
       id: 'perso',
       title: 'Mise en place des personnages',
       kind: 'setup',
+      modes: ['tuto', 'setup'],
       goal: 'Chaque joueur repart avec un plateau prêt, deux paquets de 15 cartes et deux réserves de 25.',
       steps: [
         {
@@ -653,6 +657,7 @@ export const taintedgrail: Tutorial = {
       id: 'monde',
       title: 'Mise en place du monde',
       kind: 'setup',
+      modes: ['tuto', 'setup'],
       goal: 'Le plateau de départ est monté, les paquets sont prêts, le chapitre 1 est en place.',
       steps: [
         {
@@ -1630,6 +1635,121 @@ export const taintedgrail: Tutorial = {
             'Le reste de la campagne se joue exactement comme ça, jour après jour.',
           ],
           ref: 'Cours du Jour — p.8 et Résumé des Règles — p.24',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------- rappel des règles */
+
+    {
+      id: 'r-jour',
+      title: 'Le cours du jour',
+      kind: 'play',
+      modes: ['recap'],
+      goal: 'Retrouver les trois temps d’une journée et ce qu’on y fait.',
+      steps: [
+        {
+          id: 'r1',
+          kind: 'info',
+          title: 'Ce qui vous presse',
+          body: [
+            'Un lieu ne reste en jeu que s’il touche, même en diagonale, un lieu portant un menhir actif.',
+            'Chaque menhir a un cadran qui perd 1 jour à chaque aube. À zéro, il s’éteint, et la carte disparaît.',
+          ],
+          warn: 'Un personnage sur un lieu retiré perd 2 Santé, gagne 2 Terreur, et se retrouve sur le lieu restant le plus proche.',
+          crop: { page: 7, x: 0.398, y: 0.324, w: 0.194, h: 0.112 },
+          ref: 'Menhirs et Wyrd — p.11',
+        },
+        {
+          id: 'r2',
+          kind: 'info',
+          title: 'L’aube, neuf étapes',
+          body: [
+            '1. Effets d’aube. 2. Menhirs sans cadran retirés. 3. Lieux hors de portée défaussés.',
+            '4. Cadrans des menhirs réduits de 1. 5. Cadrans Temps réduits, pions Temps retirés des lieux.',
+            '6. Gardiens déplacés au dé. 7. Carte Événement révélée. 8. Concertation. 9. Équipement vérifié.',
+          ],
+          ref: 'L’Aube — p.8',
+        },
+        {
+          id: 'r3',
+          kind: 'info',
+          title: 'La journée : six actions',
+          body: [
+            'Exploration (1 Énergie), Voyage (1 Énergie), action de lieu (coût imprimé), action de personnage.',
+            'Inspection de menhir et Passer sont gratuites.',
+            'On joue chacun son tour, jusqu’à ce que tous aient passé ou manquent d’Énergie.',
+          ],
+          warn: 'On ne voyage qu’orthogonalement, et seulement entre lieux reliés par des clés de direction.',
+          crop: { page: 8, x: 0.655, y: 0.28, w: 0.3, h: 0.26 },
+          ref: 'La Journée — p.8-9',
+        },
+        {
+          id: 'r4',
+          kind: 'info',
+          title: 'Le crépuscule, six étapes',
+          body: [
+            '1. Effets de crépuscule. 2. Repos : 1 Nourriture pour +1 Santé et −1 Terreur.',
+            '3. Énergie remise à sa case de départ — 4 points seulement si vous étiez épuisé.',
+            '4. Expérience dépensée. 5. Paquets reconstruits, 15 cartes minimum. 6. Rêve, si le lieu en porte le symbole.',
+          ],
+          warn: 'Votre Énergie ne dépasse jamais votre Santé, quelle que soit l’étape.',
+          ref: 'Le Crépuscule — p.9',
+        },
+      ],
+    },
+
+    {
+      id: 'r-rencontre',
+      title: 'Combat et diplomatie',
+      kind: 'play',
+      modes: ['recap'],
+      goal: 'Retrouver le tour de rencontre et l’usage des clés.',
+      steps: [
+        {
+          id: 'r5',
+          kind: 'info',
+          title: 'Le même moteur, deux buts',
+          body: [
+            'Paquets vert, gris et violet : combat, on remplit le potentiel de combat.',
+            'Paquet bleu : diplomatie, on fait monter le marqueur sur la piste Affinité.',
+            'Main de départ : 3 cartes, 2 si quatre personnages sont impliqués. Mulligan possible, une carte de moins à chaque fois.',
+          ],
+          ref: 'Combat — p.14, Diplomatie — p.18',
+        },
+        {
+          id: 'r6',
+          kind: 'info',
+          title: 'Le tour, en trois phases',
+          body: [
+            'I. Un personnage non activé est désigné : pion Temps sur son plateau.',
+            'II. 1 capacités différées, 2 cartes jouées, 3 attaque de l’ennemi, 4 disponibilité.',
+            'III. Défausser jusqu’à 3 cartes, en piocher 1, retirer les pions Temps des plateaux.',
+          ],
+          ref: 'Tour de Combat — p.15',
+        },
+        {
+          id: 'r7',
+          kind: 'info',
+          title: 'Relier les clés',
+          body: [
+            'Caractéristique : il faut le niveau indiqué. Magique : 1 Magie. Gratuite : toujours.',
+            'Clé éclair : c’est elle, et elle seule, qui autorise à jouer une carte de plus.',
+          ],
+          warn: 'La première carte du tour n’a besoin de rien. Toutes les suivantes exigent une clé éclair reliable sur la carte qu’on pose.',
+          crop: { page: 17, x: 0.05, y: 0.165, w: 0.28, h: 0.185 },
+          ref: 'Relier des Clés — p.16',
+        },
+        {
+          id: 'r8',
+          kind: 'check',
+          title: 'Sortir de là',
+          body: [
+            'Victoire dès que le potentiel atteint la valeur de la rencontre, ou que l’affinité atteint le haut de la piste.',
+            'Fuir coûte 1 Énergie et une attaque d’opportunité ; la carte retourne au bas de son paquet.',
+          ],
+          warn: 'Terreur au-dessus de la Santé : vous paniquez. Votre première carte est celle du dessus du paquet, et vous ne piochez pas en fin de tour.',
+          ref: 'Contrôle de Victoire — p.15, Panique — p.16',
         },
       ],
     },

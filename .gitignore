@@ -13,6 +13,8 @@ dist/
 rules/*.pdf
 !rules/Nemesis\ -\ Regles.pdf
 !rules/Tainted\ Grail\ -\ Regles.pdf
+!rules/Expeditions\ -\ Regles\ FR.pdf
+!rules/Expeditions\ -\ Accomplissements.pdf
 rules/*.txt
 
 # Aperçus et bundle temporaire produits par `npm run extract` / `npm run crops`.

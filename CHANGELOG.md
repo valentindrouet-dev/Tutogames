@@ -17,6 +17,39 @@ comme complète.
 
 ---
 
+## v0.08 — 2026-09-04
+
+### Ajouté
+
+- **Trois modes par jeu.** Un tutoriel ne sert plus seulement la première
+  partie : chaque jeu propose « Première partie », « Mise en place » et
+  « Rappel des règles ». Chacun garde sa propre sauvegarde, son propre
+  chronomètre et sa propre progression.
+  - *Mise en place* ne montre que les chapitres d'installation, sans vignettes
+    de matériel ni conseils — juste le placement, étape par étape. Les
+    avertissements restent : ce sont eux qu'on rate en installant de mémoire.
+  - *Rappel des règles* est du contenu écrit pour lui : les points de règles
+    dans l'ordre, résumés, pour se remettre en tête un jeu laissé de côté.
+- **Troisième tutoriel : Expeditions — Après Scythe.** 43 étapes de première
+  partie, 13 de mise en place, 8 de rappel, 18 éléments de matériel et
+  36 découpes tirées du livret officiel.
+- **L'accueil montre la couverture des livrets.** Le résumé de chaque jeu
+  disparaît de la carte : une couverture identifie une boîte bien plus vite
+  qu'une phrase. Le détail reste accessible par le bouton d'information.
+- **Réglages de confort de lecture.** Taille du texte sur quatre crans, et
+  clarté du fond sur cinq, appliquée par-dessus les couleurs du jeu sans
+  toucher à leur contraste. Accessibles depuis l'accueil et depuis un
+  tutoriel en cours.
+- **`npm run grid`** rend une page de règles sous une grille de coordonnées
+  normalisées : c'est l'outil de repérage des découpes.
+
+### Retiré
+
+- **Le Studio de découpe.** Il ne servait plus : les rectangles se lisent au
+  grid, et se collent directement dans le fichier du jeu.
+
+---
+
 ## v0.07 — 2026-09-03
 
 ### Ajouté

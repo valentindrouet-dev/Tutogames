@@ -16,8 +16,8 @@
  *
  * Le rectangle est optionnel. Un `Crop` réduit à son numéro de page affiche
  * la page entière : c'est déjà la bonne référence visuelle, et le rectangle
- * se précise ensuite dans le Studio de découpe (bouton « Studio » de
- * l'accueil). Voir GUIDE_CREATION_TUTO.md, section « Découper les visuels ».
+ * se précise ensuite avec `npm run grid`, qui rend la page sous une grille
+ * de coordonnées. Voir GUIDE_CREATION_TUTO.md, « Découper les visuels ».
  */
 export interface Crop {
   /** Numéro de page imprimé sur la page des règles. */
@@ -51,6 +51,49 @@ export type Glyph =
  * partie à cinq sans dire au joueur « si vous êtes 3, ignorez ce qui suit ».
  */
 export type PlayerFilter = number[]
+
+/**
+ * Ce qu'on vient chercher dans l'application. Un même jeu sert trois besoins
+ * qui n'ont rien à voir :
+ *
+ * - `tuto`  — première partie : on installe et on joue, pas à pas.
+ * - `setup` — on connaît le jeu, on veut juste le poser correctement.
+ * - `recap` — on y a joué il y a longtemps : les règles, dans l'ordre, en
+ *             résumé, pour se remettre en tête avant de commencer.
+ *
+ * Un chapitre ou une étape déclare les modes où il apparaît. Rien de déclaré
+ * = `['tuto']` seulement : un contenu didactique n'a pas sa place dans un
+ * rappel, il faut le vouloir.
+ */
+export type Mode = 'tuto' | 'setup' | 'recap'
+
+export const MODES: Mode[] = ['tuto', 'setup', 'recap']
+
+export interface ModeInfo {
+  id: Mode
+  /** Nom du bouton sur l'écran d'accueil. */
+  label: string
+  /** Une ligne : à qui ça s'adresse. */
+  blurb: string
+}
+
+export const MODE_INFO: Record<Mode, ModeInfo> = {
+  tuto: {
+    id: 'tuto',
+    label: 'Première partie',
+    blurb: 'On installe et on joue, pas à pas.',
+  },
+  setup: {
+    id: 'setup',
+    label: 'Mise en place',
+    blurb: 'Juste le placement, étape par étape.',
+  },
+  recap: {
+    id: 'recap',
+    label: 'Rappel des règles',
+    blurb: 'Vous y avez déjà joué : on rafraîchit.',
+  },
+}
 
 /**
  * Un élément de matériel du jeu. C'est ce que le joueur doit reconnaître
@@ -144,6 +187,8 @@ export interface Step {
   ref?: string
   /** Effectifs concernés. Absent = tous. */
   only?: PlayerFilter
+  /** Modes où cette étape apparaît. Absent = ceux du chapitre. */
+  modes?: Mode[]
 }
 
 export type ChapterKind = 'brief' | 'setup' | 'play' | 'debrief'
@@ -157,6 +202,8 @@ export interface Chapter {
   steps: Step[]
   /** Effectifs concernés. Absent = tous. */
   only?: PlayerFilter
+  /** Modes où ce chapitre apparaît. Absent = `['tuto']`. */
+  modes?: Mode[]
 }
 
 /**
@@ -253,10 +300,34 @@ export interface Tutorial {
     pageOffset: number
     credit: string
   }
+  /**
+   * Couverture du livret, découpée dans le PDF. C'est elle qui illustre le
+   * jeu sur l'écran d'accueil : un joueur reconnaît sa boîte bien plus vite
+   * qu'il ne lit un résumé.
+   */
+  cover?: Crop
   /** Ce que le tutoriel couvre volontairement, et ce qu'il laisse de côté. */
   scope: { covered: string[]; skipped: string[] }
   components: Component[]
   chapters: Chapter[]
+}
+
+/** Modes d'un chapitre. Rien de déclaré = première partie seulement. */
+export function chapterModes(c: Chapter): Mode[] {
+  return c.modes ?? ['tuto']
+}
+
+/** Modes d'une étape : les siens, sinon ceux de son chapitre. */
+export function stepModes(c: Chapter, s: Step): Mode[] {
+  return s.modes ?? chapterModes(c)
+}
+
+/** Modes réellement proposés par un tutoriel, dans l'ordre canonique. */
+export function modesOf(t: Tutorial): Mode[] {
+  const found = new Set<Mode>()
+  for (const c of t.chapters) for (const m of chapterModes(c)) found.add(m)
+  for (const c of t.chapters) for (const s of c.steps) for (const m of stepModes(c, s)) found.add(m)
+  return MODES.filter((m) => found.has(m))
 }
 
 /** Un contenu s'applique-t-il à cet effectif ? */

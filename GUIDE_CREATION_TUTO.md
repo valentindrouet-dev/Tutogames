@@ -22,6 +22,14 @@ src/games/      un fichier par jeu — tout le contenu est ici
 games/          les pages de règles ingérées et leurs découpes, à la racine du dépôt
 ```
 
+Un jeu propose **trois modes**, et c'est le même fichier qui les porte tous :
+
+| Mode | Pour qui | Ce qu'il montre |
+|---|---|---|
+| `tuto` | On découvre le jeu | Tout : matériel, mise en place, tour joué pas à pas |
+| `setup` | On connaît le jeu | Les seuls chapitres de mise en place, sans vignettes ni conseils |
+| `recap` | On y a joué il y a longtemps | Les règles dans l'ordre, résumées |
+
 Ajouter un jeu, c'est ajouter **un fichier** dans `src/games/` et l'inscrire dans
 `src/games/index.ts`. Aucune ligne de moteur ou d'interface ne doit changer. Si
 vous avez besoin de modifier le moteur pour faire passer un jeu, c'est le signe
@@ -69,8 +77,9 @@ la page « 2 » imprimée est souvent la 3ᵉ page du fichier.
 
 Ouvrez `games/mon-jeu/pages/`, trouvez la page portant le numéro 2, et
 renseignez l'écart dans `source.pageOffset`. **Une seule valeur corrige toutes
-les découpes du tutoriel.** Vérifiez dans le Studio : le compteur affiche à la
-fois le numéro du livret et l'index du fichier.
+les découpes du tutoriel.** Vérifiez avec `npm run grid -- <pdf> <page>` : le
+nom du fichier produit porte l'index dans le PDF, la page rendue porte son
+numéro imprimé.
 
 ### Étape 4 — Déclarer les effectifs jouables
 
@@ -156,7 +165,20 @@ theme: {
 Comparez toujours les deux jeux côte à côte sur l'accueil : si on ne les
 distingue pas d'un coup d'œil, le thème ne sert à rien.
 
-### Étape 6 — Recenser le matériel
+### Étape 6 — Découper la couverture
+
+L'écran d'accueil montre la couverture du livret, pas un résumé : un joueur
+reconnaît sa boîte bien plus vite qu'il ne lit une phrase.
+
+```ts
+cover: { page: 1, x: 0.02, y: 0.06, w: 0.96, h: 0.6 },
+```
+
+Visez un rectangle **proche du 16/10** — la carte le recadre au centre, ce qui
+dépasse est perdu. Cadrez sur le titre et l'illustration, pas sur les logos
+d'éditeur du bas de page.
+
+### Étape 7 — Recenser le matériel
 
 Un `Component` par élément que le joueur doit **reconnaître physiquement** sur
 la table. Reprenez le **nom exact des règles** : c'est ce qui permet au joueur
@@ -179,7 +201,7 @@ de recouper avec le livret.
   disent déjà. Si vous paraphrasez, supprimez la note.
 - `glyph` est le pictogramme de secours affiché tant que la découpe n'existe pas.
 
-### Étape 7 — Découper les visuels
+### Étape 8 — Découper les visuels
 
 Deux voies, à utiliser dans cet ordre.
 
@@ -215,12 +237,20 @@ Options utiles :
 | `--no-regions` | N'extrait que les images intégrées, sans analyse de pixels. |
 | `--dpi 200` | Analyse plus fine, aperçus plus nets. |
 
-**b) Studio de découpe — pour le reste.**
+**b) Grille de coordonnées — pour le reste.**
 
-Ce que l'extraction n'a pas isolé proprement se trace à la main : lancez
-l'application, bouton **Studio de découpe** en bas de l'accueil. Naviguez
-jusqu'à la page, tracez un rectangle au doigt ou à la souris, copiez le
-littéral et collez-le dans le tutoriel.
+```bash
+npm run grid -- "rules/Mon jeu - Regles.pdf" 3
+npm run grid -- "rules/Mon jeu - Regles.pdf" 3 0.33 0.15 0.67 0.85   # zoom
+```
+
+L'outil rend la page sous une grille de coordonnées normalisées, dans
+`.extract/grid/`. On ouvre l'image, on lit les bords du visuel sur les axes,
+on écrit le rectangle. **La grille reste en coordonnées de page même quand on
+zoome** : un rectangle lu dans un zoom se colle sans conversion.
+
+C'est la méthode qui a servi pour l'intégralité de *Tainted Grail* et
+d'*Expeditions*. Elle remplace l'ancien Studio de découpe, retiré en v0.08.
 
 **c) Pré-découper — une fois les rectangles posés.**
 
@@ -283,7 +313,7 @@ défauts ne se voient qu'à l'œil :
   pages du livret *Tainted Grail*. Dans ce cas, changez de source : la photo
   produit du même élément dans la liste du matériel fait toujours l'affaire.
 
-### Étape 8 — Écrire les chapitres
+### Étape 9 — Écrire les chapitres
 
 Découpage recommandé, éprouvé sur Nemesis :
 
@@ -304,7 +334,38 @@ on survole ; au-dessus, on abandonne avant la fin.
 Comptez ce que voit **un** joueur : `nominalSteps()` calcule le total à
 l'effectif conseillé, filtres `only` appliqués.
 
-### Étape 9 — Relire à voix haute
+### Étape 10 — Servir les trois modes
+
+Un chapitre déclare les modes où il apparaît. **Rien de déclaré = `['tuto']`
+seulement** : un contenu didactique n'a pas sa place dans un rappel, il faut le
+vouloir.
+
+```ts
+// Mise en place : sert la première partie ET le mode « Mise en place ».
+{ id: 'setup-board', title: 'Mise en place : le plateau', kind: 'setup',
+  modes: ['tuto', 'setup'], … }
+
+// Rappel : des chapitres écrits pour lui, courts, jamais réutilisés ailleurs.
+{ id: 'r-boucle', title: 'La manche', kind: 'play', modes: ['recap'], … }
+```
+
+Une étape peut affiner : `modes: ['tuto']` sur une étape d'un chapitre
+`['tuto', 'setup']` la réserve à la première partie — pratique pour un aparté
+qui n'a rien à faire dans une installation rapide.
+
+**Ce que le mode `setup` retire tout seul.** Le moteur y supprime les `tip` et
+les vignettes de matériel de chaque étape : on sait déjà ce qu'est une tuile
+Salle, on veut savoir où elle va. Les `warn` restent — c'est justement ce
+qu'on rate en installant de mémoire. Vous n'avez donc **rien à réécrire** :
+vos chapitres de mise en place servent les deux modes tels quels.
+
+**Écrire le rappel.** Comptez 6 à 10 étapes, pas plus. Une étape par bloc de
+règles, dans l'ordre où on les rencontre à la table. Des listes de faits, pas
+des explications : celui qui lit connaît déjà le jeu, il cherche à retrouver un
+détail. Les `warn` valent de l'or ici : ce sont les règles qu'on oublie entre
+deux parties.
+
+### Étape 11 — Relire à voix haute
 
 Lisez le tutoriel comme si vous guidiez quelqu'un. Toute phrase que vous
 n'auriez pas dite à l'oral n'a rien à faire à l'écran.
@@ -415,10 +476,16 @@ l'interface les porte déjà.
 | Ouvrir la fiche d'un composant | Les vignettes de matériel, sous l'étape |
 | Index complet du matériel | Bouton grille, en haut à droite |
 | Chronomètre | En haut à droite ; il survit à la fermeture de l'application |
+| Taille du texte et clarté du fond | Bouton réglages, en haut à droite et sur l'accueil |
 
 Le saut d'étape et les raccourcis clavier sont **génériques** : ils suivent la
-vue filtrée par l'effectif, donc un tutoriel n'a rien à déclarer pour en
-bénéficier.
+vue filtrée par l'effectif et le mode, donc un tutoriel n'a rien à déclarer
+pour en bénéficier.
+
+Les réglages de confort (`src/engine/prefs.ts`) multiplient toutes les tailles
+de texte et décalent la clarté des fonds de ±20 % au maximum, par-dessus
+l'habillage du jeu. Écrivez donc vos titres **courts** : un titre qui tient sur
+deux lignes en taille normale en prend quatre en « Énorme ».
 
 ---
 
@@ -479,6 +546,10 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 - [ ] Chaque valeur de mise en place qui dépend du nombre de joueurs a bien
       sa variante `only`.
 - [ ] Sur l'accueil, le jeu se distingue des autres d'un coup d'œil.
+- [ ] La couverture est nette, cadrée sur le titre, proche du 16/10.
+- [ ] Les trois modes se déroulent en entier : aucun chapitre vide, aucun
+      renvoi à une étape qui n'existe pas dans ce mode.
+- [ ] Le rappel tient en 6 à 10 étapes et ne réexplique rien.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.
 - [ ] Aucun texte ne répète le libellé d'un bouton.
 - [ ] Tous les `components` cités par une étape existent dans la liste.
@@ -515,3 +586,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-03 | v0.03 | Première application réelle sur Nemesis : 36 découpes de matériel et 10 schémas d'exemple. Ingestion recommandée en JPEG 200 dpi. |
 | 2026-09-03 | v0.06 | Deux étapes nouvelles : « Déclarer les effectifs jouables » (`players`, filtres `only`, vue filtrée) et « Habiller le jeu » (`theme`). Les découpes sont rendues depuis le PDF à 1800 px et non plus taillées dans la page. Ajout de la relecture en planche contact, de la section « Ce que le joueur peut faire », et de l'encadré sur les `.js` émis par TypeScript. Volumétrie revue à 6-10 chapitres et 60-95 étapes. Deuxième tutoriel : *Tainted Grail — La Chute d'Avalon*. |
 | 2026-09-03 | v0.07 | `scheme: 'light'` et couleurs sémantiques (`ok` / `warn` / `danger`) par jeu : l'interface accepte un fond clair, appliqué au parchemin de *Tainted Grail*. Nouvelle édition du PDF Nemesis, découpes refaites à l'identique avec `--force`. Encadré sur la qualité de la source d'une découpe, et la marche à suivre après un changement de PDF. |
+| 2026-09-04 | v0.08 | Trois modes par jeu (`modes` sur les chapitres et les étapes) : première partie, mise en place, rappel des règles. Nouvelle étape « Découper la couverture » (`cover`) et « Servir les trois modes ». Le Studio de découpe est remplacé par `npm run grid`, qui rend une page sous une grille de coordonnées. Réglages de confort : taille du texte et clarté du fond. Troisième tutoriel : *Expeditions*. |

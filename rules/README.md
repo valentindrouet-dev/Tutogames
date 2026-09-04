@@ -14,6 +14,7 @@ propriétaire du dépôt :
 |---|---|
 | `Nemesis - Regles.pdf` | `src/games/nemesis.ts` |
 | `Tainted Grail - Regles.pdf` | `src/games/taintedgrail.ts` |
+| `Expeditions - Regles FR.pdf` | `src/games/expeditions.ts` |
 
 Le nom du fichier attendu est déclaré dans `source.pdf` du tutoriel : c'est là
 que `npm run crops` va chercher le PDF pour rendre les découpes.

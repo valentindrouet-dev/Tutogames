@@ -123,6 +123,30 @@ export const STEP_KIND: Record<StepKind, { label: string; tint: string; Icon: (p
   check: { label: 'Vérifier', tint: '#22d3ee', Icon: CheckCircle },
 }
 
+/** Roue crantée des réglages de confort. */
+export const Settings = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="3.2" />
+    <path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" />
+  </svg>
+)
+
+/** Deux lettres A de tailles différentes : la taille du texte. */
+export const TextSize = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M2.4 19 7 6l4.6 13M3.9 15h6.2" />
+    <path d="M13.6 19 17 9.5 20.4 19M14.7 16.2h4.6" />
+  </svg>
+)
+
+/** Disque mi-clair mi-sombre : la clarté du fond. */
+export const Contrast = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor" stroke="none" />
+  </svg>
+)
+
 export const Crop = (p: P) => (
   <svg {...base} {...p}><path d="M6.5 2.5v15h15" /><path d="M2.5 6.5h15v15" /></svg>
 )

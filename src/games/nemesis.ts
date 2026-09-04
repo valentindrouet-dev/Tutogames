@@ -63,6 +63,9 @@ export const nemesis: Tutorial = {
     credit: 'Règles officielles FR — Awaken Realms',
   },
 
+  // Couverture du livret : ce que le joueur reconnaît sur l'écran d'accueil.
+  cover: { page: 1, x: 0.02, y: 0.06, w: 0.96, h: 0.6 },
+
   scope: {
     covered: [
       'La mise en place complète, des 20 étapes officielles',
@@ -452,6 +455,7 @@ export const nemesis: Tutorial = {
       id: 'setup-board',
       title: 'Mise en place : le plateau',
       kind: 'setup',
+      modes: ['tuto', 'setup'],
       goal: 'Les 13 premières étapes officielles : le vaisseau est prêt, les Intrus aussi.',
       steps: [
         {
@@ -637,6 +641,7 @@ export const nemesis: Tutorial = {
       id: 'setup-crew',
       title: 'Mise en place : l’équipage',
       kind: 'setup',
+      modes: ['tuto', 'setup'],
       goal: 'Les étapes 14 à 20 : chaque joueur a son personnage, son objectif secret et son matériel.',
       steps: [
         {
@@ -1330,6 +1335,96 @@ export const nemesis: Tutorial = {
           ],
           tip: 'Rejouez maintenant deux ou trois manches par vous-mêmes. Revenez sur ce chapitre autant que nécessaire, la progression est sauvegardée.',
           ref: 'Phase Événement, étape 9 — p.10',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------- rappel des règles */
+
+    {
+      id: 'r-boucle',
+      title: 'La manche',
+      kind: 'play',
+      modes: ['recap'],
+      goal: 'Retrouver la structure d’une manche et l’ordre des phases.',
+      steps: [
+        {
+          id: 'rr1',
+          kind: 'info',
+          title: 'Une manche, deux phases',
+          body: [
+            'Phase Joueur : chacun son tour, jusqu’à ce que tout le monde ait passé.',
+            'Phase Événement : 5 étapes, dans l’ordre, pour tout le monde à la fois.',
+            'Le marqueur Premier joueur avance d’un cran à la fin de la manche.',
+          ],
+          ref: 'Déroulement — p.10',
+        },
+        {
+          id: 'rr2',
+          kind: 'info',
+          title: 'Votre tour : deux actions',
+          body: [
+            'Vous en faites deux, puis c’est au suivant. Passer met fin à votre manche.',
+            'Presque toute action se paie en défaussant une carte Action de sa main.',
+            'Une main pleine vous protège aussi des attaques-surprises.',
+          ],
+          warn: 'Une fois que vous avez passé, vous ne rejouez plus avant la manche suivante.',
+          ref: 'Actions — p.12',
+        },
+        {
+          id: 'rr3',
+          kind: 'info',
+          title: 'Se déplacer, et faire du bruit',
+          body: [
+            'Un déplacement vers une salle déjà explorée coûte 1 carte ; vers une salle inconnue, on explore.',
+            'À l’arrivée dans une salle non explorée : tuile retournée, jeton Exploration résolu, puis jet de bruit.',
+            'Le jet de bruit pose un marqueur dans le couloir tiré — ou déclenche une rencontre si le couloir en a déjà un.',
+          ],
+          ref: 'Déplacement et bruit — p.14-15',
+        },
+        {
+          id: 'rr4',
+          kind: 'info',
+          title: 'La rencontre',
+          body: [
+            'Piochez un jeton dans le sac Intrus, placez la figurine correspondante, et vous êtes en combat.',
+            'Comparez le chiffre du jeton à votre nombre de cartes en main : moins de cartes que le chiffre = attaque-surprise.',
+          ],
+          warn: 'Le jeton pioché ne retourne pas dans le sac : mettez-le de côté.',
+          ref: 'Rencontre — p.17-18',
+        },
+        {
+          id: 'rr5',
+          kind: 'info',
+          title: 'Combattre, ou fuir',
+          body: [
+            'Tir : 1 carte + 1 munition, un dé de combat. Corps-à-corps : 1 carte, sans munition, mais l’Intrus riposte.',
+            'Fuir coûte 1 carte et vous déplace : l’Intrus reste sur place.',
+            'Un Intrus tué laisse une carcasse ; un personnage blessé pioche une Blessure légère ou grave.',
+          ],
+          ref: 'Combat — p.19-21',
+        },
+        {
+          id: 'rr6',
+          kind: 'info',
+          title: 'La phase Événement, 5 étapes',
+          body: [
+            '1. Carte Événement révélée et résolue. 2. Déplacement des Intrus attirés par le bruit.',
+            '3. Attaque des Intrus en contact. 4. Un jeton tiré du sac par joueur encore en vie.',
+            '5. Entretien : marqueurs de bruit retirés, mains complétées, premier joueur décalé.',
+          ],
+          ref: 'Phase Événement — p.22',
+        },
+        {
+          id: 'rr7',
+          kind: 'check',
+          title: 'Gagner',
+          body: [
+            'Il faut survivre : être en hibernation ou dans une nacelle au moment où la partie s’arrête.',
+            'Et remplir son objectif secret, que personne d’autre ne connaît.',
+          ],
+          warn: 'Survivre ne suffit pas, et l’objectif seul ne suffit pas non plus. Il faut les deux.',
+          ref: 'Fin de partie — p.23',
         },
       ],
     },

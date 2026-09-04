@@ -6,13 +6,15 @@
  * étape et chronomètre compris. Aucune donnée ne quitte l'iPad.
  */
 
-import type { Tutorial } from './types'
+import type { Mode, Tutorial } from './types'
 
 const KEY = 'tutogames.save.v1'
 
 export interface Save {
   /** Identifiant du tutoriel en cours. */
   tutorialId: string
+  /** Mode en cours : les trois modes d'un jeu se reprennent séparément. */
+  mode: Mode
   /** Effectif choisi au démarrage : décide des étapes affichées. */
   players: number
   /** Version du contenu au moment de la sauvegarde, pour détecter un decalage. */
@@ -32,6 +34,11 @@ export interface Save {
 }
 
 type SaveMap = Record<string, Save>
+
+/** Clé de sauvegarde : un jeu peut avoir une partie en cours par mode. */
+function keyOf(tutorialId: string, mode: Mode): string {
+  return `${tutorialId}:${mode}`
+}
 
 function readAll(): SaveMap {
   try {
@@ -54,29 +61,36 @@ function writeAll(map: SaveMap): void {
   }
 }
 
-export function loadSave(tutorialId: string): Save | null {
-  return readAll()[tutorialId] ?? null
+export function loadSave(tutorialId: string, mode: Mode): Save | null {
+  return readAll()[keyOf(tutorialId, mode)] ?? null
 }
 
 export function listSaves(): Save[] {
-  return Object.values(readAll()).sort((a, b) => b.updatedAt - a.updatedAt)
+  // Les sauvegardes d'avant l'arrivée des modes n'ont pas de champ `mode` :
+  // on les rattache à la première partie, qui est ce qu'elles étaient.
+  return Object.values(readAll())
+    .map((s) => ({ ...s, mode: s.mode ?? 'tuto' }))
+    .sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
 export function writeSave(save: Save): void {
   const all = readAll()
-  all[save.tutorialId] = { ...save, updatedAt: Date.now() }
+  all[keyOf(save.tutorialId, save.mode)] = { ...save, updatedAt: Date.now() }
   writeAll(all)
 }
 
-export function clearSave(tutorialId: string): void {
+export function clearSave(tutorialId: string, mode: Mode): void {
   const all = readAll()
+  delete all[keyOf(tutorialId, mode)]
+  // Une sauvegarde d'avant les modes portait le seul identifiant du jeu.
   delete all[tutorialId]
   writeAll(all)
 }
 
-export function newSave(t: Tutorial, players: number): Save {
+export function newSave(t: Tutorial, players: number, mode: Mode): Save {
   return {
     tutorialId: t.id,
+    mode,
     players,
     contentVersion: t.contentVersion,
     chapter: 0,

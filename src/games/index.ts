@@ -7,7 +7,8 @@
  */
 
 import type { Tutorial } from '../engine/types'
+import { expeditions } from './expeditions'
 import { nemesis } from './nemesis'
 import { taintedgrail } from './taintedgrail'
 
-export const TUTORIALS: Tutorial[] = [nemesis, taintedgrail]
+export const TUTORIALS: Tutorial[] = [nemesis, taintedgrail, expeditions]

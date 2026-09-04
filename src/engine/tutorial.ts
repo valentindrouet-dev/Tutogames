@@ -10,7 +10,10 @@
  * Le moteur ne connaît aucun jeu en particulier.
  */
 
-import { appliesTo, type Chapter, type Component, type Step, type Tutorial } from './types'
+import {
+  appliesTo, chapterModes, stepModes,
+  type Chapter, type Component, type Mode, type Step, type Tutorial,
+} from './types'
 
 /** Position dans un tutoriel : index de chapitre et d'étape, dans la vue. */
 export interface Position {
@@ -18,25 +21,37 @@ export interface Position {
   step: number
 }
 
-/** Tutoriel filtré pour un effectif. */
+/** Tutoriel filtré pour un effectif et un mode. */
 export interface View {
   tutorial: Tutorial
   players: number
+  mode: Mode
   chapters: Chapter[]
 }
 
 /**
- * Construit la vue d'un tutoriel pour un effectif. Les chapitres et étapes
- * hors effectif sont retirés ; un chapitre vidé de toutes ses étapes
- * disparaît aussi.
+ * Construit la vue d'un tutoriel pour un effectif et un mode. Les chapitres
+ * et étapes hors effectif ou hors mode sont retirés ; un chapitre vidé de
+ * toutes ses étapes disparaît aussi.
+ *
+ * En mode « Mise en place », les étapes perdent leurs vignettes de matériel
+ * et leurs conseils : on sait déjà ce qu'est une tuile Salle, on veut savoir
+ * où elle va. Les avertissements, eux, restent — c'est justement ce qu'on
+ * rate quand on installe de mémoire.
  */
-export function viewFor(tutorial: Tutorial, players: number): View {
+export function viewFor(tutorial: Tutorial, players: number, mode: Mode = 'tuto'): View {
+  const bare = mode === 'setup'
   const chapters = tutorial.chapters
-    .filter((c) => appliesTo(c.only, players))
-    .map((c) => ({ ...c, steps: c.steps.filter((s) => appliesTo(s.only, players)) }))
+    .filter((c) => appliesTo(c.only, players) && chapterModes(c).includes(mode))
+    .map((c) => ({
+      ...c,
+      steps: c.steps
+        .filter((s) => appliesTo(s.only, players) && stepModes(c, s).includes(mode))
+        .map((s) => (bare ? { ...s, tip: undefined, components: undefined } : s)),
+    }))
     .filter((c) => c.steps.length > 0)
 
-  return { tutorial, players, chapters }
+  return { tutorial, players, mode, chapters }
 }
 
 export interface FlatStep {
@@ -113,9 +128,9 @@ export function componentsOf(t: Tutorial, step: Step): Component[] {
 }
 
 /**
- * Nombre d'étapes d'un tutoriel pour son effectif conseillé — sert à annoncer
- * une taille sur l'écran d'accueil, avant que le joueur ait choisi.
+ * Nombre d'étapes d'un mode pour l'effectif conseillé — sert à annoncer une
+ * taille sur l'écran d'accueil, avant que le joueur ait choisi.
  */
-export function nominalSteps(t: Tutorial): number {
-  return totalSteps(viewFor(t, t.players.recommended ?? t.players.min))
+export function nominalSteps(t: Tutorial, mode: Mode = 'tuto'): number {
+  return totalSteps(viewFor(t, t.players.recommended ?? t.players.min, mode))
 }

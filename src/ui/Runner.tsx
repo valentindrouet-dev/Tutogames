@@ -10,8 +10,9 @@
  */
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
-import type { Component, Tutorial } from '../engine/types'
-import { playerLabel } from '../engine/types'
+import type { Component, Mode, Tutorial } from '../engine/types'
+import { MODE_INFO, playerLabel } from '../engine/types'
+import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
 import {
   clampPosition, componentsOf, indexOf, next, prev, stepAt, totalSteps, viewFor,
 } from '../engine/tutorial'
@@ -23,26 +24,48 @@ import { useManifest, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
-import { themePanel, themeStyle } from './theme'
+import { themeBackground, themePanel, themeStyle } from './theme'
 import {
-  Alert, ArrowLeft, ArrowRight, Bulb, Check, Grid, Home, List, Trophy, STEP_KIND,
+  Alert, ArrowLeft, ArrowRight, Bulb, Check, Grid, Home, List, Settings, Trophy, STEP_KIND,
 } from './icons'
+
+/** Écran de fin : ce qu'on vient de terminer n'est pas la même chose selon le mode. */
+const DONE_TITLE: Record<Mode, string> = {
+  tuto: 'Partie tutorielle terminée',
+  setup: 'Le jeu est installé',
+  recap: 'Règles rafraîchies',
+}
+
+const DONE_LEAD: Record<Mode, string> = {
+  tuto:
+    'Vous connaissez la mise en place, le tour de jeu et la fin de manche. Rejouez maintenant une partie complète avec les règles officielles.',
+  setup:
+    'Tout est en place. Bonne partie — et si un point de règle vous échappe, le rappel des règles est à un bouton d’ici.',
+  recap:
+    'Vous avez tout revu, dans l’ordre. Installez le jeu et lancez-vous : le livret n’est là que pour les cas particuliers.',
+}
 
 interface Props {
   tutorial: Tutorial
+  /** Ce qu'on est venu chercher : première partie, mise en place, rappel. */
+  mode: Mode
   /** Effectif choisi pour cette partie. */
   players: number
   /** true pour repartir de zéro, false pour reprendre la sauvegarde. */
   restart: boolean
+  prefs?: Prefs
+  onOpenSettings?: () => void
   onExit: () => void
 }
 
-export function Runner({ tutorial, players, restart, onExit }: Props) {
-  const view = useMemo(() => viewFor(tutorial, players), [tutorial, players])
+export function Runner({
+  tutorial, mode, players, restart, prefs = DEFAULT_PREFS, onOpenSettings, onExit,
+}: Props) {
+  const view = useMemo(() => viewFor(tutorial, players, mode), [tutorial, players, mode])
 
   const [save, setSave] = useState<Save>(() => {
-    const existing = restart ? null : loadSave(tutorial.id)
-    if (!existing || existing.players !== players) return newSave(tutorial, players)
+    const existing = restart ? null : loadSave(tutorial.id, mode)
+    if (!existing || existing.players !== players) return newSave(tutorial, players, mode)
     // Le contenu a pu changer depuis la dernière session : on ramène la
     // position sur une étape qui existe encore.
     return { ...existing, ...clampPosition(view, existing.chapter, existing.step) }
@@ -147,18 +170,18 @@ export function Runner({ tutorial, players, restart, onExit }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [finished, part, index, jump, goNext, goPrev])
 
-  const theme = themeStyle(tutorial.theme)
+  const theme = themeStyle(tutorial.theme, prefs)
   // Les panneaux modaux ont leur propre fond : on ne leur passe pas celui du thème.
-  const panel = themePanel(tutorial.theme)
+  const panel = themePanel(tutorial.theme, prefs)
 
   // Le rebond de défilement de l'iPad laisse voir le fond de la page, pas
   // celui de l'application : sans cela, un tutoriel clair clignoterait noir
   // à chaque à-coup du doigt.
   useEffect(() => {
     const { background } = document.body.style
-    document.body.style.background = tutorial.theme.bg
+    document.body.style.background = themeBackground(tutorial.theme, prefs)
     return () => { document.body.style.background = background }
-  }, [tutorial.theme.bg])
+  }, [tutorial.theme, prefs])
 
   if (finished) {
     return (
@@ -166,22 +189,19 @@ export function Runner({ tutorial, players, restart, onExit }: Props) {
         <div className="done-screen">
           <div className="done-badge"><Trophy aria-hidden /></div>
           <div>
-            <div className="done-title">Partie tutorielle terminée</div>
+            <div className="done-title">{DONE_TITLE[mode]}</div>
             <div className="done-time">
               {formatClock(save.elapsedMs)} — {tutorial.title}, {playerLabel(tutorial.players, players).toLowerCase()}
             </div>
           </div>
-          <p className="brand-tag" style={{ maxWidth: '52ch' }}>
-            Vous connaissez la mise en place, le tour de jeu et la fin de manche.
-            Rejouez maintenant une partie complète avec les règles officielles.
-          </p>
+          <p className="brand-tag" style={{ maxWidth: '52ch' }}>{DONE_LEAD[mode]}</p>
           <div className="done-actions">
             <button
               type="button"
               className="btn btn-lg btn-ghost"
               onClick={() => {
-                clearSave(tutorial.id)
-                setSave(newSave(tutorial, players))
+                clearSave(tutorial.id, mode)
+                setSave(newSave(tutorial, players, mode))
                 setFinished(false)
               }}
             >
@@ -222,15 +242,23 @@ export function Runner({ tutorial, players, restart, onExit }: Props) {
         <div className="topbar-id">
           <span className="topbar-title">{tutorial.title}</span>
           <span className="topbar-sub">
-            {playerLabel(tutorial.players, players).toUpperCase()} · TUTO v{tutorial.contentVersion}
+            {MODE_INFO[mode].label.toUpperCase()} · {playerLabel(tutorial.players, players).toUpperCase()}
           </span>
         </div>
 
         <div className="topbar-spacer" />
 
-        <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
-          <Grid aria-hidden />
-        </button>
+        {mode !== 'setup' && (
+          <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
+            <Grid aria-hidden />
+          </button>
+        )}
+
+        {onOpenSettings && (
+          <button type="button" className="btn btn-ghost btn-icon" onClick={onOpenSettings} aria-label="Réglages">
+            <Settings aria-hidden />
+          </button>
+        )}
 
         <Timer elapsedMs={save.elapsedMs} runningSince={save.runningSince} onToggle={toggleTimer} />
       </header>
