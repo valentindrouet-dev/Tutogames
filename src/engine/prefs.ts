@@ -11,9 +11,14 @@
 
 const KEY = 'tutogames.prefs.v1'
 
+/** Ordre d'affichage des jeux sur l'accueil. */
+export type SortOrder = 'catalogue' | 'alpha'
+
 export interface Prefs {
   /** Multiplicateur de la taille du texte. */
   textScale: number
+  /** `catalogue` suit l'ordre d'installation, `alpha` trie par titre. */
+  sort: SortOrder
   /**
    * Décalage de clarté du fond, de -2 (plus sombre) à +2 (plus clair).
    * Zéro laisse les couleurs du jeu telles que son auteur les a réglées.
@@ -30,7 +35,12 @@ export const TEXT_SCALES = [
 
 export const LIFTS = [-2, -1, 0, 1, 2]
 
-export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0 }
+export const SORTS: { value: SortOrder; glyph: string; label: string }[] = [
+  { value: 'catalogue', glyph: '1 · 2 · 3', label: 'Catalogue' },
+  { value: 'alpha', glyph: 'A → Z', label: 'Alphabétique' },
+]
+
+export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0, sort: 'catalogue' }
 
 function clamp(n: number, min: number, max: number): number {
   return Math.min(Math.max(n, min), max)
@@ -44,6 +54,7 @@ export function loadPrefs(): Prefs {
     return {
       textScale: clamp(Number(p.textScale) || 1, 1, 1.5),
       lift: clamp(Math.round(Number(p.lift) || 0), -2, 2),
+      sort: p.sort === 'alpha' ? 'alpha' : 'catalogue',
     }
   } catch {
     // Stockage indisponible : les réglages par défaut restent utilisables.

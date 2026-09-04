@@ -17,7 +17,7 @@
  *  - Tout le reste (même origine, GET) : cache d'abord, puis réseau mis en cache.
  */
 
-const SHELL = 'tutogames-shell-v0.09'
+const SHELL = 'tutogames-shell-v0.10'
 const MEDIA = 'tutogames-media-v1'
 const START = './'
 

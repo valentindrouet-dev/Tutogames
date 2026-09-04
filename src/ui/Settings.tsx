@@ -1,17 +1,18 @@
 /**
- * Réglages de confort de lecture.
+ * Réglages de l'application.
  *
- * Deux réglages, pas plus : la taille du texte et la clarté du fond. Chacun
- * se montre lui-même — les tailles sont écrites à leur taille, les clartés
- * sont des pastilles de la couleur qu'elles produisent. Rien à lire pour
- * comprendre ce qu'un bouton va faire.
+ * Trois réglages, pas plus : la taille du texte, la clarté du fond, l'ordre
+ * des jeux. Chacun se montre lui-même — les tailles sont écrites à leur
+ * taille, les clartés sont des pastilles de la couleur qu'elles produisent,
+ * l'ordre est écrit dans l'ordre qu'il produit. Rien à lire pour comprendre
+ * ce qu'un bouton va faire.
  */
 
 import type { Prefs } from '../engine/prefs'
-import { LIFTS, TEXT_SCALES, shade } from '../engine/prefs'
+import { DEFAULT_PREFS, LIFTS, SORTS, TEXT_SCALES, shade } from '../engine/prefs'
 import type { Theme } from '../engine/types'
 import { Sheet } from './Sheet'
-import { Contrast, TextSize } from './icons'
+import { Contrast, SortIcon, TextSize } from './icons'
 import { themePanel } from './theme'
 
 interface Props {
@@ -25,7 +26,7 @@ interface Props {
 export function Settings({ prefs, onChange, onClose, theme }: Props) {
   return (
     <Sheet
-      title="Confort de lecture"
+      title="Réglages"
       onClose={onClose}
       style={themePanel(theme, prefs)}
       footer={
@@ -33,7 +34,7 @@ export function Settings({ prefs, onChange, onClose, theme }: Props) {
           <button
             type="button"
             className="btn btn-ghost"
-            onClick={() => onChange({ textScale: 1, lift: 0 })}
+            onClick={() => onChange(DEFAULT_PREFS)}
           >
             Réinitialiser
           </button>
@@ -81,6 +82,24 @@ export function Settings({ prefs, onChange, onClose, theme }: Props) {
           S'applique par-dessus les couleurs du jeu, sans changer leur contraste.
         </p>
       </div>
+      <div>
+        <div className="section-label"><SortIcon aria-hidden /> Ordre des jeux</div>
+        <div className="pref-row">
+          {SORTS.map((o) => (
+            <button
+              key={o.value}
+              type="button"
+              className={`pref-btn${o.value === prefs.sort ? ' picked' : ''}`}
+              onClick={() => onChange({ ...prefs, sort: o.value })}
+            >
+              {/* L'étiquette montre l'ordre qu'elle produit. */}
+              <span className="pref-glyph">{o.glyph}</span>
+              <span className="pref-btn-label">{o.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
     </Sheet>
   )
 }

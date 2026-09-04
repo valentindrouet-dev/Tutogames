@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.09** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.10** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -76,8 +76,9 @@ Sur ordinateur, **Espace** passe à l'étape suivante et **Maj + Espace** revien
 à la précédente. Le bouton « Étape *n* / *m* » ouvre la liste du chapitre pour
 sauter directement où l'on veut.
 
-Le bouton réglages, en haut à droite, ajuste la taille du texte et la clarté du
-fond — utile de nuit, ou quand la tablette est posée un peu loin.
+Le bouton réglages, en haut à droite, ajuste la taille du texte, la clarté du
+fond — utile de nuit, ou quand la tablette est posée un peu loin — et l'ordre
+d'affichage des jeux.
 
 ## Ajouter les visuels des règles
 

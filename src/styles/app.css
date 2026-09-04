@@ -830,43 +830,50 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 /* Action secondaire a cote de deux pastilles : plus compacte qu'un bouton plein. */
 .game-card-head .btn-icon { min-width: 46px; min-height: 46px; padding: 0 12px; }
 
-.mode-list { display: flex; flex-direction: column; gap: 8px; }
+/*
+ * Les trois modes tiennent sur une ligne, en boutons carres : le pictogramme
+ * porte le sens avant le libelle, et la carte se lit d'un coup d'oeil.
+ */
+/* minmax(0, 1fr) : sans cela une piste refuse de passer sous la largeur du
+   plus long mot du libelle, et le troisieme bouton deborde de la carte. */
+.mode-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 
 .mode-btn {
+  aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 56px;
-  padding: 10px 14px;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 5px;
   border-radius: var(--r);
   background: var(--bg-3);
   border: 1px solid var(--stroke);
-  text-align: left;
+  text-align: center;
   cursor: pointer;
 }
-.mode-btn:active { transform: scale(0.985); }
+.mode-btn:active { transform: scale(0.97); }
+.mode-btn > svg { width: 24px; height: 24px; color: var(--accent); }
 .mode-btn-label {
-  flex: 1;
-  min-width: 0;
   font-family: var(--font-title);
-  /* Pas d'interlettrage ici : trois libelles fixes doivent tenir sur une
-     ligne quelle que soit la police de repli du systeme. */
-  font-size: calc(17px * var(--text-scale));
+  /* Pas d'interlettrage : les libelles sont fixes et doivent tenir dans le
+     carre quelle que soit la police de repli du systeme. */
+  font-size: calc(12px * var(--text-scale));
   font-weight: 700;
+  line-height: 1.2;
   text-transform: var(--title-transform);
+  overflow-wrap: break-word;
 }
 .mode-btn-count {
-  flex: 0 0 auto;
   font-family: var(--mono);
-  font-size: calc(13px * var(--text-scale));
+  font-size: calc(12px * var(--text-scale));
   color: var(--fg-faint);
   white-space: nowrap;
 }
 .mode-btn-count.started {
   color: var(--accent-ink);
   background: var(--accent);
-  padding: 4px 10px;
+  padding: 2px 9px;
   border-radius: 999px;
   font-weight: 700;
 }
@@ -895,6 +902,13 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   width: 46px; height: 46px;
   border-radius: 12px;
   border: 1px solid var(--stroke);
+}
+/* Etiquette qui montre l'ordre qu'elle produit : « 1 · 2 · 3 » ou « A → Z ». */
+.pref-glyph {
+  font-family: var(--mono);
+  font-size: calc(16px * var(--text-scale));
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .section-label svg { width: 16px; height: 16px; vertical-align: -3px; margin-right: 6px; }

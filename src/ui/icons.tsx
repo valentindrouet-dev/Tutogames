@@ -4,7 +4,7 @@
  */
 
 import type { JSX } from 'react'
-import type { Glyph, StepKind } from '../engine/types'
+import type { Glyph, Mode, StepKind } from '../engine/types'
 
 type P = JSX.IntrinsicElements['svg']
 
@@ -154,6 +154,24 @@ export const Crop = (p: P) => (
 export const List = (p: P) => (
   <svg {...base} {...p}><path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12" /><circle cx="4.2" cy="6.5" r="1.1" fill="currentColor" stroke="none" /><circle cx="4.2" cy="12" r="1.1" fill="currentColor" stroke="none" /><circle cx="4.2" cy="17.5" r="1.1" fill="currentColor" stroke="none" /></svg>
 )
+/**
+ * Pictogramme de chaque mode. Sur l'accueil, les trois boutons sont carrés :
+ * l'icône porte le sens avant même qu'on lise le libellé.
+ */
+export const MODE_ICON: Record<Mode, (p: P) => JSX.Element> = {
+  tuto: Play,
+  setup: Board,
+  recap: List,
+}
+
+/** Ordre d'affichage des jeux : deux tris possibles. */
+export const SortIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M4 6.5h10M4 12h7M4 17.5h4" />
+    <path d="M17 5.5v13M14 15.5l3 3 3-3" />
+  </svg>
+)
+
 export const Users = (p: P) => (
   <svg {...base} {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /><path d="M16 5.6a3.2 3.2 0 0 1 0 6" /><path d="M17.5 14.9c1.9.5 3.2 2.2 3.2 4.6" /></svg>
 )

@@ -17,6 +17,24 @@ comme complète.
 
 ---
 
+## v0.10 — 2026-09-04
+
+### Modifié
+
+- **Les trois modes d'un jeu tiennent sur une ligne**, en boutons carrés.
+  Chacun porte son pictogramme, son libellé et son nombre d'étapes : le
+  pictogramme donne le sens avant même qu'on lise.
+
+### Ajouté
+
+- **Tri des jeux**, dans les réglages de l'accueil, à côté de la taille du
+  texte et de la clarté du fond : ordre du catalogue, ou alphabétique. Le
+  choix est mémorisé sur la tablette.
+- Le panneau s'appelle désormais « Réglages » : il ne contient plus seulement
+  du confort de lecture.
+
+---
+
 ## v0.09 — 2026-09-04
 
 ### Modifié

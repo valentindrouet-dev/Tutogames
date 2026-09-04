@@ -479,16 +479,17 @@ l'interface les porte déjà.
 | Ouvrir la fiche d'un composant | Les vignettes de matériel, sous l'étape |
 | Index complet du matériel | Bouton grille, en haut à droite |
 | Chronomètre | En haut à droite ; il survit à la fermeture de l'application |
-| Taille du texte et clarté du fond | Bouton réglages, en haut à droite et sur l'accueil |
+| Taille du texte, clarté du fond, ordre des jeux | Bouton réglages, en haut à droite et sur l'accueil |
 
 Le saut d'étape et les raccourcis clavier sont **génériques** : ils suivent la
 vue filtrée par l'effectif et le mode, donc un tutoriel n'a rien à déclarer
 pour en bénéficier.
 
-Les réglages de confort (`src/engine/prefs.ts`) multiplient toutes les tailles
-de texte et décalent la clarté des fonds de ±20 % au maximum, par-dessus
-l'habillage du jeu. Écrivez donc vos titres **courts** : un titre qui tient sur
-deux lignes en taille normale en prend quatre en « Énorme ».
+Les réglages (`src/engine/prefs.ts`) multiplient toutes les tailles de texte,
+décalent la clarté des fonds de ±20 % au maximum par-dessus l'habillage du
+jeu, et choisissent l'ordre des jeux sur l'accueil. Écrivez donc vos titres
+**courts** : un titre qui tient sur deux lignes en taille normale en prend
+quatre en « Énorme ».
 
 ---
 
@@ -591,3 +592,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-03 | v0.07 | `scheme: 'light'` et couleurs sémantiques (`ok` / `warn` / `danger`) par jeu : l'interface accepte un fond clair, appliqué au parchemin de *Tainted Grail*. Nouvelle édition du PDF Nemesis, découpes refaites à l'identique avec `--force`. Encadré sur la qualité de la source d'une découpe, et la marche à suivre après un changement de PDF. |
 | 2026-09-04 | v0.08 | Trois modes par jeu (`modes` sur les chapitres et les étapes) : première partie, mise en place, rappel des règles. Nouvelle étape « Découper la couverture » (`cover`) et « Servir les trois modes ». Le Studio de découpe est remplacé par `npm run grid`, qui rend une page sous une grille de coordonnées. Réglages de confort : taille du texte et clarté du fond. Troisième tutoriel : *Expeditions*. |
 | 2026-09-04 | v0.09 | L'accueil ne porte plus de texte libre : le `cover` devient un bandeau de titre au rapport 3/1, qui remplace le titre écrit et le résumé de la carte. Trois cartes tiennent désormais sur un écran d'iPad sans défilement. |
+| 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |

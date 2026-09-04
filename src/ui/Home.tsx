@@ -20,7 +20,7 @@ import { nominalSteps, totalSteps, viewFor } from '../engine/tutorial'
 import { Sheet } from './Sheet'
 import { Visual } from './Visual'
 import { themePanel, themeStyle } from './theme'
-import { Check, Circle, Info, Play, Settings, Users } from './icons'
+import { Check, Circle, Info, MODE_ICON, Play, Settings, Users } from './icons'
 import version from '../../version.json'
 
 interface Props {
@@ -38,6 +38,14 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
   // Recalculé après chaque abandon de partie, pour que la barre de reprise
   // disparaisse immédiatement.
   const saves = useMemo(() => listSaves(), [saveTick])
+
+  // L'ordre d'affichage est un réglage : catalogue, ou alphabétique.
+  const games = useMemo(
+    () => (prefs.sort === 'alpha'
+      ? [...tutorials].sort((a, b) => a.title.localeCompare(b.title, 'fr'))
+      : tutorials),
+    [tutorials, prefs.sort],
+  )
   const resumable = saves
     .map((s) => ({ save: s, tutorial: tutorials.find((t) => t.id === s.tutorialId) }))
     .filter((r): r is { save: (typeof saves)[number]; tutorial: Tutorial } => Boolean(r.tutorial))
@@ -92,7 +100,7 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
 
         <section>
           <div className="game-grid">
-            {tutorials.map((t) => (
+            {games.map((t) => (
               <GameCard
                 key={t.id}
                 tutorial={t}
@@ -225,11 +233,13 @@ function GameCard({
             const save = saves.find((s) => s.mode === m)
             const started = save && save.done.length > 0
             const total = save ? totalSteps(viewFor(tutorial, save.players, m)) : nominalSteps(tutorial, m)
+            const Icon = MODE_ICON[m]
             return (
               <button key={m} type="button" className="mode-btn" onClick={() => onPick(m)}>
+                <Icon aria-hidden />
                 <span className="mode-btn-label">{MODE_INFO[m].label}</span>
                 <span className={`mode-btn-count${started ? ' started' : ''}`}>
-                  {started ? `${save!.done.length}/${total}` : `${total} étapes`}
+                  {started ? `${save!.done.length}/${total}` : total}
                 </span>
               </button>
             )
