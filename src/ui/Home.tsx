@@ -52,10 +52,6 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
             {/* Version, visible sous le titre. */}
             <span className="brand-version">v<b>{version.version}</b> · {version.date}</span>
           </div>
-          <p className="brand-tag">
-            Posez la tablette à côté de vous. Elle vous fait installer le jeu, puis
-            jouer vos premiers tours, étape par étape.
-          </p>
           <button type="button" className="btn btn-ghost btn-icon" onClick={onOpenSettings} aria-label="Réglages">
             <Settings aria-hidden />
           </button>
@@ -95,7 +91,6 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
         )}
 
         <section>
-          <div className="section-label">Jeux disponibles</div>
           <div className="game-grid">
             {tutorials.map((t) => (
               <GameCard
@@ -116,10 +111,6 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
             à partir d'un PDF de règles.
           </p>
         )}
-
-        <footer className="home-foot">
-          <span>Progression et chronomètre sauvegardés sur cette tablette.</span>
-        </footer>
       </div>
 
       {setup && (
@@ -217,18 +208,16 @@ function GameCard({
 
       <div className="game-card-body">
         <div className="game-card-head">
-          <div className="game-card-title">{tutorial.title}</div>
-          <button type="button" className="btn btn-ghost btn-icon" onClick={onAbout} aria-label="Détails">
-            <Info aria-hidden />
-          </button>
-        </div>
-
-        <div className="meta-row">
+          {/* Le bandeau de couverture porte le titre : on ne le répète pas. */}
           <span className="chip">
             <Users aria-hidden />
             {tutorial.players.min} à {tutorial.players.max}
           </span>
           <span className="chip">~{tutorial.minutes} min</span>
+          <span className="game-card-spacer" />
+          <button type="button" className="btn btn-ghost btn-icon" onClick={onAbout} aria-label={`${tutorial.title} — détails`}>
+            <Info aria-hidden />
+          </button>
         </div>
 
         <div className="mode-list">
@@ -238,10 +227,7 @@ function GameCard({
             const total = save ? totalSteps(viewFor(tutorial, save.players, m)) : nominalSteps(tutorial, m)
             return (
               <button key={m} type="button" className="mode-btn" onClick={() => onPick(m)}>
-                <span className="mode-btn-text">
-                  <span className="mode-btn-label">{MODE_INFO[m].label}</span>
-                  <span className="mode-btn-blurb">{MODE_INFO[m].blurb}</span>
-                </span>
+                <span className="mode-btn-label">{MODE_INFO[m].label}</span>
                 <span className={`mode-btn-count${started ? ' started' : ''}`}>
                   {started ? `${save!.done.length}/${total}` : `${total} étapes`}
                 </span>

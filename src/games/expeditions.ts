@@ -64,7 +64,7 @@ export const expeditions: Tutorial = {
     credit: 'Règles officielles FR — Stonemaier Games / Éditions Matagot',
   },
 
-  cover: { page: 1, x: 0.03, y: 0.03, w: 0.94, h: 0.44 },
+  cover: { page: 1, x: 0.03, y: 0.045, w: 0.94, h: 0.243 },
 
   scope: {
     covered: [

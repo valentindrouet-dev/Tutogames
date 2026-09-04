@@ -71,28 +71,14 @@ export const MODES: Mode[] = ['tuto', 'setup', 'recap']
 
 export interface ModeInfo {
   id: Mode
-  /** Nom du bouton sur l'écran d'accueil. */
+  /** Nom du bouton. C'est le seul texte : le bouton se suffit à lui-même. */
   label: string
-  /** Une ligne : à qui ça s'adresse. */
-  blurb: string
 }
 
 export const MODE_INFO: Record<Mode, ModeInfo> = {
-  tuto: {
-    id: 'tuto',
-    label: 'Première partie',
-    blurb: 'On installe et on joue, pas à pas.',
-  },
-  setup: {
-    id: 'setup',
-    label: 'Mise en place',
-    blurb: 'Juste le placement, étape par étape.',
-  },
-  recap: {
-    id: 'recap',
-    label: 'Rappel des règles',
-    blurb: 'Vous y avez déjà joué : on rafraîchit.',
-  },
+  tuto: { id: 'tuto', label: 'Première partie' },
+  setup: { id: 'setup', label: 'Mise en place' },
+  recap: { id: 'recap', label: 'Rappel des règles' },
 }
 
 /**
@@ -301,9 +287,10 @@ export interface Tutorial {
     credit: string
   }
   /**
-   * Couverture du livret, découpée dans le PDF. C'est elle qui illustre le
-   * jeu sur l'écran d'accueil : un joueur reconnaît sa boîte bien plus vite
-   * qu'il ne lit un résumé.
+   * Bandeau de titre du livret, découpé dans le PDF. C'est lui qui identifie
+   * le jeu sur l'écran d'accueil, à la place d'un titre écrit et d'un résumé :
+   * un joueur reconnaît sa boîte bien plus vite qu'il ne lit une phrase.
+   * Cadrez sur le titre, en bandeau large — environ 3 pour 1.
    */
   cover?: Crop
   /** Ce que le tutoriel couvre volontairement, et ce qu'il laisse de côté. */

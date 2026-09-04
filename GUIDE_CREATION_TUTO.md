@@ -165,18 +165,21 @@ theme: {
 Comparez toujours les deux jeux côte à côte sur l'accueil : si on ne les
 distingue pas d'un coup d'œil, le thème ne sert à rien.
 
-### Étape 6 — Découper la couverture
+### Étape 6 — Découper le bandeau de titre
 
-L'écran d'accueil montre la couverture du livret, pas un résumé : un joueur
-reconnaît sa boîte bien plus vite qu'il ne lit une phrase.
+L'écran d'accueil ne contient **aucun texte libre** : ni résumé, ni titre
+écrit. Le bandeau découpé dans la couverture du livret identifie le jeu, et
+trois boutons disent le reste. Un joueur reconnaît sa boîte bien plus vite
+qu'il ne lit une phrase.
 
 ```ts
-cover: { page: 1, x: 0.02, y: 0.06, w: 0.96, h: 0.6 },
+cover: { page: 1, x: 0.03, y: 0.3, w: 0.94, h: 0.32 },
 ```
 
-Visez un rectangle **proche du 16/10** — la carte le recadre au centre, ce qui
-dépasse est perdu. Cadrez sur le titre et l'illustration, pas sur les logos
-d'éditeur du bas de page.
+Visez un rectangle **proche du 3 pour 1**, cadré sur le titre du jeu. Ce qui
+dépasse du rapport est recadré au centre : un titre placé en haut ou en bas de
+la couverture sera coupé si le rectangle est trop haut. Laissez de côté les
+logos d'éditeur et les mentions légales.
 
 ### Étape 7 — Recenser le matériel
 
@@ -546,7 +549,7 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 - [ ] Chaque valeur de mise en place qui dépend du nombre de joueurs a bien
       sa variante `only`.
 - [ ] Sur l'accueil, le jeu se distingue des autres d'un coup d'œil.
-- [ ] La couverture est nette, cadrée sur le titre, proche du 16/10.
+- [ ] Le bandeau de couverture est net, cadré sur le titre, proche du 3/1.
 - [ ] Les trois modes se déroulent en entier : aucun chapitre vide, aucun
       renvoi à une étape qui n'existe pas dans ce mode.
 - [ ] Le rappel tient en 6 à 10 étapes et ne réexplique rien.
@@ -587,3 +590,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-03 | v0.06 | Deux étapes nouvelles : « Déclarer les effectifs jouables » (`players`, filtres `only`, vue filtrée) et « Habiller le jeu » (`theme`). Les découpes sont rendues depuis le PDF à 1800 px et non plus taillées dans la page. Ajout de la relecture en planche contact, de la section « Ce que le joueur peut faire », et de l'encadré sur les `.js` émis par TypeScript. Volumétrie revue à 6-10 chapitres et 60-95 étapes. Deuxième tutoriel : *Tainted Grail — La Chute d'Avalon*. |
 | 2026-09-03 | v0.07 | `scheme: 'light'` et couleurs sémantiques (`ok` / `warn` / `danger`) par jeu : l'interface accepte un fond clair, appliqué au parchemin de *Tainted Grail*. Nouvelle édition du PDF Nemesis, découpes refaites à l'identique avec `--force`. Encadré sur la qualité de la source d'une découpe, et la marche à suivre après un changement de PDF. |
 | 2026-09-04 | v0.08 | Trois modes par jeu (`modes` sur les chapitres et les étapes) : première partie, mise en place, rappel des règles. Nouvelle étape « Découper la couverture » (`cover`) et « Servir les trois modes ». Le Studio de découpe est remplacé par `npm run grid`, qui rend une page sous une grille de coordonnées. Réglages de confort : taille du texte et clarté du fond. Troisième tutoriel : *Expeditions*. |
+| 2026-09-04 | v0.09 | L'accueil ne porte plus de texte libre : le `cover` devient un bandeau de titre au rapport 3/1, qui remplace le titre écrit et le résumé de la carte. Trois cartes tiennent désormais sur un écran d'iPad sans défilement. |

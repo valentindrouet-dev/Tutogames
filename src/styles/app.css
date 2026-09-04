@@ -160,11 +160,11 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: 40px clamp(24px, 5vw, 72px) 32px;
-  gap: 34px;
+  padding: 28px clamp(20px, 4vw, 56px) 28px;
+  gap: 22px;
 }
 
-.brand { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 
 .brand-mark { display: flex; flex-direction: column; gap: 4px; }
 
@@ -202,8 +202,8 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+  gap: 18px;
 }
 
 .game-card {
@@ -212,31 +212,18 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 26px;
-  min-height: 220px;
   border-radius: var(--r-lg);
   background: var(--bg-2);
   border: 1px solid var(--stroke);
-  transition: transform 120ms ease, border-color 120ms ease;
 }
-.game-card:active { transform: scale(0.99); }
 .game-card::before {
   content: '';
   position: absolute;
   inset: 0 0 auto 0;
-  height: 5px;
+  height: 4px;
+  z-index: 1;
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
-.game-card-title {
-  font-family: var(--font-title);
-  font-size: calc(28px * var(--text-scale));
-  font-weight: var(--title-weight);
-  letter-spacing: var(--title-spacing);
-  text-transform: var(--title-transform);
-}
-.game-card-tag { color: var(--fg-dim); font-size: calc(16px * var(--text-scale)); flex: 1; }
-
 .meta-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .chip svg { width: 16px; height: 16px; }
@@ -272,18 +259,6 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .resume-text { flex: 1; min-width: 220px; }
 .resume-title { font-size: calc(20px * var(--text-scale)); font-weight: 700; }
 .resume-sub { color: var(--fg-dim); font-size: calc(15px * var(--text-scale)); }
-
-.home-foot {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
-  align-items: center;
-  color: var(--fg-faint);
-  font-size: calc(14px * var(--text-scale));
-  margin-top: auto;
-  padding-top: 10px;
-}
 
 /* ------------------------------------------------------------- barre haute */
 
@@ -821,15 +796,19 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
  * Une carte de jeu montre la couverture du livret et une entree par mode.
  * Pas de resume : la couverture identifie la boite plus vite qu'une phrase.
  */
+/*
+ * Le bandeau de titre du livret remplace le titre ecrit et le resume : il
+ * identifie le jeu d'un coup d'oeil, et laisse la carte tenir en trois
+ * boutons. Rapport ~3/1, comme les decoupes declarees par les jeux.
+ */
 .game-cover {
   display: block;
   width: 100%;
   padding: 0;
   border: 0;
-  border-radius: var(--r) var(--r) 0 0;
   overflow: hidden;
   background: var(--bg-3);
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 3 / 1;
   position: relative;
   cursor: pointer;
 }
@@ -845,19 +824,21 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .game-cover .visual-fallback { border: 0; }
 .game-cover:active { filter: brightness(1.06); }
 
-.game-card-body { display: flex; flex-direction: column; gap: 14px; padding: 18px 20px 20px; }
-.game-card-head { display: flex; align-items: center; gap: 12px; }
-.game-card-head .game-card-title { flex: 1; min-width: 0; }
+.game-card-body { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; }
+.game-card-head { display: flex; align-items: center; gap: 8px; }
+.game-card-spacer { flex: 1; }
+/* Action secondaire a cote de deux pastilles : plus compacte qu'un bouton plein. */
+.game-card-head .btn-icon { min-width: 46px; min-height: 46px; padding: 0 12px; }
 
-.mode-list { display: flex; flex-direction: column; gap: 10px; }
+.mode-list { display: flex; flex-direction: column; gap: 8px; }
 
 .mode-btn {
   display: flex;
   align-items: center;
   gap: 14px;
   width: 100%;
-  min-height: var(--tap);
-  padding: 12px 16px;
+  min-height: 56px;
+  padding: 10px 14px;
   border-radius: var(--r);
   background: var(--bg-3);
   border: 1px solid var(--stroke);
@@ -865,13 +846,16 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   cursor: pointer;
 }
 .mode-btn:active { transform: scale(0.985); }
-.mode-btn-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .mode-btn-label {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-title);
-  font-size: calc(18px * var(--text-scale));
+  /* Pas d'interlettrage ici : trois libelles fixes doivent tenir sur une
+     ligne quelle que soit la police de repli du systeme. */
+  font-size: calc(17px * var(--text-scale));
   font-weight: 700;
+  text-transform: var(--title-transform);
 }
-.mode-btn-blurb { font-size: calc(14px * var(--text-scale)); color: var(--fg-dim); }
 .mode-btn-count {
   flex: 0 0 auto;
   font-family: var(--mono);

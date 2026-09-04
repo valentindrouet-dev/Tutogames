@@ -17,6 +17,22 @@ comme complète.
 
 ---
 
+## v0.09 — 2026-09-04
+
+### Modifié
+
+- **L'accueil ne porte plus de texte libre.** L'accroche sous le titre,
+  l'étiquette « Jeux disponibles », la phrase de pied de page, le titre écrit
+  de chaque carte et la description de chaque mode ont disparu. Il reste le
+  nom de l'application, sa version, et des boutons.
+- **Les vignettes deviennent des bandeaux de titre**, trois fois moins hauts :
+  la couverture est recadrée sur le seul titre du livret, au rapport 3 pour 1.
+  C'est lui qui identifie le jeu, à la place du titre écrit.
+- Les trois jeux tiennent maintenant sur un écran d'iPad en paysage, sans
+  défilement.
+
+---
+
 ## v0.08 — 2026-09-04
 
 ### Ajouté

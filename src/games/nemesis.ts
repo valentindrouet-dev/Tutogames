@@ -64,7 +64,7 @@ export const nemesis: Tutorial = {
   },
 
   // Couverture du livret : ce que le joueur reconnaît sur l'écran d'accueil.
-  cover: { page: 1, x: 0.02, y: 0.06, w: 0.96, h: 0.6 },
+  cover: { page: 1, x: 0.03, y: 0.3, w: 0.94, h: 0.32 },
 
   scope: {
     covered: [
