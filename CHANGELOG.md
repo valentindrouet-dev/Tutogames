@@ -17,6 +17,17 @@ comme complète.
 
 ---
 
+## v0.11 — 2026-09-04
+
+### Modifié
+
+- **Le nombre d'étapes disparaît des boutons de mode.** Il n'aidait pas à
+  choisir, et chargeait l'écran. Une partie en cours se signale maintenant
+  par l'état du bouton — bordure et fond d'accent — sans le moindre chiffre.
+- Les boutons carrés passent de 101 à **86 px** de côté.
+
+---
+
 ## v0.10 — 2026-09-04
 
 ### Modifié

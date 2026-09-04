@@ -834,18 +834,20 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
  * Les trois modes tiennent sur une ligne, en boutons carres : le pictogramme
  * porte le sens avant le libelle, et la carte se lit d'un coup d'oeil.
  */
-/* minmax(0, 1fr) : sans cela une piste refuse de passer sous la largeur du
-   plus long mot du libelle, et le troisieme bouton deborde de la carte. */
-.mode-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.mode-list { display: flex; gap: 8px; }
 
 .mode-btn {
+  /* Plafonne : sur une carte large, trois carres de 86 px suffisent. */
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 86px;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 5px;
+  gap: 5px;
+  padding: 6px 4px;
   border-radius: var(--r);
   background: var(--bg-3);
   border: 1px solid var(--stroke);
@@ -853,29 +855,21 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   cursor: pointer;
 }
 .mode-btn:active { transform: scale(0.97); }
-.mode-btn > svg { width: 24px; height: 24px; color: var(--accent); }
+.mode-btn > svg { width: 22px; height: 22px; color: var(--accent); }
+/* Partie en cours : l'etat du bouton le dit, sans compteur. */
+.mode-btn.started {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-3));
+}
 .mode-btn-label {
   font-family: var(--font-title);
   /* Pas d'interlettrage : les libelles sont fixes et doivent tenir dans le
      carre quelle que soit la police de repli du systeme. */
-  font-size: calc(12px * var(--text-scale));
+  font-size: calc(11.5px * var(--text-scale));
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   text-transform: var(--title-transform);
   overflow-wrap: break-word;
-}
-.mode-btn-count {
-  font-family: var(--mono);
-  font-size: calc(12px * var(--text-scale));
-  color: var(--fg-faint);
-  white-space: nowrap;
-}
-.mode-btn-count.started {
-  color: var(--accent-ink);
-  background: var(--accent);
-  padding: 2px 9px;
-  border-radius: 999px;
-  font-weight: 700;
 }
 
 /* ------------------------------------------------------------ reglages */

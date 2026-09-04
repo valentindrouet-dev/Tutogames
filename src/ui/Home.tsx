@@ -16,7 +16,7 @@ import type { Mode, Tutorial } from '../engine/types'
 import { MODE_INFO, modesOf, playerLabel, playerRange } from '../engine/types'
 import type { Prefs } from '../engine/prefs'
 import { clearSave, formatClock, listSaves } from '../engine/progress'
-import { nominalSteps, totalSteps, viewFor } from '../engine/tutorial'
+import { totalSteps, viewFor } from '../engine/tutorial'
 import { Sheet } from './Sheet'
 import { Visual } from './Visual'
 import { themePanel, themeStyle } from './theme'
@@ -231,16 +231,19 @@ function GameCard({
         <div className="mode-list">
           {modes.map((m) => {
             const save = saves.find((s) => s.mode === m)
-            const started = save && save.done.length > 0
-            const total = save ? totalSteps(viewFor(tutorial, save.players, m)) : nominalSteps(tutorial, m)
+            // Une partie en cours se signale par l'état du bouton, pas par
+            // un compteur : le nombre d'étapes n'aide pas à choisir.
+            const started = Boolean(save && save.done.length > 0)
             const Icon = MODE_ICON[m]
             return (
-              <button key={m} type="button" className="mode-btn" onClick={() => onPick(m)}>
+              <button
+                key={m}
+                type="button"
+                className={`mode-btn${started ? ' started' : ''}`}
+                onClick={() => onPick(m)}
+              >
                 <Icon aria-hidden />
                 <span className="mode-btn-label">{MODE_INFO[m].label}</span>
-                <span className={`mode-btn-count${started ? ' started' : ''}`}>
-                  {started ? `${save!.done.length}/${total}` : total}
-                </span>
               </button>
             )
           })}
