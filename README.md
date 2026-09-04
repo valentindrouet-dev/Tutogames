@@ -6,28 +6,31 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.11** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.12** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
-| Jeu | Éditeur | Joueurs | Première partie | Mise en place | Rappel |
-|---|---|---|---|---|---|
-| Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 21 | 7 |
-| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 22 | 8 |
-| Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 13 | 8 |
+| Jeu | Éditeur | Joueurs | Découvrir | Installer | Reprendre | Réviser |
+|---|---|---|---|---|---|---|
+| Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 21 | 6 | 7 |
+| Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 22 | 14 | 8 |
+| Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 13 | 6 | 8 |
 
-## Trois façons d'ouvrir un jeu
+## Quatre façons d'ouvrir un jeu
 
-- **Première partie** — vous ne connaissez pas le jeu. On installe et on joue,
-  pas à pas, matériel identifié par les images des règles.
-- **Mise en place** — vous connaissez le jeu, vous voulez juste le poser
+- **Découvrir** — vous ne connaissez pas le jeu. On installe et on joue, pas à
+  pas, matériel identifié par les images des règles.
+- **Installer** — vous connaissez le jeu, vous voulez juste le poser
   correctement. Rien que le placement, avec les illustrations.
-- **Rappel des règles** — vous y avez joué, mais il y a longtemps. Les points
-  de règles dans l'ordre, résumés.
+- **Reprendre** — vous remontez une partie déjà commencée. Pour une campagne,
+  la remise en place officielle d'une sauvegarde ; pour un jeu d'une séance, le
+  contrôle de la table laissée montée.
+- **Réviser** — vous y avez joué, mais il y a longtemps. Les points de règles
+  dans l'ordre, résumés.
 
-Chacun garde sa propre sauvegarde. Le nombre d'étapes est celui de l'effectif
-conseillé : l'application demande combien vous êtes au démarrage, et adapte son
-contenu.
+Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
+de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
+et adapte son contenu.
 
 Chaque jeu a son habillage — couleurs, polices, arrondis, fond clair ou
 sombre — mais la mise en page ne change jamais : un joueur qui a suivi un

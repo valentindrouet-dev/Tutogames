@@ -808,6 +808,95 @@ export const expeditions: Tutorial = {
       ],
     },
 
+    /* --------------------------------------------- reprise d'une séance */
+
+    {
+      id: 'rp',
+      title: 'Reprendre la séance',
+      kind: 'setup',
+      modes: ['reprise'],
+      goal: 'Retrouver l’état exact d’une table laissée en plan, et repartir sans faute.',
+      steps: [
+        {
+          id: 'rp1',
+          kind: 'info',
+          title: 'Expeditions n’a pas de sauvegarde',
+          body: [
+            'C’est une partie d’une séance : le livret ne prévoit ni fiche de sauvegarde, ni rangement intermédiaire.',
+            'Reprendre veut donc dire : la table est restée montée, et on vérifie qu’elle n’a pas bougé.',
+          ],
+          warn: 'Rangée, la partie est perdue : ni la Pioche, ni l’ordre des jetons Corruption empilés ne se reconstituent.',
+          ref: 'Déroulement de la partie — p.4',
+        },
+        {
+          id: 'rp2',
+          kind: 'check',
+          title: 'Le jeton Action, d’abord',
+          body: [
+            'Sur chaque pupitre, la case qu’il couvre décide du tour à venir : c’est l’information la plus fragile de la table.',
+            'S’il est dans la case Renouveler, le joueur fera ses trois actions à son prochain tour.',
+          ],
+          warn: 'Un jeton Action déplacé par mégarde change tout le tour du joueur. Vérifiez-les tous avant de reprendre.',
+          components: ['jetons-action'],
+          crop: { page: 12, x: 0.675, y: 0.155, w: 0.28, h: 0.195 },
+          ref: 'Renouveler — p.12',
+        },
+        {
+          id: 'rp3',
+          kind: 'check',
+          title: 'Vérifiez chaque pupitre',
+          body: [
+            'La main à gauche, le rang actif à droite, dans l’ordre où les cartes ont été jouées.',
+            'Les ouvriers posés sur les cartes, et ceux restés disponibles sur le pupitre.',
+            'Les jetons Puissance et Ruse sur la piste, les jetons Corruption et Plan gagnés.',
+          ],
+          warn: 'L’ordre du rang actif compte : plusieurs capacités visent « la carte précédente ».',
+          components: ['ouvriers', 'jetons-piste', 'corruption', 'plans'],
+          crop: { page: 9, x: 0.15, y: 0.67, w: 0.8, h: 0.3 },
+          ref: 'Cartes que vous contrôlez — p.6',
+        },
+        {
+          id: 'rp4',
+          kind: 'check',
+          title: 'Les cartes glissées sous les pupitres',
+          body: [
+            'Quêtes résolues en haut, objets améliorés à droite, météorites fondues en bas.',
+            'Comptez-les : ce sont les catégories de Gloire, plafonnées à quatre.',
+          ],
+          components: ['quetes', 'objets', 'meteorites'],
+          crop: { page: 10, x: 0.64, y: 0.3, w: 0.31, h: 0.17 },
+          ref: 'Améliorer et Fondre — p.10',
+        },
+        {
+          id: 'rp5',
+          kind: 'check',
+          title: 'Vérifiez le plateau',
+          body: [
+            'La position de chaque Mecha, les tuiles encore face cachée et leurs jetons Plan.',
+            'Les piles de Corruption sur chaque lieu, dans leur ordre : c’est le jeton du dessus qui se paie.',
+            'Les cinq cartes centrales, la Pioche et le Tas.',
+          ],
+          components: ['lieux', 'corruption', 'mechas'],
+          crop: { page: 3, x: 0.04, y: 0.455, w: 0.9, h: 0.385 },
+          ref: 'Mise en place — p.3',
+        },
+        {
+          id: 'rp6',
+          kind: 'check',
+          title: 'Le Campement, et à qui le tour',
+          body: [
+            'Les jetons Gloire déjà posés : ils disent où en est la course, et si la fin est proche.',
+            'Reprenez au joueur dont c’était le tour, puis dans le sens horaire.',
+          ],
+          warn: 'Si un joueur a déjà posé son 4ᵉ jeton Gloire, la fin de partie est déclenchée : il ne reste qu’un tour à chacun.',
+          tip: 'Le rappel des règles, sur l’accueil, remet le tour en tête en quatre étapes.',
+          components: ['gloire', 'campement'],
+          crop: { page: 13, x: 0.64, y: 0.078, w: 0.31, h: 0.135 },
+          ref: 'Fin de partie — p.13',
+        },
+      ],
+    },
+
     /* ------------------------------------------------- rappel des règles */
 
     {

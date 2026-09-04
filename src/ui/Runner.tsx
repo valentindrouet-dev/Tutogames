@@ -33,6 +33,7 @@ import {
 const DONE_TITLE: Record<Mode, string> = {
   tuto: 'Partie tutorielle terminée',
   setup: 'Le jeu est installé',
+  reprise: 'La partie est remontée',
   recap: 'Règles rafraîchies',
 }
 
@@ -41,6 +42,8 @@ const DONE_LEAD: Record<Mode, string> = {
     'Vous connaissez la mise en place, le tour de jeu et la fin de manche. Rejouez maintenant une partie complète avec les règles officielles.',
   setup:
     'Tout est en place. Bonne partie — et si un point de règle vous échappe, le rappel des règles est à un bouton d’ici.',
+  reprise:
+    'La table est dans l’état où vous l’aviez laissée. Relisez vos objectifs en cours, et reprenez où vous en étiez.',
   recap:
     'Vous avez tout revu, dans l’ordre. Installez le jeu et lancez-vous : le livret n’est là que pour les cas particuliers.',
 }

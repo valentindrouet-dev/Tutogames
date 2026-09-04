@@ -1339,6 +1339,89 @@ export const nemesis: Tutorial = {
       ],
     },
 
+    /* --------------------------------------------- reprise d'une séance */
+
+    {
+      id: 'rp',
+      title: 'Reprendre la séance',
+      kind: 'setup',
+      modes: ['reprise'],
+      goal: 'Retrouver l’état exact d’une table laissée en plan, et repartir sans faute.',
+      steps: [
+        {
+          id: 'rp1',
+          kind: 'info',
+          title: 'Nemesis n’a pas de sauvegarde',
+          body: [
+            'C’est une partie d’une séance : le livret ne prévoit ni fiche de sauvegarde, ni rangement intermédiaire.',
+            'Reprendre veut donc dire : la table est restée montée, et on vérifie qu’elle n’a pas bougé.',
+          ],
+          warn: 'Si la table a été rangée, la partie est perdue : rien ne permet de reconstituer le contenu du sac Intrus ni les objectifs secrets.',
+          ref: 'Déroulement — p.10',
+        },
+        {
+          id: 'rp2',
+          kind: 'check',
+          title: 'Où en était-on ?',
+          body: [
+            'Phase Joueur ou phase Événement ? Si personne ne s’en souvient, reprenez au début de la phase Joueur.',
+            'Le marqueur Premier joueur donne l’ordre du tour.',
+            'Qui avait déjà passé ? Un joueur qui a passé ne rejoue pas avant la manche suivante.',
+          ],
+          components: ['premier-joueur'],
+          ref: 'Déroulement — p.10',
+        },
+        {
+          id: 'rp3',
+          kind: 'check',
+          title: 'Vérifiez chaque joueur',
+          body: [
+            'Sa main de cartes Action, face cachée : c’est elle qui paie les actions et protège des attaques-surprises.',
+            'Ses cartes Blessure légère et grave, ses Contaminations, son inventaire et ses munitions.',
+            'La position de sa figurine, et l’état de son personnage.',
+          ],
+          warn: 'Une main mélangée avec la défausse est irrécupérable. Comptez les cartes avant de reprendre : le nombre en main décide des attaques-surprises.',
+          components: ['actions', 'blessures', 'contamination', 'inventaires'],
+          ref: 'Actions — p.12',
+        },
+        {
+          id: 'rp4',
+          kind: 'check',
+          title: 'Vérifiez le plateau',
+          body: [
+            'Marqueurs de Bruit dans les couloirs, figurines d’Intrus, œufs restants sur le plateau Intrus.',
+            'Portes ouvertes ou fermées, feux, pannes, marqueur de Destination.',
+          ],
+          components: ['marqueurs-bruit', 'figurines', 'portes', 'marqueurs-feu', 'marqueurs-panne'],
+          ref: 'Mise en place — p.6',
+        },
+        {
+          id: 'rp5',
+          kind: 'check',
+          title: 'Le sac Intrus, surtout',
+          body: [
+            'Son contenu ne se déduit de rien : c’est la seule information de la partie qui n’existe qu’à l’intérieur du sac.',
+            'Les jetons piochés sont restés à côté, ils n’y retournent pas.',
+          ],
+          warn: 'Un sac vidé sur la table, même en le remettant, fausse la partie pour de bon.',
+          components: ['sac', 'jetons-intrus'],
+          ref: 'Rencontre — p.17',
+        },
+        {
+          id: 'rp6',
+          kind: 'check',
+          title: 'Relisez votre objectif',
+          body: [
+            'Le vôtre, seul, sans le montrer : c’est lui qui décide de ce que vous ferez au prochain tour.',
+            'Vérifiez aussi l’état des moteurs déjà révélés, et la carte Coordonnées si elle a été vue.',
+          ],
+          tip: 'Le rappel des règles, sur l’accueil, remet la manche en tête en sept étapes.',
+          components: ['objectifs', 'moteurs'],
+          ref: 'Fin de partie — p.23',
+        },
+      ],
+    },
+
     /* ------------------------------------------------- rappel des règles */
 
     {

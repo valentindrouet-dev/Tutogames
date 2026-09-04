@@ -17,6 +17,31 @@ comme complète.
 
 ---
 
+## v0.12 — 2026-09-04
+
+### Ajouté
+
+- **Quatrième mode : « Reprendre ».** Remonter une partie déjà commencée.
+  - *Tainted Grail* est le seul des trois jeux à avoir des règles de
+    sauvegarde : sa reprise déroule la procédure officielle à l'envers, en
+    14 étapes — fiche de sauvegarde, plateaux, paquets, carte, menhirs et
+    cadrans, jusqu'à l'ajout ou au retrait d'un joueur entre deux séances.
+  - *Nemesis* et *Expeditions* se jouent en une séance et n'ont aucune
+    sauvegarde. Leur reprise est un contrôle de la table laissée montée : ce
+    qui a pu bouger, ce qui est irrécupérable si on l'a rangé, et où
+    reprendre. Chacune le dit dès sa première étape.
+- Un mode qu'aucun chapitre ne déclare n'apparaît pas sur l'accueil : c'est ce
+  qui permet à un jeu sans sauvegarde de ne pas afficher de bouton.
+
+### Modifié
+
+- Les boutons carrés portent maintenant un libellé d'**un seul mot** —
+  Découvrir, Installer, Reprendre, Réviser. Quatre libellés complets ne
+  tenaient pas dans quatre carrés ; le nom complet reste dans le bandeau du
+  tutoriel et dans le titre du panneau.
+
+---
+
 ## v0.11 — 2026-09-04
 
 ### Modifié

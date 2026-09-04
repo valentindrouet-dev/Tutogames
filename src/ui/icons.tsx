@@ -161,6 +161,7 @@ export const List = (p: P) => (
 export const MODE_ICON: Record<Mode, (p: P) => JSX.Element> = {
   tuto: Play,
   setup: Board,
+  reprise: Reset,
   recap: List,
 }
 

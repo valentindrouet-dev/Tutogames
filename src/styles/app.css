@@ -840,7 +840,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   /* Plafonne : sur une carte large, trois carres de 86 px suffisent. */
   flex: 1 1 0;
   min-width: 0;
-  max-width: 86px;
+  max-width: 80px;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
@@ -865,7 +865,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   font-family: var(--font-title);
   /* Pas d'interlettrage : les libelles sont fixes et doivent tenir dans le
      carre quelle que soit la police de repli du systeme. */
-  font-size: calc(11.5px * var(--text-scale));
+  font-size: calc(11px * var(--text-scale));
   font-weight: 700;
   line-height: 1.15;
   text-transform: var(--title-transform);

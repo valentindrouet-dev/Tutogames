@@ -24,11 +24,15 @@ games/          les pages de règles ingérées et leurs découpes, à la racine
 
 Un jeu propose **trois modes**, et c'est le même fichier qui les porte tous :
 
-| Mode | Pour qui | Ce qu'il montre |
-|---|---|---|
-| `tuto` | On découvre le jeu | Tout : matériel, mise en place, tour joué pas à pas |
-| `setup` | On connaît le jeu | Les seuls chapitres de mise en place, sans vignettes ni conseils |
-| `recap` | On y a joué il y a longtemps | Les règles dans l'ordre, résumées |
+| Mode | Bouton | Pour qui | Ce qu'il montre |
+|---|---|---|---|
+| `tuto` | Découvrir | On découvre le jeu | Tout : matériel, mise en place, tour joué pas à pas |
+| `setup` | Installer | On connaît le jeu | Les seuls chapitres de mise en place, sans vignettes ni conseils |
+| `reprise` | Reprendre | On remonte une partie déjà commencée | La remise en place d'une sauvegarde, ou le contrôle d'une table laissée en plan |
+| `recap` | Réviser | On y a joué il y a longtemps | Les règles dans l'ordre, résumées |
+
+**Un mode qu'aucun chapitre ne déclare n'apparaît pas.** Un jeu sans règles de
+sauvegarde peut donc n'avoir aucun bouton « Reprendre » — ne l'inventez pas.
 
 Ajouter un jeu, c'est ajouter **un fichier** dans `src/games/` et l'inscrire dans
 `src/games/index.ts`. Aucune ligne de moteur ou d'interface ne doit changer. Si
@@ -162,7 +166,7 @@ theme: {
 - Les `tint` de faces de dé (widget `roller`) restent, par convention, des
   couleurs **vives** : le badge y pose toujours une encre sombre.
 
-Comparez toujours les deux jeux côte à côte sur l'accueil : si on ne les
+Comparez toujours les jeux côte à côte sur l'accueil : si on ne les
 distingue pas d'un coup d'œil, le thème ne sert à rien.
 
 ### Étape 6 — Découper le bandeau de titre
@@ -368,6 +372,18 @@ des explications : celui qui lit connaît déjà le jeu, il cherche à retrouver
 détail. Les `warn` valent de l'or ici : ce sont les règles qu'on oublie entre
 deux parties.
 
+**Écrire la reprise.** Deux cas très différents, et il faut trancher en lisant
+le livret :
+
+- **Le jeu a des règles de sauvegarde** (campagne). Écrivez la remise en place
+  comme la procédure de sauvegarde à l'envers, en suivant le livret étape par
+  étape. C'est ce que fait *Tainted Grail* : fiche de sauvegarde, plateaux,
+  paquets, carte, menhirs, cadrans. 12 à 15 étapes.
+- **Le jeu n'en a pas** (partie d'une séance). N'inventez pas de sauvegarde.
+  Écrivez un contrôle de la table laissée montée : ce qui a pu bouger, ce qui
+  est irrécupérable si on l'a rangé, et où reprendre. 5 à 7 étapes, et dites
+  dès la première que le jeu n'a pas de sauvegarde officielle.
+
 ### Étape 11 — Relire à voix haute
 
 Lisez le tutoriel comme si vous guidiez quelqu'un. Toute phrase que vous
@@ -551,7 +567,7 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
       sa variante `only`.
 - [ ] Sur l'accueil, le jeu se distingue des autres d'un coup d'œil.
 - [ ] Le bandeau de couverture est net, cadré sur le titre, proche du 3/1.
-- [ ] Les trois modes se déroulent en entier : aucun chapitre vide, aucun
+- [ ] Chaque mode déclaré se déroule en entier : aucun chapitre vide, aucun
       renvoi à une étape qui n'existe pas dans ce mode.
 - [ ] Le rappel tient en 6 à 10 étapes et ne réexplique rien.
 - [ ] Chaque `warn` est un vrai piège, pas une précision.
@@ -593,3 +609,4 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.08 | Trois modes par jeu (`modes` sur les chapitres et les étapes) : première partie, mise en place, rappel des règles. Nouvelle étape « Découper la couverture » (`cover`) et « Servir les trois modes ». Le Studio de découpe est remplacé par `npm run grid`, qui rend une page sous une grille de coordonnées. Réglages de confort : taille du texte et clarté du fond. Troisième tutoriel : *Expeditions*. |
 | 2026-09-04 | v0.09 | L'accueil ne porte plus de texte libre : le `cover` devient un bandeau de titre au rapport 3/1, qui remplace le titre écrit et le résumé de la carte. Trois cartes tiennent désormais sur un écran d'iPad sans défilement. |
 | 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |
+| 2026-09-04 | v0.12 | Quatrième mode : `reprise`. Section « Écrire la reprise », qui distingue le jeu à sauvegarde officielle du jeu d'une séance. `MODE_INFO` gagne un libellé court d'un mot pour les boutons carrés. |

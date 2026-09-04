@@ -1639,6 +1639,192 @@ export const taintedgrail: Tutorial = {
       ],
     },
 
+    /* -------------------------------------------------- reprise de campagne */
+
+    {
+      id: 'rp-perso',
+      title: 'Reprendre : les personnages',
+      kind: 'setup',
+      modes: ['reprise'],
+      goal: 'Remonter chaque plateau Personnage à partir de la fiche de sauvegarde.',
+      steps: [
+        {
+          id: 'rp1',
+          kind: 'take',
+          title: 'Sortez la fiche de sauvegarde',
+          body: [
+            'C’est le carnet de bord de la campagne : elle porte tout ce qui ne tient pas dans la boîte.',
+            'La remise en place consiste à dérouler la sauvegarde à l’envers, dans cet ordre.',
+          ],
+          components: ['fiches'],
+          crop: { page: 2, x: 0.665, y: 0.29, w: 0.152, h: 0.115 },
+          ref: 'Sauvegarder la Partie — p.13',
+        },
+        {
+          id: 'rp2',
+          kind: 'take',
+          title: 'Chacun reprend son personnage',
+          body: [
+            'Plateau, tuile Personnage et figurine de la même couleur qu’à la séance précédente.',
+            'Le schéma qui porte votre nom sur la fiche est le vôtre.',
+          ],
+          components: ['plateaux', 'tuiles-perso', 'figurines'],
+          ref: 'Sauvegarder la Partie, I.1 — p.13',
+        },
+        {
+          id: 'rp3',
+          kind: 'place',
+          title: 'Reportez vos caractéristiques, ressources et pistes Survie',
+          body: [
+            'Tout est écrit au crayon sur votre schéma : les six caractéristiques, les cinq ressources, Énergie, Santé et Terreur.',
+            'Reposez les marqueurs universels et le marqueur en T aux valeurs notées.',
+          ],
+          warn: 'Vérifiez que votre Énergie ne dépasse pas votre Santé : c’est l’erreur la plus fréquente au remontage.',
+          components: ['marqueurs-univ', 'marqueur-t'],
+          crop: { page: 10, x: 0.078, y: 0.763, w: 0.218, h: 0.108 },
+          ref: 'Sauvegarder la Partie, I.1 — p.13',
+        },
+        {
+          id: 'rp4',
+          kind: 'take',
+          title: 'Reprenez vos compétences',
+          body: [
+            'Leur numéro unique est noté à côté de la caractéristique correspondante.',
+            'Cherchez-les dans le paquet Compétence et reposez-les devant vous.',
+          ],
+          components: ['cartes-competence'],
+          ref: 'Sauvegarder la Partie, I.2 — p.13',
+        },
+        {
+          id: 'rp5',
+          kind: 'take',
+          title: 'Reprenez vos Objets et vos Secrets',
+          body: [
+            'Ils sont dans votre compartiment de sauvegarde, celui que vous aviez choisi.',
+            'Reposez aussi les cadrans Quête ou Secret aux valeurs notées sur la fiche.',
+          ],
+          components: ['cartes-objet', 'cartes-secret', 'cadrans', 'pions-quete'],
+          ref: 'Sauvegarder la Partie, I.3 et I.5 — p.13',
+        },
+        {
+          id: 'rp6',
+          kind: 'shuffle',
+          title: 'Reconstituez vos quatre piles de cartes',
+          body: [
+            'Votre paquet Combat et votre paquet Diplomatie, mélangés, de part et d’autre du plateau.',
+            'Vos deux réserves de progression, sous leur carte « Réserve de Progression ».',
+          ],
+          warn: 'La carte séparatrice marque le sommet de la réserve : ce qui est au-dessus est votre paquet de jeu, ce qui est en dessous votre réserve.',
+          components: ['cartes-standard', 'cartes-avancees'],
+          ref: 'Sauvegarder la Partie, I.6 — p.13',
+        },
+        {
+          id: 'rp7',
+          kind: 'place',
+          title: 'Glissez vos cartes sous le plateau',
+          body: [
+            'Les quêtes déjà résolues sous le bord supérieur, les améliorations à droite, les météorites fondues en bas.',
+          ],
+          warn: 'Ces cartes comptent pour vos limites : quatre quêtes résolues au maximum, quatre objets, quatre météorites.',
+          ref: 'Résoudre — p.8',
+        },
+      ],
+    },
+
+    {
+      id: 'rp-monde',
+      title: 'Reprendre : le monde',
+      kind: 'setup',
+      modes: ['reprise'],
+      goal: 'Remonter la carte, les menhirs et les paquets exactement comme ils étaient.',
+      steps: [
+        {
+          id: 'rp8',
+          kind: 'place',
+          title: 'Reconstruisez la carte',
+          body: [
+            'Reprenez la pile de cartes Lieu : au-dessus du séparateur « Lieux Révélés », les lieux qui étaient en jeu.',
+            'Reposez-les selon leurs clés de direction, autour du lieu où se trouvaient les personnages.',
+          ],
+          warn: 'Les lieux retirés de la partie sont rangés à part, dans le petit compartiment. Ils ne reviennent jamais.',
+          components: ['cartes-lieu'],
+          crop: { page: 7, x: 0.393, y: 0.542, w: 0.218, h: 0.156 },
+          ref: 'Sauvegarder la Partie, II.3 — p.13',
+        },
+        {
+          id: 'rp9',
+          kind: 'place',
+          title: 'Replacez menhirs, gardiens et cadrans',
+          body: [
+            'La fiche note le lieu de chaque menhir et de chaque gardien, et la valeur de chaque cadran.',
+            'Glissez chaque cadran sous son menhir à la valeur écrite.',
+          ],
+          warn: 'Un menhir noté sans cadran s’éteindra à la prochaine aube : ne lui en remettez pas un.',
+          components: ['fig-menhir', 'cadrans', 'fig-precurseur'],
+          crop: { page: 7, x: 0.398, y: 0.324, w: 0.194, h: 0.112 },
+          ref: 'Sauvegarder la Partie, II.1 — p.13',
+        },
+        {
+          id: 'rp10',
+          kind: 'place',
+          title: 'Posez les figurines sur leur lieu',
+          body: ['Chaque personnage retrouve le lieu noté sur la fiche.'],
+          components: ['figurines'],
+          ref: 'Sauvegarder la Partie, II.1 — p.13',
+        },
+        {
+          id: 'rp11',
+          kind: 'take',
+          title: 'Ressortez les paquets sauvegardés',
+          body: [
+            'Les quatre paquets Rencontre, sous le séparateur « Rencontres Sauvegardées ».',
+            'Le paquet Événement et vos quêtes actives, sous le séparateur « Événements Sauvegardés ».',
+          ],
+          warn: 'Ne remélangez rien : ces paquets ont été rangés dans l’ordre où vous les aviez laissés.',
+          components: ['rencontres', 'evenements'],
+          ref: 'Sauvegarder la Partie, II.4 et II.5 — p.13',
+        },
+        {
+          id: 'rp12',
+          kind: 'info',
+          title: 'Ajouter ou retirer un joueur',
+          only: [2, 3, 4],
+          body: [
+            'À chaque nouvelle séance, l’effectif peut changer, dans la limite de 1 à 4.',
+            'Les Secrets d’un personnage qui s’en va sont répartis entre ceux qui restent.',
+            'Une recrue démarre sur le lieu d’un ancien, avec ses paquets et ses ressources de départ.',
+          ],
+          warn: 'Un Secret ne sort jamais de la partie, sauf instruction contraire de la carte.',
+          components: ['cartes-secret'],
+          ref: 'Ajouter ou Retirer des Joueurs — p.13',
+        },
+        {
+          id: 'rp13',
+          kind: 'check',
+          title: 'Relisez avant de reprendre',
+          body: [
+            'Vos quêtes actives : ce sont elles qui disent où aller.',
+            'Les statuts notés sur la fiche : ils ont changé le monde pour de bon.',
+            'Le cadran du menhir le plus faible : c’est votre compte à rebours.',
+          ],
+          tip: 'Le rappel des règles, sur l’accueil, remet le cours du jour en tête en huit étapes.',
+          components: ['fiches'],
+          ref: 'Sauvegarder la Partie — p.13',
+        },
+        {
+          id: 'rp14',
+          kind: 'info',
+          title: 'Où reprend-on ?',
+          body: [
+            'Une sauvegarde faite en fin de chapitre reprend à l’aube suivante.',
+            'Une sauvegarde faite en cours de journée reprend là où elle s’est arrêtée, si vous l’avez notée.',
+          ],
+          warn: 'Le livret déconseille de sauvegarder en pleine journée : on oublie le détail d’une quête en cours, et les actions « une fois par jour » se retrouvent disponibles trop tôt.',
+          ref: 'Sauvegarder la Partie — p.13',
+        },
+      ],
+    },
+
     /* ------------------------------------------------- rappel des règles */
 
     {

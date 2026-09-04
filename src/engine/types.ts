@@ -56,29 +56,41 @@ export type PlayerFilter = number[]
  * Ce qu'on vient chercher dans l'application. Un même jeu sert trois besoins
  * qui n'ont rien à voir :
  *
- * - `tuto`  — première partie : on installe et on joue, pas à pas.
- * - `setup` — on connaît le jeu, on veut juste le poser correctement.
- * - `recap` — on y a joué il y a longtemps : les règles, dans l'ordre, en
- *             résumé, pour se remettre en tête avant de commencer.
+ * - `tuto`    — première partie : on installe et on joue, pas à pas.
+ * - `setup`   — on connaît le jeu, on veut juste le poser correctement.
+ * - `reprise` — on remet en place une partie déjà commencée : campagne
+ *               sauvegardée, ou table laissée en plan la semaine dernière.
+ * - `recap`   — on y a joué il y a longtemps : les règles, dans l'ordre, en
+ *               résumé, pour se remettre en tête avant de commencer.
  *
  * Un chapitre ou une étape déclare les modes où il apparaît. Rien de déclaré
  * = `['tuto']` seulement : un contenu didactique n'a pas sa place dans un
  * rappel, il faut le vouloir.
+ *
+ * Un mode qu'aucun chapitre ne déclare n'apparaît pas sur l'accueil : un jeu
+ * sans règles de sauvegarde n'a pas de bouton « Reprendre ».
  */
-export type Mode = 'tuto' | 'setup' | 'recap'
+export type Mode = 'tuto' | 'setup' | 'reprise' | 'recap'
 
-export const MODES: Mode[] = ['tuto', 'setup', 'recap']
+export const MODES: Mode[] = ['tuto', 'setup', 'reprise', 'recap']
 
 export interface ModeInfo {
   id: Mode
-  /** Nom du bouton. C'est le seul texte : le bouton se suffit à lui-même. */
+  /** Nom complet, pour le bandeau du tutoriel et le titre du panneau. */
   label: string
+  /**
+   * Un seul mot, pour les boutons carrés de l'accueil : quatre libellés
+   * complets ne tiennent pas dans quatre carrés, et le pictogramme porte
+   * déjà le sens.
+   */
+  short: string
 }
 
 export const MODE_INFO: Record<Mode, ModeInfo> = {
-  tuto: { id: 'tuto', label: 'Première partie' },
-  setup: { id: 'setup', label: 'Mise en place' },
-  recap: { id: 'recap', label: 'Rappel des règles' },
+  tuto: { id: 'tuto', label: 'Première partie', short: 'Découvrir' },
+  setup: { id: 'setup', label: 'Mise en place', short: 'Installer' },
+  reprise: { id: 'reprise', label: 'Reprendre', short: 'Reprendre' },
+  recap: { id: 'recap', label: 'Rappel des règles', short: 'Réviser' },
 }
 
 /**

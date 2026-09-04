@@ -241,9 +241,10 @@ function GameCard({
                 type="button"
                 className={`mode-btn${started ? ' started' : ''}`}
                 onClick={() => onPick(m)}
+                aria-label={`${tutorial.title} — ${MODE_INFO[m].label}`}
               >
                 <Icon aria-hidden />
-                <span className="mode-btn-label">{MODE_INFO[m].label}</span>
+                <span className="mode-btn-label">{MODE_INFO[m].short}</span>
               </button>
             )
           })}
