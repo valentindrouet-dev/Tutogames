@@ -4,6 +4,11 @@
  * Tout est en localStorage : la tablette reste utilisable sans réseau, et
  * une partie interrompue se reprend exactement où elle en était — effectif,
  * étape et chronomètre compris. Aucune donnée ne quitte l'iPad.
+ *
+ * **Une sauvegarde par jeu**, pas une par mode. Sur la vignette d'un jeu il
+ * n'y a qu'un bouton « reprendre » : il doit désigner une partie et une
+ * seule. Démarrer un autre mode du même jeu efface donc la précédente — on
+ * ne perd que sa place dans une lecture, jamais l'état de la table.
  */
 
 import type { Mode, Tutorial } from './types'
@@ -35,9 +40,9 @@ export interface Save {
 
 type SaveMap = Record<string, Save>
 
-/** Clé de sauvegarde : un jeu peut avoir une partie en cours par mode. */
-function keyOf(tutorialId: string, mode: Mode): string {
-  return `${tutorialId}:${mode}`
+/** Clé de sauvegarde : un jeu, une partie en cours. Le mode est dedans. */
+function keyOf(tutorialId: string): string {
+  return tutorialId
 }
 
 function readAll(): SaveMap {
@@ -61,29 +66,50 @@ function writeAll(map: SaveMap): void {
   }
 }
 
-export function loadSave(tutorialId: string, mode: Mode): Save | null {
-  return readAll()[keyOf(tutorialId, mode)] ?? null
+/**
+ * La partie en cours d'un jeu, quel que soit son mode. Passer un `mode`
+ * restreint au cas où c'est bien celui-là qui est en cours : c'est ce que
+ * fait le lecteur quand il ouvre un mode précis.
+ */
+export function loadSave(tutorialId: string, mode?: Mode): Save | null {
+  const save = readAll()[keyOf(tutorialId)] ?? null
+  if (!save) return null
+  const normalised: Save = { ...save, mode: save.mode ?? 'tuto' }
+  if (mode && normalised.mode !== mode) return null
+  return normalised
 }
 
 export function listSaves(): Save[] {
   // Les sauvegardes d'avant l'arrivée des modes n'ont pas de champ `mode` :
-  // on les rattache à la première partie, qui est ce qu'elles étaient.
-  return Object.values(readAll())
-    .map((s) => ({ ...s, mode: s.mode ?? 'tuto' }))
-    .sort((a, b) => b.updatedAt - a.updatedAt)
+  // on les rattache à la première partie, qui est ce qu'elles étaient. Les
+  // clés d'avant la V2 pouvaient en laisser plusieurs pour un même jeu : on
+  // ne garde que la plus récente, celle que le bouton de reprise désigne.
+  const byGame = new Map<string, Save>()
+  for (const raw of Object.values(readAll())) {
+    const save: Save = { ...raw, mode: raw.mode ?? 'tuto' }
+    const kept = byGame.get(save.tutorialId)
+    if (!kept || save.updatedAt > kept.updatedAt) byGame.set(save.tutorialId, save)
+  }
+  return [...byGame.values()].sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
 export function writeSave(save: Save): void {
   const all = readAll()
-  all[keyOf(save.tutorialId, save.mode)] = { ...save, updatedAt: Date.now() }
+  // Écrire, c'est aussi remplacer la partie qu'un autre mode du même jeu
+  // aurait laissée : un jeu n'a qu'une place enregistrée.
+  for (const key of Object.keys(all)) {
+    if (key === save.tutorialId || key.startsWith(`${save.tutorialId}:`)) delete all[key]
+  }
+  all[keyOf(save.tutorialId)] = { ...save, updatedAt: Date.now() }
   writeAll(all)
 }
 
-export function clearSave(tutorialId: string, mode: Mode): void {
+export function clearSave(tutorialId: string): void {
   const all = readAll()
-  delete all[keyOf(tutorialId, mode)]
-  // Une sauvegarde d'avant les modes portait le seul identifiant du jeu.
-  delete all[tutorialId]
+  for (const key of Object.keys(all)) {
+    // Les clés d'avant la V2 portaient le mode en suffixe.
+    if (key === tutorialId || key.startsWith(`${tutorialId}:`)) delete all[key]
+  }
   writeAll(all)
 }
 

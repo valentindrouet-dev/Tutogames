@@ -1,4 +1,12 @@
-/** Panneau modal générique (fiche matériel, index, réglages). */
+/**
+ * Panneau modal générique (fiche matériel, aide de jeu, index, réglages).
+ *
+ * Les panneaux **s'empilent** : ouvrir la fiche d'une salle depuis l'index
+ * des salles ne referme pas l'index, elle se pose dessus. Seul le panneau
+ * du dessus écoute Échap et le tap sur le fond ; ceux du dessous restent
+ * montés, donc ils gardent leur position de défilement et réapparaissent
+ * exactement comme on les avait laissés.
+ */
 
 import { useEffect, type CSSProperties, type ReactNode } from 'react'
 import { Close } from './icons'
@@ -10,30 +18,38 @@ interface Props {
   footer?: ReactNode
   /** Habillage du jeu : le panneau entier doit porter les couleurs du jeu. */
   style?: CSSProperties
+  /**
+   * Un autre panneau est ouvert par-dessus celui-ci. Il reste visible et
+   * monté, mais ne se ferme plus ni au clavier ni au tap : c'est le panneau
+   * du dessus qui répond.
+   */
+  behind?: boolean
 }
 
-export function Sheet({ title, onClose, children, footer, style }: Props) {
+export function Sheet({ title, onClose, children, footer, style, behind = false }: Props) {
   useEffect(() => {
+    if (behind) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [onClose, behind])
 
   return (
     <div
-      className="sheet-backdrop"
+      className={`sheet-backdrop${behind ? ' behind' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label={title}
+      aria-hidden={behind || undefined}
       // Fermeture au tap hors panneau, mais pas sur un tap qui a commencé
       // à l'intérieur et s'est terminé sur le fond (glissement de scroll).
       onPointerDown={(e) => {
-        if (e.target === e.currentTarget) onClose()
+        if (!behind && e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="sheet" style={style}>
+      <div className="sheet" style={style} inert={behind}>
         <div className="sheet-head">
           <h2>{title}</h2>
           <button type="button" className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Fermer">

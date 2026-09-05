@@ -269,6 +269,16 @@ export interface Step {
   only?: PlayerFilter
   /** Modes où cette étape apparaît. Absent = ceux du chapitre. */
   modes?: Mode[]
+  /**
+   * L'étape ne vient pas du livret : c'est un conseil de jeu recueilli
+   * ailleurs. Elle est alors signalée à l'écran, pour qu'on ne la confonde
+   * jamais avec une règle. Voir `Ext`.
+   */
+  ext?: boolean
+  /** Conseil hors livret ajouté à une étape de règle. Signalé comme tel. */
+  extTip?: string
+  /** D'où vient ce qui est hors livret, en clair. Ex. « retours de joueurs ». */
+  extSource?: string
 }
 
 export type ChapterKind = 'brief' | 'setup' | 'play' | 'debrief'
@@ -387,6 +397,107 @@ export interface Vo {
   terms: VoTerm[]
 }
 
+/**
+ * Aides de jeu : la partie « référence » de l'application.
+ *
+ * Un tutoriel se lit une fois, dans l'ordre. Une aide de jeu se consulte
+ * vingt fois, dans le désordre, pendant la partie — l'action d'une salle,
+ * l'effet d'un marqueur, le résumé d'une manche. C'est ce qui permet de
+ * jouer **sans rouvrir le livret** : tout ce qu'on va chercher au manuel en
+ * cours de partie doit avoir sa fiche ici.
+ *
+ * Une aide est faite de groupes, un groupe d'entrées. Une entrée tient en
+ * un terme et ce qu'il fait — jamais un paragraphe de prose.
+ */
+export interface AidEntry {
+  /** Clé stable, unique dans le tutoriel : sert d'ancre à l'index. */
+  id: string
+  /** Le terme tel qu'il est imprimé sur le matériel ou dans le livret. */
+  term: string
+  /** Coût de l'action, quand l'entrée en est une. Ex. « 2 cartes ». */
+  cost?: string
+  /** Étiquette de classement, ex. « salle de base », « objet lourd ». */
+  tag?: string
+  /** L'effet, ligne par ligne. */
+  body: string[]
+  /** Précision qui évite une erreur courante. */
+  note?: string
+  /** Piège de règle. Toujours mis en avant. */
+  warn?: string
+  /** Vignette découpée dans le livret, quand reconnaître à l'œil compte. */
+  crop?: Crop
+  /** Page des règles officielles. */
+  ref?: string
+  /** Teinte propre à l'entrée (couleur d'une salle, d'un paquet d'objets). */
+  tint?: string
+  /** L'entrée est un conseil hors livret. Signalée comme telle. */
+  ext?: boolean
+  /** Termes supplémentaires sous lesquels l'index doit ranger l'entrée. */
+  aliases?: string[]
+}
+
+export interface AidGroup {
+  title?: string
+  /** Une phrase qui vaut pour tout le groupe. */
+  lead?: string
+  entries: AidEntry[]
+}
+
+/** Un pictogramme d'aide, choisi parmi ceux que l'interface connaît. */
+export type AidIcon = 'rooms' | 'items' | 'summary' | 'moments' | 'markers' | 'goal' | 'combat'
+
+export interface Aid {
+  id: string
+  title: string
+  /** Ce que l'aide répond, en une phrase. Lu sur la tuile de l'index. */
+  lead?: string
+  icon?: AidIcon
+  groups: AidGroup[]
+}
+
+/**
+ * L'enjeu du jeu, en clair.
+ *
+ * Un joueur qui a suivi tout le tutoriel sait poser les pièces et résoudre
+ * un tour. Ça ne lui dit pas ce qu'il **doit faire** : quel est le but, à
+ * quoi ressemble une partie réussie, par quoi commencer. C'est ce que ce
+ * bloc écrit, et c'est le premier chose qu'on lit.
+ */
+export interface Brief {
+  /** La situation : où on est, ce qui se passe. Deux ou trois lignes. */
+  pitch: string[]
+  /** Ce qu'il faut réussir pour gagner. */
+  win: string[]
+  /** Ce que le joueur cherche à faire, concrètement, tout au long. */
+  doing: string[]
+  /** Les erreurs qui coûtent la partie. */
+  traps?: string[]
+  /** Les premiers tours : par quoi commencer. Hors livret, signalé. */
+  first?: string[]
+  /** D'où viennent les conseils hors livret. */
+  extSource?: string
+}
+
+/**
+ * Entrée d'index écrite à la main.
+ *
+ * L'index alphabétique est surtout **calculé** — voir `indexEntriesOf` :
+ * chaque aide de jeu, chaque composant et chaque variante y entrent tout
+ * seuls. On n'écrit ici que les termes qui n'existent nulle part ailleurs,
+ * ou les renvois d'un mot vers un autre.
+ */
+export interface IndexEntry {
+  term: string
+  /** Autres orthographes ou synonymes sous lesquels ranger le même texte. */
+  aliases?: string[]
+  /** La réponse, en deux ou trois lignes. Absent avec `see`. */
+  body?: string[]
+  /** Renvoi vers un autre terme de l'index. */
+  see?: string
+  ref?: string
+  ext?: boolean
+}
+
 export interface Tutorial {
   id: string
   title: string
@@ -425,6 +536,15 @@ export interface Tutorial {
   vo?: Vo
   /** Ce que le tutoriel couvre volontairement, et ce qu'il laisse de côté. */
   scope: { covered: string[]; skipped: string[] }
+  /**
+   * L'enjeu du jeu. Ouvre le tutoriel et reste consultable pendant la
+   * partie. Absent = le tutoriel n'a pas encore été repris pour la V2.
+   */
+  brief?: Brief
+  /** Aides de jeu, dans l'ordre où on les consulte le plus souvent. */
+  aids?: Aid[]
+  /** Entrées d'index écrites à la main, en plus de celles qu'on calcule. */
+  index?: IndexEntry[]
   components: Component[]
   chapters: Chapter[]
 }

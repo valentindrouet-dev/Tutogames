@@ -10,12 +10,13 @@
  */
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
-import type { Component, Crop, Mode, Tutorial, Variant } from '../engine/types'
+import type { Aid, Component, Crop, Mode, Tutorial, Variant } from '../engine/types'
 import { MODE_INFO, assetIdsOf, bookOf, playerLabel } from '../engine/types'
 import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
 import { voSpansFor } from '../engine/vo'
 import {
   clampPosition, componentsOf, indexOf, next, prev, stepAt, totalSteps, viewFor,
+  type IndexRow,
 } from '../engine/tutorial'
 import {
   clearSave, elapsedOf, formatClock, loadSave, newSave, writeSave, type Save,
@@ -25,11 +26,31 @@ import { useManifests, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
+import { AidSheet, AidsSheet, OutsideMark } from './Aids'
+import { IndexRowSheet, IndexSheet } from './IndexSheet'
 import { VoScope, VoText } from './Vo'
 import { themeBackground, themePanel, themeStyle } from './theme'
 import {
-  Alert, ArrowLeft, ArrowRight, Bulb, Check, FlagEn, Grid, Home, List, Settings, Trophy, STEP_KIND,
+  Aids, Alert, ArrowLeft, ArrowRight, AZ, Bulb, Check, FlagEn, Grid, Home, List, Outside,
+  Settings, Trophy, STEP_KIND,
 } from './icons'
+
+/**
+ * Un panneau ouvert par-dessus l'étape.
+ *
+ * Les panneaux s'empilent : depuis l'index du matériel on ouvre une fiche,
+ * depuis l'index alphabétique on ouvre une aide de jeu, depuis une aide on
+ * revient à la liste. Refermer un panneau rend celui d'en dessous, tel
+ * qu'on l'avait laissé — c'est la seule règle de navigation à retenir.
+ */
+type Panel =
+  | { kind: 'jump' }
+  | { kind: 'parts' }
+  | { kind: 'part'; component: Component }
+  | { kind: 'aids' }
+  | { kind: 'aid'; aid: Aid; focus?: string }
+  | { kind: 'index' }
+  | { kind: 'row'; row: IndexRow }
 
 /** Écran de fin : ce qu'on vient de terminer n'est pas la même chose selon le mode. */
 const DONE_TITLE: Record<Mode, string> = {
@@ -109,10 +130,24 @@ export function Runner({
     return { ...existing, ...clampPosition(view, existing.chapter, existing.step) }
   })
 
-  const [part, setPart] = useState<Component | null>(null)
-  const [index, setIndex] = useState(false)
-  const [jump, setJump] = useState(false)
+  // Une pile, pas trois booléens : fermer rend toujours le panneau d'avant.
+  const [stack, setStack] = useState<Panel[]>([])
   const [finished, setFinished] = useState(false)
+
+  const openPanel = useCallback((panel: Panel) => setStack((s) => [...s, panel]), [])
+  const closePanel = useCallback(() => setStack((s) => s.slice(0, -1)), [])
+
+  // Une ligne d'index mène à la fiche d'où elle vient. Quand elle porte
+  // elle-même sa réponse, on l'ouvre telle quelle.
+  const goFromIndex = useCallback((row: IndexRow) => {
+    if (row.target.kind === 'aid') {
+      openPanel({ kind: 'aid', aid: row.target.aid, focus: row.target.entry?.id })
+    } else if (row.target.kind === 'part') {
+      openPanel({ kind: 'part', component: row.target.component })
+    } else {
+      openPanel({ kind: 'row', row })
+    }
+  }, [openPanel])
 
   // Toute mutation de l'état passe par ici : la sauvegarde suit la
   // progression sans qu'aucun appelant n'ait à y penser.
@@ -202,7 +237,7 @@ export function Runner({
    * un panneau est ouvert pour ne pas naviguer derrière lui.
    */
   useEffect(() => {
-    if (finished || part || index || jump) return
+    if (finished || stack.length > 0) return
     const onKey = (e: KeyboardEvent) => {
       // Ne pas voler l'espace à un bouton ou un champ qui a le focus.
       const el = document.activeElement
@@ -221,11 +256,11 @@ export function Runner({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [finished, part, index, jump, goNext, goPrev])
+  }, [finished, stack.length, goNext, goPrev])
 
   const theme = themeStyle(tutorial.theme, prefs)
   // Les panneaux modaux ont leur propre fond : on ne leur passe pas celui du thème.
-  const panel = themePanel(tutorial.theme, prefs)
+  const panel_ = themePanel(tutorial.theme, prefs)
 
   // Le rebond de défilement de l'iPad laisse voir le fond de la page, pas
   // celui de l'application : sans cela, un tutoriel clair clignoterait noir
@@ -253,7 +288,7 @@ export function Runner({
               type="button"
               className="btn btn-lg btn-ghost"
               onClick={() => {
-                clearSave(tutorial.id, mode)
+                clearSave(tutorial.id)
                 setSave(newSave(tutorial, players, mode))
                 setFinished(false)
               }}
@@ -323,10 +358,42 @@ export function Runner({
           )}
 
           {mode !== 'setup' && (
-            <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
+            <button
+              type="button"
+              className="btn btn-ghost btn-icon"
+              onClick={() => openPanel({ kind: 'parts' })}
+              aria-label="Matériel du jeu"
+              title="Matériel"
+            >
               <Grid aria-hidden />
             </button>
           )}
+
+          {/* Les aides de jeu se consultent en partie, pas seulement pendant
+              la lecture : elles sont là dans tous les modes. */}
+          {tutorial.aids?.length ? (
+            <button
+              type="button"
+              className="btn btn-ghost btn-icon"
+              onClick={() => openPanel({ kind: 'aids' })}
+              aria-label="Aides de jeu"
+              title="Aides de jeu"
+            >
+              <Aids aria-hidden />
+            </button>
+          ) : null}
+
+          {(tutorial.aids?.length || tutorial.index?.length) ? (
+            <button
+              type="button"
+              className="btn btn-ghost btn-icon"
+              onClick={() => openPanel({ kind: 'index' })}
+              aria-label="Index alphabétique"
+              title="Index"
+            >
+              <AZ aria-hidden />
+            </button>
+          ) : null}
 
           {onOpenSettings && (
             <button type="button" className="btn btn-ghost btn-icon" onClick={onOpenSettings} aria-label="Réglages">
@@ -361,8 +428,11 @@ export function Runner({
               <span className="step-kind" style={{ '--kind': kind.tint } as CSSProperties}>
                 <kind.Icon aria-hidden /> {kind.label}
               </span>
+              {/* Cette étape n'est pas dans le livret : on le dit avant que
+                  le joueur la lise, pas après. */}
+              {step.ext && <OutsideMark source={step.extSource} />}
               {/* Aller directement à n'importe quelle étape du chapitre. */}
-              <button type="button" className="btn btn-ghost step-jump" onClick={() => setJump(true)}>
+              <button type="button" className="btn btn-ghost step-jump" onClick={() => openPanel({ kind: 'jump' })}>
                 <List aria-hidden />
                 Étape {save.step + 1} / {chapter.steps.length}
               </button>
@@ -398,6 +468,15 @@ export function Runner({
               </div>
             )}
 
+            {step.extTip && (
+              <div className="callout callout-ext">
+                <Outside aria-hidden />
+                <span>
+                  <b>Hors livret{step.extSource ? ` — ${step.extSource}` : ''}.</b> {step.extTip}
+                </span>
+              </div>
+            )}
+
             {step.ref && <div className="step-ref">Règles officielles — {step.ref}</div>}
           </div>
 
@@ -419,7 +498,7 @@ export function Runner({
                     type="button"
                     className="part"
                     style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
-                    onClick={() => setPart(c)}
+                    onClick={() => openPanel({ kind: 'part', component: c })}
                   >
                     <span className="part-thumb">
                       <Thumb
@@ -461,85 +540,126 @@ export function Runner({
           </button>
         </footer>
 
-        {jump && (
-          <Sheet title={chapter.title} onClose={() => setJump(false)} style={panel}>
-            <p className="sheet-lead">{chapter.goal}</p>
-            <ol className="jump-list">
-              {chapter.steps.map((s, i) => {
-                const k = STEP_KIND[s.kind]
-                return (
-                  <li key={s.id}>
+        {/*
+          * La pile de panneaux. Tous restent montés : celui du dessous garde
+          * sa position de défilement et redevient actif dès qu'on referme
+          * celui du dessus.
+          */}
+        {stack.map((panel, i) => {
+          const behind = i < stack.length - 1
+          const key = `${i}-${panel.kind}`
+
+          if (panel.kind === 'jump') {
+            return (
+              <Sheet key={key} title={chapter.title} onClose={closePanel} style={panel_} behind={behind}>
+                <p className="sheet-lead">{chapter.goal}</p>
+                <ol className="jump-list">
+                  {chapter.steps.map((s, n) => {
+                    const k = STEP_KIND[s.kind]
+                    return (
+                      <li key={s.id}>
+                        <button
+                          type="button"
+                          className={`jump-item${n === save.step ? ' current' : ''}${save.done.includes(s.id) ? ' done' : ''}`}
+                          onClick={() => { update({ step: n }); closePanel() }}
+                        >
+                          <span className="jump-num">{n + 1}</span>
+                          <span className="jump-icon" style={{ '--kind': k.tint } as CSSProperties}>
+                            <k.Icon aria-hidden />
+                          </span>
+                          <span className="jump-title">{s.title}</span>
+                          {s.ext && <Outside aria-hidden className="jump-ext" />}
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ol>
+              </Sheet>
+            )
+          }
+
+          if (panel.kind === 'parts') {
+            return (
+              <Sheet key={key} title={`Matériel — ${tutorial.title}`} onClose={closePanel} style={panel_} behind={behind}>
+                <div className="parts-index">
+                  {tutorial.components.map((c) => (
                     <button
+                      key={c.id}
                       type="button"
-                      className={`jump-item${i === save.step ? ' current' : ''}${save.done.includes(s.id) ? ' done' : ''}`}
-                      onClick={() => { update({ step: i }); setJump(false) }}
+                      className="part"
+                      style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
+                      onClick={() => openPanel({ kind: 'part', component: c })}
                     >
-                      <span className="jump-num">{i + 1}</span>
-                      <span className="jump-icon" style={{ '--kind': k.tint } as CSSProperties}>
-                        <k.Icon aria-hidden />
+                      <span className="part-thumb">
+                        <Thumb book={bookOf(tutorial, c.crop)} crop={c.crop} glyph={c.glyph} name={c.name} />
                       </span>
-                      <span className="jump-title">{s.title}</span>
+                      <span className="part-txt">
+                        <span className="part-name">
+                          {c.name}
+                          {c.variants && <span className="part-types">{c.variants.length} types</span>}
+                        </span>
+                        {c.qty && <span className="part-qty">{c.qty}</span>}
+                      </span>
                     </button>
-                  </li>
-                )
-              })}
-            </ol>
-          </Sheet>
-        )}
+                  ))}
+                </div>
+              </Sheet>
+            )
+          }
 
-        {part && (
-          <Sheet title="Matériel" onClose={() => setPart(null)} style={panel}>
-            <div className={`part-detail${part.variants ? ' part-detail-aid' : ''}`}>
-              <div className="visual">
-                <Visual
-                  book={bookOf(tutorial, part.crop)}
-                  crop={part.crop}
-                  glyph={part.glyph}
-                  name={part.name}
-                  tint={part.tint}
-                />
-              </div>
-              <div>
-                <div className="part-detail-name">{part.name}</div>
-                {part.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{part.qty}</div>}
-                {part.note && <p className="part-detail-note">{part.note}</p>}
-              </div>
-            </div>
-            {part.variants && <Variants tutorial={tutorial} list={part.variants} />}
-          </Sheet>
-        )}
+          if (panel.kind === 'part') {
+            const c = panel.component
+            return (
+              <Sheet key={key} title={c.name} onClose={closePanel} style={panel_} behind={behind}>
+                <div className={`part-detail${c.variants ? ' part-detail-aid' : ''}`}>
+                  <div className="visual">
+                    <Visual book={bookOf(tutorial, c.crop)} crop={c.crop} glyph={c.glyph} name={c.name} tint={c.tint} />
+                  </div>
+                  <div>
+                    <div className="part-detail-name">{c.name}</div>
+                    {c.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{c.qty}</div>}
+                    {c.note && <p className="part-detail-note">{c.note}</p>}
+                  </div>
+                </div>
+                {c.variants && <Variants tutorial={tutorial} list={c.variants} />}
+              </Sheet>
+            )
+          }
 
-        {index && (
-          <Sheet title={`Matériel — ${tutorial.title}`} onClose={() => setIndex(false)} style={panel}>
-            <div className="parts-index">
-              {tutorial.components.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className="part"
-                  style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
-                  onClick={() => { setIndex(false); setPart(c) }}
-                >
-                  <span className="part-thumb">
-                    <Thumb
-                      book={bookOf(tutorial, c.crop)}
-                      crop={c.crop}
-                      glyph={c.glyph}
-                      name={c.name}
-                    />
-                  </span>
-                  <span className="part-txt">
-                    <span className="part-name">
-                      {c.name}
-                      {c.variants && <span className="part-types">{c.variants.length} types</span>}
-                    </span>
-                    {c.qty && <span className="part-qty">{c.qty}</span>}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </Sheet>
-        )}
+          if (panel.kind === 'aids') {
+            return (
+              <AidsSheet
+                key={key}
+                tutorial={tutorial}
+                style={panel_}
+                onClose={closePanel}
+                onPick={(aid) => openPanel({ kind: 'aid', aid })}
+              />
+            )
+          }
+
+          if (panel.kind === 'aid') {
+            return (
+              <AidSheet
+                key={key}
+                tutorial={tutorial}
+                aid={panel.aid}
+                focus={panel.focus}
+                style={panel_}
+                onClose={closePanel}
+              />
+            )
+          }
+
+          if (panel.kind === 'index') {
+            return (
+              <IndexSheet key={key} tutorial={tutorial} style={panel_} onClose={closePanel} onGo={goFromIndex} />
+            )
+          }
+
+          return <IndexRowSheet key={key} row={panel.row} style={panel_} onClose={closePanel} />
+        })}
+
     </VoScope>
     </div>
   )

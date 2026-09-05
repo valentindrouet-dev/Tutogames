@@ -17,6 +17,71 @@ comme complète.
 
 ---
 
+## v0.23 — 2026-09-05 — « V2 : jouer sans le livret »
+
+La V2 change ce qu'un tutoriel promet. Jusqu'ici il apprenait à jouer un
+premier tour, puis renvoyait le joueur au manuel pour le reste. Désormais il
+couvre **tout ce qui arrive en partie**, dit **pourquoi** on joue, et garde à
+portée de main de quoi répondre à n'importe quelle question sans rouvrir le
+livret. *Nemesis* est le premier jeu repris ; les six autres suivront.
+
+### Ajouté
+
+- **L'enjeu du jeu, avant les règles** (`Tutorial.brief`). Où on est, comment
+  on gagne, ce qu'on cherche à faire tour après tour, les erreurs qui coûtent
+  la partie, et par quoi commencer. Le chapitre Briefing s'ouvre là-dessus, et
+  le bloc reste consultable pendant la partie.
+- **Les aides de jeu** (`Tutorial.aids`), sous un nouveau bouton du bandeau, à
+  côté du matériel. Une fiche répond à une question qu'on se pose *pendant* la
+  partie : que fait ce lieu, que coûte cette action, que déclenche ce marqueur.
+  *Nemesis* en a six — l'enjeu et la victoire, l'index des 25 salles, les objets
+  et les corps, les marqueurs et les portes, les moments spéciaux et la fin de
+  partie, et le résumé des règles de la dernière page du livret.
+- **L'index alphabétique** (bouton A→Z), avec champ de recherche et réglette de
+  lettres. Il est **calculé**, pas écrit : `indexEntriesOf()` récolte chaque
+  entrée d'aide de jeu, chaque composant et chaque variante de composant, et
+  `Tutorial.index` ne sert qu'aux termes qui n'ont de fiche nulle part. Le tri
+  ignore accents, articles et numéros d'ordre. 181 entrées pour *Nemesis*.
+  Taper sur une ligne ouvre la fiche d'où elle vient.
+- **Une marque unique pour ce qui ne vient pas du livret** : un globe, une
+  couleur qui ne sert qu'à ça, et le mot « hors livret ». Elle s'applique à une
+  étape entière (`step.ext`), à un conseil dans une étape de règle
+  (`step.extTip`), à une entrée d'aide de jeu ou à une ligne d'index. Un
+  `extSource` dit d'où ça vient. Une règle et un conseil ne se confondent plus.
+- **Trois chapitres de plus dans *Nemesis*** : « Agir dans une salle » (fouille,
+  action de salle, fabrication, objets de quête, corps lourds, marqueurs,
+  portes et conduits), « Les moments spéciaux » (première rencontre, premier
+  personnage tué, ouverture de l'hibernation, point de non-retour) et « Sortir
+  vivant » (nacelles, hibernation, état des moteurs, coordonnées,
+  contamination). Le tutoriel passe de 65 à 91 étapes.
+
+### Modifié
+
+- **Les fiches s'empilent.** Ouvrir la fiche d'un composant depuis l'index du
+  matériel ne referme plus l'index : elle se pose dessus, et la refermer rend
+  l'index intact, position de défilement comprise. Vrai partout — matériel,
+  aides de jeu, index alphabétique.
+- **Ce qu'on peut enchaîner dans un tour est écrit noir sur blanc.** Trois
+  étapes nouvelles disent qu'on a le droit de faire deux fois la même action,
+  qu'on peut n'en faire qu'une et passer, que la manche ne s'arrête pas après
+  un tour de table, et donnent les huit actions de base avec leur prix.
+- **L'accueil abandonne le bandeau de reprise.** Une partie en cours se signale
+  par un bouton rond dans le coin de la vignette du jeu, avec une croix pour
+  l'abandonner. Un jeu n'a plus qu'**une seule partie enregistrée**, tous modes
+  confondus : en démarrer une autre efface la précédente.
+- **`scope.skipped` de *Nemesis* ne renvoie plus au livret.** Il ne reste que
+  les modes optionnels, le plateau alternatif et le texte des cartes. L'étape
+  « Ce que ce tutoriel n'a pas couvert » est remplacée par « Ce que vous
+  emportez à la table ».
+- Le rappel des règles de *Nemesis* s'ouvre sur l'enjeu et les quatre bascules
+  de la partie.
+- `GUIDE_CREATION_TUTO.md` : nouvelle section 10, « L'enjeu, les aides de jeu
+  et l'index ». Les sections 6, 7 et 9 sont reprises — un tutoriel couvre
+  désormais tout ce qui arrive en partie, et `skipped` se limite à trois sortes
+  de choses.
+
+---
+
 ## v0.22 — 2026-09-05
 
 ### Modifié

@@ -529,20 +529,30 @@ Découpage recommandé, éprouvé sur Nemesis :
 
 | Chapitre | `kind` | Rôle |
 |---|---|---|
-| Briefing | `brief` | Ce qu'on va faire, ce qu'il faut sortir de la boîte |
+| Briefing | `brief` | **L'enjeu du jeu**, puis ce qu'il faut sortir de la boîte |
 | Mise en place (1 ou 2 chapitres) | `setup` | Suivre la procédure officielle, étape par étape |
 | Comprendre le tour | `play` | La structure de la manche et le coût des actions |
 | Boucle principale | `play` | L'action qu'on répète le plus, avec ses conséquences |
 | Les moments qui font peur | `play` | Combat, conflit, tout ce qui bloque un débutant |
 | Fin de manche | `play` | Ce qui se passe quand les joueurs ont fini |
-| Gagner | `debrief` | Conditions de victoire, et ce qu'on n'a pas couvert |
+| Agir sur le plateau | `play` | Fouiller, utiliser un lieu, gérer objets et marqueurs |
+| Les moments spéciaux | `play` | Les bascules qui ne dépendent pas du tour de jeu |
+| Sortir / conclure | `play` | Comment on quitte la partie, et ce qu'il faut avoir préparé |
+| Gagner | `debrief` | Conditions de victoire, et ce qu'on emporte à la table |
 
-Visez **6 à 10 chapitres** et **60 à 95 étapes** — Nemesis en compte 65, le
-tutoriel *Tainted Grail*, qui installe une campagne entière, 92. En dessous,
-on survole ; au-dessus, on abandonne avant la fin. Un livret de 84 pages
-comme celui de *Frosthaven* déborde forcément : on y accepte une centaine
-d'étapes en première partie, mais on ne rogne pas sur les trois autres modes
-pour autant.
+Visez **8 à 12 chapitres** et **80 à 120 étapes** — Nemesis en compte 91, le
+tutoriel *Tainted Grail*, qui installe une campagne entière, 92, et *Oathsworn*
+144. En dessous, on survole ; au-dessus, on abandonne avant la fin. Un livret
+de 84 pages comme celui de *Frosthaven* déborde forcément : on y accepte une
+centaine d'étapes en première partie, mais on ne rogne pas sur les trois autres
+modes pour autant.
+
+> **Un tutoriel couvre tout ce qui arrive en partie.** On ne renvoie plus le
+> joueur au livret pour un pan entier de règles : les lieux, les objets, les
+> marqueurs et les fins de partie ont leur place dans les chapitres, ou dans
+> une aide de jeu (§10). Ce qui reste légitimement dehors : le **texte des
+> cartes**, qui se lit quand elles sortent, et les **modes optionnels**, qui
+> changent le cadre de la partie.
 
 Comptez ce que voit **un** joueur : `nominalSteps()` calcule le total à
 l'effectif conseillé, filtres `only` appliqués.
@@ -799,12 +809,23 @@ l'interface les porte déjà.
 | Changer de chapitre | Le bandeau de chapitres, en haut |
 | Ouvrir la fiche d'un composant | Les vignettes de matériel, sous l'étape |
 | Index complet du matériel | Bouton grille, en haut à droite |
+| Consulter une aide de jeu | Bouton fiches, en haut à droite (§10) |
+| Chercher un mot du jeu | Bouton index A→Z, en haut à droite (§10) |
 | Chronomètre | En haut à droite ; il survit à la fermeture de l'application |
 | Taille du texte, clarté du fond, ordre des jeux | Bouton réglages, en haut à droite et sur l'accueil |
+| Reprendre une partie en cours | Le bouton rond, dans le coin de la vignette du jeu |
 
 Le saut d'étape et les raccourcis clavier sont **génériques** : ils suivent la
 vue filtrée par l'effectif et le mode, donc un tutoriel n'a rien à déclarer
 pour en bénéficier.
+
+Les panneaux **s'empilent** : ouvrir une fiche depuis un index ne referme pas
+l'index, elle se pose dessus, et la refermer le rend intact — position de
+défilement comprise. C'est vrai partout, sans rien à déclarer non plus.
+
+Un jeu n'a **qu'une partie enregistrée à la fois**, tous modes confondus : en
+démarrer une autre efface la précédente. Le bouton de reprise de la vignette
+désigne donc toujours une partie et une seule.
 
 Les réglages (`src/engine/prefs.ts`) multiplient toutes les tailles de texte,
 décalent la clarté des fonds de ±20 % au maximum par-dessus l'habillage du
@@ -814,14 +835,26 @@ quatre en « Énorme ».
 
 ---
 
-## 7. Portée : dire ce qu'on n'enseigne pas
+## 7. Portée : ce qu'on couvre, ce qui reste dehors
 
-`scope.covered` et `scope.skipped` sont affichés au joueur avant qu'il commence,
-et rappelés en fin de tutoriel.
+`scope.covered` et `scope.skipped` sont affichés au joueur avant qu'il commence.
 
-Un tutoriel qui prétend tout couvrir ment. Un tutoriel qui annonce ses limites
-est utilisable : le joueur sait quand ouvrir le livret. **Remplissez toujours
-`skipped`.**
+L'objectif est qu'un joueur puisse **jouer sans rouvrir le livret**. `skipped`
+doit donc être court, et ne contenir que trois sortes de choses :
+
+- le **texte des cartes, tuiles et jetons**, qui se lit au moment où ils sortent ;
+- les **modes optionnels** (coopératif, variante, plateau alternatif), qui
+  changent le cadre de la partie plutôt que ses règles ;
+- ce qui appartient à une **extension**.
+
+Tout le reste — les lieux, les objets, les marqueurs, les fins de partie — se
+couvre : dans un chapitre si le joueur en a besoin pour jouer son premier tour,
+dans une aide de jeu (§10) s'il ira le chercher en cours de partie. Une entrée
+de `skipped` qui dit « voir l'index p.24-26 » est le signe qu'une aide de jeu
+manque.
+
+**Remplissez toujours `skipped`** : un tutoriel qui prétend littéralement tout
+couvrir ment aussi.
 
 ---
 
@@ -879,7 +912,14 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 - [ ] Aucun texte ne répète le libellé d'un bouton.
 - [ ] Tous les `components` cités par une étape existent dans la liste.
 - [ ] Les numéros de page des `ref` correspondent à l'édition ingérée.
-- [ ] `scope.skipped` est rempli.
+- [ ] `scope.skipped` est rempli, et ne renvoie à aucune page du livret pour
+      une règle qui arrive en partie (voir §7).
+- [ ] `brief` répond aux trois questions : où on est, comment on gagne, ce
+      qu'on cherche à faire.
+- [ ] Le chapitre `brief` raconte le même enjeu en étapes, avant la mise en place.
+- [ ] Chaque aide de jeu a son `ref` par entrée, et chaque `id` d'entrée est unique.
+- [ ] L'index compte assez d'entrées pour le jeu (`indexEntriesOf`).
+- [ ] Tout ce qui ne vient pas du PDF porte `ext` / `extTip` et son `extSource`.
 - [ ] Accents et guillemets français vérifiés.
 - [ ] `contentVersion` incrémentée si le contenu a changé.
 - [ ] `npm run crops` relancé si un rectangle a changé, et les découpes
@@ -889,7 +929,133 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 
 ---
 
-## 10. Droits sur les visuels
+## 10. L'enjeu, les aides de jeu et l'index — la V2
+
+Un tutoriel qui déroule bien ses étapes laisse quand même le joueur avec deux
+questions auxquelles aucune étape ne répond : **« qu'est-ce que je dois
+faire ? »** et **« où je retrouve ça, maintenant, en pleine partie ? »**.
+Trois blocs y répondent. Ils sont facultatifs dans le modèle, mais un tutoriel
+sans eux n'est pas fini.
+
+### `brief` — l'enjeu, avant les règles
+
+```ts
+brief: {
+  pitch: ['…où on est, ce qui se passe…'],
+  win:   ['…ce qu'il faut réussir pour gagner…'],
+  doing: ['…ce que le joueur cherche à faire, tout au long…'],
+  traps: ['…les erreurs qui coûtent la partie…'],
+  first: ['…par quoi commencer — hors livret, voir plus bas…'],
+  extSource: 'guides de jeu en ligne',
+}
+```
+
+Écrivez-le **en premier**, avant les chapitres : si vous n'arrivez pas à dire
+en trois lignes ce que le joueur doit faire de sa partie, le tutoriel ne le
+dira pas non plus.
+
+`brief` est un bloc de référence, consultable pendant la partie. Il ne se
+substitue pas au récit : ouvrez aussi le chapitre `brief` par trois ou quatre
+étapes qui disent la même chose, dans l'ordre où on la lit — la situation, la
+victoire, les intentions de jeu, les premiers tours.
+
+### `aids` — ce qu'on va chercher dans le livret en cours de partie
+
+Une aide de jeu répond à une question qu'on se pose **pendant** la partie, pas
+en la préparant : que fait cette salle, que coûte cette action, que se passe-t-il
+quand ce marqueur arrive. Le bouton **Aides de jeu** du bandeau y donne accès
+dans tous les modes.
+
+```ts
+aids: [{
+  id: 'salles', title: 'Index des salles', icon: 'rooms',
+  lead: 'Les 25 salles du vaisseau et ce que chacune permet de faire.',
+  groups: [{
+    title: 'Les 11 salles de base « 1 »',
+    lead: 'Marquées d'un « 1 » au dos de leur tuile.',
+    entries: [{
+      id: 'armurerie', term: 'Armurerie', tag: 'salle « 1 »', cost: '2 cartes',
+      body: ['Recharger votre arme énergétique : ajoutez 2 jetons Munition…'],
+      note: 'Ne recharge pas les armes classiques.',
+      ref: 'Index des salles — p.24',
+    }],
+  }],
+}]
+```
+
+Règles d'écriture :
+
+- **Une entrée = un terme et ce qu'il fait.** Jamais un paragraphe de prose.
+  Si l'entrée ne tient pas en quatre lignes de `body`, c'est deux entrées.
+- **`id` unique dans tout le tutoriel** : c'est l'ancre de l'index.
+- **`cost` porte le prix**, pas le `body`. Il s'affiche en pastille : c'est ce
+  qu'on lit en premier.
+- **`term` reprend le mot du livret**, à la lettre. C'est sous ce mot qu'on
+  cherchera, pas sous une paraphrase.
+- **`aliases`** pour les autres façons de nommer la même chose.
+- **`ref`** sur chaque entrée : une aide de jeu qui ne dit pas d'où elle sort
+  ne peut pas être vérifiée.
+
+Prévoyez **4 à 7 fiches**, pas plus. Pour un jeu à plateau, celles qui
+reviennent toujours : l'enjeu et la victoire, l'index des lieux, les objets,
+les marqueurs, les moments spéciaux, et le résumé des règles de la dernière
+page du livret. Les `icon` disponibles : `goal`, `rooms`, `items`, `markers`,
+`moments`, `combat`, `summary`.
+
+### `index` — l'index alphabétique, presque gratuit
+
+Le bouton **Index** ouvre la liste alphabétique de tout le jeu, avec un champ
+de recherche et une réglette de lettres. Taper sur une entrée ouvre la fiche
+d'où elle vient.
+
+**L'index est calculé, pas écrit** — `indexEntriesOf()` récolte :
+
+- chaque entrée d'aide de jeu, sous son `term` et sous chacun de ses `aliases` ;
+- chaque composant, sous son `name` ;
+- chaque variante de composant, sous son `label`.
+
+Le champ `index` du tutoriel ne sert donc qu'aux **restes** : un terme qui
+n'existe dans aucune fiche, ou un renvoi.
+
+```ts
+index: [
+  { term: 'Jet de bruit', body: ['Lancez le dé de bruit et…'], ref: 'p.15' },
+  { term: 'Séquence d'autodestruction', see: 'Génératrice' },
+]
+```
+
+Le tri ignore les accents, les articles (`le`, `la`, `l'`, `des`…) et les
+numéros d'ordre : « l'Hibernatorium » se cherche à H, « 1. Contrôle des
+moteurs » à C. Vous n'avez rien à faire pour ça.
+
+Après écriture, comptez : **150 entrées et plus** pour un jeu de la taille de
+Nemesis. Beaucoup moins veut dire que les aides de jeu sont trop maigres.
+
+### Hors livret : signaler ce qui ne vient pas du PDF
+
+Un bon conseil de jeu ne se trouve pas dans le manuel. On a le droit d'aller le
+chercher ailleurs — mais **le lecteur doit toujours pouvoir distinguer une
+règle d'un conseil**. Une seule marque sert à ça, partout : un globe, la
+couleur `--ext`, et le mot « hors livret ».
+
+| Où | Champ | Rend |
+|---|---|---|
+| Une étape entière | `step.ext: true` | Pastille « Hors livret » à côté du type d'étape |
+| Un conseil dans une étape de règle | `step.extTip` | Encadré violet au globe |
+| Une entrée d'aide de jeu | `entry.ext: true` | Liseré violet + pastille |
+| Une entrée d'index | `entry.ext: true` | Globe dans la ligne |
+
+`step.extSource` et `brief.extSource` disent d'où ça vient, en clair et en trois
+mots : « guides de jeu en ligne », « retours de joueurs ».
+
+> **Ne mélangez jamais les deux dans une même phrase.** Une ligne de `body`
+> d'une étape de règle est une règle. Un conseil va dans `extTip`, ou dans une
+> étape `ext` à lui. Et `ref` d'une étape hors livret vaut `'Aucune — hors
+> livret'` : elle ne cite pas une page qu'elle ne suit pas.
+
+---
+
+## 11. Droits sur les visuels
 
 Les pages ingérées et leurs découpes sont l'œuvre de l'éditeur. Elles sont
 **versionnées dans `games/`** parce que le site est publié depuis la racine du
@@ -901,7 +1067,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 
 ---
 
-## 11. Journal du guide
+## 12. Journal du guide
 
 | Date | Version app | Modification |
 |---|---|---|
@@ -918,6 +1084,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.23 | La V2 : un tutoriel couvre tout ce qui arrive en partie. Nouvelle section 10 — `brief` (l'enjeu du jeu), `aids` (les aides de jeu, sous leur bouton du bandeau) et l'index alphabétique, calculé depuis les aides et le matériel. Une marque unique pour ce qui ne vient pas du livret (`ext`, `extTip`, `extSource`). Sections 6, 7 et 9 reprises : volumétrie à 8-12 chapitres et 80-120 étapes, `skipped` limité aux cartes, aux modes optionnels et aux extensions. Les panneaux s'empilent, un jeu n'a qu'une partie enregistrée. |
 | 2026-09-05 | v0.22 | Le bouton VO remplace le mot français par le terme imprimé, accordé en genre de phrase et en nombre. Étape 11 : « Le mode sur la boîte, et le pluriel », et `enPlural` pour les irréguliers. Le réglage des termes passe à trois choix. |
 | 2026-09-05 | v0.21 | Les composants à faces se décrivent face par face, vignette comprise : dé de bruit et symboles Intrus de *Nemesis*, les trois dés de *Rois de la Ruine*. Deux composants qui partageaient une photo de groupe sont recadrés chacun sur le sien. |
 | 2026-09-05 | v0.20 | `Component.variants` : les variétés d'un composant, en aide de jeu dans sa fiche, avec vignette et couleur. Étape 8 : « Les variétés d'un composant », et `npm run aids` pour voir ce qui reste à décrire. 97 types de matériel écrits sur les sept jeux. |

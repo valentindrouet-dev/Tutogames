@@ -7,6 +7,10 @@
  * couverture identifie la boîte bien plus vite qu'une phrase, et les boutons
  * disent déjà ce qu'ils font.
  *
+ * Une partie en cours ne prend pas de bandeau : elle met un petit bouton
+ * carré dans le coin de sa vignette. Un jeu n'a qu'une partie enregistrée à
+ * la fois, donc ce bouton ne désigne jamais qu'une chose.
+ *
  * Le numéro de version de l'application est affiché juste sous le titre,
  * conformément au système de versionnement décrit dans CHANGELOG.md.
  */
@@ -15,13 +19,13 @@ import { useMemo, useState } from 'react'
 import type { Mode, Tutorial } from '../engine/types'
 import { MODE_INFO, bookOf, modesOf, playerLabel, playerRange } from '../engine/types'
 import type { Prefs } from '../engine/prefs'
-import { clearSave, formatClock, listSaves } from '../engine/progress'
+import { clearSave, formatClock, listSaves, type Save } from '../engine/progress'
 import { totalSteps, viewFor } from '../engine/tutorial'
 import { Sheet } from './Sheet'
 import { VoList } from './Vo'
 import { Visual } from './Visual'
 import { themePanel, themeStyle } from './theme'
-import { Check, Circle, FlagEn, Info, MODE_ICON, Play, Settings, Users } from './icons'
+import { Check, Circle, Close, FlagEn, Info, MODE_ICON, Play, Resume, Settings, Users } from './icons'
 import version from '../../version.json'
 
 interface Props {
@@ -47,11 +51,6 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
       : tutorials),
     [tutorials, prefs.sort],
   )
-  const resumable = saves
-    .map((s) => ({ save: s, tutorial: tutorials.find((t) => t.id === s.tutorialId) }))
-    .filter((r): r is { save: (typeof saves)[number]; tutorial: Tutorial } => Boolean(r.tutorial))
-    .find((r) => r.save.done.length > 0)
-
   return (
     <div className="app" style={{ '--text-scale': String(prefs.textScale) } as React.CSSProperties}>
       <div className="home scroll">
@@ -66,39 +65,6 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
           </button>
         </header>
 
-        {resumable && (
-          <div className="resume-bar" style={themeStyle(resumable.tutorial.theme, prefs)}>
-            <div className="resume-text">
-              <div className="resume-title">
-                Reprendre {resumable.tutorial.title} · {MODE_INFO[resumable.save.mode].label}
-              </div>
-              <div className="resume-sub">
-                {playerLabel(resumable.tutorial.players, resumable.save.players)} ·
-                {' '}Étape {resumable.save.done.length} sur{' '}
-                {totalSteps(viewFor(resumable.tutorial, resumable.save.players, resumable.save.mode))} ·{' '}
-                {formatClock(resumable.save.elapsedMs)}
-              </div>
-            </div>
-            <button
-              type="button"
-              className="btn btn-ghost btn-danger"
-              onClick={() => {
-                clearSave(resumable.tutorial.id, resumable.save.mode)
-                setSaveTick((n) => n + 1)
-              }}
-            >
-              Abandonner
-            </button>
-            <button
-              type="button"
-              className="btn btn-lg btn-primary"
-              onClick={() => onStart(resumable.tutorial, resumable.save.mode, resumable.save.players, false)}
-            >
-              <Play aria-hidden /> Continuer
-            </button>
-          </div>
-        )}
-
         <section>
           <div className="game-grid">
             {games.map((t) => (
@@ -106,9 +72,11 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
                 key={t.id}
                 tutorial={t}
                 prefs={prefs}
-                saves={saves.filter((s) => s.tutorialId === t.id)}
+                save={saves.find((s) => s.tutorialId === t.id) ?? null}
                 onPick={(mode) => setSetup({ tutorial: t, mode })}
                 onAbout={() => setAbout(t)}
+                onResume={(save) => onStart(t, save.mode, save.players, false)}
+                onDrop={() => { clearSave(t.id); setSaveTick((n) => n + 1) }}
               />
             ))}
           </div>
@@ -196,23 +164,31 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
 /**
  * Carte d'un jeu : sa couverture, et une entrée par mode.
  *
- * Un mode déjà entamé affiche sa progression sur son propre bouton — c'est
- * la seule information dont on a besoin pour savoir où reprendre.
+ * Une partie en cours se signale par un petit bouton carré dans le coin de
+ * la vignette, et par l'état du bouton de son mode. Rien de plus : la
+ * couverture doit rester lisible.
  */
 function GameCard({
   tutorial,
   prefs,
-  saves,
+  save,
   onPick,
   onAbout,
+  onResume,
+  onDrop,
 }: {
   tutorial: Tutorial
   prefs: Prefs
-  saves: { mode: Mode; players: number; done: string[] }[]
+  save: Save | null
   onPick: (mode: Mode) => void
   onAbout: () => void
+  onResume: (save: Save) => void
+  onDrop: () => void
 }) {
   const modes = modesOf(tutorial)
+  // Une sauvegarde sans étape validée n'est qu'une ouverture d'écran : elle
+  // ne vaut pas la peine d'un bouton « reprendre ».
+  const started = save && save.done.length > 0 ? save : null
 
   return (
     <div className="game-card" style={themeStyle(tutorial.theme, prefs)}>
@@ -225,6 +201,32 @@ function GameCard({
           tint={tutorial.theme.accent}
         />
       </button>
+
+      {/* Les deux commandes de la partie en cours vivent ensemble, dans le
+          coin de la vignette : reprendre en grand, abandonner en petit. Elles
+          ne touchent pas à la rangée de pastilles, qui reste sur une ligne. */}
+      {started && (
+        <div className="game-resume-box">
+          <button
+            type="button"
+            className="game-drop"
+            onClick={onDrop}
+            aria-label={`Abandonner la partie en cours de ${tutorial.title}`}
+            title="Abandonner la partie en cours"
+          >
+            <Close aria-hidden />
+          </button>
+          <button
+            type="button"
+            className="game-resume"
+            onClick={() => onResume(started)}
+            aria-label={`Reprendre ${tutorial.title} — ${MODE_INFO[started.mode].label}`}
+            title={`Reprendre — ${MODE_INFO[started.mode].label}, ${playerLabel(tutorial.players, started.players)}, ${formatClock(started.elapsedMs)}`}
+          >
+            <Resume aria-hidden />
+          </button>
+        </div>
+      )}
 
       <div className="game-card-body">
         <div className="game-card-head">
@@ -253,16 +255,14 @@ function GameCard({
 
         <div className="mode-list">
           {modes.map((m) => {
-            const save = saves.find((s) => s.mode === m)
-            // Une partie en cours se signale par l'état du bouton, pas par
-            // un compteur : le nombre d'étapes n'aide pas à choisir.
-            const started = Boolean(save && save.done.length > 0)
+            // Un jeu n'a qu'une partie en cours : au plus un mode s'allume.
+            const current = started?.mode === m
             const Icon = MODE_ICON[m]
             return (
               <button
                 key={m}
                 type="button"
-                className={`mode-btn${started ? ' started' : ''}`}
+                className={`mode-btn${current ? ' started' : ''}`}
                 onClick={() => onPick(m)}
                 aria-label={`${tutorial.title} — ${MODE_INFO[m].label}`}
               >

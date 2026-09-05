@@ -198,3 +198,59 @@ export const FlagEn = (p: P) => (
     <rect x="1" y="4" width="22" height="16" rx="2.4" fill="none" stroke="rgba(0,0,0,0.3)" strokeWidth="1" />
   </svg>
 )
+
+/** Aides de jeu : un jeu de fiches qu'on garde à portée de main. */
+export const Aids = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="6" width="13" height="15" rx="2" />
+    <path d="M7 3.5h11.5A2.5 2.5 0 0 1 21 6v11.5" />
+    <path d="M6.6 11h6.8M6.6 15h4.4" />
+  </svg>
+)
+
+/** Index alphabétique : la tranche d'un dictionnaire, avec ses onglets. */
+export const AZ = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M4.5 4.5h11a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2h-11z" />
+    <path d="M17.5 6.5H20v13h-4.5" />
+    <path d="M7 12.6h5.5M8 14.8l1.8-4.6 1.9 4.6" />
+  </svg>
+)
+
+/** Loupe du champ de recherche de l'index. */
+export const Search = (p: P) => (
+  <svg {...base} {...p}><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.4 15.4 21 21" /></svg>
+)
+
+/**
+ * Hors livret : ce qui vient d'ailleurs que du manuel de règles.
+ *
+ * Le globe est le seul pictogramme que l'application emploie pour cela, et
+ * il ne sert qu'à ça. Partout où il apparaît — étape, conseil, entrée
+ * d'aide, ligne d'index — le texte à côté n'est pas une règle : c'est un
+ * conseil de jeu recueilli en dehors du PDF, et le lecteur doit pouvoir
+ * faire la différence d'un coup d'œil.
+ */
+export const Outside = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="8.6" />
+    <path d="M3.4 12h17.2" />
+    <path d="M12 3.4c2.2 2.4 3.4 5.4 3.4 8.6s-1.2 6.2-3.4 8.6c-2.2-2.4-3.4-5.4-3.4-8.6S9.8 5.8 12 3.4z" />
+  </svg>
+)
+
+/** L'enjeu du jeu : une cible, ce vers quoi on joue. */
+export const Target = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.6" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+/** Reprendre une partie en cours, depuis la vignette du jeu. */
+export const Resume = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M10 8.6 16 12l-6 3.4z" fill="currentColor" stroke="none" />
+  </svg>
+)

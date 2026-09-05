@@ -18,7 +18,7 @@ export const nemesis: Tutorial = {
   title: 'Nemesis',
   tagline:
     'Vous vous réveillez d’hibernation sur un vaisseau infesté. Survivre ne suffit pas : il faut aussi remplir un objectif que personne d’autre ne connaît.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Awaken Realms',
   author: 'Adam Kwapinski',
   players: {
@@ -190,27 +190,1349 @@ export const nemesis: Tutorial = {
 
   scope: {
     covered: [
+      'L’enjeu du jeu : ce que vous devez faire, et à quoi ressemble une partie gagnée',
       'La mise en place complète, des 20 étapes officielles',
       'La structure d’une manche : phase Joueur puis phase Événement',
-      'Payer ses actions en défaussant des cartes',
+      'Payer ses actions, et savoir ce qu’on a le droit d’enchaîner dans un tour',
       'Se déplacer, explorer une salle, résoudre un jeton Exploration',
       'Le jet de bruit et les marqueurs Bruit',
       'Déclencher et résoudre une rencontre, subir une attaque-surprise',
       'Tirer, combattre au corps-à-corps, fuir',
       'Blessures légères et graves, cartes Contamination',
       'Les 5 étapes de la phase Événement et le sac Intrus',
+      'Fouiller, faire une action de salle, fabriquer, porter objets et corps',
+      'Les quatre moments spéciaux : première rencontre, premier mort, hibernation, point de non-retour',
+      'Les deux sorties : nacelle de secours et hibernation, et l’état du vaisseau',
       'Les deux conditions de victoire et le contrôle de fin de partie',
+      'Les 25 salles, les marqueurs, les objets et le résumé du livret, en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Le détail des 20 salles et de leurs actions (index p.24-26)',
-      'La fabrication d’objets et les objets de quête',
-      'La séquence d’autodestruction et les nacelles de secours',
-      'Les points faibles et l’analyse au laboratoire',
-      'Le mode coopératif, « jouer en tant qu’Intrus » et le plateau alternatif — le mode solo, lui, est couvert',
+      'Le mode coopératif et le mode « jouer en tant qu’Intrus » — décrits dans l’index de l’application',
+      'Le plateau alternatif du verso, prévu pour le jeu en campagne',
+      'Le texte des cartes Action, Objet, Événement et Blessure grave, qui se lit quand elles sortent',
     ],
   },
 
   /* ------------------------------------------------------------ matériel */
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Un joueur qui a suivi tout le tutoriel sait poser les tuiles et résoudre
+   * un tour. Ça ne lui dit toujours pas ce qu'il **doit faire** de sa partie.
+   * Ce bloc y répond en premier, et il reste consultable pendant le jeu.
+   */
+  brief: {
+    pitch: [
+      'Le Nemesis est un cargo spatial qui rentre vers la Terre. L’équipage fait le voyage en hypersommeil.',
+      'Réveil d’urgence en cours de route : le saut est interrompu, un membre d’équipage est mort dans son caisson, et quelque chose circule dans le vaisseau.',
+      'Personne ne sait dans quel état sont les moteurs, ni où le vaisseau se dirige vraiment. Tout se découvre en explorant, salle par salle.',
+    ],
+    win: [
+      'On gagne seul. Il faut DEUX choses, jamais une seule : remplir l’objectif secret gardé en main, ET être en vie à la fin de la partie.',
+      'Être en vie, c’est l’un de ces deux états, et aucun autre : dormir dans l’hibernatorium au moment où le vaisseau saute vers la bonne destination, ou s’être échappé à bord d’une nacelle de secours.',
+      'Mourir à bord, exploser avec le vaisseau, ou être encore debout au moment du saut : la partie est perdue, quel que soit l’objectif rempli.',
+      'Plusieurs joueurs peuvent gagner la même partie. Ou aucun. Ce que gagne un autre ne vous enlève rien — sauf si votre objectif dit précisément le contraire.',
+    ],
+    doing: [
+      'Votre carte Objectif donne la mission particulière : envoyer un signal, détruire le nid, découvrir un point faible, ramener le vaisseau sur Mars, être le seul survivant…',
+      'Tout le reste de ce que vous faites sert à une seule chose : rendre votre sortie possible. Deux moteurs en état, la bonne destination affichée, une nacelle déverrouillée, une contamination soignée.',
+      'Vous ne pourrez pas tout faire. Une partie tient en une douzaine de manches, et chaque manche ne rend que 5 cartes. La question de chaque tour est : qu’est-ce que j’abandonne ?',
+      'Il faut coopérer sans se faire confiance. À deux on abat un Intrus ; mais l’autre a un objectif que vous ne connaissez pas, et il peut avoir besoin que vous ne rentriez pas.',
+    ],
+    traps: [
+      'Rentrer vivant avec des cartes Contamination : le contrôle de fin de partie tue les contaminés APRÈS le retour. Se soigner fait partie du plan, pas des à-côtés.',
+      'Partir vers l’hibernatorium ou une nacelle à la dernière manche : le trajet coûte des tours qu’on n’a plus, et l’entrée demande un jet de bruit qui peut échouer.',
+      'Réparer les moteurs sans avoir consulté les coordonnées : un vaisseau en parfait état qui file vers Mars tue tous ceux qui dorment.',
+      'Compter sur le saut en hyperespace pour tuer les Intrus : il ne les tue pas. Un objectif « tuer la Reine » ou « détruire le nid » doit être rempli à la main, avant.',
+    ],
+    first: [
+      'Faire du bruit est le vrai danger, pas les Intrus. Chaque salle vide où vous entrez demande un jet de bruit ; deux marqueurs Bruit au même endroit déclenchent une rencontre.',
+      'Le Déplacement vigilant coûte 2 cartes au lieu d’1, mais il laisse choisir où le bruit se pose au lieu de le lancer. Sur les premières manches, c’est presque toujours le bon achat.',
+      'Restez à deux ou trois les premiers tours. Une salle occupée ne demande pas de jet de bruit quand on y entre, et un Intrus rencontré seul se termine mal.',
+      'Ouvrez tôt les salles utiles — génératrice, infirmerie, armurerie — et fouillez pendant que le vaisseau est calme. Les objets se trouvent avant d’en avoir besoin, jamais pendant.',
+      'Surveillez le nombre de marqueurs Feu et Panne posés : au neuvième, le vaisseau explose et la partie s’arrête pour tout le monde.',
+      'Décidez tôt par où vous sortez. La nacelle demande une section d’évacuation déverrouillée et libre d’Intrus ; l’hibernation ne s’ouvre qu’à partir de la case bleue de la piste temporelle.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  /**
+   * Aides de jeu : tout ce qu'on va chercher dans le livret en cours de
+   * partie. L'index des salles, les objets, les marqueurs, les moments
+   * spéciaux et le résumé de la dernière page y sont en entier.
+   */
+  aids: [
+    {
+      id: 'enjeu',
+      title: 'L’enjeu et la victoire',
+      lead: 'Ce que vous devez faire, et ce qui compte à la fin.',
+      icon: 'goal',
+      groups: [
+        {
+          title: 'Gagner',
+          entries: [
+            {
+              id: 'deux-conditions',
+              term: 'Les deux conditions',
+              body: [
+                'Remplir l’objectif de la carte que vous avez gardée après la première rencontre.',
+                'ET survivre : hiberner au moment du saut, ou partir en nacelle.',
+                'Une seule des deux ne vaut rien. Plusieurs joueurs peuvent gagner, ou aucun.',
+              ],
+              ref: 'Buts des joueurs — p.11',
+            },
+            {
+              id: 'survivre',
+              term: 'Survivre',
+              body: [
+                'Hibernation : être dans un compartiment quand le vaisseau saute, avec au moins 2 moteurs sur 3 opérationnels et la destination Terre.',
+                'Nacelle : avoir lancé une nacelle de secours. Tout personnage à bord d’une nacelle est considéré comme arrivé sur Terre.',
+              ],
+              warn: 'Un personnage encore debout dans le vaisseau au moment du saut est tué par l’accélération. Les Intrus, eux, ne le sont pas.',
+              ref: 'Buts des joueurs — p.11 · Nacelles de secours — p.26',
+            },
+            {
+              id: 'semi-coop',
+              term: 'Semi-coopératif',
+              aliases: ['Trahison', 'Coopérer'],
+              body: [
+                'Chacun a son objectif, et ne se soucie pas de la réussite des autres.',
+                'On ne peut pas attaquer directement un autre joueur.',
+                'Mais on peut l’enfermer dans une salle en feu, lancer l’autodestruction en le laissant à bord, ou jeter une grenade dans sa salle.',
+              ],
+              ref: 'Buts des joueurs — p.11 · Attaquer les joueurs — p.23',
+            },
+          ],
+        },
+        {
+          title: 'Les objectifs, et où trouver ce qu’ils demandent',
+          lead: 'Quel que soit l’objectif, il faut aussi survivre.',
+          entries: [
+            {
+              id: 'obj-signal',
+              term: 'Envoyer un signal',
+              body: [
+                'Aller au relais de transmission et faire son action de salle.',
+                'Il y a toujours un relais sur le plateau. Cherchez-le parmi les salles marquées « 1 ».',
+              ],
+              ref: 'Objectifs — p.12',
+            },
+            {
+              id: 'obj-terre',
+              term: 'Le vaisseau doit atteindre la Terre / Mars',
+              body: [
+                'Les coordonnées du cockpit doivent être correctes et au moins deux des trois moteurs opérationnels.',
+                'Se vérifie au cockpit (consulter, puis définir la destination) et dans les salles Moteur.',
+              ],
+              ref: 'Objectifs — p.12',
+            },
+            {
+              id: 'obj-point-faible',
+              term: 'Découvrir un point faible',
+              body: [
+                'Un membre de l’équipage — vous ou un autre — apporte un corps (œuf, cadavre ou carcasse) au laboratoire et fait l’action de la salle.',
+                'Si un point faible a été découvert avant la fin de la partie, l’objectif est rempli.',
+              ],
+              ref: 'Objectifs — p.12 · Cartes Point faible — p.21',
+            },
+            {
+              id: 'obj-nid',
+              term: 'Détruire le nid',
+              body: [
+                'Le nid est détruit lorsqu’il ne contient plus aucun œuf d’Intrus.',
+                'Il y a toujours un nid sur le plateau, parmi les salles marquées « 1 ».',
+              ],
+              ref: 'Objectifs — p.12 · Nid — p.24-25',
+            },
+            {
+              id: 'obj-seul',
+              term: 'Vous devez être le seul survivant',
+              body: ['Personne d’autre ne doit survivre à la partie.'],
+              ref: 'Objectifs — p.12',
+            },
+            {
+              id: 'obj-joueur-x',
+              term: 'Le joueur X ne doit pas survivre',
+              body: [
+                'Le joueur désigné ne doit pas être en vie au moment du contrôle d’objectif.',
+                'Vous n’avez pas à le tuer vous-même : il suffit qu’il ne rentre pas.',
+              ],
+              ref: 'Objectifs — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Bien jouer',
+          lead: 'Ces conseils ne sont pas dans le livret : ils viennent de parties et de guides en ligne.',
+          entries: [
+            {
+              id: 'conseil-bruit',
+              term: 'Le bruit avant les Intrus',
+              ext: true,
+              body: [
+                'Ce qui tue en début de partie, ce n’est pas un Intrus : c’est la vitesse à laquelle on en fait apparaître.',
+                'Le Déplacement vigilant coûte 2 cartes mais pose le marqueur Bruit où vous voulez, au lieu de le tirer au dé.',
+              ],
+            },
+            {
+              id: 'conseil-groupe',
+              term: 'Rester groupés au début',
+              ext: true,
+              body: [
+                'Entrer dans une salle déjà occupée ne demande pas de jet de bruit.',
+                'À deux, un Intrus se tue ; seul, il se fuit.',
+              ],
+              note: 'Le revers : certains événements font lancer un jet de bruit à chaque personnage d’une même salle.',
+            },
+            {
+              id: 'conseil-sortie',
+              term: 'Préparer la sortie tôt',
+              ext: true,
+              body: [
+                'Déverrouiller une nacelle, réparer un moteur, vérifier les coordonnées : ce sont des trajets, et les trajets prennent des manches.',
+                'Une équipe qui décide de sa sortie à la dernière manche ne sort pas.',
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'salles',
+      title: 'Index des salles',
+      lead: 'Les 25 salles du vaisseau et ce que chacune permet de faire.',
+      icon: 'rooms',
+      groups: [
+        {
+          title: 'Faire une action de salle',
+          entries: [
+            {
+              id: 'action-salle',
+              term: 'Action de salle',
+              cost: '2 cartes',
+              body: [
+                'Il faut être dans la salle qui correspond à l’action, sauf capacité spéciale qui dit le contraire.',
+                'Défaussez 2 cartes Action de votre main.',
+              ],
+              warn: 'Aucune action de salle n’est possible en combat, ni dans une salle qui porte un marqueur Panne.',
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'ordinateur',
+              term: 'Salle avec un ordinateur',
+              body: [
+                'Certaines salles portent une icône Ordinateur. Elle ne sert qu’à des cartes Action, Objet ou Événement qui la demandent.',
+                'Un marqueur Panne sur la salle met l’ordinateur hors service : jouez comme s’il n’y avait pas d’icône.',
+              ],
+              ref: 'Index des salles — p.24',
+            },
+          ],
+        },
+        {
+          title: 'Les 11 salles de base « 1 »',
+          lead: 'Marquées d’un « 1 » au dos de leur tuile. Elles sont dans toutes les parties.',
+          entries: [
+            {
+              id: 'armurerie',
+              term: 'Armurerie',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: ['Recharger votre arme énergétique : ajoutez 2 jetons Munition à une de vos armes énergétiques.'],
+              note: 'Ne recharge pas les armes classiques. Une arme ne dépasse jamais la capacité imprimée sur sa carte.',
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'bloc-operatoire',
+              term: 'Bloc opératoire',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Mener une procédure chirurgicale : scannez toutes vos cartes Contamination — pioche, main et défausse — et retirez toutes les cartes infectées.',
+                'Retirez aussi toute Larve de votre plateau.',
+                'Défaussez ensuite votre main, puis mélangez votre défausse avec votre pioche.',
+                'Vous subissez une blessure légère et vous passez automatiquement.',
+              ],
+              note: 'Votre main reste vide jusqu’au début de la manche suivante. C’est le seul nettoyage complet du jeu.',
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'depot',
+              term: 'Dépôt',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Fouiller le dépôt : piochez 2 cartes du paquet Objet de la couleur de votre choix — rouge, jaune ou vert.',
+                'Conservez 1 carte et remettez l’autre sous le paquet.',
+              ],
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'generatrice',
+              term: 'Génératrice',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Lancer ou arrêter la séquence d’autodestruction.',
+                'Au lancement, placez un marqueur standard sur la première case (verte) de la piste d’autodestruction.',
+                'Ensuite, chaque fois que le marqueur Temps avance, celui de l’autodestruction avance aussi.',
+                'À l’arrêt, retirez le marqueur. Une nouvelle séquence repartirait de la case verte.',
+              ],
+              warn: 'Impossible de lancer la séquence si un personnage est déjà en hibernation. Passé la case jaune, elle ne s’arrête plus. Un saut en hyperespace ne l’arrête pas non plus : le vaisseau explose quand même.',
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'infirmerie',
+              term: 'Infirmerie',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Traiter vos blessures. Au choix, une seule des trois :',
+                'panser toutes vos blessures graves ;',
+                'OU soigner une de vos blessures graves déjà pansée ;',
+                'OU soigner toutes vos blessures légères.',
+              ],
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'laboratoire',
+              term: 'Laboratoire',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Analyser 1 corps : il faut qu’un cadavre de personnage, une carcasse d’Intrus ou un œuf soit dans la salle — y compris porté par quelqu’un.',
+                'Découvrez la carte Point faible correspondante et révélez-la sur le plateau Intrus. Tout l’équipage en profite.',
+              ],
+              note: 'Le corps n’est pas défaussé après l’analyse. Vous pouvez le lâcher gratuitement si vous le voulez.',
+              ref: 'Index des salles — p.24 · Cartes Point faible — p.21',
+            },
+            {
+              id: 'nid',
+              term: 'Nid',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Prendre un œuf : prenez 1 jeton Œuf sur le plateau Intrus, puis faites un jet de bruit.',
+                'Le nid est détruit dès qu’il ne contient plus d’œufs : placez un marqueur Dégâts dessus.',
+              ],
+              warn: 'Prendre un œuf depuis le plateau Intrus coûte 2 actions ; ramasser un œuf déjà posé sur le plateau de jeu n’en coûte qu’une. Un œuf est un corps lourd : il occupe une main.',
+              note: 'On ne peut pas fouiller le nid. Un marqueur Feu dans une salle contenant des œufs non transportés en détruit un par phase Événement.',
+              ref: 'Index des salles — p.24',
+            },
+            {
+              id: 'detruire-oeufs',
+              term: 'Détruire des œufs',
+              body: [
+                'Dans une salle où se trouvent des œufs que personne ne porte, résolvez l’action comme un Tir ou un Corps-à-corps. Tout dégât détruit 1 œuf.',
+                'Une grenade détruit 2 œufs, un cocktail Molotov en détruit 1.',
+                'Chaque tentative demande un jet de bruit.',
+              ],
+              note: 'Sur un échec au corps-à-corps contre des œufs, pas de blessure et pas de carte Contamination à piocher.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'relais',
+              term: 'Relais de transmission',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Envoyer un signal : placez un marqueur standard sur la case Signal de votre plateau.',
+                'Cette salle ne sert à rien d’autre. Certains objectifs la demandent.',
+              ],
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'evac-a',
+              term: 'Section d’évacuation A',
+              aliases: ['Section d’évacuation B', 'Section d’évacuation'],
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Essayer d’entrer dans une nacelle : possible seulement si une nacelle de cette section est déverrouillée et a au moins une case libre.',
+                'Faites un jet de bruit. Si un Intrus apparaît dans la salle, l’action échoue.',
+                'Sinon, placez votre personnage sur une case libre d’une nacelle déverrouillée de la section. Chaque nacelle a 2 cases.',
+              ],
+              warn: 'Impossible d’entrer dans une nacelle si un Intrus est présent dans la section d’évacuation. La section B suit exactement les mêmes règles.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'anti-incendie',
+              term: 'Système anti-incendie',
+              tag: 'salle « 1 »',
+              cost: '2 cartes',
+              body: [
+                'Lancer la procédure anti-incendie : choisissez n’importe quelle salle du vaisseau.',
+                'Défaussez son marqueur Feu s’il y en a un.',
+                'Tous les Intrus de cette salle s’enfuient : piochez une carte Événement par Intrus pour connaître la direction.',
+              ],
+              note: 'La procédure marche même sans feu dans la salle visée : c’est un moyen de chasser des Intrus à distance.',
+              ref: 'Index des salles — p.25',
+            },
+          ],
+        },
+        {
+          title: 'Les 9 salles supplémentaires « 2 »',
+          lead: 'Marquées d’un « 2 » au dos. Seules 5 d’entre elles sont en jeu à chaque partie.',
+          entries: [
+            {
+              id: 'cabines',
+              term: 'Cabines',
+              tag: 'salle « 2 »',
+              cost: 'effet passif',
+              body: [
+                'Reprendre son souffle : si vous êtes dans cette salle au début d’une manche et qu’aucun Intrus ne s’y trouve, piochez une carte Action de plus — 6 au lieu de 5.',
+              ],
+              note: 'L’effet passif ne fonctionne pas si la salle porte un marqueur Panne.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'cantine',
+              term: 'Cantine',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: [
+                'Manger un morceau : soignez 1 blessure légère.',
+                'Vous pouvez au choix scanner toutes les cartes Contamination de votre main pour en retirer les cartes non infectées.',
+              ],
+              warn: 'Si au moins une carte scannée est infectée, placez une Larve sur votre plateau et gardez la carte. S’il y avait déjà une Larve, vous êtes tué et un Rôdeur apparaît dans votre salle.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'commandement',
+              term: 'Centrale de commandement',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: [
+                'Ouvrir ou fermer des portes : choisissez n’importe quelle salle, et ouvrez ou fermez une ou plusieurs portes des couloirs qui y mènent.',
+                'Vous choisissez lesquelles. Vous n’êtes pas obligé de toutes les actionner.',
+              ],
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'controle-nacelles',
+              term: 'Contrôle des nacelles',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: ['Verrouiller ou déverrouiller une nacelle : retournez un jeton Nacelle sur sa face verrouillée ou déverrouillée.'],
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'controle-sas',
+              term: 'Contrôle des sas',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: [
+                'Provoquer une dépressurisation : choisissez une autre salle jaune, dont aucun couloir n’a de porte détruite.',
+                'Fermez automatiquement la porte de chaque couloir relié à cette salle et posez-y le jeton Dépressurisation.',
+                'Si toutes ces portes sont encore fermées à la fin de la phase Joueur, tout ce qui se trouve dans la salle meurt — personnages et Intrus. Retirez ensuite le jeton.',
+              ],
+              warn: 'Si une de ces portes est rouverte pendant la phase Joueur, retirez le jeton : rien ne se passe. Une salle jaune est une salle dont le titre est sur fond jaune.',
+              note: 'Un marqueur Feu de la salle est retiré. Les cadavres, carcasses et corps lourds, eux, y restent.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'douches',
+              term: 'Douches',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: [
+                'Prendre une douche : défaussez le marqueur Slime de votre plateau si vous en avez un.',
+                'Vous pouvez au choix scanner toutes les cartes Contamination de votre main pour en retirer les cartes non infectées.',
+              ],
+              warn: 'Comme à la cantine : une carte infectée place une Larve sur votre plateau, une seconde Larve vous tue et fait apparaître un Rôdeur.',
+              note: 'Les douches peuvent prendre feu comme n’importe quelle salle, et s’y doucher ne l’éteint pas.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'salle-slime',
+              term: 'Salle de slime',
+              tag: 'salle « 2 »',
+              cost: 'effet passif',
+              body: ['En entrant dans cette salle, vous recevez automatiquement un marqueur Slime.'],
+              warn: 'Placez le marqueur Slime AVANT de résoudre l’effet du jeton Exploration.',
+              note: 'On ne peut pas fouiller cette salle.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'salle-machines',
+              term: 'Salle des machines',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: ['Vérifier l’état des moteurs : vous consultez l’état des 3 moteurs d’un coup.'],
+              warn: 'On ne peut pas modifier l’état des moteurs ici — seulement le lire. La vérification marche même si la salle d’un moteur porte un marqueur Panne.',
+              ref: 'Index des salles — p.25',
+            },
+            {
+              id: 'salle-video',
+              term: 'Salle vidéo',
+              tag: 'salle « 2 »',
+              cost: '2 cartes',
+              body: [
+                'Consultez secrètement une tuile Salle non explorée et son jeton Exploration, puis reposez-les.',
+                'Vous n’êtes pas obligé de dire la vérité sur ce que vous avez vu.',
+              ],
+              ref: 'Index des salles — p.25',
+            },
+          ],
+        },
+        {
+          title: 'Les 5 salles spéciales',
+          lead: 'Imprimées sur le plateau, toujours au même endroit. Explorées dès le début, et jamais fouillables.',
+          entries: [
+            {
+              id: 'cockpit',
+              term: 'Cockpit',
+              tag: 'salle spéciale',
+              cost: '2 cartes',
+              body: [
+                'Contrôles de vol : consulter les coordonnées OU définir une destination. Une seule des deux.',
+                'Consulter : regardez secrètement la carte Coordonnées et reposez-la. Vous n’êtes pas obligé de dire la vérité, mais vous devez vous en souvenir.',
+                'Définir : déplacez le marqueur Destination sur la case de votre choix.',
+              ],
+              warn: 'Impossible de définir une destination si un Intrus est dans le cockpit, ou si un personnage est déjà en hibernation.',
+              note: 'En fin de partie, si le vaisseau n’a pas explosé, la carte Coordonnées est révélée : la position du marqueur donne la destination réelle.',
+              ref: 'Index des salles — p.26',
+            },
+            {
+              id: 'hibernatorium',
+              term: 'Hibernatorium',
+              tag: 'salle spéciale',
+              cost: '2 cartes',
+              body: [
+                'Entrer en hibernation : possible uniquement quand le marqueur Temps est sur une case bleue.',
+                'Faites un jet de bruit. Si un Intrus apparaît, l’action échoue.',
+                'Sinon, retirez votre figurine du jeu : vous ne jouez plus. La fin de partie dira si vous survivez.',
+              ],
+              warn: 'Une fois quelqu’un en hibernation, plus personne ne peut changer la destination du vaisseau ni lancer l’autodestruction. Et on n’entre jamais si un Intrus est dans l’hibernatorium.',
+              ref: 'Index des salles — p.26',
+            },
+            {
+              id: 'moteur',
+              term: 'Moteur n° 1, 2 et 3',
+              aliases: ['Moteurs'],
+              tag: 'salle spéciale',
+              cost: '2 cartes',
+              body: [
+                'Vérifier le moteur : regardez secrètement la tuile Moteur du dessus de cette salle. Vous n’êtes pas obligé de dire la vérité.',
+                'Réparer ou casser le moteur : avec une action Réparations ou l’objet Outils, prenez les deux tuiles Moteur, consultez-les et reposez-les dans l’ordre de votre choix.',
+              ],
+              warn: 'Si vous avez changé l’ordre des tuiles, vous devez le dire aux autres — mais pas si vous avez réparé ou cassé. Réparer/casser marche même avec un marqueur Panne sur la salle.',
+              note: 'Le vaisseau a 3 moteurs, dont 2 doivent être opérationnels pour rentrer. Personne ne connaît leur état au début.',
+              ref: 'Index des salles — p.26',
+            },
+            {
+              id: 'nacelles-secours',
+              term: 'Nacelles de secours',
+              tag: 'sortie',
+              body: [
+                'Toutes verrouillées au début. On les déverrouille avec une carte Objet ou l’action Contrôle des nacelles.',
+                'Elles se déverrouillent toutes seules à la première mort de personnage, ou quand le marqueur d’autodestruction atteint une case jaune.',
+                'Une fois à bord, vous pouvez partir tout de suite ou attendre un second passager.',
+                'Au lancement, retirez votre figurine et la nacelle du jeu : vous êtes considéré comme arrivé sur Terre.',
+              ],
+              warn: 'Si vous attendez, vous ne pouvez lancer qu’au début de votre premier tour de la phase Joueur. Sinon, il faut passer ou ressortir. Un Intrus dans la section d’évacuation vous fait ressortir de force.',
+              note: 'Les corps lourds ne prennent pas de place dans une nacelle. Un autre passager peut décider de lancer immédiatement.',
+              ref: 'Nacelles de secours — p.26',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'objets',
+      title: 'Objets et corps',
+      lead: 'Trouver, fabriquer, porter. Et ce que sont les corps.',
+      icon: 'items',
+      groups: [
+        {
+          title: 'Trouver des objets',
+          entries: [
+            {
+              id: 'couleurs-objets',
+              term: 'Les quatre couleurs d’objets',
+              body: [
+                'Rouge : militaire. Jaune : technique. Vert : médical. Bleu : fabriqué.',
+                'Les rouges, jaunes et verts se trouvent dans les salles avec l’action Fouille.',
+                'Les bleus ne se trouvent jamais : ils s’assemblent.',
+              ],
+              ref: 'Objets et corps — p.23',
+            },
+            {
+              id: 'fouille',
+              term: 'Fouille',
+              cost: '1 carte',
+              body: [
+                'Action de base. Piochez 2 objets, gardez-en 1.',
+                'Vous ne piochez que dans la couleur de la salle. Dans une salle blanche, vous choisissez la pioche.',
+                'La couleur d’une salle se lit au fond coloré sous son nom et son texte de règle.',
+              ],
+              warn: 'Chaque fouille fait baisser le compteur d’objets de la salle de 1. À 0, la salle ne se fouille plus.',
+              note: 'Le nid, la salle de slime, le cockpit, l’hibernatorium et les salles Moteur ne se fouillent jamais.',
+              ref: 'Objets et corps — p.23',
+            },
+            {
+              id: 'fabriquer',
+              term: 'Fabriquer un objet',
+              cost: '1 carte',
+              body: [
+                'Action de base. Les objets bleus ont 2 icônes grises : ce sont les composants demandés.',
+                'Défaussez 2 cartes Objet portant les icônes bleues correspondantes. Chaque carte fournit une icône.',
+                'Quatre recettes : Antidote, Taser, Lance-flammes, Cocktail Molotov.',
+              ],
+              warn: 'Impossible de fabriquer si la carte bleue n’est plus disponible, même avec les bons composants.',
+              note: 'Le paquet des objets fabriqués se consulte librement, à tout moment. Ces cartes ne se piochent jamais.',
+              ref: 'Objets et corps — p.23',
+            },
+            {
+              id: 'objets-quete',
+              term: 'Objets de quête',
+              cost: '1 carte pour activer',
+              body: [
+                'Vous en avez 2 au début de la partie, posées face cachée à l’horizontale : ce sont des quêtes, pas encore des objets.',
+                'Chacune a une condition d’activation, écrite du côté horizontal.',
+                'Activer un objet de quête est une action de base. Retournez alors la carte : c’est un objet ordinaire.',
+              ],
+              ref: 'Objets et corps — pp.22-23',
+            },
+          ],
+        },
+        {
+          title: 'Porter des objets',
+          entries: [
+            {
+              id: 'inventaire',
+              term: 'Inventaire',
+              body: [
+                'Les objets normaux se rangent dans le porte-cartes : les autres n’en voient que le dos, donc la couleur, pas la nature.',
+                'Vous pouvez en mettre autant que vous voulez.',
+                'Quand vous jouez une carte Objet, vous devez la montrer.',
+              ],
+              ref: 'Objets et corps — p.22',
+            },
+            {
+              id: 'objets-lourds',
+              term: 'Objets lourds',
+              body: [
+                'Marqués d’une icône de main. Ils ne se cachent pas et ne vont pas dans l’inventaire.',
+                'Chaque personnage a deux mains : deux objets ou corps lourds au maximum.',
+                'Pour en prendre un troisième, il faut d’abord en lâcher un.',
+              ],
+              note: 'Le ruban adhésif combine 2 objets lourds en une seule main, mais jamais 2 corps lourds.',
+              ref: 'Objets et corps — p.22 · Résumé — p.28',
+            },
+            {
+              id: 'corps',
+              term: 'Corps',
+              aliases: ['Corps lourds', 'Cadavre', 'Carcasse'],
+              body: [
+                'Trois sortes, toutes des jetons : œuf d’Intrus, cadavre de personnage, carcasse d’Intrus.',
+                'Ils occupent une main, comme un objet lourd.',
+                'Ils servent à découvrir les points faibles au laboratoire.',
+              ],
+              note: 'Une carcasse apparaît quand vous tuez un Intrus — sauf une Larve. Un cadavre apparaît quand un personnage meurt.',
+              ref: 'Objets et corps — p.22 · Résumé — p.28',
+            },
+            {
+              id: 'lacher',
+              term: 'Lâcher un objet ou un corps',
+              cost: 'gratuit',
+              body: [
+                'À tout moment de votre tour, autant que vous voulez. Depuis vos mains comme depuis l’inventaire.',
+                'Un corps lâché reste dans la salle.',
+                'Un objet lâché est perdu : remettez-le face cachée sous sa pioche.',
+              ],
+              ref: 'Objets et corps — p.22',
+            },
+            {
+              id: 'armes-munitions',
+              term: 'Munitions',
+              body: [
+                'Une arme trouvée en fouillant reçoit immédiatement 1 marqueur Munition.',
+                'Une arme ne dépasse jamais la capacité imprimée sur sa carte.',
+                'Les armes énergétiques se rechargent à l’armurerie ; les classiques, non.',
+              ],
+              ref: 'Objets et corps — p.22 · Index des salles — p.24',
+            },
+            {
+              id: 'usage-unique',
+              term: 'Usage unique',
+              body: [
+                'Certains objets se défaussent après avoir été joués. C’est écrit sur la carte.',
+                'Un objet défaussé après usage part face visible dans la défausse.',
+                'Un objet défaussé sans être utilisé — une fouille, par exemple — retourne face cachée sous sa pioche.',
+              ],
+              ref: 'Objets et corps — p.22',
+            },
+          ],
+        },
+        {
+          title: 'Points faibles',
+          entries: [
+            {
+              id: 'points-faibles',
+              term: 'Cartes Point faible',
+              body: [
+                'Trois cartes posées face cachée sur le plateau Intrus à la mise en place, une par sorte de corps : cadavre de personnage, œuf, carcasse.',
+                'Pour en découvrir une, il faut apporter le corps correspondant au laboratoire et faire l’action de la salle.',
+                'La carte révélée modifie les règles des Intrus en votre faveur, et profite à tout l’équipage.',
+              ],
+              ref: 'Cartes Point faible — p.21',
+            },
+          ],
+        },
+        {
+          title: 'Et les autres joueurs',
+          entries: [
+            {
+              id: 'attaquer-joueurs',
+              term: 'Attaquer un autre joueur',
+              body: [
+                'Impossible directement : les implants de l’équipage bloquent toute violence entre humains.',
+                'Mais les dégâts collatéraux sont permis, délibérés ou non.',
+                'Isoler quelqu’un dans une salle en feu, lancer l’autodestruction en le laissant à bord, jeter une grenade dans sa salle pendant qu’il combat.',
+              ],
+              ref: 'Attaquer les joueurs — p.23',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'marqueurs',
+      title: 'Marqueurs, portes et conduits',
+      lead: 'Feu, panne, slime, bruit, portes : ce que chaque pion fait au vaisseau.',
+      icon: 'markers',
+      groups: [
+        {
+          title: 'Marqueurs',
+          entries: [
+            {
+              id: 'marqueur-feu',
+              term: 'Marqueur Feu',
+              tint: '#f97316',
+              body: [
+                'Terminer votre tour dans une salle en feu vous inflige 1 blessure légère.',
+                'Pendant la phase Événement, tout Intrus dans une salle en feu subit 1 dégât.',
+                'Il y a 8 marqueurs Feu. S’il faut en poser un neuvième, le vaisseau explose et la partie s’arrête.',
+              ],
+              warn: 'La blessure tombe à la fin de votre tour, pas en entrant. Un tour, c’est 2 actions — ou une action puis « je passe », ou juste « je passe ».',
+              note: 'Une salle ne porte jamais plus d’un marqueur Feu. On peut faire l’action de la salle, et la fouiller, même en feu.',
+              ref: 'Marqueur Feu — p.17',
+            },
+            {
+              id: 'marqueur-panne',
+              term: 'Marqueur Panne',
+              tint: '#94a3b8',
+              body: [
+                'L’action de la salle n’est plus disponible. La Fouille, elle, marche toujours.',
+                'Il y a 8 marqueurs Panne. S’il faut en poser un neuvième, le vaisseau explose et la partie s’arrête.',
+                'Plusieurs cartes Action — Réparations — et objets — Outils — permettent d’en défausser un.',
+              ],
+              warn: 'Le nid et la salle de slime ne peuvent pas recevoir de marqueur Panne.',
+              note: 'Une panne sur une salle d’ordinateur met l’ordinateur hors service. Une panne sur une salle Moteur ne change rien à l’état du moteur. Une panne sur l’hibernatorium n’affecte pas ceux qui dorment déjà.',
+              ref: 'Marqueur Panne — p.17',
+            },
+            {
+              id: 'marqueur-slime',
+              term: 'Marqueur Slime',
+              tint: '#84cc16',
+              body: [
+                'Tant que vous l’avez, tout résultat « Silence » — au dé de bruit comme sur un jeton Exploration — compte comme un « Danger ».',
+                'Un seul à la fois : un deuxième ne fait rien.',
+                'On s’en débarrasse avec la carte Vêtements, ou à la douche.',
+              ],
+              ref: 'Marqueur Slime — p.17',
+            },
+            {
+              id: 'marqueur-bruit',
+              term: 'Marqueur Bruit',
+              tint: '#facc15',
+              body: ['Il ne fait rien par lui-même : il marque le couloir où le bruit a eu lieu, pour les jets de bruit suivants.'],
+              ref: 'Marqueur Bruit — p.17',
+            },
+          ],
+        },
+        {
+          title: 'Portes',
+          entries: [
+            {
+              id: 'porte-ouverte',
+              term: 'Porte ouverte',
+              body: [
+                'Aucun pion sur le couloir. Au début de la partie, toutes les portes sont ouvertes.',
+              ],
+              ref: 'Pions Porte — p.17',
+            },
+            {
+              id: 'porte-fermee',
+              term: 'Porte fermée',
+              body: [
+                'Pion Porte debout sur le couloir. Personnages et Intrus ne peuvent plus l’emprunter, ni y lancer de grenade.',
+                'Un Intrus qui doit passer par un couloir fermé ne bouge pas : il détruit la porte.',
+              ],
+              note: 'Si plusieurs Intrus partent de la même salle, ils détruisent tous la porte mais restent tous sur place.',
+              ref: 'Pions Porte — p.17',
+            },
+            {
+              id: 'porte-detruite',
+              term: 'Porte détruite',
+              body: [
+                'Pion Porte couché sur le couloir. Le passage est de nouveau libre.',
+                'Une porte détruite ne se referme plus.',
+              ],
+              note: 'La torche plasma du Mécano est la seule exception.',
+              ref: 'Pions Porte — p.17',
+            },
+            {
+              id: 'portes-regles',
+              term: 'Règles générales des portes',
+              body: [
+                'Un pion Porte ne se pose que dans un couloir, jamais dans un conduit. Un couloir n’en accueille qu’un.',
+                'Les portes n’affectent pas les jets de bruit, et sont ignorées quand on résout une rencontre.',
+                'S’il faut poser une porte et qu’il n’en reste plus, prenez-en une sur le plateau — pas une détruite.',
+              ],
+              ref: 'Pions Porte — p.17',
+            },
+          ],
+        },
+        {
+          title: 'Conduits',
+          entries: [
+            {
+              id: 'conduits',
+              term: 'Conduits',
+              body: [
+                'Le réseau de ventilation. Les Intrus l’empruntent, les personnages jamais.',
+                'À part cette interdiction de passage, un conduit se traite comme un couloir.',
+                'Un Intrus qui se déplace vers un conduit disparaît : défaussez ses marqueurs Dégâts, remettez son jeton dans le sac, retirez la figurine.',
+              ],
+              warn: 'Un marqueur Bruit qui devrait aller sur un conduit se pose sur l’icône générique des conduits du plateau. Cette icône n’en porte jamais deux : s’il y en a déjà un, résolvez une rencontre à la place.',
+              note: 'La carte Conduits de ventilation du Mécano et la carte Plans des conduits sont les seules exceptions à l’interdiction de passage.',
+              ref: 'Conduits — p.16',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'moments',
+      title: 'Moments spéciaux et fin de partie',
+      lead: 'Les quatre bascules de la partie, et comment elle s’arrête.',
+      icon: 'moments',
+      groups: [
+        {
+          title: 'Les moments spéciaux du jeu',
+          lead: 'Ils ne dépendent pas de la manche : ils se déclenchent quand leur condition arrive.',
+          entries: [
+            {
+              id: 'premiere-rencontre',
+              term: 'Première rencontre',
+              body: [
+                'Se déclenche à l’arrivée de la première figurine d’Intrus sur le plateau, quel que soit son type.',
+                'Chaque joueur choisit immédiatement l’une de ses deux cartes Objectif. L’autre est retirée du jeu, face cachée.',
+                'Puis on résout normalement la rencontre qui a déclenché tout ça.',
+              ],
+              warn: 'À partir de là, chacun n’a plus qu’un objectif, et le cache. Personne n’a le droit de consulter les objectifs défaussés par les autres.',
+              note: 'Les œufs ne sont pas des Intrus : un œuf ne déclenche pas la première rencontre.',
+              ref: 'Moments spéciaux — p.12',
+            },
+            {
+              id: 'premier-mort',
+              term: 'Premier personnage tué',
+              body: [
+                'L’IA du vaisseau lance les procédures d’urgence.',
+                'Toutes les nacelles se déverrouillent automatiquement : retournez-les face « déverrouillé ».',
+              ],
+              note: 'Elles pourront être reverrouillées plus tard, par exemple depuis la salle de contrôle des nacelles. Le premier personnage mort peut, en option, continuer à jouer en tant qu’Intrus.',
+              ref: 'Moments spéciaux — p.12',
+            },
+            {
+              id: 'compartiments',
+              term: 'Ouverture des compartiments d’hibernation',
+              body: [
+                'Se déclenche quand le marqueur Temps atteint une case bleue de la piste temporelle.',
+                'Avant cette case, on ne peut pas entrer en hibernation.',
+              ],
+              ref: 'Moments spéciaux — p.12',
+            },
+            {
+              id: 'point-non-retour',
+              term: 'Point de non-retour',
+              body: [
+                'Se déclenche quand le marqueur d’autodestruction atteint une case jaune.',
+                'Toutes les nacelles se déverrouillent automatiquement.',
+                'La séquence d’autodestruction ne peut plus être arrêtée.',
+              ],
+              ref: 'Moments spéciaux — p.12',
+            },
+          ],
+        },
+        {
+          title: 'La partie s’arrête',
+          lead: 'Dès qu’une de ces trois situations arrive.',
+          entries: [
+            {
+              id: 'fin-temps',
+              term: 'Le marqueur Temps atteint la dernière case',
+              body: [
+                'Le vaisseau saute en hyperespace.',
+                'Tous les personnages qui ne sont pas en hibernation sont tués par l’accélération.',
+              ],
+              warn: 'Les Intrus ne sont pas tués par l’accélération. Un objectif « tuer la Reine », « tuer un Hybride » ou « détruire le nid » est un échec s’il comptait sur le saut.',
+              ref: 'Fin de la partie — p.11',
+            },
+            {
+              id: 'fin-explosion',
+              term: 'Le vaisseau explose',
+              body: [
+                'Soit le marqueur d’autodestruction atteint la dernière case de sa piste.',
+                'Soit il faut poser un 9e marqueur Feu ou un 9e marqueur Panne.',
+                'Tout ce qui est à bord est tué : personnages actifs et en hibernation, Intrus, nid.',
+              ],
+              note: 'Que tout soit détruit peut justement être ce que demande un objectif.',
+              ref: 'Fin de la partie — p.11',
+            },
+            {
+              id: 'fin-vide',
+              term: 'Plus personne à bord',
+              body: [
+                'Le dernier joueur en vie et non hibernant meurt, hiberne, ou part en nacelle.',
+                'Si l’autodestruction est active, poussez son marqueur sur la dernière case et résolvez-la.',
+                'Sinon, poussez le marqueur Temps sur la dernière case de la piste temporelle et résolvez-la.',
+              ],
+              ref: 'Fin de la partie — p.11',
+            },
+          ],
+        },
+        {
+          title: 'Contrôle de victoire, dans l’ordre',
+          lead: 'On y passe s’il reste au moins 1 personnage survivant, en hibernation ou en nacelle.',
+          entries: [
+            {
+              id: 'cv-moteurs',
+              term: '1. Contrôle des moteurs',
+              body: [
+                'Si le vaisseau n’a pas explosé, révélez la tuile du dessus de chacun des trois moteurs.',
+                '2 ou 3 moteurs endommagés : le vaisseau explose, tout ce qui est à bord est tué.',
+              ],
+              note: 'Un marqueur Panne sur un moteur bloque seulement l’action de la salle. Il ne rend pas le moteur endommagé.',
+              ref: 'Contrôle de victoire — p.11',
+            },
+            {
+              id: 'cv-coordonnees',
+              term: '2. Contrôle des coordonnées',
+              body: [
+                'Révélez la carte Coordonnées. Le marqueur Destination indique où le vaisseau va.',
+                'Si ce n’est pas la Terre, tous les personnages de l’hibernatorium meurent.',
+              ],
+              warn: 'Seul l’objectif Quarantaine, qui demande Mars, échappe à cette règle. Les Intrus ne sont pas affectés, et le vaisseau survit même si l’équipage meurt.',
+              ref: 'Contrôle de victoire — p.11',
+            },
+            {
+              id: 'cv-contamination',
+              term: '3. Contrôle de contamination',
+              body: [
+                'Chaque survivant scanne les cartes Contamination de sa pioche, de sa défausse et de sa main.',
+                'S’il y a au moins 1 carte infectée : mélangez toutes vos cartes — Action et Contamination — et piochez les 4 premières.',
+                'S’il y a au moins 1 carte Contamination parmi ces quatre, infectée ou non, le personnage est tué.',
+              ],
+              warn: 'Un personnage qui a une Larve sur son plateau ne fait que la seconde étape : il pioche directement les 4 cartes.',
+              ref: 'Contrôle de victoire — p.11 · Contamination — p.20',
+            },
+            {
+              id: 'cv-objectif',
+              term: '4. Contrôle d’objectif',
+              body: [
+                'Les personnages encore en vie révèlent l’objectif qu’ils avaient gardé.',
+                'Objectif rempli : la partie est gagnée.',
+              ],
+              ref: 'Contrôle de victoire — p.11',
+            },
+            {
+              id: 'finir-avant',
+              term: 'Terminer avant les autres',
+              body: [
+                'Un personnage qui part en nacelle, hiberne ou meurt ne joue plus : il regarde la fin de la partie.',
+                'Son sort ne se décide qu’au contrôle de victoire, avec celui des autres.',
+              ],
+              ref: 'Terminer la partie avant les autres joueurs — p.11',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'resume',
+      title: 'Résumé des règles',
+      lead: 'Le rappel de la dernière page du livret, par catégorie.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Séquence d’une manche',
+          entries: [
+            {
+              id: 'res-joueur',
+              term: 'I. Phase Joueur',
+              body: [
+                '1. Piochez de manière à avoir 5 cartes Action.',
+                '2. Le jeton Premier joueur passe au joueur de gauche.',
+                '3. Tour d’actions. Dans le sens horaire, chaque joueur peut : faire 2 actions ; OU faire 1 action et passer ; OU passer.',
+                'Répétez les tours jusqu’à ce que tous les joueurs aient passé.',
+              ],
+              warn: 'Après avoir passé, un joueur ne participe plus aux tours suivants de cette manche.',
+              ref: 'Résumé des règles — p.28',
+            },
+            {
+              id: 'res-evenement',
+              term: 'II. Phase Événement',
+              body: [
+                '4. Avancez le marqueur de la piste temporelle d’un cran, et celui de l’autodestruction si elle est active.',
+                '5. Attaque des Intrus.',
+                '6. Dégâts du feu.',
+                '7. Résolvez 1 carte Événement : déplacement des Intrus, puis effet de l’événement.',
+                '8. Sac Intrus : piochez 1 jeton et résolvez ses effets.',
+              ],
+              ref: 'Résumé des règles — p.28',
+            },
+          ],
+        },
+        {
+          title: 'Actions',
+          lead: 'Les cartes Contamination ne paient jamais le coût d’une action.',
+          entries: [
+            {
+              id: 'res-base',
+              term: 'Actions de base',
+              cost: '1 carte',
+              body: [
+                'Défaussez 1 carte Action de votre main.',
+                'Déplacement, Déplacement vigilant, Tir, Corps-à-corps, Ramasser un corps lourd, Échanger, Fabriquer un objet, Fouille.',
+              ],
+              warn: 'Le Déplacement vigilant coûte 2 cartes, pas 1.',
+              ref: 'Résumé des règles — p.28 · Actions — p.13',
+            },
+            {
+              id: 'res-cartes',
+              term: 'Actions des cartes Action',
+              body: [
+                'Défaussez la carte de l’action voulue, PLUS le nombre de cartes indiqué dans son icône.',
+                'Le coût est donc toujours en plus de la carte jouée.',
+              ],
+              note: 'Une carte partagée en deux sections séparées par « OU » laisse choisir l’un des deux effets.',
+              ref: 'Résumé des règles — p.28 · Actions — p.13',
+            },
+            {
+              id: 'res-salle',
+              term: 'Actions de salle',
+              cost: '2 cartes',
+              body: ['Défaussez 2 cartes Action. Impossible s’il y a un marqueur Panne sur la salle.'],
+              ref: 'Résumé des règles — p.28',
+            },
+            {
+              id: 'res-objet',
+              term: 'Actions d’objet',
+              body: [
+                'Défaussez le nombre de cartes Action indiqué sur la carte Objet.',
+                'Les objets à usage unique se défaussent après utilisation.',
+              ],
+              ref: 'Résumé des règles — p.28',
+            },
+            {
+              id: 'combat-hors-combat',
+              term: 'En combat / hors combat',
+              body: [
+                'Un symbole d’arme sur fond clair : cette action ne peut être faite QU’EN combat.',
+                'Le même symbole barré de rouge : cette action ne peut PAS être faite en combat.',
+                'Sans symbole, aucune restriction.',
+              ],
+              warn: 'Vous êtes en combat dès qu’un Intrus est dans votre salle. Les œufs ne sont pas des Intrus.',
+              ref: 'Actions — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Exploration',
+          entries: [
+            {
+              id: 'res-exploration',
+              term: 'Entrer dans une salle inexplorée',
+              body: [
+                '1. Révélez la tuile Salle.',
+                '2. Révélez son jeton Exploration et résolvez ses effets. Certains annulent l’étape 3.',
+                '3. Résolvez un jet de bruit s’il n’y a personne dans la salle.',
+              ],
+              note: 'Le chiffre du jeton Exploration règle le compteur d’objets de la salle : faites pivoter la tuile pour l’aligner sur la flèche rouge. Pas pour le nid ni la salle de slime.',
+              ref: 'Résumé des règles — p.28 · Déplacement — p.14',
+            },
+            {
+              id: 'res-salle-occupee',
+              term: 'Entrer dans une salle occupée',
+              body: [
+                'Un personnage ou un Intrus déjà dans la salle : pas de jet de bruit en entrant.',
+                'Une salle vide, explorée ou non : jet de bruit.',
+              ],
+              note: 'Les effets d’un déplacement dans un couloir se résolvent après être entré dans la salle.',
+              ref: 'Déplacement — p.14',
+            },
+          ],
+        },
+        {
+          title: 'Combat',
+          lead: 'Vous êtes en combat dès que vous êtes dans une salle avec un Intrus.',
+          entries: [
+            {
+              id: 'res-tir',
+              term: 'Tir',
+              cost: '1 carte',
+              body: [
+                '1. Choisissez votre arme et votre cible.',
+                '2. Défaussez 1 munition de votre arme.',
+                '3. Lancez un dé de combat. Touché : posez un marqueur Dégâts sur l’Intrus, puis tirez une carte Attaque d’Intrus pour vérifier les dégâts.',
+              ],
+              ref: 'Résumé des règles — p.28 · Combat — p.18',
+            },
+            {
+              id: 'res-cac',
+              term: 'Corps-à-corps',
+              cost: '1 carte',
+              body: [
+                '1. Piochez 1 carte Contamination.',
+                '2. Choisissez votre cible.',
+                '3. Lancez un dé de combat — un résultat double compte comme simple. Touché : marqueur Dégâts, puis carte Attaque d’Intrus.',
+              ],
+              warn: 'Si vous manquez votre attaque au corps-à-corps, vous subissez 1 blessure grave.',
+              ref: 'Résumé des règles — p.28 · Combat — p.18',
+            },
+            {
+              id: 'res-fuite',
+              term: 'Fuite',
+              cost: '1 carte',
+              body: [
+                '1. Choisissez une salle adjacente.',
+                '2. Piochez une carte Attaque d’Intrus et résolvez-la.',
+                'Tué : posez un jeton Cadavre de personnage dans votre salle. Survivant : résolvez le déplacement normalement — exploration, jet de bruit, etc.',
+              ],
+              note: 'Quitter par un déplacement une salle où se trouve un Intrus est toujours une Fuite.',
+              ref: 'Résumé des règles — p.28 · Combat — pp.18-19',
+            },
+            {
+              id: 'res-attaque-intrus',
+              term: 'Attaque d’Intrus',
+              body: [
+                '1. L’Intrus choisit le personnage ciblé : celui qui a le moins de cartes en main.',
+                '2. Piochez une carte Attaque d’Intrus. Si un des symboles d’Intrus de la carte correspond au type de l’attaquant, l’attaque est portée : résolvez l’effet.',
+                'Si aucun symbole ne correspond, l’attaque est manquée.',
+              ],
+              ref: 'Résumé des règles — p.28',
+            },
+          ],
+        },
+        {
+          title: 'Blessures',
+          entries: [
+            {
+              id: 'blessure-legere',
+              term: 'Blessure légère',
+              body: [
+                'Posez le marqueur Blessure sur la case du haut de votre piste de blessures.',
+                'S’il y est déjà, descendez-le d’un cran.',
+                'Arrivé sur la case Blessure grave : défaussez le marqueur et subissez une blessure grave.',
+              ],
+              ref: 'Blessures — p.21',
+            },
+            {
+              id: 'blessure-grave',
+              term: 'Blessure grave',
+              body: [
+                'Piochez 1 carte Blessure grave et posez-la à côté de votre plateau. Son effet vous suit en permanence.',
+                'À 3 blessures graves, la moindre blessure supplémentaire — légère ou grave — vous tue.',
+              ],
+              note: 'Deux blessures graves identiques ne cumulent pas leurs effets, mais mettent plus longtemps à disparaître.',
+              ref: 'Blessures — p.21',
+            },
+            {
+              id: 'panser-soigner',
+              term: 'Panser et soigner',
+              body: [
+                'Panser une blessure grave : retournez la carte face cachée. Son effet est ignoré, mais elle compte toujours dans la limite de 3.',
+                'Soigner une blessure légère : remontez le marqueur d’un cran, ou retirez-le s’il est déjà en haut.',
+                'Soigner une blessure grave pansée : défaussez la carte.',
+              ],
+              note: 'Se fait avec des vêtements, des pansements, un medikit, ou l’action de l’infirmerie.',
+              ref: 'Blessures — p.21',
+            },
+            {
+              id: 'mort',
+              term: 'Mort d’un personnage',
+              body: [
+                'Retirez la figurine et posez à sa place un jeton Cadavre de personnage : c’est un corps.',
+                'Vous lâchez tous les corps lourds que vous portiez, dans la salle.',
+                'Le reste de vos objets retourne face cachée dans la boîte.',
+              ],
+              ref: 'Blessures et mort — p.21',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  /**
+   * Entrées d'index écrites à la main.
+   *
+   * L'index est surtout calculé : chaque entrée d'aide de jeu, chaque
+   * composant et chaque variante de composant y entrent tout seuls. On
+   * n'écrit ici que les termes qui n'ont de fiche nulle part, et les
+   * renvois d'un mot d'usage vers le mot du livret.
+   */
+  index: [
+    {
+      term: 'Adjacence',
+      aliases: ['Salle adjacente'],
+      body: [
+        'Deux salles sont adjacentes si un couloir les relie directement.',
+        'Une porte fermée sur ce couloir rompt l’adjacence pour le déplacement des personnages.',
+      ],
+      ref: 'Action de déplacement — p.14',
+    },
+    {
+      term: 'Compteur d’objets',
+      body: [
+        'Le chiffre en face de la flèche rouge de la tuile Salle : combien d’objets la salle peut encore donner.',
+        'Il se règle sur le chiffre du jeton Exploration à la découverte, et baisse de 1 à chaque fouille.',
+        'À 0, la salle ne se fouille plus.',
+      ],
+      ref: 'Jetons Exploration — p.14',
+    },
+    {
+      term: 'Défausse',
+      body: [
+        'Vos cartes Action jouées ou payées y vont, face visible.',
+        'Quand votre pioche est vide et qu’il faut piocher, mélangez la défausse pour en refaire une pioche.',
+      ],
+      ref: 'Phase Joueur — p.10',
+    },
+    {
+      term: 'Déplacement vigilant',
+      body: [
+        'Action de base à 2 cartes au lieu d’1.',
+        'Vous placez le marqueur Bruit dans le couloir de votre choix au lieu de lancer le dé de bruit.',
+      ],
+      ref: 'Actions de base — p.13',
+    },
+    {
+      term: 'Échanger',
+      body: [
+        'Action de base à 1 carte : donner ou échanger des objets avec un personnage de votre salle.',
+      ],
+      ref: 'Actions de base — p.13',
+    },
+    {
+      term: 'Jet de bruit',
+      body: [
+        'Lancez le dé de bruit et appliquez le résultat au couloir désigné.',
+        'On en fait un en entrant dans une salle vide, et à chaque fois qu’une règle le demande.',
+        'Un marqueur Bruit posé sur un couloir qui en porte déjà un déclenche une rencontre.',
+      ],
+      ref: 'Jets de bruit — p.15',
+    },
+    {
+      term: 'Manche',
+      aliases: ['Tour de jeu'],
+      body: [
+        'Une manche = une phase Joueur suivie d’une phase Événement.',
+        'La phase Joueur enchaîne des tours de 2 actions jusqu’à ce que tous aient passé.',
+      ],
+      ref: 'Comment jouer — p.10',
+    },
+    {
+      term: 'Passer',
+      body: [
+        'Passer met fin à votre participation pour toute la phase Joueur en cours : vous ne rejouez plus avant la manche suivante.',
+        'En passant, vous pouvez défausser autant de cartes de votre main que vous voulez.',
+        'Retournez votre aide de jeu du côté « Passé ».',
+      ],
+      ref: 'Phase Joueur — p.10',
+    },
+    {
+      term: 'Piste temporelle',
+      body: [
+        'Elle avance d’un cran par phase Événement, et elle donne la durée de la partie.',
+        'Case bleue : les compartiments d’hibernation s’ouvrent.',
+        'Dernière case : le vaisseau saute, tout ce qui n’hiberne pas meurt.',
+      ],
+      ref: 'Phase Événement — p.10 · Fin de la partie — p.11',
+    },
+    {
+      term: 'Ramasser un corps lourd',
+      body: [
+        'Action de base à 1 carte : prenez dans une main libre un corps posé dans votre salle.',
+      ],
+      ref: 'Actions de base — p.13',
+    },
+    {
+      term: 'Rencontre',
+      body: [
+        'Elle se déclenche quand un marqueur Bruit doit se poser sur un couloir qui en porte déjà un.',
+        'Un Intrus est tiré du sac et arrive dans la salle : la première rencontre de la partie fait choisir son objectif à tout le monde.',
+      ],
+      ref: 'Rencontre et combat — p.18',
+    },
+    {
+      term: 'Sac Intrus',
+      body: [
+        'On y pioche 1 jeton à la fin de chaque phase Événement, et à chaque rencontre.',
+        'Larve et Rôdeur sortent du sac définitivement, remplacés par un Adulte et un Hybride.',
+        'Adulte, Hybride et Reine y retournent après avoir agi.',
+      ],
+      ref: 'Phase Événement — p.10',
+    },
+    {
+      term: 'Scanner',
+      body: [
+        'Posez son filtre sur une carte Contamination : si le mot « infectée » apparaît, elle l’est.',
+        'Regardez bien — certains mots codés ressemblent beaucoup à « infectée ».',
+        'Une carte infectée pose une Larve sur votre plateau ; une seconde Larve vous tue.',
+      ],
+      ref: 'Contamination — pp.20-21',
+    },
+    {
+      term: 'Séquence d’autodestruction',
+      see: 'Génératrice',
+    },
+    {
+      term: 'Mode coopératif',
+      body: [
+        'Chaque joueur pioche 1 carte du paquet Objectifs Solo/Coop au lieu de 2 du paquet normal.',
+        'Pour gagner, TOUS les objectifs doivent être remplis, et au moins 1 joueur doit survivre.',
+        'L’infirmerie est équipée d’un AutoDoc : un personnage peut transporter un cadavre jusqu’à l’infirmerie pour ranimer son camarade à la manche suivante.',
+      ],
+      ref: 'Modes de jeu — p.27',
+    },
+    {
+      term: 'Jouer en tant qu’Intrus',
+      body: [
+        'Mode optionnel : le premier joueur éliminé incarne les Intrus pour le reste de la partie.',
+        'Il pioche 3 cartes, joue 1 seule Action d’Intrus par tour, et ne reçoit jamais le jeton Premier joueur.',
+        'Il ne peut pas gagner : il doit seulement s’assurer que personne ne gagne.',
+      ],
+      ref: 'Modes de jeu — p.27',
+    },
+    {
+      term: 'Plateau alternatif',
+      body: [
+        'Le verso du plateau standard, plutôt conçu pour le jeu en campagne, et plus difficile à survivre.',
+        'Deux réseaux de conduits séparés — gérez l’icône rouge et l’icône bleue indépendamment.',
+        'Certaines salles sont reliées par un double couloir : une porte sur l’un ne bloque pas l’autre.',
+      ],
+      ref: 'Modes de jeu — p.27',
+    },
+  ],
 
   components: [
     {
@@ -671,8 +1993,65 @@ export const nemesis: Tutorial = {
       id: 'brief',
       title: 'Briefing',
       kind: 'brief',
-      goal: 'Savoir ce que vous allez apprendre et ce qu’il faut sortir de la boîte.',
+      goal: 'Comprendre l’enjeu du jeu, puis savoir ce qu’il faut sortir de la boîte.',
       steps: [
+        {
+          id: 'brief-0',
+          kind: 'info',
+          title: 'Où vous êtes, et ce qui a mal tourné',
+          body: [
+            'Le Nemesis est un cargo spatial qui rentre vers la Terre. L’équipage fait le voyage en hypersommeil.',
+            'Réveil d’urgence en cours de route : le saut est interrompu, un membre d’équipage est mort dans son caisson, et quelque chose circule à bord.',
+            'Personne ne sait dans quel état sont les moteurs, ni où le vaisseau se dirige vraiment. Tout se découvre en explorant, salle par salle.',
+          ],
+          tip: 'Ce n’est pas un jeu où l’on nettoie le vaisseau. C’est un jeu où l’on essaie d’en sortir avant qu’il ne soit trop tard.',
+          components: ['plateau'],
+          ref: 'Introduction — p.2',
+        },
+        {
+          id: 'brief-0b',
+          crop: { page: 11, x: 0.046, y: 0.163, w: 0.295, h: 0.252 },
+          kind: 'info',
+          title: 'Ce que vous devez faire pour gagner',
+          body: [
+            'Deux conditions, jamais une seule. Un : remplir l’objectif secret de la carte que vous garderez. Deux : être en vie à la fin.',
+            'Être en vie veut dire l’un de ces deux états, et aucun autre : dormir dans l’hibernatorium quand le vaisseau saute, ou s’être échappé en nacelle de secours.',
+            'Rester debout dans le vaisseau au moment du saut, c’est mourir. Le saut tue tout ce qui n’hiberne pas.',
+          ],
+          warn: 'Un objectif rempli sans survivre ne vaut rien. Une survie sans objectif non plus. Le contrôle de fin de partie vérifie les deux, dans cet ordre.',
+          components: ['objectifs'],
+          ref: 'Buts des joueurs — p.11',
+        },
+        {
+          id: 'brief-0c',
+          crop: { page: 12, x: 0.353, y: 0.100, w: 0.295, h: 0.320 },
+          kind: 'info',
+          title: 'Vos intentions de jeu, tour après tour',
+          body: [
+            'Votre objectif donne la mission particulière : envoyer un signal, détruire le nid, ramener le vaisseau sur Mars, être le seul survivant…',
+            'Tout le reste de vos actions sert à une seule chose : rendre votre sortie possible. Deux moteurs en état, la bonne destination affichée, une nacelle déverrouillée, une contamination soignée.',
+            'Vous ne pourrez pas tout faire. Une partie tient en une douzaine de manches, et chaque manche ne rend que 5 cartes.',
+            'La vraie question de chaque tour n’est donc pas « que puis-je faire ? », mais « qu’est-ce que j’abandonne ? ».',
+          ],
+          tip: 'Le bouton Aides de jeu du bandeau garde tout ça sous la main pendant la partie, avec l’index des salles et le résumé des règles.',
+          ref: 'Buts des joueurs — p.11 · Objectifs — p.12',
+        },
+        {
+          id: 'brief-0d',
+          kind: 'info',
+          title: 'Vos premiers tours',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Le vrai danger des premières manches n’est pas un Intrus : c’est la vitesse à laquelle on en fait apparaître. Chaque salle vide où vous entrez demande un jet de bruit.',
+            'Le Déplacement vigilant coûte 2 cartes au lieu d’1, mais il pose le marqueur Bruit où vous voulez au lieu de le tirer au dé. Sur les premiers tours, c’est presque toujours le bon achat.',
+            'Restez à deux ou trois : entrer dans une salle déjà occupée ne demande pas de jet de bruit, et un Intrus rencontré seul se termine mal.',
+            'Ouvrez tôt les salles utiles — génératrice, infirmerie, armurerie — et fouillez pendant que le vaisseau est calme.',
+            'Décidez tôt par où vous sortez. Les nacelles et l’hibernatorium sont des trajets, et les trajets prennent des manches.',
+          ],
+          warn: 'Ces conseils ne sont pas dans le livret de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
+        },
         {
           id: 'brief-1',
           kind: 'info',
@@ -1140,6 +2519,32 @@ export const nemesis: Tutorial = {
           ref: 'Phase Joueur, étape 3 — p.10',
         },
         {
+          id: 't3b',
+          kind: 'info',
+          title: 'Oui, deux fois la même action',
+          body: [
+            'Rien n’oblige à varier : deux déplacements, deux tirs, deux fouilles dans la même salle, c’est un tour parfaitement légal.',
+            'Vos 2 actions du tour sont indépendantes. Chacune est choisie, et payée, séparément.',
+            'La seule limite est ce que vous pouvez payer, et les restrictions propres à chaque action.',
+          ],
+          warn: 'Vous n’êtes pas obligé d’en faire deux. Un tour, c’est au choix : 2 actions ; ou 1 action puis « je passe » ; ou « je passe » tout de suite.',
+          tip: 'Deux déplacements d’affilée sont le tour le plus courant du jeu : c’est comme ça qu’on traverse le vaisseau.',
+          ref: 'Phase Joueur, étape 3 — p.10 et résumé p.28',
+        },
+        {
+          id: 't3c',
+          kind: 'info',
+          title: 'La manche ne s’arrête pas après un tour',
+          only: [2, 3, 4, 5],
+          body: [
+            'Une fois que tout le monde a joué son tour de 2 actions, on ne passe PAS à la phase Événement.',
+            'Un nouveau tour de table démarre, et chacun rejoue 2 actions — sauf ceux qui ont passé.',
+            'Ça tourne comme ça, autant de fois qu’il le faut, jusqu’à ce que le dernier joueur passe.',
+          ],
+          warn: 'C’est la raison pour laquelle passer est un vrai choix : ceux qui ont encore des cartes continuent d’agir pendant que vous regardez.',
+          ref: 'Phase Joueur, étape 3 — p.10',
+        },
+        {
           id: 't4',
           kind: 'info',
           title: 'Payer une action, c’est défausser des cartes',
@@ -1179,13 +2584,44 @@ export const nemesis: Tutorial = {
           kind: 'info',
           title: 'Quatre familles d’actions',
           body: [
-            'Actions de base : déplacement, déplacement vigilant, tir, corps-à-corps, ramasser un corps lourd, échanger, fabriquer.',
+            'Actions de base : la liste imprimée sur votre aide de jeu. Tout le monde les a, tout le temps.',
             'Cartes Action : les capacités propres à votre personnage.',
             'Cartes Objet : ce que permet l’objet, décrit sur sa carte.',
             'Actions de salle : ce que permet la pièce où vous vous trouvez.',
           ],
-          warn: 'En combat, les seules actions de base autorisées sont : déplacement (donc fuite), tir et corps-à-corps.',
+          warn: 'En combat, les seules actions de base autorisées sont : déplacement (qui devient une fuite), tir et corps-à-corps.',
+          tip: 'Le bouton Aides de jeu du bandeau garde ces quatre familles, et le détail de chaque salle, sous la main pendant toute la partie.',
+          components: ['aides'],
           ref: 'Actions — p.12-13',
+        },
+        {
+          id: 't6b',
+          crop: { page: 13, x: 0.045, y: 0.163, w: 0.295, h: 0.406 },
+          kind: 'info',
+          title: 'Les huit actions de base, et leur prix',
+          body: [
+            'Déplacement — 1 carte. Déplacement vigilant — 2 cartes.',
+            'Tir — 1 carte. Corps-à-corps — 1 carte.',
+            'Fouille — 1 carte. Fabriquer un objet — 1 carte.',
+            'Ramasser un corps lourd — 1 carte. Échanger — 1 carte.',
+          ],
+          warn: 'Une action de salle coûte 2 cartes, quelle que soit la salle. Une action de carte coûte la carte jouée PLUS le nombre indiqué dessus.',
+          tip: 'Un tour de 2 actions ne permet donc pas toujours deux choses : un déplacement vigilant consomme déjà toute une main de 2 cartes.',
+          components: ['aides', 'actions'],
+          ref: 'Actions de base — p.13 et résumé p.28',
+        },
+        {
+          id: 't6c',
+          kind: 'info',
+          title: 'Deux symboles à repérer sur les cartes',
+          body: [
+            'Une arme sur fond clair : cette action ne peut être faite QU’EN combat.',
+            'La même arme barrée de rouge : cette action ne peut PAS être faite en combat.',
+            'Aucun des deux symboles : l’action se fait dans les deux situations.',
+          ],
+          warn: 'Vous êtes en combat dès qu’un Intrus se trouve dans votre salle — pas seulement quand vous l’attaquez. Les œufs ne sont pas des Intrus.',
+          components: ['actions', 'objets'],
+          ref: 'Action en combat ou hors combat — p.12',
         },
       ],
     },
@@ -1727,6 +3163,266 @@ export const nemesis: Tutorial = {
     /* --------------------------------------------- reprise d'une séance */
 
     {
+      id: 'salles',
+      title: 'Agir dans une salle',
+      kind: 'play',
+      goal: 'Fouiller, utiliser l’action d’une salle, se servir de ses objets.',
+      steps: [
+        {
+          id: 'sa1',
+          kind: 'info',
+          title: 'Une salle, deux choses à en tirer',
+          body: [
+            'Fouiller : action de base à 1 carte. Vous piochez 2 objets et en gardez 1.',
+            'Faire son action : action de salle à 2 cartes. C’est l’effet écrit sur la tuile.',
+            'Les deux sont indépendantes, et les deux se refont autant de fois que vous pouvez les payer.',
+          ],
+          warn: 'Aucune action de salle en combat, ni sur une salle qui porte un marqueur Panne. La Fouille, elle, reste possible dans les deux cas.',
+          components: ['salles1', 'actions'],
+          ref: 'Index des salles — p.24 · Objets et corps — p.23',
+        },
+        {
+          id: 'sa2',
+          crop: { page: 23, x: 0.045, y: 0.152, w: 0.295, h: 0.304 },
+          kind: 'action',
+          title: 'Fouillez la salle où vous êtes',
+          body: [
+            'Défaussez 1 carte Action. Piochez 2 cartes du paquet Objet de la couleur de la salle, gardez-en 1, remettez l’autre sous le paquet.',
+            'La couleur de la salle se lit au fond coloré sous son nom : rouge militaire, jaune technique, vert médical.',
+            'Dans une salle blanche, vous choisissez librement l’une des trois pioches.',
+          ],
+          warn: 'Chaque fouille fait baisser le compteur d’objets de la salle de 1. À 0, la salle est vidée pour toute la partie.',
+          tip: 'Une arme trouvée en fouillant reçoit immédiatement 1 marqueur Munition.',
+          components: ['objets', 'munitions'],
+          ref: 'Fouille — p.23',
+        },
+        {
+          id: 'sa3',
+          crop: { page: 22, x: 0.352, y: 0.158, w: 0.294, h: 0.332 },
+          kind: 'info',
+          title: 'Ranger ce que vous trouvez',
+          body: [
+            'Les objets normaux vont dans votre inventaire, le porte-cartes : les autres joueurs n’en voient que le dos, donc la couleur.',
+            'Les objets lourds — marqués d’une icône de main — ne se cachent pas : ils occupent une de vos deux mains.',
+            'Deux objets ou corps lourds au maximum. Pour en prendre un troisième, il faut d’abord en lâcher un.',
+          ],
+          tip: 'Lâcher est gratuit, à tout moment de votre tour. Un corps lâché reste dans la salle ; un objet lâché est perdu.',
+          components: ['inventaires', 'objets'],
+          ref: 'Inventaire et mains — p.22',
+        },
+        {
+          id: 'sa4',
+          crop: { page: 23, x: 0.351, y: 0.152, w: 0.297, h: 0.304 },
+          kind: 'info',
+          title: 'Fabriquer, et les objets de quête',
+          body: [
+            'Les objets bleus ne se trouvent jamais : ils s’assemblent. Fabriquer un objet est une action de base à 1 carte.',
+            'Défaussez 2 cartes Objet portant les icônes bleues demandées par la carte bleue voulue. Quatre recettes : Antidote, Taser, Lance-flammes, Cocktail Molotov.',
+            'Vos 2 cartes posées à l’horizontale sont des quêtes, pas des objets. Remplissez la condition écrite dessus, puis dépensez une action de base pour les activer et les retourner.',
+          ],
+          warn: 'On ne fabrique pas un objet si sa carte bleue n’est plus disponible, même avec les bons composants en main.',
+          tip: 'Le paquet des objets fabriqués se consulte librement, à tout moment de la partie.',
+          components: ['objets'],
+          ref: 'Fabriquer un objet — p.23 · Objets de quête — p.23',
+        },
+        {
+          id: 'sa5',
+          kind: 'info',
+          title: 'Les corps, et ce qu’on en fait',
+          body: [
+            'Trois sortes de corps, tous des jetons : œuf d’Intrus, cadavre de personnage, carcasse d’Intrus.',
+            'Un corps occupe une main, comme un objet lourd. Ramasser un corps lourd est une action de base à 1 carte.',
+            'Portés au laboratoire, ils servent à découvrir les points faibles des Intrus — une carte par sorte de corps.',
+          ],
+          tip: 'Un point faible découvert profite à tout l’équipage, pas seulement à celui qui a fait le trajet.',
+          components: ['oeufs', 'carcasses', 'cadavres-rouges'],
+          ref: 'Objets et corps — p.22 · Cartes Point faible — p.21',
+        },
+        {
+          id: 'sa6',
+          kind: 'info',
+          title: 'Le vaisseau s’abîme aussi',
+          body: [
+            'Marqueur Feu : terminer son tour dans la salle coûte 1 blessure légère, et tout Intrus qui s’y trouve perd 1 point de vie à la phase Événement.',
+            'Marqueur Panne : l’action de la salle est coupée, et l’ordinateur de la salle avec.',
+            'Marqueur Slime : tant que vous l’avez, chaque résultat « Silence » du dé de bruit compte comme un « Danger ».',
+          ],
+          warn: 'Il y a 8 marqueurs Feu et 8 marqueurs Panne. S’il faut en poser un neuvième, de l’une ou l’autre sorte, le vaisseau explose et la partie s’arrête pour tout le monde.',
+          tip: 'C’est la condition de fin la plus facile à ne pas voir venir. Comptez-les à voix haute quand ça monte.',
+          components: ['marqueurs-feu', 'marqueurs-panne'],
+          ref: 'Marqueurs Feu et Panne — p.17',
+        },
+        {
+          id: 'sa7',
+          crop: { page: 17, x: 0.663, y: 0.108, w: 0.292, h: 0.392 },
+          kind: 'info',
+          title: 'Portes et conduits',
+          body: [
+            'Une porte est ouverte (aucun pion), fermée (pion debout) ou détruite (pion couché). Toutes sont ouvertes au début.',
+            'Une porte fermée coupe le passage aux personnages comme aux Intrus. Un Intrus qui devait passer ne bouge pas : il détruit la porte.',
+            'Une porte détruite ne se referme plus, et le passage redevient libre.',
+            'Les conduits sont le réseau de ventilation : les Intrus l’empruntent, jamais vous.',
+          ],
+          warn: 'Un Intrus qui entre dans un conduit disparaît du plateau et son jeton retourne dans le sac. Il reviendra.',
+          components: ['portes'],
+          ref: 'Pions Porte — p.17 · Conduits — p.16',
+        },
+      ],
+    },
+
+    {
+      id: 'moments',
+      title: 'Les moments spéciaux',
+      kind: 'play',
+      goal: 'Reconnaître les quatre bascules qui changent la partie en cours de route.',
+      steps: [
+        {
+          id: 'mo1',
+          crop: { page: 12, x: 0.041, y: 0.106, w: 0.297, h: 0.335 },
+          kind: 'info',
+          title: 'Quatre moments hors manche',
+          body: [
+            'Ils ne dépendent pas du tour de jeu : ils arrivent quand leur condition est remplie, et ils changent la partie d’un coup.',
+            'La première rencontre avec un Intrus. Le premier personnage tué.',
+            'L’ouverture des compartiments d’hibernation. Le point de non-retour de l’autodestruction.',
+          ],
+          tip: 'Ce sont les quatre bascules que le livret appelle les moments spéciaux du jeu. Les rater, c’est jouer la mauvaise partie.',
+          ref: 'Moments spéciaux du jeu — p.12',
+        },
+        {
+          id: 'mo2',
+          kind: 'action',
+          title: 'Première rencontre : chacun choisit son objectif',
+          body: [
+            'Dès que la première figurine d’Intrus arrive sur le plateau — n’importe quel type — la partie bascule.',
+            'Chaque joueur choisit immédiatement l’une de ses deux cartes Objectif et retire l’autre du jeu, face cachée.',
+            'Puis on résout normalement la rencontre qui vient de déclencher tout ça.',
+          ],
+          warn: 'À partir de cet instant, chacun n’a plus qu’un objectif et le cache. Personne n’a le droit de regarder les objectifs défaussés par les autres.',
+          tip: 'Les œufs ne sont pas des Intrus : un œuf ne déclenche pas ce moment.',
+          components: ['objectifs'],
+          ref: 'Première rencontre — p.12',
+        },
+        {
+          id: 'mo3',
+          kind: 'info',
+          title: 'Premier personnage tué : les nacelles s’ouvrent',
+          body: [
+            'L’IA du vaisseau lance les procédures d’urgence à la première mort.',
+            'Toutes les nacelles de secours se déverrouillent automatiquement : retournez-les face « déverrouillé ».',
+          ],
+          tip: 'Elles pourront être reverrouillées ensuite, notamment depuis la salle de contrôle des nacelles. Ce n’est pas définitif.',
+          components: ['nacelles'],
+          ref: 'Premier personnage tué — p.12',
+        },
+        {
+          id: 'mo4',
+          kind: 'info',
+          title: 'Case bleue : l’hibernation s’ouvre',
+          body: [
+            'Quand le marqueur Temps atteint une case bleue de la piste temporelle, les compartiments d’hibernation s’ouvrent.',
+            'Avant cette case, l’action de l’hibernatorium est impossible, quoi que vous fassiez.',
+          ],
+          warn: 'C’est la porte de sortie la plus lente du jeu : il faut être présent, la piste doit être arrivée, et l’entrée demande encore un jet de bruit.',
+          components: ['marqueurs-std'],
+          ref: 'Autres moments spéciaux — p.12',
+        },
+        {
+          id: 'mo5',
+          kind: 'info',
+          title: 'Case jaune : le point de non-retour',
+          body: [
+            'Si quelqu’un a lancé l’autodestruction à la génératrice, son marqueur avance à chaque phase Événement, en même temps que le temps.',
+            'À la case jaune, la séquence ne peut plus être arrêtée, et toutes les nacelles se déverrouillent automatiquement.',
+            'À la dernière case, le vaisseau explose avec tout ce qu’il contient.',
+          ],
+          warn: 'Un saut en hyperespace n’arrête pas une séquence d’autodestruction. Le vaisseau explose quand même.',
+          tip: 'On ne peut pas lancer l’autodestruction si quelqu’un est déjà en hibernation : l’IA protège les dormeurs.',
+          ref: 'Autres moments spéciaux — p.12 · Génératrice — p.24',
+        },
+      ],
+    },
+
+    {
+      id: 'sortir',
+      title: 'Sortir vivant',
+      kind: 'play',
+      goal: 'Savoir par où l’on quitte le vaisseau, et ce qu’il faut avoir préparé avant.',
+      steps: [
+        {
+          id: 'so1',
+          kind: 'info',
+          title: 'Deux sorties, pas une de plus',
+          body: [
+            'La nacelle de secours : vous partez, et vous êtes considéré comme arrivé sur Terre.',
+            'L’hibernation : vous dormez, et le vaisseau doit vous ramener entier, à la bonne destination.',
+            'Il n’y a pas de troisième issue. Rester debout à bord au moment du saut, c’est mourir.',
+          ],
+          tip: 'Choisir sa sortie tôt change tout le reste : la nacelle demande une section d’évacuation, l’hibernation demande un vaisseau en état.',
+          components: ['nacelles'],
+          ref: 'Buts des joueurs — p.11',
+        },
+        {
+          id: 'so2',
+          crop: { page: 26, x: 0.660, y: 0.098, w: 0.296, h: 0.332 },
+          kind: 'info',
+          title: 'Prendre une nacelle',
+          body: [
+            'Rendez-vous dans la section d’évacuation A ou B et faites son action de salle, à 2 cartes.',
+            'Faites un jet de bruit : si un Intrus apparaît dans la salle, l’action échoue.',
+            'Sinon, placez votre figurine sur une des deux cases de la nacelle. Vous partez tout de suite, ou vous attendez un second passager.',
+          ],
+          warn: 'Impossible d’entrer si un Intrus est déjà dans la section d’évacuation, ou si la nacelle est verrouillée. Un Intrus qui arrive pendant que vous attendez vous fait ressortir.',
+          tip: 'Si vous attendez, vous ne pouvez lancer qu’au début de votre premier tour de la phase Joueur. Sinon, il faut passer ou ressortir.',
+          components: ['nacelles'],
+          ref: 'Section d’évacuation — p.25 · Nacelles de secours — p.26',
+        },
+        {
+          id: 'so3',
+          crop: { page: 26, x: 0.046, y: 0.748, w: 0.295, h: 0.168 },
+          kind: 'info',
+          title: 'Entrer en hibernation',
+          body: [
+            'Rendez-vous à l’hibernatorium et faites son action de salle, à 2 cartes. Le marqueur Temps doit être sur une case bleue.',
+            'Faites un jet de bruit : si un Intrus apparaît, l’action échoue.',
+            'Sinon, retirez votre figurine du jeu. Vous ne jouez plus, et la fin de partie dira si vous survivez.',
+          ],
+          warn: 'Une fois quelqu’un endormi, plus personne ne peut changer la destination du vaisseau ni lancer l’autodestruction.',
+          tip: 'C’est le pari inverse de la nacelle : vous échangez votre sécurité contre l’état du vaisseau, que d’autres tiennent encore entre leurs mains.',
+          ref: 'Hibernatorium — p.26',
+        },
+        {
+          id: 'so4',
+          crop: { page: 26, x: 0.351, y: 0.338, w: 0.294, h: 0.316 },
+          kind: 'info',
+          title: 'Le vaisseau doit être en état',
+          body: [
+            'Deux des trois moteurs doivent être opérationnels, sinon le vaisseau explose au contrôle de fin de partie.',
+            'L’état d’un moteur se lit dans sa salle, ou d’un coup dans la salle des machines. Il se change avec une action Réparations ou l’objet Outils.',
+            'La destination se lit et se change au cockpit. Si le vaisseau ne va pas vers la Terre, tous les dormeurs meurent.',
+          ],
+          warn: 'Personne n’est obligé de dire la vérité sur ce qu’il a vu — ni sur l’état d’un moteur, ni sur les coordonnées. Un joueur peut casser un moteur sans le dire.',
+          tip: 'Cela ne concerne que l’hibernation. Une nacelle lancée rentre quoi qu’il arrive au vaisseau derrière elle.',
+          components: ['moteurs', 'coordonnees'],
+          ref: 'Cockpit et Moteurs — p.26 · Contrôle de victoire — p.11',
+        },
+        {
+          id: 'so5',
+          kind: 'info',
+          title: 'Et la contamination, qui tue après',
+          body: [
+            'Rentrer vivant ne suffit pas : au contrôle de fin de partie, chaque survivant scanne ses cartes Contamination.',
+            'Le bloc opératoire les retire toutes d’un coup, au prix d’une blessure légère et d’un tour perdu.',
+            'L’antidote, la cantine et les douches en retirent une partie.',
+          ],
+          warn: 'C’est le piège classique de la première partie : on rentre, on se croit sauvé, et on meurt au dernier contrôle.',
+          components: ['contamination', 'scanner'],
+          ref: 'Contrôle de contamination — p.11 · Bloc opératoire — p.24',
+        },
+      ],
+    },
+
+    {
       id: 'rp',
       title: 'Reprendre la séance',
       kind: 'setup',
@@ -1827,8 +3523,34 @@ export const nemesis: Tutorial = {
       title: 'La manche',
       kind: 'play',
       modes: ['recap'],
-      goal: 'Retrouver la structure d’une manche et l’ordre des phases.',
+      goal: 'Retrouver l’enjeu du jeu, la structure d’une manche et l’ordre des phases.',
       steps: [
+        {
+          id: 'rr0',
+          kind: 'info',
+          title: 'Ce qu’on cherche à faire',
+          body: [
+            'Deux conditions pour gagner : remplir son objectif secret, ET être en vie à la fin.',
+            'Être en vie, c’est dormir dans l’hibernatorium au moment du saut, ou être parti en nacelle. Rien d’autre.',
+            'Tout le reste — moteurs, coordonnées, contamination, objets — sert à rendre cette sortie possible.',
+          ],
+          warn: 'Le saut en hyperespace tue tout ce qui n’hiberne pas, et ne tue aucun Intrus.',
+          components: ['objectifs'],
+          ref: 'Buts des joueurs — p.11',
+        },
+        {
+          id: 'rr0b',
+          kind: 'info',
+          title: 'Les quatre bascules à ne pas rater',
+          body: [
+            'Première figurine d’Intrus sur le plateau : tout le monde choisit son objectif et défausse l’autre.',
+            'Premier personnage tué : toutes les nacelles se déverrouillent.',
+            'Case bleue de la piste temporelle : les compartiments d’hibernation s’ouvrent.',
+            'Case jaune de l’autodestruction : elle ne s’arrête plus, et les nacelles se déverrouillent.',
+          ],
+          tip: 'Le bouton Aides de jeu garde ces quatre moments, les 25 salles et le résumé du livret sous la main pendant la partie.',
+          ref: 'Moments spéciaux du jeu — p.12',
+        },
         {
           id: 'rr1-solo',
           kind: 'info',
@@ -1994,34 +3716,43 @@ export const nemesis: Tutorial = {
           ref: 'Contrôle de contamination — p.11 et p.20',
         },
         {
-          id: 'w5-solo',
-          kind: 'info',
-          title: 'Ce que ce tutoriel n’a pas couvert',
-          only: [1],
-          body: [
-            'Les actions des 20 salles, décrites dans l’index p.24 à 26.',
-            'L’action Fouille, la fabrication d’objets, les objets de quête.',
-            'La séquence d’autodestruction, les nacelles, l’hibernation en détail.',
-            'Les points faibles et l’analyse de corps au laboratoire.',
-            'Le mode coopératif et « jouer en tant qu’Intrus ». Le mode solo, lui, est couvert : ce tutoriel vient d’en dérouler les trois règles.',
-          ],
-          tip: 'Gardez le livret ouvert à l’index des salles pendant votre première partie : c’est la seule page que vous consulterez vraiment souvent.',
-          ref: 'Index des salles — p.24-26',
-        },
-        {
           id: 'w5',
           kind: 'info',
-          title: 'Ce que ce tutoriel n’a pas couvert',
+          title: 'Ce que vous emportez à la table',
+          body: [
+            'Vous avez vu toutes les règles de la partie : la mise en place, le tour, l’exploration, la rencontre, le combat, les salles, les objets, les moments spéciaux et les deux sorties.',
+            'Ce qui reste, ce sont les textes des cartes et des tuiles : ils se lisent au moment où ils sortent.',
+            'Le bouton Aides de jeu garde l’index des 25 salles, les objets, les marqueurs et le résumé du livret sous la main.',
+            'Le bouton Index cherche n’importe quel mot du jeu par ordre alphabétique.',
+          ],
+          tip: 'Vous n’avez plus besoin de rouvrir le livret pendant la partie. C’est exactement ce que ces deux boutons servent à éviter.',
+          ref: 'Résumé des règles — p.28',
+        },
+        {
+          id: 'w5b',
+          kind: 'info',
+          title: 'Les deux modes que ce tutoriel ne déroule pas',
           only: [2, 3, 4, 5],
           body: [
-            'Les actions des 20 salles, décrites dans l’index p.24 à 26.',
-            'L’action Fouille, la fabrication d’objets, les objets de quête.',
-            'La séquence d’autodestruction, les nacelles, l’hibernation en détail.',
-            'Les points faibles et l’analyse de corps au laboratoire.',
-            'Les modes solo, coopératif et « jouer en tant qu’Intrus ».',
+            'Le mode coopératif : un objectif Solo/Coop par joueur, tous doivent être remplis, et au moins un joueur doit survivre. L’infirmerie y ranime les morts.',
+            'Jouer en tant qu’Intrus : le premier joueur éliminé prend les Intrus en main pour le reste de la partie.',
+            'Le plateau alternatif, au verso, avec ses deux réseaux de conduits séparés et ses doubles couloirs.',
           ],
-          tip: 'Gardez le livret ouvert à l’index des salles pendant votre première partie : c’est la seule page que vous consulterez vraiment souvent.',
-          ref: 'Index des salles — p.24-26',
+          tip: 'Les trois ont leur entrée dans l’index de l’application. Ils changent le cadre de la partie, pas ses règles de base.',
+          ref: 'Modes de jeu — p.27',
+        },
+        {
+          id: 'w5b-solo',
+          kind: 'info',
+          title: 'Les modes que ce tutoriel ne déroule pas',
+          only: [1],
+          body: [
+            'Le mode solo, lui, est couvert : ce tutoriel vient d’en dérouler les règles particulières.',
+            'Le mode coopératif : un objectif Solo/Coop par joueur, tous doivent être remplis, et au moins un joueur doit survivre.',
+            'Jouer en tant qu’Intrus, et le plateau alternatif au verso.',
+          ],
+          tip: 'Les trois ont leur entrée dans l’index de l’application.',
+          ref: 'Modes de jeu — p.27',
         },
         {
           id: 'w6',

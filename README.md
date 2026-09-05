@@ -64,6 +64,27 @@ plusieurs types — les six symboles des jetons Exploration de *Nemesis*, les
 quatorze conditions de *Frosthaven* — affiche la liste dans sa fiche, avec le
 symbole de chacun. On tape dessus en pleine partie, on lit, on referme.
 
+### Jouer sans rouvrir le livret
+
+Un tutoriel dit d'abord **pourquoi** on joue : où on est, comment on gagne, ce
+qu'on cherche à faire tour après tour, et par quoi commencer. C'est la première
+chose qu'on lit, et ça reste consultable pendant la partie.
+
+Deux boutons du bandeau prennent le relais une fois la partie lancée :
+
+- **Aides de jeu** — une fiche par question qu'on se pose en jouant. Pour
+  *Nemesis* : l'enjeu et la victoire, l'index des 25 salles avec le coût et
+  l'effet de chacune, les objets et les corps, les marqueurs et les portes, les
+  moments spéciaux, et le résumé des règles de la dernière page du livret.
+- **Index** — tous les mots du jeu par ordre alphabétique, avec un champ de
+  recherche. 181 entrées pour *Nemesis*. Taper sur une ligne ouvre la fiche
+  d'où elle vient ; les fiches s'empilent, et refermer la dernière rend la
+  précédente intacte.
+
+**Ce qui ne vient pas du livret est signalé comme tel.** Les conseils de jeu
+recueillis ailleurs portent un globe, une couleur qui ne sert qu'à ça, et le
+mot « hors livret ». Une règle et un conseil ne se confondent jamais.
+
 **En solo, vous avez les règles du solo.** Ce n'est pas la même partie en moins
 nombreux : le tutoriel sort le paquet d'objectifs Solo de *Nemesis*, l'Automa
 d'*Expeditions*, le Tengu de *Bitoku*, la variante à deux personnages de
