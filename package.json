@@ -15,6 +15,7 @@
     "crops": "node tools/crops.mjs",
     "grid": "node tools/grid.mjs",
     "snap": "node tools/snap.mjs",
+    "players": "node tools/players.mjs",
     "vo": "node tools/vo-check.mjs"
   },
   "dependencies": {

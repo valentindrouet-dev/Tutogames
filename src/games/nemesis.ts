@@ -206,7 +206,7 @@ export const nemesis: Tutorial = {
       'La fabrication d’objets et les objets de quête',
       'La séquence d’autodestruction et les nacelles de secours',
       'Les points faibles et l’analyse au laboratoire',
-      'Les modes solo, coopératif, « jouer en tant qu’Intrus » et le plateau alternatif',
+      'Le mode coopératif, « jouer en tant qu’Intrus » et le plateau alternatif — le mode solo, lui, est couvert',
     ],
   },
 
@@ -548,9 +548,23 @@ export const nemesis: Tutorial = {
           tip: 'Le chronomètre en haut à droite tourne pendant la partie. Vous pouvez le mettre en pause à tout moment ; il reprend même si vous fermez l’application.',
         },
         {
+          id: 'brief-2-solo',
+          kind: 'info',
+          title: 'Nemesis se joue aussi seul',
+          only: [1],
+          body: [
+            'Le jeu est conçu pour le semi-coopératif, mais il prévoit une partie en solitaire : un seul personnage, un seul objectif.',
+            'Vous gagnez si vous remplissez votre objectif et si vous survivez. Les deux, ou rien.',
+          ],
+          warn: 'Le mode solo change trois choses, que le tutoriel signale au bon moment : le paquet d’objectifs, le nombre d’objets dans les salles, et l’enchaînement des tours.',
+          components: ['objectifs'],
+          ref: 'Modes de jeu, mode solo — p.27',
+        },
+        {
           id: 'brief-2',
           kind: 'info',
           title: 'Nemesis est semi-coopératif',
+          only: [2, 3, 4, 5],
           body: [
             'Vous survivez ensemble, mais chacun a un objectif secret que les autres ignorent.',
             'Plusieurs joueurs peuvent gagner. Aucun ne le peut sans avoir survécu.',
@@ -711,9 +725,23 @@ export const nemesis: Tutorial = {
           ref: 'Mise en place, étape 9 — p.6',
         },
         {
+          id: 's10-solo',
+          kind: 'take',
+          title: 'Remplissez le sac Intrus',
+          only: [1],
+          body: [
+            'Dans le sac : 1 vierge, 4 Larves, 1 Rôdeur, 1 Reine, 3 Adultes.',
+            'Ajoutez 1 jeton Adulte supplémentaire par joueur : seul, vous n’en ajoutez qu’un. Le sac contient donc 4 Adultes.',
+            'Le reste des jetons Intrus, et les jetons Carcasse, restent à portée de main à côté du plateau.',
+          ],
+          components: ['sac', 'jetons-intrus', 'carcasses'],
+          ref: 'Mise en place, étape 10 — p.6',
+        },
+        {
           id: 's10',
           kind: 'take',
           title: 'Remplissez le sac Intrus',
+          only: [2, 3, 4, 5],
           body: [
             'Dans le sac : 1 vierge, 4 Larves, 1 Rôdeur, 1 Reine, 3 Adultes.',
             'Ajoutez ensuite 1 jeton Adulte supplémentaire par joueur.',
@@ -733,13 +761,42 @@ export const nemesis: Tutorial = {
             'Laissez un espace de défausse libre à côté des objets, des événements, des attaques d’Intrus et des blessures graves.',
           ],
           warn: 'Les cartes Action d’Intrus et les objectifs Solo/Coop ne servent pas dans le jeu de base : laissez-les dans la boîte.',
+          only: [2, 3, 4, 5],
           components: ['objets', 'evenements', 'attaques', 'contamination', 'blessures', 'scanner'],
           ref: 'Mise en place, étape 11 — p.6',
+        },
+        {
+          id: 's11-solo',
+          kind: 'shuffle',
+          title: 'Mélangez et posez les paquets de cartes',
+          only: [1],
+          body: [
+            'Mélangés séparément : 3 paquets Objet (un par couleur), Événement, Attaque d’Intrus, Contamination, Blessure grave.',
+            'Posez le paquet Objets fabriqués (bleu) à côté des autres objets, et le Scanner près du paquet Contamination.',
+            'Sortez aussi le paquet Objectif Solo/Coop, et mélangez-le : c’est celui du mode solo.',
+          ],
+          warn: 'Seules les cartes Action d’Intrus restent dans la boîte : elles ne servent qu’au mode « jouer en tant qu’Intrus ».',
+          components: ['objets', 'evenements', 'attaques', 'contamination', 'blessures', 'scanner', 'objectifs'],
+          ref: 'Mise en place, étape 11 — p.6 ; Modes de jeu — p.27',
+        },
+        {
+          id: 's12-solo',
+          kind: 'place',
+          title: 'Sortez les marqueurs et les dés',
+          only: [1],
+          body: [
+            'À portée de main : marqueurs Feu, Panne, Bruit, Munition/Dégâts et standard.',
+            'Ajoutez les pions Porte, les jetons Cadavre rouges, les 2 dés de combat et les 2 dés de bruit.',
+          ],
+          tip: 'Le jeton Premier joueur peut rester dans la boîte : il ne sert pas en solo.',
+          components: ['marqueurs-feu', 'marqueurs-panne', 'marqueurs-bruit', 'munitions', 'marqueurs-std', 'portes', 'de-combat', 'de-bruit'],
+          ref: 'Mise en place, étape 12 — p.6',
         },
         {
           id: 's12',
           kind: 'place',
           title: 'Sortez les marqueurs et les dés',
+          only: [2, 3, 4, 5],
           body: [
             'À portée de tous : marqueurs Feu, Panne, Bruit, Munition/Dégâts et standard.',
             'Ajoutez les pions Porte, les jetons Cadavre rouges, les 2 dés de combat, les 2 dés de bruit et le jeton Premier joueur.',
@@ -894,9 +951,23 @@ export const nemesis: Tutorial = {
           ref: 'Comment jouer — p.10',
         },
         {
+          id: 't2-solo',
+          kind: 'action',
+          title: 'Complétez votre main à 5 cartes',
+          only: [1],
+          body: [
+            'Début de phase Joueur : reprenez la main à 5 cartes Action.',
+            'Pioche vide ? Mélangez votre défausse pour former une nouvelle pioche, puis piochez.',
+          ],
+          tip: 'Le jeton Premier joueur ne sert pas : vous êtes seul à jouer.',
+          components: ['actions'],
+          ref: 'Phase Joueur, étapes 1 et 2 — p.10',
+        },
+        {
           id: 't2',
           kind: 'action',
           title: 'Piochez 5 cartes Action chacun',
+          only: [2, 3, 4, 5],
           body: [
             'Début de phase Joueur : chacun complète sa main à 5 cartes.',
             'Pioche vide ? Mélangez votre défausse pour former une nouvelle pioche, puis piochez.',
@@ -906,9 +977,23 @@ export const nemesis: Tutorial = {
           ref: 'Phase Joueur, étapes 1 et 2 — p.10',
         },
         {
+          id: 't3-solo',
+          kind: 'info',
+          title: 'Votre tour, c’est 2 actions',
+          only: [1],
+          body: [
+            'Vous jouez 2 actions, puis un nouveau tour de 2 actions, et ainsi de suite.',
+            'La phase Joueur s’arrête quand vous passez.',
+          ],
+          tip: 'Passer est définitif pour la manche. En passant, vous pouvez défausser autant de cartes de votre main que vous voulez, et vous retournez votre aide de jeu côté « passé ».',
+          components: ['aides'],
+          ref: 'Phase Joueur, étape 3 — p.10',
+        },
+        {
           id: 't3',
           kind: 'info',
           title: 'Votre tour, c’est 2 actions',
+          only: [2, 3, 4, 5],
           body: [
             'En commençant par le premier joueur, dans le sens horaire, chacun joue 2 actions.',
             'Quand tout le monde a joué, un nouveau tour commence : encore 2 actions.',
@@ -976,9 +1061,23 @@ export const nemesis: Tutorial = {
       goal: 'Faire votre premier déplacement et comprendre la boucle exploration / bruit.',
       steps: [
         {
+          id: 'e1-solo',
+          kind: 'action',
+          title: 'Déplacez-vous',
+          only: [1],
+          body: [
+            'Défaussez 1 carte Action et déplacez votre figurine vers une salle adjacente.',
+            'Deux salles sont adjacentes si un couloir les relie directement.',
+            'Les personnages n’existent que dans les salles : on ne s’arrête jamais dans un couloir.',
+          ],
+          components: ['actions'],
+          ref: 'Déplacement — p.14',
+        },
+        {
           id: 'e1',
           kind: 'action',
           title: 'Premier joueur : déplacez-vous',
+          only: [2, 3, 4, 5],
           body: [
             'Défaussez 1 carte Action et déplacez votre figurine vers une salle adjacente.',
             'Deux salles sont adjacentes si un couloir les relie directement.',
@@ -1201,7 +1300,7 @@ export const nemesis: Tutorial = {
             'La rencontre se résout ensuite normalement.',
           ],
           warn: 'Ce moment n’arrive qu’une fois dans la partie. Ne le manquez pas : à partir de là, chacun poursuit son objectif unique, en le cachant.',
-          tip: 'Personne n’a le droit de consulter les objectifs défaussés par les autres.',
+          tip: 'Un objectif écarté ne se montre jamais, même une fois la partie finie.',
           components: ['objectifs'],
           ref: 'Moments spéciaux — p.12',
         },
@@ -1387,10 +1486,25 @@ export const nemesis: Tutorial = {
           ref: 'Phase Événement, étape 4 — p.10',
         },
         {
+          id: 'v3-solo',
+          crop: { page: 20, x: 0.356, y: 0.53, w: 0.289, h: 0.364 },
+          kind: 'action',
+          title: '2. Les Intrus attaquent',
+          only: [1],
+          body: [
+            'Tout Intrus en combat avec votre personnage l’attaque.',
+            'Piochez une carte Attaque d’Intrus. Si un de ses symboles correspond au type de l’attaquant, l’effet s’applique. Sinon, l’attaque échoue.',
+          ],
+          tip: 'Lors d’une attaque, on ignore le chiffre de la tache de sang : il ne sert qu’à vérifier la mort d’un Intrus.',
+          components: ['attaques'],
+          ref: 'Attaque d’Intrus — p.20',
+        },
+        {
           id: 'v3',
           crop: { page: 20, x: 0.356, y: 0.53, w: 0.289, h: 0.364 },
           kind: 'action',
           title: '2. Les Intrus attaquent',
+          only: [2, 3, 4, 5],
           body: [
             'Tout Intrus en combat avec un personnage l’attaque.',
             'Piochez une carte Attaque d’Intrus. Si un de ses symboles correspond au type de l’attaquant, l’effet s’applique. Sinon, l’attaque échoue.',
@@ -1448,9 +1562,22 @@ export const nemesis: Tutorial = {
           ref: 'Phase Événement, étape 8 — p.10',
         },
         {
+          id: 'v7-solo',
+          kind: 'check',
+          title: 'Manche terminée',
+          only: [1],
+          body: [
+            'La manche s’arrête après l’étape du sac Intrus : toutes les rencontres et attaques-surprises ont été jouées.',
+            'Nouvelle manche : reprenez votre main à 5 cartes, et rejouez.',
+          ],
+          tip: 'Rejouez maintenant deux ou trois manches par vous-même. Revenez sur ce chapitre autant que nécessaire, la progression est sauvegardée.',
+          ref: 'Phase Événement, étape 9 — p.10',
+        },
+        {
           id: 'v7',
           kind: 'check',
           title: 'Manche terminée',
+          only: [2, 3, 4, 5],
           body: [
             'La manche s’arrête après l’étape du sac Intrus : toutes les rencontres et attaques-surprises ont été jouées.',
             'Nouvelle manche : chacun complète sa main à 5 cartes, et le jeton Premier joueur passe à gauche.',
@@ -1482,9 +1609,22 @@ export const nemesis: Tutorial = {
           ref: 'Déroulement — p.10',
         },
         {
+          id: 'rp2-solo',
+          kind: 'check',
+          title: 'Où en était-on ?',
+          only: [1],
+          body: [
+            'Phase Joueur ou phase Événement ? Si vous ne vous en souvenez pas, reprenez au début de la phase Joueur.',
+            'Aviez-vous déjà passé ? Votre aide de jeu est retournée côté « passé » si c’est le cas.',
+          ],
+          components: ['aides'],
+          ref: 'Déroulement — p.10',
+        },
+        {
           id: 'rp2',
           kind: 'check',
           title: 'Où en était-on ?',
+          only: [2, 3, 4, 5],
           body: [
             'Phase Joueur ou phase Événement ? Si personne ne s’en souvient, reprenez au début de la phase Joueur.',
             'Le marqueur Premier joueur donne l’ordre du tour.',
@@ -1554,9 +1694,21 @@ export const nemesis: Tutorial = {
       goal: 'Retrouver la structure d’une manche et l’ordre des phases.',
       steps: [
         {
+          id: 'rr1-solo',
+          kind: 'info',
+          title: 'Une manche, deux phases',
+          only: [1],
+          body: [
+            'Phase Joueur : 2 actions par tour, autant de tours que vous voulez, jusqu’à ce que vous passiez.',
+            'Phase Événement : 5 étapes, dans l’ordre.',
+          ],
+          ref: 'Déroulement — p.10',
+        },
+        {
           id: 'rr1',
           kind: 'info',
           title: 'Une manche, deux phases',
+          only: [2, 3, 4, 5],
           body: [
             'Phase Joueur : chacun son tour, jusqu’à ce que tout le monde ait passé.',
             'Phase Événement : 5 étapes, dans l’ordre, pour tout le monde à la fois.',
@@ -1610,9 +1762,22 @@ export const nemesis: Tutorial = {
           ref: 'Combat — p.19-21',
         },
         {
+          id: 'rr6-solo',
+          kind: 'info',
+          title: 'La phase Événement, 5 étapes',
+          only: [1],
+          body: [
+            '1. Carte Événement révélée et résolue. 2. Déplacement des Intrus attirés par le bruit.',
+            '3. Attaque des Intrus en contact. 4. Un jeton tiré du sac Intrus.',
+            '5. Entretien : marqueurs de bruit retirés, main complétée à 5 cartes.',
+          ],
+          ref: 'Phase Événement — p.22',
+        },
+        {
           id: 'rr6',
           kind: 'info',
           title: 'La phase Événement, 5 étapes',
+          only: [2, 3, 4, 5],
           body: [
             '1. Carte Événement révélée et résolue. 2. Déplacement des Intrus attirés par le bruit.',
             '3. Attaque des Intrus en contact. 4. Un jeton tiré du sac par joueur encore en vie.',
@@ -1693,9 +1858,25 @@ export const nemesis: Tutorial = {
           ref: 'Contrôle de contamination — p.11 et p.20',
         },
         {
+          id: 'w5-solo',
+          kind: 'info',
+          title: 'Ce que ce tutoriel n’a pas couvert',
+          only: [1],
+          body: [
+            'Les actions des 20 salles, décrites dans l’index p.24 à 26.',
+            'L’action Fouille, la fabrication d’objets, les objets de quête.',
+            'La séquence d’autodestruction, les nacelles, l’hibernation en détail.',
+            'Les points faibles et l’analyse de corps au laboratoire.',
+            'Le mode coopératif et « jouer en tant qu’Intrus ». Le mode solo, lui, est couvert : ce tutoriel vient d’en dérouler les trois règles.',
+          ],
+          tip: 'Gardez le livret ouvert à l’index des salles pendant votre première partie : c’est la seule page que vous consulterez vraiment souvent.',
+          ref: 'Index des salles — p.24-26',
+        },
+        {
           id: 'w5',
           kind: 'info',
           title: 'Ce que ce tutoriel n’a pas couvert',
+          only: [2, 3, 4, 5],
           body: [
             'Les actions des 20 salles, décrites dans l’index p.24 à 26.',
             'L’action Fouille, la fabrication d’objets, les objets de quête.',

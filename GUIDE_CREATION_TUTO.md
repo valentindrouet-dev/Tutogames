@@ -201,6 +201,48 @@ Trois usages qui reviennent presque toujours :
   `only: [1]` d'un côté, `only: [2, 3, …]` de l'autre ;
 - une **étape de concertation** qui n'a pas de sens seul → `only: [2, 3, …]`.
 
+#### Le solo n'est pas « la même partie, en moins nombreux »
+
+Quand `players.min` vaut 1, **relisez le tutoriel entier en vous demandant à
+chaque étape : est-ce que cette phrase veut dire quelque chose, seul ?** Trois
+tournures trahissent une étape écrite pour une table pleine :
+
+- « le premier joueur », « le jeton Premier joueur passe à gauche » ;
+- « chacun son tour », « dans le sens horaire », « jusqu'à ce que tous aient
+  passé » ;
+- « les autres joueurs », quand le jeu n'a pas d'adversaire automatisé.
+
+`npm run players` fait ce relevé pour vous :
+
+```bash
+npm run players            # tous les jeux
+npm run players -- nemesis # un seul
+```
+
+Il donne le nombre d'étapes par effectif et par mode, les étapes propres au
+solo, celles qui lui sont masquées, et la liste de celles qui parlent des
+autres joueurs sans porter de filtre. Un signalement n'est pas une faute :
+chez *Bitoku*, « l'autre joueur » est le Tengu, l'adversaire automatisé.
+
+Trois façons de traiter un cas, de la plus légère à la plus lourde :
+
+1. **Reformuler pour que la phrase soit vraie à tous les effectifs.** La phase
+   Oathsworn se compte en personnages, pas en joueurs : « un autre personnage »
+   est exact à quatre comme seul. C'est presque toujours la bonne réponse.
+2. **Un `warn` ou un `tip` qui couvre les deux cas**, quand la règle elle-même
+   dépend du nombre : « seul, vous payez une fois ; à quatre, quatre fois ».
+3. **Deux étapes, `only: [1]` et `only: [2, 3, …]`**, quand le livret donne
+   deux règles différentes. C'est le cas du mode solo de *Nemesis*, qui change
+   le paquet d'objectifs, le nombre d'objets dans les salles et l'enchaînement
+   des tours : trois étapes doublées, et le joueur solo ne voit jamais celles
+   de la partie à plusieurs.
+
+> **Une variante solo n'est pas hors périmètre par défaut.** Si le livret lui
+> consacre une section, elle se traite comme le reste : lue, traduite, placée
+> au bon endroit du tutoriel. Ne la listez dans `scope.skipped` que si vous ne
+> la couvrez vraiment pas — un joueur qui a choisi « 1 » et lit « le mode solo
+> n'est pas couvert » a de quoi se sentir mal servi.
+
 ### Étape 5 — Habiller le jeu
 
 Chaque jeu a son ambiance. Le champ `theme` fournit les valeurs, la feuille de
@@ -798,6 +840,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.19 | Étape 4 : « Le solo n'est pas la même partie, en moins nombreux », et `npm run players` pour relever ce que chaque effectif voit. Les sept tutoriels relus à 1 joueur ; *Nemesis* passe de 3 à 16 étapes propres au solo. |
 | 2026-09-05 | v0.18 | Le texte d'une étape est du texte brut, sans gras ni markdown. Un jeu peut porter **plusieurs livrets** : `source.books`, `crop.book`, `bookOf()`, un dossier d'assets par livret, et la pastille d'une découpe pleine page qui nomme le livret. Étape 3 : la section « Un jeu livré en deux livrets », et pourquoi on ne les fusionne pas. *Oathsworn* couvre désormais le chapitre entier, histoire et rencontre. |
 | 2026-09-05 | v0.17 | Étape 8e : `npm run snap` recale les rectangles sur le bloc qu'ils visent, après mesure des colonnes page par page. Une étape qui cite ses composants ne découpe plus la planche de matériel. Septième tutoriel : *Oathsworn : Into the Deepwood*, dont le livret Histoire est livré en quatre PDF et dont seule la moitié Histoire est couverte, la Rencontre ayant son propre livret. |
 | 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |

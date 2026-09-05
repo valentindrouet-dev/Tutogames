@@ -1852,9 +1852,24 @@ export const taintedgrail: Tutorial = {
           ref: 'L’Aube — p.8',
         },
         {
+          id: 'r3-solo',
+          kind: 'info',
+          title: 'La journée : six actions',
+          only: [1],
+          body: [
+            'Exploration (1 Énergie), Voyage (1 Énergie), action de lieu (coût imprimé), action de personnage.',
+            'Inspection de menhir et Passer sont gratuites.',
+            'Vous enchaînez vos actions jusqu’à passer ou manquer d’Énergie.',
+          ],
+          warn: 'On ne voyage qu’orthogonalement, et seulement entre lieux reliés par des clés de direction.',
+          crop: { page: 8, x: 0.655, y: 0.28, w: 0.3, h: 0.26 },
+          ref: 'La Journée — p.8-9',
+        },
+        {
           id: 'r3',
           kind: 'info',
           title: 'La journée : six actions',
+          only: [2, 3, 4],
           body: [
             'Exploration (1 Énergie), Voyage (1 Énergie), action de lieu (coût imprimé), action de personnage.',
             'Inspection de menhir et Passer sont gratuites.',

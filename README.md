@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.18** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.19** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -53,6 +53,12 @@ une découpe pleine page dit de quel livret vient la page.
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
 et adapte son contenu.
+
+**En solo, vous avez les règles du solo.** Ce n'est pas la même partie en moins
+nombreux : le tutoriel sort le paquet d'objectifs Solo de *Nemesis*, l'Automa
+d'*Expeditions*, le Tengu de *Bitoku*, la variante à deux personnages de
+*Frosthaven*, et il vous épargne le jeton Premier joueur, le tour de table et
+le voisin de gauche.
 
 Chaque jeu a ses couleurs — fond clair ou sombre, accent, arrondis — mais la
 mise en page et la typographie ne changent jamais : un joueur qui a suivi un
@@ -156,6 +162,7 @@ version.json    source unique du numéro de version
 | `npm run crops` | Pré-découpe les visuels référencés par les tutoriels |
 | `npm run grid -- <pdf> <page>` | Rend une page sous une grille de coordonnées, pour repérer les découpes |
 | `npm run snap -- <jeu> [--write]` | Recale les découpes d'un tutoriel sur le bloc qu'elles visent |
+| `npm run players -- [jeu]` | Montre ce que chaque effectif voit, et repère les étapes écrites pour une table pleine |
 | `npm run vo` | Contrôle les glossaires de version originale, jeu par jeu |
 
 ## Crédits

@@ -17,6 +17,44 @@ comme complète.
 
 ---
 
+## v0.19 — 2026-09-05
+
+### Corrigé
+
+- **L'effectif 1 joueur reçoit enfin les règles du solo.** Le filtrage par
+  effectif existait depuis la v0.06, mais plusieurs jeux laissaient passer des
+  consignes qui n'ont pas de sens seul — un jeton Premier joueur à faire
+  tourner, un tour de table, un voisin de gauche — et *Nemesis* allait jusqu'à
+  se contredire.
+  - *Nemesis* passe de 3 à 16 étapes propres au solo. Le briefing ne parle plus
+    de trahison, le sac Intrus donne le compte exact (4 Adultes), les paquets
+    de cartes sortent le paquet Objectif Solo/Coop au lieu de le laisser dans
+    la boîte — ce que l'étape 11 disait, en contredisant l'étape 16 —, la
+    phase Joueur, le déplacement, l'attaque d'Intrus, la fin de manche, la
+    reprise et le rappel ont leur version solitaire. Le débriefing ne range
+    plus le mode solo parmi ce qui n'est pas couvert : il l'est.
+  - *Tainted Grail* : le rappel de la journée ne fait plus jouer « chacun son
+    tour » quand on est seul.
+  - *Expeditions* : plus de premier joueur à tirer au sort ; en solo, vous et
+    l'Automa alternez, et c'est vous qui ouvrez. La reprise le dit aussi.
+  - *Oathsworn* : la décision secrète a sa version solo — vous décidez pour la
+    Compagnie, sans rien cacher, comme le livret le prévoit. La phase Oathsworn
+    et les interruptions se comptent désormais en personnages et non en
+    joueurs : c'est exact à quatre comme seul, où un joueur mène les quatre.
+  - *Rois de la Ruine* : le coût d'une Pierre de Passage se compte sur les
+    personnages en jeu, « seul, vous payez une fois ; à quatre, quatre fois ».
+
+### Outils
+
+- **`npm run players -- [jeu]`** montre ce que chaque effectif voit : le
+  nombre d'étapes par mode, les étapes propres au solo, celles qui lui sont
+  masquées, et surtout celles qui **parlent des autres joueurs sans porter de
+  filtre**. C'est là que se cachaient les « premier joueur » et les « sens
+  horaire » d'un tutoriel joué seul. Un signalement n'est pas une faute : chez
+  *Bitoku*, l'autre joueur est le Tengu.
+
+---
+
 ## v0.18 — 2026-09-05
 
 ### Ajouté

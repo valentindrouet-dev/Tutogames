@@ -814,7 +814,7 @@ export const taintedgrailkor: Tutorial = {
             'pour chaque personnage en jeu, payez 1 Magie et soit 1 Richesse soit 1 Nourriture ;',
             'ou le « Prix du sang » : 3 santé perdues et 2 terreur gagnées, par personnage en jeu.',
           ],
-          warn: 'Le compte se fait sur les personnages en jeu, pas sur les membres de votre groupe. À quatre, c’est quatre fois le prix.',
+          warn: 'Le compte se fait sur les personnages en jeu, pas sur les joueurs autour de la table : seul, vous payez une fois ; à quatre, quatre fois.',
           components: ['pierres'],
                     ref: 'Activer une Pierre de Passage — p.9',
         },
