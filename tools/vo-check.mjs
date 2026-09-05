@@ -73,6 +73,26 @@ for (const t of TUTORIALS) {
   console.log(`  étapes les plus fournies : ${top.map((r) => `${r.id} (${r.n})`).join(', ')}`)
   console.log(`  étapes sans terme : ${empty.length}${empty.length ? ` — ${empty.slice(0, 10).map((r) => r.id).join(' ')}` : ''}`)
   console.log(`  jamais rencontrés : ${never.length ? never.join(' · ') : 'aucun'}`)
+
+  // Le mode « sur la boîte » remplace le mot français par le terme imprimé,
+  // accordé en nombre. On montre les pluriels que la règle fabrique, pour
+  // repérer ceux qui demandent un `enPlural` — Larva donne Larvae, pas
+  // Larvas.
+  const guessed = t.vo.terms
+    .filter((v) => !v.enPlural && /^[\p{L}\s'-]+$/u.test(v.en) && !/[sx]$/i.test(v.fr.trim().split(/\s+/).pop()))
+    .map((v) => {
+      const last = v.en.trim().split(/\s+/).pop()
+      if (/s$/i.test(last) && !/(ss|us|is)$/i.test(last)) return null
+      if (/([sxz]|ch|sh)$/i.test(last)) return `${v.en} → ${v.en}es`
+      if (/[^aeiou]y$/i.test(last)) return `${v.en} → ${v.en.slice(0, -1)}ies`
+      return null
+    })
+    .filter(Boolean)
+  if (guessed.length) console.log(`  pluriels fabriqués, à vérifier : ${guessed.join(' · ')}`)
+  const declared = t.vo.terms.filter((v) => v.enPlural)
+  if (declared.length) {
+    console.log(`  pluriels déclarés : ${declared.map((v) => `${v.en} → ${v.enPlural}`).join(' · ')}`)
+  }
 }
 
 if (!found) {

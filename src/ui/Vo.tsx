@@ -2,8 +2,15 @@
  * Termes de la version originale, dans le texte de l'étape.
  *
  * Quand la boîte posée sur la table n'est pas en français, les mots dont le
- * matériel porte un autre nom sont **surlignés dans la consigne**. Un survol
- * à la souris, une tape sur l'iPad, et la bulle donne le terme imprimé.
+ * matériel porte un autre nom sont surlignés dans la consigne. Deux façons
+ * de les lire, que le bouton VO du bandeau fait basculer :
+ *
+ *  - **en français** : le mot reste écrit en français, et la bulle donne le
+ *    terme imprimé sur le matériel ;
+ *  - **sur la boîte** : le mot **est remplacé** par le terme imprimé, et la
+ *    bulle rappelle le français. La phrase, elle, reste en français : seuls
+ *    les noms du matériel basculent, ce qui laisse lire la consigne tout en
+ *    cherchant la bonne carte des yeux.
  *
  * Le glossaire complet reste consultable sur la fiche du jeu, à l'accueil :
  * ici, on ne montre que ce que l'étape emploie, là où le joueur le lit.
@@ -16,10 +23,15 @@ import {
 import type { VoTerm } from '../engine/types'
 import type { VoSpan } from '../engine/vo'
 
+/** Ce que la bulle affiche, et dans quel sens. */
+type Way = 'fr' | 'vo'
+
 /* ------------------------------------------------------------------ bulle */
 
 interface Tip {
   term: VoTerm
+  /** Ce que la bulle doit donner : le terme imprimé, ou le mot français. */
+  other: string
   /** Le mot surligné : sert à ne fermer que sa propre bulle. */
   el: HTMLElement
   /** Ouverte au doigt : elle reste jusqu'à la prochaine tape. */
@@ -34,7 +46,7 @@ interface VoApi {
   tip: Tip | null
   /** Langue du matériel, pour ce que lit un lecteur d'écran. */
   language: string
-  show: (el: HTMLElement, term: VoTerm, sticky: boolean) => void
+  show: (el: HTMLElement, term: VoTerm, other: string, sticky: boolean) => void
   hide: (el?: HTMLElement) => void
 }
 
@@ -52,11 +64,12 @@ const EDGE = 150
 export function VoScope({ language, children }: { language: string; children: ReactNode }) {
   const [tip, setTip] = useState<Tip | null>(null)
 
-  const show = useCallback((el: HTMLElement, term: VoTerm, sticky: boolean) => {
+  const show = useCallback((el: HTMLElement, term: VoTerm, other: string, sticky: boolean) => {
     const r = el.getBoundingClientRect()
     const above = r.top > 140
     setTip({
       term,
+      other,
       el,
       sticky,
       x: Math.min(Math.max(r.left + r.width / 2, EDGE), window.innerWidth - EDGE),
@@ -98,7 +111,7 @@ export function VoScope({ language, children }: { language: string; children: Re
           style={{ left: tip.x, top: tip.y }}
           role="status"
         >
-          <span className="vo-tip-en">{tip.term.en}</span>
+          <span className="vo-tip-en">{tip.other}</span>
           {tip.term.note && <span className="vo-tip-note">{tip.term.note}</span>}
         </span>
       )}
@@ -108,13 +121,69 @@ export function VoScope({ language, children }: { language: string; children: Re
 
 /* ------------------------------------------------------------ surlignage */
 
-function VoMark({ term, children }: { term: VoTerm; children: string }) {
+/** Le dernier mot d'un terme : c'est lui qui porte le nombre. */
+const lastWord = (t: string) => t.trim().split(/\s+/).pop() ?? ''
+
+/**
+ * Le texte trouvé était-il au pluriel ? Le repérage compare des formes sans
+ * « s » final : « les Rôdeurs » et « un Rôdeur » tombent tous deux sur la
+ * même entrée. On regarde donc le mot tel qu'il est écrit.
+ */
+function isPlural(source: string, fr: string): boolean {
+  const a = lastWord(source).toLowerCase()
+  const b = lastWord(fr).toLowerCase()
+  return /[sx]$/.test(a) && !/[sx]$/.test(b)
+}
+
+/**
+ * Le pluriel anglais d'un terme, quand le glossaire ne le donne pas.
+ *
+ * La règle du « s » couvre la quasi-totalité des noms de matériel — Rooms,
+ * Corridors, Action cards —, complétée par « es » après s, x, z, ch ou sh, et
+ * par « ies » après une consonne et un y. Une abréviation entre parenthèses
+ * reste telle quelle : « Hit Points (HP) » ne se pluralise pas.
+ *
+ * Un terme dont le français est déjà au pluriel ne passe jamais par ici :
+ * `isPlural` le voit et n'accorde rien. Restent les vrais irréguliers —
+ * Larva, Larvae — qui se déclarent dans le glossaire, par `enPlural`.
+ */
+function pluralOf(en: string): string {
+  if (!/^[\p{L}\s'-]+$/u.test(en)) return en
+  const last = lastWord(en)
+  // Déjà au pluriel : « hit points », « special rules ». Un « s » final qui
+  // suit ss, us ou is appartient au mot — class, bonus, Miss —, pas au nombre.
+  if (/s$/i.test(last) && !/(ss|us|is)$/i.test(last)) return en
+  if (/([sxz]|ch|sh)$/i.test(last)) return en + 'es'
+  if (/[^aeiou]y$/i.test(last)) return en.slice(0, -1) + 'ies'
+  return en + 's'
+}
+
+/**
+ * Le terme imprimé, accordé au mot qu'il remplace.
+ *
+ * « Rôdeur » en tête de phrase devient « Creeper », pas « creeper » ; « les
+ * Rôdeurs » devient « les Creepers ». Le glossaire écrit chaque terme comme
+ * la boîte l'imprime : on ne touche qu'à la majuscule et au nombre, pour que
+ * la phrase française reste lisible autour.
+ */
+function printed(term: VoTerm, source: string): string {
+  const en = isPlural(source, term.fr) ? (term.enPlural ?? pluralOf(term.en)) : term.en
+  const head = source[0]
+  if (!head || head !== head.toUpperCase() || head === head.toLowerCase()) return en
+  return en[0].toUpperCase() + en.slice(1)
+}
+
+function VoMark({ term, way, children }: { term: VoTerm; way: Way; children: string }) {
   const api = useContext(VoCtx)
   const ref = useRef<HTMLButtonElement>(null)
   const open = api?.tip?.el === ref.current
 
+  // En français, le mot montre le terme imprimé ; sur la boîte, l'inverse.
+  const shown = way === 'vo' ? printed(term, children) : children
+  const other = way === 'vo' ? children : term.en
+
   const enter = (e: ReactPointerEvent<HTMLButtonElement>) => {
-    if (api && ref.current && e.pointerType === 'mouse') api.show(ref.current, term, false)
+    if (api && ref.current && e.pointerType === 'mouse') api.show(ref.current, term, other, false)
   }
   const leave = (e: ReactPointerEvent<HTMLButtonElement>) => {
     if (api && ref.current && e.pointerType === 'mouse' && !api.tip?.sticky) api.hide(ref.current)
@@ -123,7 +192,7 @@ function VoMark({ term, children }: { term: VoTerm; children: string }) {
     if (!api || !ref.current) return
     // Deuxième tape sur le même mot : on referme.
     if (open && api.tip?.sticky) api.hide()
-    else api.show(ref.current, term, true)
+    else api.show(ref.current, term, other, true)
   }
 
   return (
@@ -131,12 +200,17 @@ function VoMark({ term, children }: { term: VoTerm; children: string }) {
       ref={ref}
       type="button"
       className={`vo-mark${open ? ' open' : ''}`}
+      data-vo={way === 'vo' ? '' : undefined}
       onPointerEnter={enter}
       onPointerLeave={leave}
       onClick={click}
-      aria-label={`${children} — en ${api?.language ?? 'version originale'} : ${term.en}`}
+      aria-label={
+        way === 'vo'
+          ? `${shown} — en français : ${children}`
+          : `${children} — en ${api?.language ?? 'version originale'} : ${term.en}`
+      }
     >
-      {children}
+      {shown}
     </button>
   )
 }
@@ -146,7 +220,7 @@ function VoMark({ term, children }: { term: VoTerm; children: string }) {
  * rendu tel quel : c'est le cas quand le joueur a coupé le surlignage, ou
  * quand le jeu n'a pas de glossaire.
  */
-export function VoText({ text, spans }: { text: string; spans?: VoSpan[] }) {
+export function VoText({ text, spans, way = 'fr' }: { text: string; spans?: VoSpan[]; way?: Way }) {
   if (!spans?.length) return <>{text}</>
 
   const out: ReactNode[] = []
@@ -154,7 +228,7 @@ export function VoText({ text, spans }: { text: string; spans?: VoSpan[] }) {
   for (const [i, s] of spans.entries()) {
     if (s.start > at) out.push(text.slice(at, s.start))
     out.push(
-      <VoMark key={`${s.start}-${i}`} term={s.term}>
+      <VoMark key={`${s.start}-${i}`} term={s.term} way={way}>
         {text.slice(s.start, s.end)}
       </VoMark>,
     )

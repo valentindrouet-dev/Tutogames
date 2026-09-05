@@ -130,10 +130,11 @@ export function Runner({
   const position = indexOf(view, save.chapter, save.step)
   const parts = useMemo(() => (step ? componentsOf(tutorial, step) : []), [tutorial, step])
 
-  // Surlignage des termes de la version originale. Un terme n'est marqué
-  // qu'une fois par étape, dans l'ordre où le joueur lit : titre, lignes,
-  // avertissement, conseil.
-  const voOn = Boolean(tutorial.vo) && prefs.voMarks
+  // Termes de la version originale. Un terme n'est marqué qu'une fois par
+  // étape, dans l'ordre où le joueur lit : titre, lignes, avertissement,
+  // conseil. `way` décide de la langue affichée, pas du repérage.
+  const way = prefs.voMode === 'vo' ? 'vo' : 'fr'
+  const voOn = Boolean(tutorial.vo) && prefs.voMode !== 'off'
   const marks = useMemo(() => {
     if (!tutorial.vo || !voOn || !step) return null
     const body = step.body ?? []
@@ -304,11 +305,17 @@ export function Runner({
           {tutorial.vo && onPrefs && (
             <button
               type="button"
-              className={`btn btn-ghost btn-vo${voOn ? ' on' : ''}`}
-              onClick={() => onPrefs({ ...prefs, voMarks: !prefs.voMarks })}
-              aria-pressed={voOn}
-              aria-label={`Surligner les termes en ${tutorial.vo.language}`}
-              title={`Termes en ${tutorial.vo.language} : ${voOn ? 'surlignés dans les consignes' : 'masqués'}`}
+              className={`btn btn-ghost btn-vo${prefs.voMode === 'vo' ? ' on' : ''}`}
+              // Le bouton bascule la langue des termes. « Masqués » se règle
+              // dans les réglages : ici, on veut le geste d'un seul doigt.
+              onClick={() => onPrefs({ ...prefs, voMode: prefs.voMode === 'vo' ? 'fr' : 'vo' })}
+              aria-pressed={prefs.voMode === 'vo'}
+              aria-label={`Écrire les termes en ${tutorial.vo.language}`}
+              title={
+                prefs.voMode === 'vo'
+                  ? `Termes écrits en ${tutorial.vo.language}, comme sur votre matériel`
+                  : `Écrire les termes en ${tutorial.vo.language}, comme sur votre matériel`
+              }
             >
               <FlagEn aria-hidden />
               VO
@@ -361,7 +368,7 @@ export function Runner({
               </button>
             </div>
 
-            <h1 className="step-title"><VoText text={step.title} spans={marks?.title} /></h1>
+            <h1 className="step-title"><VoText text={step.title} spans={marks?.title} way={way} /></h1>
 
             {step.body?.length ? (
               <ul className="step-body">
@@ -371,7 +378,7 @@ export function Runner({
                         conteneur flex : sans cette enveloppe, chaque terme
                         surligné deviendrait un élément flex, avec sa
                         gouttière. */}
-                    <span><VoText text={line} spans={marks?.body[i]} /></span>
+                    <span><VoText text={line} spans={marks?.body[i]} way={way} /></span>
                   </li>
                 ))}
               </ul>
@@ -379,7 +386,7 @@ export function Runner({
 
             {step.warn && (
               <div className="callout callout-warn">
-                <Alert aria-hidden /><span><VoText text={step.warn} spans={marks?.warn} /></span>
+                <Alert aria-hidden /><span><VoText text={step.warn} spans={marks?.warn} way={way} /></span>
               </div>
             )}
 
@@ -387,7 +394,7 @@ export function Runner({
 
             {step.tip && (
               <div className="callout callout-tip">
-                <Bulb aria-hidden /><span><VoText text={step.tip} spans={marks?.tip} /></span>
+                <Bulb aria-hidden /><span><VoText text={step.tip} spans={marks?.tip} way={way} /></span>
               </div>
             )}
 

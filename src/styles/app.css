@@ -296,6 +296,16 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   /* La zone tactile deborde du mot sans decaler la ligne. */
   -webkit-tap-highlight-color: transparent;
 }
+/*
+ * Un terme ecrit comme sur la boite : trait plein, pas pointille. Le
+ * pointille dit « il y a autre chose a voir ici », le trait plein dit
+ * « ce mot-la est deja celui de votre materiel ».
+ */
+.vo-mark[data-vo] {
+  text-decoration: underline solid;
+  text-decoration-thickness: 2px;
+}
+
 .vo-mark.open,
 .vo-mark:hover {
   background: color-mix(in srgb, var(--accent) 16%, transparent);

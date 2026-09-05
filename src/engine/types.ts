@@ -354,8 +354,14 @@ export interface Players {
 export interface VoTerm {
   /** Le terme tel que le tutoriel l'écrit. */
   fr: string
-  /** Le terme tel qu'il est imprimé sur la boîte du joueur. */
+  /** Le terme tel qu'il est imprimé sur la boîte du joueur, au singulier. */
   en: string
+  /**
+   * Le pluriel imprimé, quand un « s » ne suffit pas. Sert au mode « sur la
+   * boîte », qui remplace le mot français par celui du matériel : « les
+   * Larves » doit donner « les Larvae », pas « les Larvas ».
+   */
+  enPlural?: string
   /** Où on le lit, ou ce qui prête à confusion. Une ligne au plus. */
   note?: string
 }

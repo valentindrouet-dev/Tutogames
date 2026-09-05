@@ -14,6 +14,17 @@ const KEY = 'tutogames.prefs.v1'
 /** Ordre d'affichage des jeux sur l'accueil. */
 export type SortOrder = 'catalogue' | 'alpha'
 
+/**
+ * Ce que les consignes font des termes dont le matériel porte un autre nom.
+ *
+ * - `fr` : le mot reste en français, surligné ; la bulle donne le terme imprimé.
+ * - `vo` : le mot **est remplacé** par le terme imprimé, et la bulle rappelle
+ *   le français. La phrase reste en français, seuls les noms du matériel
+ *   basculent — c'est ce qu'on veut quand la boîte est ouverte sur la table.
+ * - `off` : rien n'est surligné.
+ */
+export type VoMode = 'fr' | 'vo' | 'off'
+
 export interface Prefs {
   /** Multiplicateur de la taille du texte. */
   textScale: number
@@ -25,10 +36,10 @@ export interface Prefs {
    */
   lift: number
   /**
-   * Surligner, dans les consignes, les termes dont le matériel du joueur
-   * porte un autre nom. Sans effet sur un jeu sans glossaire.
+   * Langue des termes dont le matériel du joueur porte un autre nom. Sans
+   * effet sur un jeu sans glossaire.
    */
-  voMarks: boolean
+  voMode: VoMode
 }
 
 export const TEXT_SCALES = [
@@ -40,9 +51,10 @@ export const TEXT_SCALES = [
 
 export const LIFTS = [-2, -1, 0, 1, 2]
 
-export const VO_MARKS: { value: boolean; label: string }[] = [
-  { value: true, label: 'Surlignés' },
-  { value: false, label: 'Masqués' },
+export const VO_MODES: { value: VoMode; label: string; hint: string }[] = [
+  { value: 'fr', label: 'En français', hint: 'surlignés, la bulle donne le terme imprimé' },
+  { value: 'vo', label: 'Sur la boîte', hint: 'remplacés par le terme imprimé' },
+  { value: 'off', label: 'Masqués', hint: 'ni surlignage ni bulle' },
 ]
 
 export const SORTS: { value: SortOrder; glyph: string; label: string }[] = [
@@ -50,10 +62,19 @@ export const SORTS: { value: SortOrder; glyph: string; label: string }[] = [
   { value: 'alpha', glyph: 'A → Z', label: 'Alphabétique' },
 ]
 
-export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0, sort: 'catalogue', voMarks: true }
+export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0, sort: 'catalogue', voMode: 'fr' }
 
 function clamp(n: number, min: number, max: number): number {
   return Math.min(Math.max(n, min), max)
+}
+
+/**
+ * Relit le réglage des termes, y compris dans sa forme d'avant la v0.22 :
+ * un booléen `voMarks` qui ne disait que surlignés ou masqués.
+ */
+function readVoMode(p: Partial<Prefs> & { voMarks?: boolean }): VoMode {
+  if (p.voMode === 'vo' || p.voMode === 'off' || p.voMode === 'fr') return p.voMode
+  return p.voMarks === false ? 'off' : 'fr'
 }
 
 export function loadPrefs(): Prefs {
@@ -65,8 +86,7 @@ export function loadPrefs(): Prefs {
       textScale: clamp(Number(p.textScale) || 1, 1, 1.5),
       lift: clamp(Math.round(Number(p.lift) || 0), -2, 2),
       sort: p.sort === 'alpha' ? 'alpha' : 'catalogue',
-      // Absent des réglages enregistrés avant la v0.16 : actif par défaut.
-      voMarks: p.voMarks !== false,
+      voMode: readVoMode(p),
     }
   } catch {
     // Stockage indisponible : les réglages par défaut restent utilisables.

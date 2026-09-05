@@ -9,7 +9,7 @@
  */
 
 import type { Prefs } from '../engine/prefs'
-import { DEFAULT_PREFS, LIFTS, SORTS, TEXT_SCALES, VO_MARKS, shade } from '../engine/prefs'
+import { DEFAULT_PREFS, LIFTS, SORTS, TEXT_SCALES, VO_MODES, shade } from '../engine/prefs'
 import type { Theme } from '../engine/types'
 import { Sheet } from './Sheet'
 import { Contrast, FlagEn, SortIcon, TextSize } from './icons'
@@ -85,24 +85,32 @@ export function Settings({ prefs, onChange, onClose, theme }: Props) {
       <div>
         <div className="section-label"><FlagEn aria-hidden /> Termes en anglais</div>
         <div className="pref-row">
-          {VO_MARKS.map((o) => (
+          {VO_MODES.map((o) => (
             <button
-              key={String(o.value)}
+              key={o.value}
               type="button"
-              className={`pref-btn${o.value === prefs.voMarks ? ' picked' : ''}`}
-              onClick={() => onChange({ ...prefs, voMarks: o.value })}
+              className={`pref-btn${o.value === prefs.voMode ? ' picked' : ''}`}
+              onClick={() => onChange({ ...prefs, voMode: o.value })}
+              title={o.hint}
             >
               {/* L'étiquette montre ce que le réglage produit dans le texte. */}
               <span className="pref-glyph">
-                {o.value ? <span className="vo-mark">Intrus</span> : 'Intrus'}
+                {o.value === 'off' ? (
+                  'Intrus'
+                ) : (
+                  <span className="vo-mark" data-vo={o.value === 'vo' ? '' : undefined}>
+                    {o.value === 'vo' ? 'Intruder' : 'Intrus'}
+                  </span>
+                )}
               </span>
               <span className="pref-btn-label">{o.label}</span>
             </button>
           ))}
         </div>
         <p className="sheet-lead">
-          Nemesis et Frosthaven ont leur matériel en anglais. Les mots concernés sont
-          surlignés dans les consignes ; le terme imprimé s'affiche au survol ou à la tape.
+          Nemesis, Frosthaven et Oathsworn ont leur matériel en anglais. « Sur la boîte »
+          écrit les mots concernés comme votre matériel les imprime, accordés à la phrase ;
+          la bulle rappelle alors le français. Le bouton VO du bandeau fait la bascule.
         </p>
       </div>
 

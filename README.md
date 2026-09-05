@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.21** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.22** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -39,9 +39,14 @@ Trois boîtes de la table sont en anglais : *Nemesis*, *Frosthaven* et
 🇬🇧 les signale sur l'accueil, à côté de la durée. Dans le tutoriel, les mots
 dont le matériel porte un autre nom sont **surlignés dans les consignes** : un
 survol à la souris, une tape sur l'iPad, et la bulle donne le terme imprimé.
-Le bouton **VO** du bandeau coupe ou remet le surlignage ; la fiche du jeu
-porte le glossaire complet. Un jeu dont le matériel est en français n'a ni
-drapeau, ni surlignage.
+Le bouton **VO** du bandeau va plus loin : il **remplace le mot français par
+le terme imprimé**. La phrase reste en français, seuls les noms du matériel
+basculent — « Défaussez 1 Action card et déplacez votre figurine vers une Room
+adjacente » —, et la bulle rappelle alors le français. Le mot est accordé à la
+phrase : « les Rôdeurs » donne « les Creepers ».
+
+La fiche du jeu porte le glossaire complet. Un jeu dont le matériel est en
+français n'a ni drapeau, ni surlignage.
 
 ### Un jeu, deux livrets
 

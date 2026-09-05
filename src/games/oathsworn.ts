@@ -236,7 +236,7 @@ export const oathsworn: Tutorial = {
       { fr: 'valeur de défense', en: 'Defense Value' },
       { fr: 'briser un emplacement', en: 'Breaking a Location' },
       { fr: 'réaction', en: 'Reaction' },
-      { fr: 'inconscient', en: 'Unconscious' },
+      { fr: 'inconscient', en: 'Unconscious', enPlural: 'Unconscious' },
 
       // Les ennemis
       { fr: 'ennemi', en: 'Enemy' },

@@ -94,7 +94,7 @@ export const nemesis: Tutorial = {
 
       // Les Intrus
       { fr: 'Intrus', en: 'Intruder' },
-      { fr: 'Larve', en: 'Larva', note: 'Pluriel Larvae sur le livret.' },
+      { fr: 'Larve', en: 'Larva', enPlural: 'Larvae', note: 'Pluriel Larvae sur le livret.' },
       { fr: 'Rôdeur', en: 'Creeper' },
       { fr: 'Adulte', en: 'Adult Intruder' },
       { fr: 'Hybride', en: 'Breeder' },

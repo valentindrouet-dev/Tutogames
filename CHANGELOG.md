@@ -17,6 +17,39 @@ comme complète.
 
 ---
 
+## v0.22 — 2026-09-05
+
+### Modifié
+
+- **Le bouton VO écrit les termes comme votre boîte les imprime.** Il ne coupe
+  plus le surlignage : il fait basculer les mots. La phrase reste en français,
+  seuls les noms du matériel changent de langue — « Défaussez 1 Action card et
+  déplacez votre figurine vers une Room adjacente ». C'est ce qu'on veut quand
+  la boîte est ouverte sur la table et qu'on cherche la bonne carte des yeux.
+  - Le mot bascule **accordé à la phrase** : la majuscule de début de phrase
+    est reprise, et le pluriel français donne le pluriel anglais — « les
+    Rôdeurs » donne « les Creepers », « les Larves » donne « les Larvae ».
+    La règle du « s » se complète de « es » après s, x, z, ch ou sh, et de
+    « ies » après une consonne et un y ; un terme déjà au pluriel côté français
+    n'est jamais retouché. Les vrais irréguliers se déclarent dans le
+    glossaire par `enPlural`.
+  - La bulle s'inverse : en mode « sur la boîte », elle rappelle le mot
+    français. Rien ne se perd.
+  - Le soulignement change avec le sens : pointillé pour « il y a autre chose
+    à voir ici », trait plein pour « ce mot-là est déjà celui de votre
+    matériel ».
+- Le réglage « Termes en anglais » passe de deux à **trois choix** — en
+  français, sur la boîte, masqués. Le bouton du bandeau bascule entre les deux
+  premiers, d'un seul doigt ; « masqués » reste dans les réglages. Un réglage
+  enregistré avant cette version est relu tel quel.
+
+### Outils
+
+- `npm run vo` montre les pluriels que la règle fabrique et ceux que le
+  glossaire déclare, pour repérer un « Larvas » avant le joueur.
+
+---
+
 ## v0.21 — 2026-09-05
 
 ### Ajouté
