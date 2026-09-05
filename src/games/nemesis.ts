@@ -345,11 +345,11 @@ export const nemesis: Tutorial = {
       crop: { page: 3, x: 0.199, y: 0.702, w: 0.129, h: 0.06 },
       // Ce que donne chaque jeton tiré du sac, phase Événement.
       variants: [
-        { label: 'Larve', qty: '4 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Adulte.', tint: '#84cc16' },
-        { label: 'Rôdeur', qty: '1 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Hybride.', tint: '#22d3ee' },
-        { label: 'Adulte', qty: '3 + 1 par joueur', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#f97316' },
-        { label: 'Hybride', qty: '1 au départ', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#a78bfa' },
-        { label: 'Reine', qty: '1', effect: 'Un personnage dans le nid ? La Reine y arrive et déclenche une rencontre. Sinon, ajoutez un jeton Œuf sur le plateau Intrus. Le jeton retourne dans le sac.', tint: '#ef4444' },
+        { label: 'Larve', qty: '4 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Adulte.', tint: '#84cc16', crop: { page: 6, x: 0.792, y: 0.22, w: 0.038, h: 0.024 } },
+        { label: 'Rôdeur', qty: '1 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Hybride.', tint: '#22d3ee', crop: { page: 6, x: 0.792, y: 0.274, w: 0.038, h: 0.028 } },
+        { label: 'Adulte', qty: '3 + 1 par joueur', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#f97316', crop: { page: 6, x: 0.792, y: 0.332, w: 0.038, h: 0.028 } },
+        { label: 'Hybride', qty: '1 au départ', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#a78bfa', crop: { page: 6, x: 0.792, y: 0.421, w: 0.038, h: 0.034 } },
+        { label: 'Reine', qty: '1', effect: 'Un personnage dans le nid ? La Reine y arrive et déclenche une rencontre. Sinon, ajoutez un jeton Œuf sur le plateau Intrus. Le jeton retourne dans le sac.', tint: '#ef4444', crop: { page: 6, x: 0.79, y: 0.5155, w: 0.042, h: 0.028 } },
         { label: 'Vierge', qty: '1', effect: 'Ajoutez 1 jeton Adulte dans le sac. S’il n’en reste plus, rien ne se passe. Le jeton retourne dans le sac.', tint: '#64708a' },
       ],
     },
@@ -499,15 +499,31 @@ export const nemesis: Tutorial = {
       id: 'de-bruit',
       name: 'Dés de bruit',
       qty: '2 d10',
-      note: 'Le dé du jet de bruit. Ses résultats : un numéro de couloir de 1 à 4, Silence, ou Danger.',
+      note: 'Le dé du jet de bruit. Six résultats possibles : un numéro de couloir de 1 à 4, Danger, ou Silence.',
       glyph: 'die',
       tint: '#22d3ee',
-      crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
+      crop: { page: 2, x: 0.56, y: 0.903, w: 0.036, h: 0.028 },
+      // Les six résultats possibles du jet, page 15 : un symbole chacun.
       variants: [
         {
-          label: 'Résultat 1, 2, 3 ou 4',
-          effect: 'Placez un marqueur Bruit dans le couloir de ce numéro, relié à votre salle. Un couloir n’accueille jamais deux marqueurs : s’il y en a déjà un, c’est une rencontre.',
-          crop: { page: 15, x: 0.345, y: 0.398, w: 0.175, h: 0.055 },
+          label: 'Couloir 1',
+          effect: 'Un marqueur Bruit dans le couloir n° 1 relié à votre salle. Le numéro est imprimé sur le plateau, à côté du couloir.',
+          crop: { page: 15, x: 0.366, y: 0.408, w: 0.031, h: 0.04 },
+        },
+        {
+          label: 'Couloir 2',
+          effect: 'Un marqueur Bruit dans le couloir n° 2 relié à votre salle.',
+          crop: { page: 15, x: 0.411, y: 0.408, w: 0.031, h: 0.04 },
+        },
+        {
+          label: 'Couloir 3',
+          effect: 'Un marqueur Bruit dans le couloir n° 3 relié à votre salle.',
+          crop: { page: 15, x: 0.456, y: 0.408, w: 0.031, h: 0.04 },
+        },
+        {
+          label: 'Couloir 4',
+          effect: 'Un marqueur Bruit dans le couloir n° 4 relié à votre salle. Le couloir qui contient déjà un marqueur n’en prend pas un second : c’est une rencontre.',
+          crop: { page: 15, x: 0.501, y: 0.408, w: 0.031, h: 0.04 },
         },
         {
           label: 'Danger',
@@ -530,7 +546,7 @@ export const nemesis: Tutorial = {
       note: 'Le dé de combat. Ses faces disent quels types d’Intrus vous pouvez blesser, et combien.',
       glyph: 'die',
       tint: '#ef4444',
-      crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
+      crop: { page: 2, x: 0.608, y: 0.889, w: 0.032, h: 0.026 },
       // Les cinq résultats du dé, page 19 : le tableau qu'on relit à chaque
       // corps-à-corps tant qu'on ne le sait pas par cœur.
       variants: [

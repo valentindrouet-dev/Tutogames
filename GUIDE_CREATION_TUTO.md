@@ -369,6 +369,13 @@ Trois règles pour que ça reste une aide et pas un doublon du livret :
    d'abord. Ce n'est pas la place des cas particuliers.
 3. **Une vignette quand reconnaître à l'œil compte.** Un symbole gravé sur un
    jeton, une face de dé : oui. Quatre couleurs de cartes : le `tint` suffit.
+4. **Un dé se décrit face par face.** Pas « résultat 1, 2, 3 ou 4 » sur une
+   ligne : quatre entrées, quatre vignettes, le chiffre tel qu'il est gravé.
+   C'est ce que le joueur a sous les yeux quand il vient de lancer.
+
+Quand deux composants partagent une photo de groupe — les quatre dés de
+*Nemesis* sont en tas sur la même page — cadrez chacun sur le sien. Une fiche
+qui montre le dé du voisin ne sert à rien.
 
 `npm run aids` liste ce que chaque jeu décrit déjà, et signale les composants
 dont le nom ou la quantité annonce plusieurs sortes sans liste écrite.
@@ -887,6 +894,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.21 | Les composants à faces se décrivent face par face, vignette comprise : dé de bruit et symboles Intrus de *Nemesis*, les trois dés de *Rois de la Ruine*. Deux composants qui partageaient une photo de groupe sont recadrés chacun sur le sien. |
 | 2026-09-05 | v0.20 | `Component.variants` : les variétés d'un composant, en aide de jeu dans sa fiche, avec vignette et couleur. Étape 8 : « Les variétés d'un composant », et `npm run aids` pour voir ce qui reste à décrire. 97 types de matériel écrits sur les sept jeux. |
 | 2026-09-05 | v0.19 | Étape 4 : « Le solo n'est pas la même partie, en moins nombreux », et `npm run players` pour relever ce que chaque effectif voit. Les sept tutoriels relus à 1 joueur ; *Nemesis* passe de 3 à 16 étapes propres au solo. |
 | 2026-09-05 | v0.18 | Le texte d'une étape est du texte brut, sans gras ni markdown. Un jeu peut porter **plusieurs livrets** : `source.books`, `crop.book`, `bookOf()`, un dossier d'assets par livret, et la pastille d'une découpe pleine page qui nomme le livret. Étape 3 : la section « Un jeu livré en deux livrets », et pourquoi on ne les fusionne pas. *Oathsworn* couvre désormais le chapitre entier, histoire et rencontre. |

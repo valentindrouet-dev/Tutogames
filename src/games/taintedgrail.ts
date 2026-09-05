@@ -197,6 +197,13 @@ export const taintedgrail: Tutorial = {
       glyph: 'card',
       tint: '#9d3220',
       crop: { page: 3, x: 0.038, y: 0.344, w: 0.297, h: 0.271 },
+      // Les quatre paquets, page 12 : leur couleur dit ce qu'on affronte.
+      variants: [
+        { label: 'Vert — la nature', qty: '31 cartes', effect: 'Bêtes sauvages et créatures légendaires. La plupart donnent de la Nourriture quand elles sont vaincues.', tint: '#2f7d4f' },
+        { label: 'Gris — les hommes', qty: '31 cartes', effect: 'Brigands, chevaliers renégats, gens sombrés dans la folie. La plupart donnent des objets quand ils sont vaincus.', tint: '#8a8f98' },
+        { label: 'Violet — le surnaturel', qty: '31 cartes', effect: 'Épreuves mystérieuses. Vous en découvrez les effets par vous-même.', tint: '#8b5cf6' },
+        { label: 'Bleu — la communauté', qty: '31 cartes', effect: 'Rarement orienté combat : situations dangereuses, défis diplomatiques et personnels.', tint: '#3b82f6' },
+      ],
     },
     {
       id: 'cartes-standard',
@@ -240,6 +247,15 @@ export const taintedgrail: Tutorial = {
       note: 'L’équipement courant : arme, armure, bouclier, compagnon, relique. Un seul objet actif par mot-clé.',
       glyph: 'card',
       crop: { page: 3, x: 0.494, y: 0.786, w: 0.108, h: 0.142 },
+      // Les cinq mots-clés : on n'en utilise jamais deux du même à la fois.
+      variants: [
+        { label: 'Arme', effect: 'Un seul objet Arme actif à la fois, secrets compris.' },
+        { label: 'Armure', effect: 'Une seule Armure active à la fois.' },
+        { label: 'Bouclier', effect: 'Un seul Bouclier actif à la fois.' },
+        { label: 'Compagnon', effect: 'Un seul Compagnon actif à la fois.' },
+        { label: 'Relique', effect: 'Une seule Relique active à la fois. Vous pouvez donc avoir une arme, une armure, un bouclier, un compagnon et une relique en même temps.' },
+        { label: 'Symbole « A »', effect: 'Artisanat : seuls ces objets-là peuvent être fabriqués par une action d’artisanat.', tint: '#b8860b' },
+      ],
     },
     {
       id: 'cartes-competence',

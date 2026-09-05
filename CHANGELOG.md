@@ -17,6 +17,32 @@ comme complète.
 
 ---
 
+## v0.21 — 2026-09-05
+
+### Ajouté
+
+- **Une face, un symbole, un effet.** Les composants à faces sont détaillés
+  face par face, avec l'image du symbole découpée dans le livret — plus de
+  « résultat 1, 2, 3 ou 4 » regroupés sur une ligne.
+  - *Nemesis*, dé de bruit : six entrées, six symboles. Couloir 1, 2, 3 et 4
+    chacun avec son chiffre tel qu'il est gravé, puis Danger et Silence.
+  - *Nemesis*, jetons Intrus : les cinq symboles du panneau « Symboles Intrus »
+    de la page 6 — Larve, Rôdeur, Adulte, Hybride, Reine — à côté de ce que
+    chaque jeton déclenche au tirage.
+  - *Rois de la Ruine* : le dé standard, le dé Gardien et le dé Durée, chacun
+    avec sa photo.
+  - Les deux paires de dés de *Nemesis* ne partagent plus la même photo : le
+    noir pour le bruit, le rouge pour l'attaque.
+- **Deux listes de types de plus dans *Tainted Grail*.** Les quatre paquets de
+  rencontre — vert la nature, gris les hommes, violet le surnaturel, bleu la
+  communauté — avec ce que chacun donne en récompense. Et les cinq mots-clés
+  d'objet — arme, armure, bouclier, compagnon, relique — dont on ne peut jamais
+  utiliser deux du même à la fois, plus le symbole « A » de l'artisanat.
+
+**110 types de matériel décrits**, dont 29 avec leur vignette.
+
+---
+
 ## v0.20 — 2026-09-05
 
 ### Ajouté

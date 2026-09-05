@@ -258,9 +258,23 @@ export const taintedgrailkor: Tutorial = {
       tint: '#8e1420',
       crop: { page: 2, x: 0.41, y: 0.545, w: 0.35, h: 0.095 },
       variants: [
-        { label: 'Dé standard', effect: 'Crânes et Graals : c’est lui qu’on lance quand une carte demande un jet.' },
-        { label: 'Dé Gardien', effect: 'Une direction, « rien », ou la défausse du gardien.', tint: '#8a2b2b' },
-        { label: 'Dé Durée', effect: 'Combien de temps un effet reste en jeu, quand la carte ne le dit pas elle-même.', tint: '#38bdf8' },
+        {
+          label: 'Dé standard',
+          effect: 'Chiffres : c’est lui qu’on lance quand une carte ou une rencontre demande un jet.',
+          crop: { page: 2, x: 0.422, y: 0.543, w: 0.058, h: 0.058 },
+        },
+        {
+          label: 'Dé Gardien',
+          effect: 'Une direction, « rien », ou la défausse du gardien. Lancé à l’aube de chaque jour, pour chaque gardien en jeu.',
+          crop: { page: 2, x: 0.536, y: 0.543, w: 0.055, h: 0.058 },
+          tint: '#8a2b2b',
+        },
+        {
+          label: 'Dé Durée',
+          effect: 'Combien de temps un effet reste en jeu, quand la carte ne le dit pas elle-même.',
+          crop: { page: 2, x: 0.645, y: 0.543, w: 0.058, h: 0.058 },
+          tint: '#38bdf8',
+        },
       ],
     },
     {
