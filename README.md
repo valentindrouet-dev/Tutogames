@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.17** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.18** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -18,7 +18,7 @@ identifié par des images découpées dans le PDF des règles officielles.
 | Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 6 | 13 | 8 |
 | Frosthaven 🇬🇧 | Cephalofair Games | 1 à 4 | 106 étapes | 13 | 17 | 17 |
 | Bitoku | Devir / IELLO | 1 à 4 | 81 étapes | 8 | 23 | 11 |
-| Oathsworn : Into the Deepwood 🇬🇧 | Shadowborne Games | 1 à 4 | 85 étapes | 10 | 20 | 7 |
+| Oathsworn : Into the Deepwood 🇬🇧 | Shadowborne Games | 1 à 4 | 144 étapes | 13 | 32 | 15 |
 
 ## Quatre façons d'ouvrir un jeu
 
@@ -42,6 +42,13 @@ survol à la souris, une tape sur l'iPad, et la bulle donne le terme imprimé.
 Le bouton **VO** du bandeau coupe ou remet le surlignage ; la fiche du jeu
 porte le glossaire complet. Un jeu dont le matériel est en français n'a ni
 drapeau, ni surlignage.
+
+### Un jeu, deux livrets
+
+*Oathsworn* coupe ses règles en deux livres : l'histoire d'un côté, la
+rencontre de l'autre. C'est le même jeu sur la même table, donc un seul
+tutoriel, qui suit le chapitre dans l'ordre où on le joue. La pastille sous
+une découpe pleine page dit de quel livret vient la page.
 
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
@@ -169,6 +176,6 @@ Tainted Grail : Rois de la Ruine est un jeu de Krzysztof Piskorski et Marcin
 Świerkot édité par Awaken Realms ; le tutoriel s'appuie sur les règles
 françaises.
 Oathsworn : Into the Deepwood est un jeu de Jamie Jolly édité par Shadowborne
-Games ; le tutoriel est une traduction du « Story Rule Book » anglais, livré en
-quatre PDF. Les glossaires VO citent les livrets anglais de Nemesis, de
+Games ; le tutoriel est une traduction de ses deux livrets anglais, le « Story
+Rule Book » et l'« Encounter Rule Book ». Les glossaires VO citent les livrets anglais de Nemesis, de
 Frosthaven et d'Oathsworn.

@@ -10,8 +10,8 @@
  */
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
-import type { Component, Mode, Tutorial } from '../engine/types'
-import { MODE_INFO, playerLabel } from '../engine/types'
+import type { Component, Crop, Mode, Tutorial } from '../engine/types'
+import { MODE_INFO, assetIdsOf, bookOf, playerLabel } from '../engine/types'
 import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
 import { voSpansFor } from '../engine/vo'
 import {
@@ -21,7 +21,7 @@ import {
   clearSave, elapsedOf, formatClock, loadSave, newSave, writeSave, type Save,
 } from '../engine/progress'
 import { Thumb, Visual } from './Visual'
-import { useManifest, visualUrl, warm } from '../engine/assets'
+import { useManifests, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
@@ -112,20 +112,23 @@ export function Runner({
 
   // Précharge les visuels de l'étape suivante pendant que le joueur lit
   // celle-ci : au tap sur « Fait », l'image est déjà là.
-  const manifest = useManifest(tutorial.source.assetId)
+  const manifests = useManifests(assetIdsOf(tutorial))
   useEffect(() => {
-    if (!manifest) return
     const target = next(view, save.chapter, save.step)
     if (!target) return
     const s = stepAt(view, target)
     if (!s) return
-    const off = tutorial.source.pageOffset
     const nextParts = componentsOf(tutorial, s)
-    warm([
-      visualUrl(manifest, s.crop ?? nextParts[0]?.crop, off),
-      ...nextParts.map((c) => visualUrl(manifest, c.crop, off)),
-    ])
-  }, [manifest, view, tutorial, save.chapter, save.step])
+    // Chaque découpe sait de quel livret elle vient : on précharge dans le
+    // manifeste du sien.
+    const urlOf = (crop?: Crop) => {
+      if (!crop) return null
+      const book = bookOf(tutorial, crop)
+      const m = manifests[book.assetId]
+      return m ? visualUrl(m, crop, book.pageOffset) : null
+    }
+    warm([urlOf(s.crop ?? nextParts[0]?.crop), ...nextParts.map((c) => urlOf(c.crop))])
+  }, [manifests, view, tutorial, save.chapter, save.step])
 
   const goNext = useCallback(() => {
     if (!step) return
@@ -363,8 +366,7 @@ export function Runner({
           <aside className="stage-visual">
             <div className="visual">
               <Visual
-                assetId={tutorial.source.assetId}
-                pageOffset={tutorial.source.pageOffset}
+                book={bookOf(tutorial, step.crop ?? parts[0]?.crop)}
                 crop={step.crop ?? parts[0]?.crop}
                 glyph={parts[0]?.glyph ?? 'board'}
                 name={step.title}
@@ -383,8 +385,7 @@ export function Runner({
                   >
                     <span className="part-thumb">
                       <Thumb
-                        assetId={tutorial.source.assetId}
-                        pageOffset={tutorial.source.pageOffset}
+                        book={bookOf(tutorial, c.crop)}
                         crop={c.crop}
                         glyph={c.glyph}
                         name={c.name}
@@ -450,8 +451,7 @@ export function Runner({
             <div className="part-detail">
               <div className="visual">
                 <Visual
-                  assetId={tutorial.source.assetId}
-                  pageOffset={tutorial.source.pageOffset}
+                  book={bookOf(tutorial, part.crop)}
                   crop={part.crop}
                   glyph={part.glyph}
                   name={part.name}
@@ -480,8 +480,7 @@ export function Runner({
                 >
                   <span className="part-thumb">
                     <Thumb
-                      assetId={tutorial.source.assetId}
-                      pageOffset={tutorial.source.pageOffset}
+                      book={bookOf(tutorial, c.crop)}
                       crop={c.crop}
                       glyph={c.glyph}
                       name={c.name}

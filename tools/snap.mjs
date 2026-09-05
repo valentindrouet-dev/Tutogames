@@ -36,13 +36,23 @@ if (!existsSync(src)) {
   process.exit(1)
 }
 
-/** L'identifiant d'ingestion, s'il diffère du nom de fichier. */
+/**
+ * Les dossiers de pages du jeu, par clé de livret. Un jeu à deux livrets
+ * déclare le second dans `source.books` : une découpe le nomme par `book`.
+ */
 const source = readFileSync(src, 'utf8')
-const assetId = source.match(/assetId: '([^']+)'/)?.[1] ?? game
-const pagesDir = `games/${assetId}/pages`
-if (!existsSync(pagesDir)) {
-  console.error(`${pagesDir} est introuvable : ingérez le PDF d'abord.`)
-  process.exit(1)
+const dirs = new Map()
+{
+  const ids = [...source.matchAll(/assetId: '([^']+)'/g)].map((m) => m[1])
+  const keys = [...source.matchAll(/^      (\w+): \{$/gm)].map((m) => m[1])
+  dirs.set('', `games/${ids[0] ?? game}/pages`)
+  ids.slice(1).forEach((id, i) => dirs.set(keys[i] ?? id, `games/${id}/pages`))
+}
+for (const [key, dir] of dirs) {
+  if (!existsSync(dir)) {
+    console.error(`${dir} est introuvable${key ? ` (livret « ${key} »)` : ''} : ingérez le PDF d'abord.`)
+    process.exit(1)
+  }
 }
 
 /* ------------------------------------------------------------------ encre */
@@ -59,9 +69,10 @@ const GAPY = 0.018
 const CAP = 0.09
 
 const masks = new Map()
-async function maskOf(page) {
-  if (masks.has(page)) return masks.get(page)
-  const file = `${pagesDir}/p${String(page).padStart(2, '0')}.webp`
+async function maskOf(page, bookKey = '') {
+  const id = `${bookKey}:${page}`
+  if (masks.has(id)) return masks.get(id)
+  const file = `${dirs.get(bookKey)}/p${String(page).padStart(2, '0')}.webp`
   if (!existsSync(file)) return null
   const img = await loadImage(file)
   const H = Math.round((img.height / img.width) * W)
@@ -73,7 +84,7 @@ async function maskOf(page) {
     m[p] = d[i] < DARK && d[i + 1] < DARK && d[i + 2] < DARK ? 1 : 0
   }
   const out = { m, W, H }
-  masks.set(page, out)
+  masks.set(id, out)
   return out
 }
 
@@ -100,7 +111,7 @@ function push(has, from, dir, limit, gap) {
 }
 
 async function snap(r) {
-  const k = await maskOf(r.page)
+  const k = await maskOf(r.page, r.book ?? '')
   if (!k) return r
   const cx = (v) => Math.min(Math.max(v, 0), k.W - 1)
   const cy = (v) => Math.min(Math.max(v, 0), k.H - 1)
@@ -120,6 +131,7 @@ async function snap(r) {
 
   const round = (v) => Number(v.toFixed(3))
   return {
+    book: r.book,
     page: r.page,
     x: round(x0 / k.W),
     y: round(y0 / k.H),
@@ -130,23 +142,26 @@ async function snap(r) {
 
 /* ------------------------------------------------------- lecture, réécriture */
 
-const RECT = /\{ page: (\d+), x: ([-\d.]+), y: ([-\d.]+), w: ([-\d.]+), h: ([-\d.]+) \}/g
+const RECT = /\{ (?:book: '([^']+)', )?page: (\d+), x: ([-\d.]+), y: ([-\d.]+), w: ([-\d.]+), h: ([-\d.]+) \}/g
 
 const rects = []
 for (const m of source.matchAll(RECT)) {
   rects.push({
     at: m.index,
     len: m[0].length,
-    page: Number(m[1]),
-    x: Number(m[2]),
-    y: Number(m[3]),
-    w: Number(m[4]),
-    h: Number(m[5]),
+    book: m[1],
+    page: Number(m[2]),
+    x: Number(m[3]),
+    y: Number(m[4]),
+    w: Number(m[5]),
+    h: Number(m[6]),
   })
 }
 
 const num = (v) => String(Number(v.toFixed(3)))
-const fmt = (r) => `{ page: ${r.page}, x: ${num(r.x)}, y: ${num(r.y)}, w: ${num(r.w)}, h: ${num(r.h)} }`
+const fmt = (r) =>
+  `{ ${r.book ? `book: '${r.book}', ` : ''}page: ${r.page}, x: ${num(r.x)}, y: ${num(r.y)}, ` +
+  `w: ${num(r.w)}, h: ${num(r.h)} }`
 
 let out = ''
 let at = 0
@@ -156,7 +171,7 @@ for (const r of rects) {
   const same = n.x === r.x && n.y === r.y && n.w === r.w && n.h === r.h
   if (!same) {
     moved++
-    console.log(`  p${String(r.page).padStart(2, '0')} ${fmt(r)}\n     → ${fmt(n)}`)
+    console.log(`  ${r.book ? `${r.book} ` : ''}p${String(r.page).padStart(2, '0')} ${fmt(r)}\n     → ${fmt(n)}`)
   }
   out += source.slice(at, r.at) + fmt(same ? r : n)
   at = r.at + r.len

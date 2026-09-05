@@ -79,20 +79,49 @@ function cropKey(crop, pageOffset) {
 
 /* ------------------------------------------------------------- rendu */
 
+/**
+ * Les livrets d'un jeu, avec les découpes qui viennent de chacun. Un jeu à
+ * un seul livret a une seule entrée, de clé vide : c'est le cas courant.
+ */
+function booksOf(t) {
+  const books = new Map()
+  const use = (key) => {
+    if (books.has(key)) return books.get(key)
+    const src = key ? t.source.books?.[key] : t.source
+    if (!src) throw new Error(`${t.title} : découpe sur le livret « ${key} », absent de source.books`)
+    const entry = { key, src, crops: new Map() }
+    books.set(key, entry)
+    return entry
+  }
+  use('') // le livret principal a toujours sa couverture et ses pages
+  const add = (crop) => {
+    if (!crop) return
+    const entry = use(crop.book ?? '')
+    const key = cropKey(crop, entry.src.pageOffset)
+    if (key && !entry.crops.has(key)) entry.crops.set(key, crop)
+  }
+  add(t.cover)
+  for (const c of t.components) add(c.crop)
+  for (const ch of t.chapters) for (const s of ch.steps) add(s.crop)
+  return [...books.values()]
+}
+
 for (const t of TUTORIALS) {
   if (only && t.id !== only && t.source.assetId !== only) continue
 
-  const { assetId, pageOffset, pdf } = t.source
+ for (const book of booksOf(t)) {
+  const { assetId, pageOffset, pdf } = book.src
+  const label = book.key ? `${t.title} — ${book.src.label}` : t.title
   const pdfPath = join(ROOT, 'rules', pdf)
   if (!existsSync(pdfPath)) {
-    console.log(`${t.title} : PDF absent (rules/${pdf}), ignoré.`)
+    console.log(`${label} : PDF absent (rules/${pdf}), ignoré.`)
     continue
   }
 
   const dir = join(ROOT, 'games', assetId)
   const manifestPath = join(dir, 'pages.json')
   if (!existsSync(manifestPath)) {
-    console.log(`${t.title} : pages non ingérées (games/${assetId}/pages.json absent), ignoré.`)
+    console.log(`${label} : pages non ingérées (games/${assetId}/pages.json absent), ignoré.`)
     continue
   }
 
@@ -100,16 +129,8 @@ for (const t of TUTORIALS) {
   const cropsDir = join(dir, 'crops')
   mkdirSync(cropsDir, { recursive: true })
 
-  // Toutes les découpes à rectangle : couverture, matériel, puis étapes.
-  const wanted = new Map()
-  const add = (crop) => {
-    if (!crop) return
-    const key = cropKey(crop, pageOffset)
-    if (key && !wanted.has(key)) wanted.set(key, crop)
-  }
-  add(t.cover)
-  for (const c of t.components) add(c.crop)
-  for (const ch of t.chapters) for (const s of ch.steps) add(s.crop)
+  // Les découpes à rectangle de ce livret : couverture, matériel, étapes.
+  const wanted = book.crops
 
   const doc = await pdfjs.getDocument({
     data: new Uint8Array(readFileSync(pdfPath)),
@@ -190,8 +211,9 @@ for (const t of TUTORIALS) {
   const px = Object.values(produced)
   const min = px.length ? Math.min(...px.map(([a, b]) => Math.max(a, b))) : 0
   console.log(
-    `${t.title} : ${px.length} découpe(s) — ${written} rendue(s), ${kept} conservée(s), ` +
+    `${label} : ${px.length} découpe(s) — ${written} rendue(s), ${kept} conservée(s), ` +
     `${removed} supprimée(s)${missing ? `, ${missing} page(s) manquante(s)` : ''}. ` +
     `Plus petit grand côté : ${min} px.`,
   )
+ }
 }

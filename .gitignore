@@ -25,8 +25,16 @@ rules/*.pdf
 !rules/Oathsworn\ -\ Rules\ 2.pdf
 !rules/Oathsworn\ -\ Rules\ 3.pdf
 !rules/Oathsworn\ -\ Rules\ 4.pdf
-# « Frosthaven - Regles.pdf » et « Oathsworn - Regles.pdf » sont les fusions
-# des parties (npm run merge) : elles se refont en une commande et restent locales.
+!rules/Oathsworn\ -\ Encounters\ 1.pdf
+!rules/Oathsworn\ -\ Encounters\ 2.pdf
+!rules/Oathsworn\ -\ Encounters\ 3.pdf
+!rules/Oathsworn\ -\ Encounters\ 4.pdf
+!rules/Oathsworn\ -\ Encounters\ 5.pdf
+!rules/Oathsworn\ -\ Encounters\ 6.pdf
+!rules/Oathsworn\ -\ Encounters\ 7.pdf
+# « Frosthaven - Regles.pdf », « Oathsworn - Regles.pdf » et
+# « Oathsworn - Rencontre.pdf » sont les fusions des parties (npm run merge) :
+# elles se refont en une commande et restent locales.
 rules/*.txt
 
 # Aperçus et bundle temporaire produits par `npm run extract` / `npm run crops`.

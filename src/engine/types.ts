@@ -19,7 +19,35 @@
  * se précise ensuite avec `npm run grid`, qui rend la page sous une grille
  * de coordonnées. Voir GUIDE_CREATION_TUTO.md, « Découper les visuels ».
  */
+/**
+ * Un livret de règles ingéré : le PDF, son dossier d'assets, et l'écart
+ * entre le numéro imprimé sur une page et son index dans le fichier.
+ */
+export interface Source {
+  /** Nom du fichier PDF ingéré, tel qu'il est dans rules/. */
+  pdf: string
+  /** Identifiant du dossier d'assets : games/<assetId>/ */
+  assetId: string
+  /**
+   * Écart entre le numéro imprimé sur la page et son index dans le PDF.
+   * Un livret dont la page « 2 » est la 3e page du fichier a un offset de 1.
+   * Une seule valeur corrige donc toutes les découpes de ce livret.
+   */
+  pageOffset: number
+}
+
+/** Un livret secondaire, avec le nom que le joueur lit sur sa couverture. */
+export interface Book extends Source {
+  /** Titre imprimé sur la couverture : « Encounter Rule Book ». */
+  label: string
+}
+
 export interface Crop {
+  /**
+   * Livret d'où vient la page, quand le jeu en a plusieurs — la clé d'une
+   * entrée de `source.books`. Absent : le livret principal.
+   */
+  book?: string
   /** Numéro de page imprimé sur la page des règles. */
   page: number
   /** Bord gauche, 0 = gauche de la page, 1 = droite. Défaut 0. */
@@ -35,6 +63,24 @@ export interface Crop {
 /** Rectangle complet, valeurs par défaut appliquées. */
 export function rectOf(c: Crop) {
   return { x: c.x ?? 0, y: c.y ?? 0, w: c.w ?? 1, h: c.h ?? 1 }
+}
+
+/**
+ * Le livret d'où vient une découpe : celui qu'elle nomme, ou le principal.
+ *
+ * Un jeu à deux livrets garde un seul tutoriel — c'est le même jeu sur la
+ * table. Chaque découpe dit d'où elle vient, et la résolution des images
+ * comme la référence affichée passent par ici.
+ */
+export function bookOf(t: Tutorial, crop?: Crop): Book {
+  const key = crop?.book
+  const book = key ? t.source.books?.[key] : undefined
+  return book ?? { ...t.source, label: '' }
+}
+
+/** Les dossiers d'assets d'un jeu : le livret principal, puis les autres. */
+export function assetIdsOf(t: Tutorial): string[] {
+  return [t.source.assetId, ...Object.values(t.source.books ?? {}).map((b) => b.assetId)]
 }
 
 /** Palette de secours quand l'image de règles n'est pas encore ingérée. */
@@ -313,18 +359,16 @@ export interface Tutorial {
   /** Durée annoncée de la partie tutorielle, en minutes. */
   minutes: number
   theme: Theme
-  source: {
-    /** Nom du fichier PDF ingéré, tel qu'il est dans rules/. */
-    pdf: string
-    /** Identifiant du dossier d'assets : games/<assetId>/ */
-    assetId: string
-    /**
-     * Écart entre le numéro imprimé sur la page et son index dans le PDF.
-     * Un livret dont la page « 2 » est la 3e page du fichier a un offset de 1.
-     * Une seule valeur corrige donc toutes les découpes du tutoriel.
-     */
-    pageOffset: number
+  source: Source & {
     credit: string
+    /**
+     * Livrets supplémentaires du même jeu, par clé. Certains éditeurs
+     * découpent leurs règles en deux livres qui se suivent à la table :
+     * Oathsworn a un livret pour l'histoire et un pour la rencontre, chacun
+     * paginé à partir de 1. Une découpe nomme le sien par `crop.book` ; sans
+     * clé, elle vient du livret principal.
+     */
+    books?: Record<string, Book>
   }
   /**
    * Bandeau de titre du livret, découpé dans le PDF. C'est lui qui identifie

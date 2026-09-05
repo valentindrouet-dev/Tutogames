@@ -115,6 +115,52 @@ les découpes du tutoriel.** Vérifiez avec `npm run grid -- <pdf> <page>` : le
 nom du fichier produit porte l'index dans le PDF, la page rendue porte son
 numéro imprimé.
 
+#### Un jeu livré en deux livrets
+
+Certains éditeurs coupent leurs règles en deux livres qui se suivent à la
+table. *Oathsworn* en est le cas d'école : un chapitre se joue en deux temps,
+l'**Histoire** dans le « Story Rule Book », puis la **Rencontre** dans
+l'« Encounter Rule Book ». Les deux livrets sont paginés à partir de 1.
+
+**Cela ne fait pas deux tutoriels.** C'est le même jeu sur la même table, et
+le joueur passe de l'un à l'autre sans se lever : un seul tutoriel, qui suit
+le chapitre dans l'ordre où on le joue. Les livrets supplémentaires se
+déclarent dans `source.books`, et chaque découpe dit d'où elle vient :
+
+```ts
+source: {
+  pdf: 'Oathsworn - Regles.pdf',
+  assetId: 'oathsworn',
+  pageOffset: 0,
+  books: {
+    rencontre: {
+      pdf: 'Oathsworn - Rencontre.pdf',
+      assetId: 'oathsworn-rencontre',
+      pageOffset: 0,
+      label: 'Encounter Rule Book',
+    },
+  },
+  credit: '…',
+},
+
+// dans une étape :
+crop: { book: 'rencontre', page: 13, x: 0.06, y: 0.07, w: 0.42, h: 0.3 },
+```
+
+Chaque livret est ingéré séparément, sous son propre `assetId` : deux dossiers
+`games/`, deux manifestes, deux `pageOffset`. `npm run crops` et `npm run snap`
+suivent la déclaration sans rien de plus à faire. Le `label` est le titre
+imprimé sur la couverture : c'est lui que la pastille affiche sous une découpe
+pleine page, pour que le joueur sache quel livre ouvrir.
+
+Une découpe sans `book` vient du livret principal — la quasi-totalité des jeux
+n'ont donc rien à changer.
+
+> **Ne fusionnez pas les deux livrets en un seul PDF.** La numérotation
+> imprimée repartirait à 1 au milieu du fichier, et un `pageOffset` unique ne
+> peut pas corriger deux numérotations. La référence affichée au joueur
+> (« Encounter — Making an Attack — p.13 ») doit rester celle de son livret.
+
 ### Étape 4 — Déclarer les effectifs jouables
 
 Avant d'écrire une étape, dites au moteur pour combien de joueurs le tutoriel
@@ -556,6 +602,11 @@ typographiques `’`, espace insécable avant `: ; ! ?` si vous en mettez une.
 
 ---
 
+> **Le texte d'une étape est du texte brut.** Ni gras, ni italique, ni
+> markdown : les astérisques s'afficheraient telles quelles. Ce qui doit
+> ressortir ressort par la phrase — l'ordre des mots, une phrase courte — ou
+> par un `warn`, qui a son encadré.
+
 ## 4. Choisir le bon `kind` d'étape
 
 | `kind` | Étiquette | Quand |
@@ -747,5 +798,6 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.18 | Le texte d'une étape est du texte brut, sans gras ni markdown. Un jeu peut porter **plusieurs livrets** : `source.books`, `crop.book`, `bookOf()`, un dossier d'assets par livret, et la pastille d'une découpe pleine page qui nomme le livret. Étape 3 : la section « Un jeu livré en deux livrets », et pourquoi on ne les fusionne pas. *Oathsworn* couvre désormais le chapitre entier, histoire et rencontre. |
 | 2026-09-05 | v0.17 | Étape 8e : `npm run snap` recale les rectangles sur le bloc qu'ils visent, après mesure des colonnes page par page. Une étape qui cite ses composants ne découpe plus la planche de matériel. Septième tutoriel : *Oathsworn : Into the Deepwood*, dont le livret Histoire est livré en quatre PDF et dont seule la moitié Histoire est couverte, la Rencontre ayant son propre livret. |
 | 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |

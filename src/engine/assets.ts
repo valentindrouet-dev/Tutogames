@@ -55,6 +55,32 @@ export function fetchManifest(assetId: string): Promise<PageManifest | null> {
   return req
 }
 
+/**
+ * Les manifestes de tous les livrets d'un jeu, par identifiant d'assets.
+ *
+ * Un jeu à deux livrets a deux dossiers d'assets : on les résout ensemble,
+ * en un seul effet, pour que le nombre de crochets ne dépende pas du jeu
+ * affiché.
+ */
+export function useManifests(ids: string[]): Record<string, PageManifest | false> {
+  const key = ids.join(' ')
+  const [state, setState] = useState<Record<string, PageManifest | false>>({})
+
+  useEffect(() => {
+    let alive = true
+    setState({})
+    Promise.all(key.split(' ').filter(Boolean).map((id) => fetchManifest(id).then((m) => [id, m ?? false] as const)))
+      .then((pairs) => {
+        if (alive) setState(Object.fromEntries(pairs))
+      })
+    return () => {
+      alive = false
+    }
+  }, [key])
+
+  return state
+}
+
 /** null tant que la résolution est en cours, puis le manifeste ou `false`. */
 export function useManifest(assetId: string): PageManifest | false | null {
   const [state, setState] = useState<PageManifest | false | null>(null)

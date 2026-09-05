@@ -17,7 +17,7 @@
  */
 
 import type { CSSProperties } from 'react'
-import { rectOf, type Crop, type Glyph } from '../engine/types'
+import { rectOf, type Book, type Crop, type Glyph } from '../engine/types'
 import { pageUrl, precut, useManifest, type PageManifest } from '../engine/assets'
 import { GlyphIcon } from './icons'
 
@@ -58,8 +58,8 @@ export function frame(crop: Crop, m: PageManifest, pageOffset: number): Framed |
 }
 
 interface Props {
-  assetId: string
-  pageOffset: number
+  /** Le livret d'où vient la découpe — `bookOf(tutorial, crop)`. */
+  book: Book
   crop?: Crop
   glyph: Glyph
   /** Nom affiché par le visuel de secours. */
@@ -67,7 +67,8 @@ interface Props {
   tint?: string
 }
 
-export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) {
+export function Visual({ book, crop, glyph, name, tint }: Props) {
+  const { assetId, pageOffset } = book
   const manifest = useManifest(assetId)
 
   if (crop && manifest) {
@@ -90,7 +91,10 @@ export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) 
       return (
         <>
           <div className="crop" style={f.style} role="img" aria-label={name} />
-          {f.wholePage && <span className="crop-badge">Règles p.{crop.page}</span>}
+          {f.wholePage && (
+            // Deux livrets pour un même jeu : la pastille dit lequel.
+            <span className="crop-badge">{book.label || 'Règles'} p.{crop.page}</span>
+          )}
         </>
       )
     }
@@ -102,7 +106,8 @@ export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) 
       <span className="fb-name">{name}</span>
       {crop && manifest === false && (
         <span className="fb-hint">
-          Visuel des règles p.{crop.page} — lancez <code>npm run ingest</code> pour l'afficher
+          Visuel {book.label ? `du ${book.label}` : 'des règles'} p.{crop.page} — lancez{' '}
+          <code>npm run ingest</code> pour l'afficher
         </span>
       )}
     </div>
@@ -110,7 +115,8 @@ export function Visual({ assetId, pageOffset, crop, glyph, name, tint }: Props) 
 }
 
 /** Vignette carrée utilisée dans les listes de matériel. */
-export function Thumb({ assetId, pageOffset, crop, glyph, name }: Props) {
+export function Thumb({ book, crop, glyph, name }: Props) {
+  const { assetId, pageOffset } = book
   const manifest = useManifest(assetId)
 
   if (crop && manifest) {

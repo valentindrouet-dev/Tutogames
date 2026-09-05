@@ -13,7 +13,7 @@
 
 import { useMemo, useState } from 'react'
 import type { Mode, Tutorial } from '../engine/types'
-import { MODE_INFO, modesOf, playerLabel, playerRange } from '../engine/types'
+import { MODE_INFO, bookOf, modesOf, playerLabel, playerRange } from '../engine/types'
 import type { Prefs } from '../engine/prefs'
 import { clearSave, formatClock, listSaves } from '../engine/progress'
 import { totalSteps, viewFor } from '../engine/tutorial'
@@ -218,8 +218,7 @@ function GameCard({
     <div className="game-card" style={themeStyle(tutorial.theme, prefs)}>
       <button type="button" className="game-cover" onClick={onAbout} aria-label={`${tutorial.title} — détails`}>
         <Visual
-          assetId={tutorial.source.assetId}
-          pageOffset={tutorial.source.pageOffset}
+          book={bookOf(tutorial, tutorial.cover)}
           crop={tutorial.cover}
           glyph="board"
           name={tutorial.title}

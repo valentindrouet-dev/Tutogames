@@ -1,18 +1,23 @@
 /**
- * Oathsworn : Into the Deepwood — première partie tutorielle, partie Histoire.
+ * Oathsworn : Into the Deepwood — première partie tutorielle, chapitre entier.
  *
- * Source : « Oathsworn: Into the Deepwood — Story Rule Book », Shadowborne
- * Games, en ANGLAIS, livré en quatre fichiers PDF que `npm run merge`
- * réunit en un seul livret de 20 pages (voir GUIDE_CREATION_TUTO.md). La
- * page imprimée N est la N-ième page du PDF, d'où `pageOffset: 0`.
+ * Sources : les DEUX livrets officiels de Shadowborne Games, en ANGLAIS.
+ * « Story Rule Book » (20 pages, livré en quatre PDF) et « Encounter Rule
+ * Book » (35 pages, livré en sept PDF), que `npm run merge` réunit chacun en
+ * un seul fichier. Dans les deux, la page imprimée N est la N-ième page du
+ * PDF, d'où `pageOffset: 0` de part et d'autre.
  *
- * PÉRIMÈTRE. Un chapitre d'Oathsworn se joue en deux temps : l'**Histoire**,
- * qui se lit dans le Story Book avec les cartes de cité, puis la
- * **Rencontre**, qui se joue sur le plateau avec les figurines. Ce livret ne
- * couvre que l'Histoire ; la Rencontre a son propre livret, l'Encounter Rule
- * Book, qui n'est pas ingéré ici. Le tutoriel couvre donc l'Histoire de bout
- * en bout et s'arrête au seuil de la Rencontre — ce que le livret lui-même
- * recommande pour une première séance de trois heures ou moins.
+ * DEUX LIVRETS, UN SEUL TUTORIEL. Un chapitre d'Oathsworn se joue en deux
+ * temps : l'**Histoire**, qui se lit dans le Story Book avec les cartes de
+ * cité, puis la **Rencontre**, qui se joue sur le plateau avec les figurines.
+ * C'est le même jeu sur la même table : le tutoriel suit le chapitre dans
+ * l'ordre où on le joue, et chaque découpe dit de quel livret elle vient —
+ * celles de la Rencontre portent `book: 'rencontre'` (voir `source.books` et
+ * GUIDE_CREATION_TUTO.md).
+ *
+ * Le livret conseille de ne jouer que l'Histoire pour une première séance de
+ * trois heures ou moins : le chapitre « Finir l'histoire » offre cette sortie
+ * avant que la Rencontre ne commence.
  *
  * Le texte des étapes est une traduction du livret. Les noms imprimés sur le
  * matériel restent en anglais quand les traduire égarerait le joueur
@@ -42,7 +47,7 @@ export const oathsworn: Tutorial = {
       4: 'À quatre, un Oathsworn chacun. C’est l’effectif où les décisions secrètes prennent tout leur sel.',
     },
   },
-  minutes: 60,
+  minutes: 150,
 
   // Le livret est un parchemin gris-bleu froid, titres à l'encre noire et
   // or du logo. Les découpes viennent de ces pages claires : un fond clair
@@ -70,14 +75,24 @@ export const oathsworn: Tutorial = {
     pdf: 'Oathsworn - Regles.pdf',
     assetId: 'oathsworn',
     pageOffset: 0,
-    credit: 'Story Rule Book officiel EN — Shadowborne Games (quatre PDF fusionnés)',
+    // Le second livret. Une découpe qui en vient porte `book: 'rencontre'` ;
+    // les deux sont paginés à partir de 1, chacun avec son propre décalage.
+    books: {
+      rencontre: {
+        pdf: 'Oathsworn - Rencontre.pdf',
+        assetId: 'oathsworn-rencontre',
+        pageOffset: 0,
+        label: 'Encounter Rule Book',
+      },
+    },
+    credit: 'Story Rule Book et Encounter Rule Book officiels EN — Shadowborne Games',
   },
 
   cover: { page: 1, x: 0.03, y: 0.318, w: 0.94, h: 0.229 },
 
   vo: {
     language: 'anglais',
-    edition: 'Oathsworn: Into the Deepwood, Story Rule Book',
+    edition: 'Oathsworn: Into the Deepwood, Story et Encounter Rule Books',
     terms: [
       // La partie et ses deux moitiés
       { fr: 'Compagnie Libre', en: 'Free Company' },
@@ -175,6 +190,92 @@ export const oathsworn: Tutorial = {
       { fr: 'aide de jeu', en: 'Player Aid Card' },
       { fr: 'mode Action Immédiate', en: 'Instant Action Mode' },
       { fr: 'variante Hardcore', en: 'Hardcore Variant' },
+
+      // La rencontre : le plateau, les phases
+      { fr: 'plateau de jeu', en: 'Game Board', note: 'La carte de la rencontre, quadrillée en cases.' },
+      { fr: 'case', en: 'hex' },
+      { fr: 'plateau de rencontre', en: 'Encounter Board', note: 'Le plateau du boss : ses emplacements et ses dés de points de vie.' },
+      { fr: 'carte de rencontre', en: 'Encounter Card' },
+      { fr: 'carte d’étape', en: 'Stage Card' },
+      { fr: 'paquet d’étape', en: 'Stage Deck' },
+      { fr: 'étape', en: 'Stage', note: 'Les trois temps d’une rencontre : I, II, III.' },
+      { fr: 'round', en: 'Round' },
+      { fr: 'phase de récupération', en: 'Refresh Phase' },
+      { fr: 'phase Oathsworn', en: 'Oathsworn Phase' },
+      { fr: 'phase de rencontre', en: 'Encounter Phase' },
+      { fr: 'phase de fin de round', en: 'End of Round Phase' },
+      { fr: 'obstacle', en: 'Obstacle' },
+      { fr: 'tuile d’effet', en: 'Effect Tile' },
+      { fr: 'gabarit', en: 'Template' },
+      { fr: 'dé de direction', en: 'Direction Die' },
+
+      // Jouer son Oathsworn
+      { fr: 'recharge', en: 'cooldown' },
+      { fr: 'Battleflow', en: 'Battleflow', note: 'Le glissement des cartes d’une position de recharge à la suivante.' },
+      { fr: 'interruption', en: 'Interrupt' },
+      { fr: 'passer', en: 'pass' },
+      { fr: 'zone active', en: 'active area', note: 'Le côté droit du plateau : l’Animus dépensable.' },
+      { fr: 'réserve', en: 'reserve area' },
+      { fr: 'ligne de vue', en: 'Line of Sight (LoS)' },
+      { fr: 'portée', en: 'Range' },
+      { fr: 'corps à corps', en: 'Melee' },
+      { fr: 'à distance', en: 'Ranged' },
+      { fr: 'attaque à mains nues', en: 'Unarmed attack' },
+      { fr: 'échec', en: 'Miss' },
+      { fr: 'règle de la détermination', en: 'The Determination Rule' },
+      { fr: 'ignorer', en: 'ignore' },
+      { fr: 'renforcé', en: 'Empowered' },
+      { fr: 'jeton Empowered x3', en: 'Empowered x3 Token' },
+      { fr: 'jeton Battleflow', en: 'Battleflow Token' },
+      { fr: 'jeton +2 Animus', en: '+2 Animus Token' },
+      { fr: 'avant', en: 'front' },
+      { fr: 'flanc', en: 'flank' },
+      { fr: 'arrière', en: 'rear' },
+      { fr: 'cœur', en: 'core' },
+      { fr: 'emplacement du corps', en: 'Encounter Body Part' },
+      { fr: 'valeur de défense', en: 'Defense Value' },
+      { fr: 'briser un emplacement', en: 'Breaking a Location' },
+      { fr: 'réaction', en: 'Reaction' },
+      { fr: 'inconscient', en: 'Unconscious' },
+
+      // Les ennemis
+      { fr: 'ennemi', en: 'Enemy' },
+      { fr: 'boss', en: 'Boss' },
+      { fr: 'sbire', en: 'Minion' },
+      { fr: 'meute', en: 'Mob' },
+      { fr: 'grande créature', en: 'Large' },
+      { fr: 'carte de Puissance ennemie', en: 'Enemy Might Card' },
+      { fr: 'attaque brisée', en: 'Broken Attack' },
+      { fr: 'règle d’or', en: 'Golden Rule' },
+      { fr: 'nord puis ouest', en: 'North then West' },
+      { fr: 'cible', en: 'Target' },
+      { fr: 'orientation', en: 'facing' },
+      { fr: 'mouvement intuitif', en: 'Intuitive Movement' },
+
+      // Effets spéciaux
+      { fr: 'zone d’effet', en: 'Area of Effect (AoE)' },
+      { fr: 'attaque en cône', en: 'Cone Attack' },
+      { fr: 'attaque en vague', en: 'Wave Attack' },
+      { fr: 'attaque en chaîne', en: 'Chain Attack' },
+      { fr: 'charge', en: 'Charge Through' },
+      { fr: 'repoussé', en: 'Knockback' },
+      { fr: 'poussé', en: 'Pushed' },
+      { fr: 'englouti', en: 'Consumed' },
+      { fr: 'encagé', en: 'Caged' },
+      { fr: 'lancer', en: 'Thrown' },
+      { fr: 'poison', en: 'Poison' },
+      { fr: 'létalité', en: 'Lethality' },
+
+      // Après la rencontre
+      { fr: 'épilogue', en: 'Epilogue' },
+      { fr: 'butin', en: 'Loot' },
+      { fr: 'pertes', en: 'Losses' },
+      { fr: 'niveau', en: 'Level' },
+      { fr: 'trait de Compagnie Libre', en: 'Free Company Trait' },
+      { fr: 'montée de niveau rapide', en: 'Quick Leveling' },
+      { fr: 'Sentinelle', en: 'Sentinel' },
+      { fr: 'Gardien Ancien', en: 'Ancient Guardian' },
+      { fr: 'faucon', en: 'Falcon' },
     ],
   },
 
@@ -189,13 +290,20 @@ export const oathsworn: Tutorial = {
       'Objets, sac à dos, fer, indices, alliés, jetons de combat et permanents',
       'Les tests : cartes de Puissance, critiques, niveaux de succès',
       'Les décisions secrètes, le round de combat, le Banksmith et l’Apothecary',
-      'Sauvegarder la campagne dans les sacs, et la reprendre',
+      'La mise en place de la rencontre, en dix gestes',
+      'Le round de rencontre : récupération, phase Oathsworn, phase de rencontre, fin de round',
+      'Jouer une carte, la recharge et le Battleflow, les objets, les interruptions',
+      'Attaquer : portée, ligne de vue, cartes de Puissance, critiques, dégâts, emplacements brisés',
+      'Faire jouer l’ennemi : cartes d’étape, règle du nord puis ouest, cibles, déplacements, attaques, sbires',
+      'Finir la rencontre : victoire, défaite, rejouer, niveau, butin et pertes',
+      'Sauvegarder la campagne dans les sacs, et la reprendre à l’un ou l’autre des deux temps',
     ],
     skipped: [
-      'La Rencontre : plateau, figurines et combat au tour par tour, dans l’Encounter Rule Book',
       'L’histoire elle-même : elle est dans le Story Book et l’application',
-      'Les capacités des douze personnages, leurs cartes de capacité et d’archétype',
-      'Le mode Action Immédiate et la montée de niveau rapide, signalés mais pas déroulés',
+      'Les capacités des douze personnages, carte par carte, et leurs archétypes',
+      'Les effets spéciaux de l’annexe II, sauf ceux du chapitre 1 : ils se lisent quand une carte les emploie',
+      'La Grove Maiden, la Huntress et leurs bioformes, qui arrivent bien plus tard dans la campagne',
+      'Le mode Action Immédiate, signalé mais pas déroulé',
     ],
   },
 
@@ -243,7 +351,7 @@ export const oathsworn: Tutorial = {
       qty: '12 figurines',
       note: 'Une par personnage. L’une d’elles sert aussi de marqueur de Compagnie Libre sur la carte.',
       glyph: 'figure',
-      crop: { page: 4, x: 0.435, y: 0.015, w: 0.28, h: 0.14 },
+      crop: { page: 4, x: 0.432, y: 0.015, w: 0.283, h: 0.14 },
     },
     {
       id: 'plateaux',
@@ -293,7 +401,7 @@ export const oathsworn: Tutorial = {
       qty: '100 cartes',
       note: 'Les récompenses d’épilogue et des rencontres.',
       glyph: 'card',
-      crop: { page: 4, x: 0.818, y: 0.283, w: 0.152, h: 0.1 },
+      crop: { page: 4, x: 0.818, y: 0.272, w: 0.152, h: 0.111 },
     },
     {
       id: 'sac-a-dos',
@@ -318,7 +426,7 @@ export const oathsworn: Tutorial = {
       qty: '83 cartes',
       note: 'Deux paquets : cité et Forêt Profonde. Une carte tirée, appliquée, puis archivée.',
       glyph: 'card',
-      crop: { page: 4, x: 0.645, y: 0.383, w: 0.175, h: 0.105 },
+      crop: { page: 4, x: 0.645, y: 0.383, w: 0.175, h: 0.109 },
     },
     {
       id: 'cartes-allie',
@@ -343,7 +451,7 @@ export const oathsworn: Tutorial = {
       qty: '30 jetons',
       note: 'Numérotés de 1 à 30. Un lieu sans jeton ne se visite pas.',
       glyph: 'token',
-      crop: { page: 4, x: 0.552, y: 0.652, w: 0.115, h: 0.088 },
+      crop: { page: 4, x: 0.552, y: 0.64, w: 0.115, h: 0.1 },
     },
     {
       id: 'jetons-temps',
@@ -369,7 +477,7 @@ export const oathsworn: Tutorial = {
       note: 'La monnaie. Aucune limite de possession, échangeable à tout moment.',
       glyph: 'token',
       tint: '#7d5c10',
-      crop: { page: 4, x: 0.838, y: 0.728, w: 0.135, h: 0.18 },
+      crop: { page: 4, x: 0.815, y: 0.728, w: 0.158, h: 0.18 },
     },
     {
       id: 'cartes-puissance',
@@ -386,7 +494,7 @@ export const oathsworn: Tutorial = {
       qty: '49 dés',
       note: '28 dés de Puissance, 15 dés de points de vie rouges, 2 dés de direction, 4 dés de suivi.',
       glyph: 'die',
-      crop: { page: 5, x: 0.425, y: 0.185, w: 0.375, h: 0.145 },
+      crop: { page: 5, x: 0.425, y: 0.185, w: 0.375, h: 0.2 },
     },
     {
       id: 'cubes',
@@ -420,7 +528,7 @@ export const oathsworn: Tutorial = {
       note: 'Poison, saignement, estropié, et la Létalité propre au Cur.',
       glyph: 'token',
       tint: '#9a2c1f',
-      crop: { page: 5, x: 0.19, y: 0.412, w: 0.152, h: 0.07 },
+      crop: { page: 5, x: 0.19, y: 0.412, w: 0.152, h: 0.13 },
     },
     {
       id: 'animus',
@@ -456,6 +564,67 @@ export const oathsworn: Tutorial = {
       tint: '#9a2c1f',
       crop: { page: 5, x: 0.638, y: 0.405, w: 0.245, h: 0.22 },
     },
+
+    {
+      id: 'plateau-jeu',
+      name: 'Plateau de jeu',
+      qty: '1 plateau',
+      note: 'Le terrain de la rencontre, quadrillé en cases. Les bords portent les points cardinaux.',
+      glyph: 'board',
+      tint: '#1f4d3f',
+      crop: { page: 5, x: 0.155, y: 0.697, w: 0.55, h: 0.29 },
+    },
+    {
+      id: 'plateau-rencontre',
+      name: 'Plateaux de rencontre',
+      qty: '19 plateaux',
+      note: 'Un par ennemi de tête : ses emplacements, ses dés de points de vie, sa défense.',
+      glyph: 'board',
+      tint: '#7d5c10',
+      crop: { page: 5, x: 0.095, y: 0.158, w: 0.262, h: 0.09 },
+    },
+    {
+      id: 'cartes-etape',
+      name: 'Cartes d’étape',
+      qty: '284 cartes',
+      note: 'Ce que l’ennemi fait à chaque round. Trois dos : I, II, III, les trois étapes.',
+      glyph: 'card',
+      crop: { page: 5, x: 0.1, y: 0.235, w: 0.29, h: 0.105 },
+    },
+    {
+      id: 'cartes-puissance-ennemi',
+      name: 'Cartes de Puissance ennemies',
+      qty: '72 cartes',
+      note: 'Le paquet des monstres, en quatre couleurs. Les ennemis ignorent vierges et critiques.',
+      glyph: 'card',
+      tint: '#8a2b2b',
+      crop: { page: 5, x: 0.058, y: 0.332, w: 0.352, h: 0.075 },
+    },
+    {
+      id: 'obstacles',
+      name: 'Obstacles',
+      qty: '5 arbres, 4 murs, 2 bâtiments',
+      note: 'Ils coupent la ligne de vue et bloquent le passage. Une grande créature les détruit.',
+      glyph: 'tile',
+      crop: { page: 5, x: 0.355, y: 0.45, w: 0.277, h: 0.19 },
+    },
+    {
+      id: 'tuiles-effet',
+      name: 'Tuiles d’effet',
+      qty: '10 tuiles',
+      note: 'Feu, eau, nuage toxique. Elles se traversent, et se paient.',
+      glyph: 'fire',
+      tint: '#8a2b2b',
+      crop: { page: 5, x: 0.05, y: 0.555, w: 0.115, h: 0.105 },
+    },
+    {
+      id: 'gabarit',
+      name: 'Gabarit de zone d’effet',
+      qty: '4 gabarits de 7 cases',
+      note: 'Posé sur le plateau, il montre exactement qui est touché.',
+      glyph: 'tile',
+      crop: { page: 5, x: 0.081, y: 0.58, w: 0.289, h: 0.134 },
+    },
   ],
 
   /* ------------------------------------------------------------ chapitres */
@@ -473,7 +642,7 @@ export const oathsworn: Tutorial = {
           title: 'Posez la tablette à côté du livre d’histoire',
           body: [
             'Oathsworn est un jeu coopératif de dark fantasy pour un à quatre joueurs. Une campagne se déroule en chapitres.',
-            'Le livret est en anglais : le tutoriel le traduit, et les mots que votre matériel porte en anglais sont surlignés dans les consignes.',
+            'Les deux livrets sont en anglais : le tutoriel les traduit, et les mots que votre matériel porte en anglais sont surlignés dans les consignes.',
           ],
           components: ['livrets'],
           crop: { page: 4, x: 0.13, y: 0.072, w: 0.29, h: 0.205 },
@@ -493,12 +662,12 @@ export const oathsworn: Tutorial = {
         {
           id: 'b3',
           kind: 'info',
-          title: 'Ce tutoriel couvre l’histoire',
+          title: 'Deux livrets, un seul tutoriel',
           body: [
-            'Les règles de l’histoire sont dans le Story Rule Book, celui que ce tutoriel suit page par page.',
-            'Celles de la rencontre sont dans un second livret, l’Encounter Rule Book, qui n’est pas couvert ici.',
+            'Les règles de l’histoire sont dans le Story Rule Book, celles de la rencontre dans l’Encounter Rule Book. Ce tutoriel suit les deux, dans l’ordre où on les joue.',
+            'La pastille sous chaque visuel dit de quel livret vient la page.',
           ],
-          warn: 'Le livret le conseille lui-même : pour une première séance de trois heures ou moins, ne jouez que l’histoire du chapitre 1. Vous n’avez alors pas besoin de lire l’autre livret.',
+          warn: 'Le livret le conseille lui-même : pour une première séance de trois heures ou moins, ne jouez que l’histoire du chapitre 1. Le tutoriel vous laisse sortir là, avant que la rencontre ne commence.',
           components: ['livrets'],
           crop: { page: 3, x: 0.33, y: 0.86, w: 0.537, h: 0.1 },
           ref: 'First Play Session — p.3',
@@ -544,6 +713,7 @@ export const oathsworn: Tutorial = {
             'Former votre Compagnie Libre et installer vos personnages.',
             'Mener l’histoire : la carte, les lieux, le temps qui passe, les événements.',
             'Résoudre un test, une décision secrète, un round de combat, un échange.',
+            'Monter la rencontre, jouer vos cartes, attaquer, et faire jouer la bête.',
             'Fermer la séance et ranger la campagne pour la reprendre plus tard.',
           ],
         },
@@ -702,7 +872,7 @@ export const oathsworn: Tutorial = {
             'Tout Oathsworn qui finit une rencontre à 1 ou 2 points de vie prend en plus une carte de blessure.',
           ],
           warn: 'Un mort ne se rejoue pas de la campagne. S’il vous reste moins de quatre Oathsworn disponibles, le voyage s’arrête là.',
-          crop: { page: 9, x: 0.522, y: 0.612, w: 0.365, h: 0.34 },
+          crop: { page: 9, x: 0.522, y: 0.612, w: 0.365, h: 0.362 },
           ref: 'Hardcore Variant — p.9',
         },
       ],
@@ -721,7 +891,7 @@ export const oathsworn: Tutorial = {
           title: '1. Le plateau de personnage, face visible',
           body: ['Laissez la place d’une carte sur ses quatre côtés : les objets viendront s’y glisser.'],
           components: ['plateaux'],
-          crop: { page: 7, x: 0.47, y: 0.018, w: 0.45, h: 0.225 },
+          crop: { page: 7, x: 0.47, y: 0.018, w: 0.497, h: 0.224 },
           ref: 'Full Character Setup — p.7',
         },
         {
@@ -733,7 +903,7 @@ export const oathsworn: Tutorial = {
             'Si vous enchaînez sur une rencontre, réglez-le sur les points de vie notés sur la fiche de personnage.',
           ],
           components: ['des'],
-          crop: { page: 7, x: 0.47, y: 0.018, w: 0.45, h: 0.225 },
+          crop: { page: 7, x: 0.47, y: 0.018, w: 0.497, h: 0.224 },
           ref: 'Full Character Setup — p.7',
         },
         {
@@ -746,7 +916,7 @@ export const oathsworn: Tutorial = {
           ],
           tip: 'On coche des cases, on n’écrit pas de chiffre : quand la valeur monte en campagne, on coche simplement une case de plus.',
           components: ['fiches'],
-          crop: { page: 7, x: 0.325, y: 0.195, w: 0.145, h: 0.085 },
+          crop: { page: 7, x: 0.325, y: 0.195, w: 0.149, h: 0.085 },
           ref: 'Full Character Setup — p.7 ; FAQ — p.17',
         },
         {
@@ -758,7 +928,7 @@ export const oathsworn: Tutorial = {
             'Prenez autant de gemmes d’Animus que votre Animus maximum, et posez-les sur la réserve, à gauche de la piste d’Animus.',
           ],
           components: ['jetons-suivi', 'animus'],
-          crop: { page: 7, x: 0.47, y: 0.018, w: 0.45, h: 0.225 },
+          crop: { page: 7, x: 0.47, y: 0.018, w: 0.497, h: 0.224 },
           ref: 'Full Character Setup — p.7',
         },
         {
@@ -817,7 +987,7 @@ export const oathsworn: Tutorial = {
             'Deux différences : il reçoit toujours 2 gemmes d’Animus, quel que soit son niveau, et sa défense vaut la somme de ses objets plus 2, avec un minimum de 3.',
           ],
           components: ['cartes-compagnon', 'animus'],
-          crop: { page: 7, x: 0.393, y: 0.556, w: 0.475, h: 0.4 },
+          crop: { page: 7, x: 0.393, y: 0.556, w: 0.475, h: 0.424 },
           ref: 'Companion Setup — p.7',
         },
         {
@@ -916,7 +1086,7 @@ export const oathsworn: Tutorial = {
           ],
           tip: 'Aux chapitres suivants, les paquets courants dorment dans le sac de la Compagnie : il suffit de les ressortir.',
           components: ['cartes-evenement'],
-          crop: { page: 8, x: 0.478, y: 0.746, w: 0.408, h: 0.212 },
+          crop: { page: 8, x: 0.478, y: 0.746, w: 0.407, h: 0.217 },
           ref: 'Event Decks — p.8',
         },
         {
@@ -1092,7 +1262,7 @@ export const oathsworn: Tutorial = {
           title: 'On remplit la piste dans l’ordre',
           body: ['Rangée du haut, de gauche à droite. Puis rangée du bas, de gauche à droite.'],
           components: ['piste-temps'],
-          crop: { page: 11, x: 0.07, y: 0.046, w: 0.254, h: 0.229 },
+          crop: { page: 11, x: 0.07, y: 0.046, w: 0.256, h: 0.229 },
           ref: 'Time Track — p.11',
         },
         {
@@ -1104,7 +1274,7 @@ export const oathsworn: Tutorial = {
             'C’est soit une carte d’événement à tirer, soit un déclencheur d’histoire qui vous renvoie à une entrée du livre.',
           ],
           warn: 'Avec l’application, les déclencheurs d’histoire partent tout seuls ; les cartes d’événement, non : c’est à vous de les tirer.',
-          crop: { page: 11, x: 0.072, y: 0.508, w: 0.262, h: 0.145 },
+          crop: { page: 11, x: 0.072, y: 0.508, w: 0.263, h: 0.145 },
           ref: 'Time Track — p.11',
         },
         {
@@ -1112,12 +1282,12 @@ export const oathsworn: Tutorial = {
           kind: 'info',
           title: 'Effets de fin d’histoire, et de fin de rencontre',
           body: [
-            'Ils se résolvent à la fin de leur moitié de chapitre, et **si la case est restée vide**. Les premiers donnent souvent des jetons de combat.',
+            'Ils se résolvent à la fin de leur moitié de chapitre, et si la case est restée vide. Les premiers donnent souvent des jetons de combat.',
             'Un « objet unique supplémentaire » se coche dans la case Unique Item de la feuille de Compagnie : vous le gagnerez à l’épilogue.',
           ],
           tip: 'C’est tout le nerf du jeu : plus vous êtes efficaces, moins vous consommez de cases, plus vous récoltez.',
           components: ['fiches'],
-          crop: { page: 11, x: 0.072, y: 0.28, w: 0.262, h: 0.617 },
+          crop: { page: 11, x: 0.072, y: 0.28, w: 0.263, h: 0.617 },
           ref: 'Time Track — p.11',
         },
         {
@@ -1130,7 +1300,7 @@ export const oathsworn: Tutorial = {
             'Extra Unique Item : un objet unique de plus dans les récompenses de l’épilogue.',
           ],
           components: ['jetons-combat', 'cartes-evenement'],
-          crop: { page: 11, x: 0.34, y: 0.249, w: 0.51, h: 0.161 },
+          crop: { page: 11, x: 0.34, y: 0.249, w: 0.518, h: 0.162 },
           ref: 'Example Track Effects — p.11',
         },
         {
@@ -1267,7 +1437,7 @@ export const oathsworn: Tutorial = {
           title: 'Les cartes de Puissance',
           body: [
             'On les tire au hasard des paquets de Puissance : les paquets Oathsworn pour un test ou une attaque des vôtres, le paquet ennemi pour les attaques adverses.',
-            'Quatre niveaux, du plus faible au plus fort : blanc, jaune, rouge, noir. Une icône vaut une carte **ou** un dé de cette couleur, à votre choix.',
+            'Quatre niveaux, du plus faible au plus fort : blanc, jaune, rouge, noir. Une icône vaut une carte ou un dé de cette couleur, à votre choix.',
           ],
           warn: 'Paquet épuisé : remélangez sa défausse et continuez le tirage. Les défausses sont publiques, on peut les consulter.',
           components: ['cartes-puissance'],
@@ -1314,7 +1484,7 @@ export const oathsworn: Tutorial = {
           title: 'Faire un test',
           body: [
             'L’histoire annonce un test et sa difficulté : test d’observation, de survie, ou test de base. Tous se résolvent de la même façon.',
-            'Sauf mention contraire, **un seul test pour toute la Compagnie**. Parfois le texte dit « chaque Oathsworn », ou en désigne un seul.',
+            'Sauf mention contraire, un seul test pour toute la Compagnie. Parfois le texte dit « chaque Oathsworn », ou en désigne un seul.',
           ],
           components: ['cartes-puissance'],
           crop: { page: 14, x: 0.13, y: 0.1, w: 0.39, h: 0.29 },
@@ -1341,7 +1511,7 @@ export const oathsworn: Tutorial = {
             'Une carte marquée d’un symbole critique fait tirer une carte de plus, de la même couleur, dont la valeur s’ajoute. Un nouveau critique relance le processus.',
           ],
           tip: 'Les cartes vierges tirées grâce à un critique ne font pas rater le test.',
-          crop: { page: 14, x: 0.542, y: 0.05, w: 0.392, h: 0.44 },
+          crop: { page: 14, x: 0.542, y: 0.05, w: 0.393, h: 0.44 },
           ref: 'Criticals — p.14',
         },
         {
@@ -1352,7 +1522,7 @@ export const oathsworn: Tutorial = {
             'Quand le texte dit « pour chaque succès », comptez un succès par multiple de la difficulté.',
             'Difficulté 3 : 0 à 2 échec, 3 à 5 un succès, 6 à 8 deux succès, 9 à 11 trois succès.',
           ],
-          crop: { page: 14, x: 0.542, y: 0.435, w: 0.392, h: 0.2 },
+          crop: { page: 14, x: 0.542, y: 0.435, w: 0.393, h: 0.2 },
           ref: 'Levels of Success — p.14',
         },
         {
@@ -1378,7 +1548,7 @@ export const oathsworn: Tutorial = {
           ],
           tip: 'En solo, vous décidez pour la Compagnie, sans avoir à cacher quoi que ce soit.',
           components: ['des'],
-          crop: { page: 14, x: 0.542, y: 0.645, w: 0.392, h: 0.135 },
+          crop: { page: 14, x: 0.542, y: 0.645, w: 0.393, h: 0.135 },
           ref: 'Secret Decisions — p.14',
         },
         {
@@ -1386,7 +1556,7 @@ export const oathsworn: Tutorial = {
           kind: 'action',
           title: 'Un round de combat',
           body: [
-            'Une escarmouche résumée en une salve : **chaque** Oathsworn tire une attaque. Les jetons de combat sont autorisés, les capacités spéciales et d’objet non.',
+            'Une escarmouche résumée en une salve : chaque Oathsworn tire une attaque. Les jetons de combat sont autorisés, les capacités spéciales et d’objet non.',
             'Tirez autant de cartes de Puissance que votre piste l’autorise, plus jusqu’à dix blanches. Deux vierges ou plus : l’attaque manque.',
             'Sinon, la somme des valeurs est votre dégât : s’il atteint la défense de l’ennemi, c’est réussi.',
           ],
@@ -1438,17 +1608,17 @@ export const oathsworn: Tutorial = {
 
     {
       id: 'fin',
-      title: 'Finir la séance',
-      kind: 'debrief',
-      goal: 'Enchaîner sur la rencontre, ou ranger la campagne proprement.',
+      title: 'Finir l’histoire',
+      kind: 'play',
+      goal: 'Enchaîner sur la rencontre, ou s’arrêter là pour ce soir.',
       steps: [
         {
           id: 'f1',
           kind: 'info',
           title: 'Deux façons de terminer l’histoire',
           body: [
-            'Vous enchaînez immédiatement la rencontre — c’est l’autre livret qui prend le relais.',
-            'Ou vous sauvegardez, et la rencontre attendra la prochaine séance.',
+            'Vous enchaînez immédiatement la rencontre — les chapitres qui suivent la montent avec vous.',
+            'Ou vous sauvegardez ici, et la rencontre attendra la prochaine séance : les trois étapes suivantes disent quoi mettre dans les sacs.',
           ],
           crop: { page: 10, x: 0.128, y: 0.365, w: 0.268, h: 0.135 },
           ref: 'End of Play Session — p.10',
@@ -1458,11 +1628,11 @@ export const oathsworn: Tutorial = {
           kind: 'check',
           title: 'Les effets de fin d’histoire',
           body: [
-            'Avant de ranger, parcourez la piste de Temps : chaque case portant un effet de fin d’histoire et **restée vide** se déclenche maintenant.',
+            'Avant de ranger, parcourez la piste de Temps : chaque case portant un effet de fin d’histoire et restée vide se déclenche maintenant.',
             'Ces effets donnent le plus souvent des jetons de combat.',
           ],
           components: ['piste-temps', 'jetons-combat'],
-          crop: { page: 11, x: 0.072, y: 0.28, w: 0.262, h: 0.2 },
+          crop: { page: 11, x: 0.072, y: 0.28, w: 0.263, h: 0.2 },
           ref: 'Time Track — p.11',
         },
         {
@@ -1487,7 +1657,7 @@ export const oathsworn: Tutorial = {
             '2. La carte Sac à dos et tous les objets non équipés. 3. Les cartes d’allié. 4. Les deux paquets d’événements.',
           ],
           components: ['fiches', 'sac-a-dos', 'cartes-allie', 'cartes-evenement'],
-          crop: { page: 15, x: 0.608, y: 0.722, w: 0.29, h: 0.25 },
+          crop: { page: 15, x: 0.608, y: 0.721, w: 0.29, h: 0.251 },
           ref: 'Saving the Game — p.15',
         },
         {
@@ -1496,9 +1666,775 @@ export const oathsworn: Tutorial = {
           title: 'Puis archivez tout le reste',
           body: [
             'Chaque composant retourne à sa place dans la boîte. C’est ce qui rend la reprise possible sans tout réinstaller.',
+            'Si vous enchaînez au contraire sur la rencontre, ne rangez rien : la suite du tutoriel monte le plateau.',
           ],
           warn: 'Les jetons de combat inutilisés sont défaussés à la fin d’un chapitre, après l’épilogue. Ils ne passent jamais au chapitre suivant.',
-          ref: 'Saving the Game — p.15',
+          ref: 'Saving the Game — p.15 ; Encounter — Saving the Game — p.25',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-setup',
+      title: 'Mise en place de la rencontre',
+      kind: 'setup',
+      modes: ['tuto', 'setup'],
+      goal: 'Monter le plateau, l’ennemi et les quatre Oathsworn, dans l’ordre du livret.',
+      steps: [
+        {
+          id: 'rs1',
+          kind: 'info',
+          title: 'L’autre livret prend le relais',
+          body: [
+            'L’histoire est finie : ouvrez l’Encounter Rule Book. Le livre de rencontre, lui, vous donne la page de la rencontre à monter.',
+            'Cette page dit tout : le plateau à poser, les tuiles, les ennemis, et où placer les Oathsworn.',
+          ],
+          components: ['livrets', 'plateau-jeu'],
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.1, w: 0.49, h: 0.072 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs2',
+          kind: 'place',
+          title: '1. Le plateau de jeu',
+          body: [
+            'Posez le plateau au centre de la table, orienté comme le montre le livre de rencontre.',
+            'Les bords portent les points cardinaux : ils servent à trancher toutes les égalités, et vous en aurez besoin à chaque round.',
+          ],
+          components: ['plateau-jeu'],
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.372, w: 0.49, h: 0.205 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs3',
+          kind: 'place',
+          title: '2. Les obstacles et les tuiles d’effet',
+          body: [
+            'Placez les arbres, les murs et les bâtiments sur les cases indiquées.',
+            'Puis les tuiles de feu, d’eau ou de nuage toxique, s’il y en a.',
+          ],
+          components: ['obstacles', 'tuiles-effet'],
+          crop: { book: 'rencontre', page: 9, x: 0.312, y: 0.565, w: 0.283, h: 0.245 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs4',
+          kind: 'place',
+          title: '3. Le plateau de rencontre et ses dés',
+          body: [
+            'Posez le plateau de rencontre de l’ennemi de tête à côté du plateau de jeu, et sa carte de rencontre dessous.',
+            'Placez un dé de points de vie rouge sur chaque emplacement, réglé sur la valeur imprimée.',
+          ],
+          components: ['plateau-rencontre', 'des'],
+          warn: 'Ces dés sont la vie du boss. Chaque emplacement se brise séparément : c’est ce qui fait avancer la rencontre.',
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.812, w: 0.49, h: 0.058 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs5',
+          kind: 'place',
+          title: '4. Le plateau de règles spéciales',
+          body: [
+            'Retournez le plateau de règles spéciales du chapitre, face visible cette fois : il porte la défense du boss, le comportement de ses sbires, et ce qui déclenche les étapes.',
+          ],
+          components: ['regles-speciales'],
+          tip: 'Si la feuille de Compagnie indique qu’il avait déjà été révélé pendant l’histoire, il l’est resté.',
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.665, w: 0.49, h: 0.075 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs6',
+          kind: 'place',
+          title: '5. Le paquet d’étape',
+          body: [
+            'Prenez les cartes d’étape de la rencontre. Mélangez séparément les I, les II et les III, puis empilez-les : les I dessus, les III dessous.',
+            'Posez le paquet à gauche du plateau de rencontre, et retournez la carte du dessus face visible.',
+          ],
+          components: ['cartes-etape'],
+          warn: 'La carte du dessus du paquet reste face visible pendant toute la rencontre.',
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.872, w: 0.49, h: 0.09 },
+          ref: 'Encounter — Encounter Stages — p.18',
+        },
+        {
+          id: 'rs7',
+          kind: 'place',
+          title: '6. Les ennemis',
+          body: [
+            'Posez la figurine du boss sur les cases indiquées, la flèche de son socle sur la case d’avant.',
+            'Puis les sbires, chacun sur sa case.',
+          ],
+          components: ['figurines', 'plateau-jeu'],
+          crop: { book: 'rencontre', page: 14, x: 0.53, y: 0.7, w: 0.42, h: 0.285 },
+          ref: 'Encounter — Encounter Setup — p.6 ; Enemy Locations — p.14',
+        },
+        {
+          id: 'rs8',
+          kind: 'place',
+          title: '7. Les Oathsworn',
+          body: [
+            'Chaque joueur pose sa figurine sur une case de départ, au choix parmi celles que montre le livre de rencontre.',
+            'Les plateaux de personnage restent devant leurs joueurs, comme pendant l’histoire.',
+          ],
+          components: ['figurines', 'plateaux'],
+          crop: { book: 'rencontre', page: 6, x: 0.678, y: 0.385, w: 0.315, h: 0.205 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rs9',
+          kind: 'place',
+          title: '8. Points de vie, Animus, défense',
+          body: [
+            'Chaque Oathsworn repart au maximum de points de vie de sa difficulté, même s’il a souffert pendant l’histoire.',
+            'Animus au maximum dans la zone active, jeton de suivi de défense à la somme des objets équipés.',
+          ],
+          components: ['des', 'animus', 'jetons-suivi'],
+          warn: 'La rencontre commence toujours au maximum : les points de vie perdus pendant l’histoire ne se reportent pas.',
+          ref: 'Encounter — Encounter Setup — p.6 ; Saving the Game — p.25',
+        },
+        {
+          id: 'rs10',
+          kind: 'take',
+          title: '9. La main de cartes de capacité',
+          body: [
+            'Chaque personnage complet choisit sept cartes de capacité parmi celles qu’il a débloquées, et les prend en main.',
+            'Un compagnon ne choisit rien : il joue avec sa carte de Compagnon et ses archétypes.',
+          ],
+          components: ['cartes-capacite', 'cartes-compagnon', 'cartes-archetype'],
+          crop: { book: 'rencontre', page: 6, x: 0.618, y: 0.595, w: 0.34, h: 0.235 },
+          ref: 'Encounter — Starting Ability Cards — p.7',
+        },
+        {
+          id: 'rs11',
+          kind: 'place',
+          title: '10. Les paquets de Puissance',
+          body: [
+            'Reformez les quatre paquets Oathsworn dans leur organisateur, et les quatre paquets ennemis dans le leur.',
+            'Chaque paquet est mélangé, défausse comprise : la rencontre commence avec des paquets complets.',
+          ],
+          components: ['cartes-puissance', 'cartes-puissance-ennemi'],
+          ref: 'Encounter — Encounter Setup — p.6 ; Component Questions — p.33',
+        },
+        {
+          id: 'rs12',
+          kind: 'check',
+          title: 'La table est prête',
+          body: [
+            'Plateau et obstacles, plateau de rencontre garni de ses dés, plateau de règles spéciales face visible.',
+            'Paquet d’étape avec sa carte du dessus visible, ennemis posés, quatre Oathsworn en pleine forme, sept cartes en main chacun.',
+          ],
+          crop: { book: 'rencontre', page: 6, x: 0.605, y: 0.045, w: 0.385, h: 0.34 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-tour',
+      title: 'Le round de rencontre',
+      kind: 'play',
+      goal: 'Savoir dans quel ordre les quatre phases s’enchaînent, et qui joue quand.',
+      steps: [
+        {
+          id: 'rt1',
+          kind: 'info',
+          title: 'Quatre phases, dans cet ordre',
+          body: [
+            '1. Récupération. 2. Phase Oathsworn. 3. Phase de rencontre. 4. Fin de round.',
+            'Vous répétez ce round jusqu’à ce que la rencontre se termine, d’un côté ou de l’autre.',
+          ],
+          crop: { book: 'rencontre', page: 8, x: 0.125, y: 0.044, w: 0.261, h: 0.248 },
+          ref: 'Encounter — Sequence of Play — p.8',
+        },
+        {
+          id: 'rt2',
+          kind: 'place',
+          title: 'Phase de récupération',
+          body: [
+            'Chaque Oathsworn regagne son Animus de régénération : déplacez autant de gemmes de la réserve vers la zone active, sans dépasser son maximum.',
+            'Un compagnon et un allié en regagnent 2, quel que soit leur niveau.',
+          ],
+          components: ['animus'],
+          crop: { book: 'rencontre', page: 8, x: 0.432, y: 0.292, w: 0.496, h: 0.225 },
+          ref: 'Encounter — Refresh Phase — p.8',
+        },
+        {
+          id: 'rt3',
+          kind: 'info',
+          title: 'Phase Oathsworn : autant de tours que vous voulez',
+          body: [
+            'Les joueurs jouent dans l’ordre qu’ils veulent, et un même Oathsworn peut reprendre la main plusieurs fois dans le round.',
+            'La phase s’arrête quand tout le monde passe : un joueur qui a passé peut encore jouer si un autre agit après lui.',
+          ],
+          warn: 'L’Animus non dépensé reste disponible pour une interruption pendant le tour d’un autre joueur, ou pendant la phase de rencontre.',
+          crop: { book: 'rencontre', page: 8, x: 0.125, y: 0.508, w: 0.261, h: 0.3 },
+          ref: 'Encounter — Oathsworn Phase — p.8',
+        },
+        {
+          id: 'rt4',
+          kind: 'info',
+          title: 'Ce que vous pouvez faire de votre tour',
+          body: [
+            'Jouer une carte de capacité, jouer un objet, vous déplacer, ou passer.',
+            'Tout coûte de l’Animus, et l’Animus ne revient qu’à la phase de récupération du round suivant.',
+          ],
+          components: ['cartes-capacite', 'objets-communs', 'animus'],
+          crop: { book: 'rencontre', page: 8, x: 0.395, y: 0.532, w: 0.235, h: 0.125 },
+          ref: 'Encounter — Oathsworn Phase — p.8',
+        },
+        {
+          id: 'rt5',
+          kind: 'info',
+          title: 'Puis les ennemis, puis la fin du round',
+          body: [
+            'La phase de rencontre retourne une carte d’étape et l’applique, puis active les sbires.',
+            'La phase de fin de round résout ce qui devait attendre la fin, et défausse les cartes « jusqu’à la fin du round ».',
+          ],
+          components: ['cartes-etape'],
+          crop: { book: 'rencontre', page: 24, x: 0.128, y: 0.035, w: 0.44, h: 0.08 },
+          ref: 'Encounter — End of Round Phase — p.24',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-jouer',
+      title: 'Jouer son Oathsworn',
+      kind: 'play',
+      goal: 'Poser une carte, la voir refroidir, et savoir ce qu’elle vous coûte.',
+      steps: [
+        {
+          id: 'rj1',
+          kind: 'action',
+          title: 'Jouer une carte de capacité',
+          body: [
+            'Payez son coût en Animus, en ramenant les gemmes de la zone active vers la réserve.',
+            'Résolvez ses effets, du haut vers le bas.',
+          ],
+          components: ['cartes-capacite', 'animus'],
+          crop: { book: 'rencontre', page: 10, x: 0.125, y: 0.102, w: 0.362, h: 0.204 },
+          ref: 'Encounter — Playing Ability Cards — pp.10-11',
+        },
+        {
+          id: 'rj2',
+          kind: 'place',
+          title: 'La carte va en recharge',
+          body: [
+            'La carte jouée se pose sur la position de recharge imprimée en bas : 1, 2 ou 3.',
+            'Plus la capacité est forte, plus la position est haute, et plus la carte met de temps à revenir en main.',
+          ],
+          components: ['cartes-capacite', 'plateaux'],
+          crop: { book: 'rencontre', page: 11, x: 0.058, y: 0.018, w: 0.8, h: 0.227 },
+          ref: 'Encounter — Cooldown — p.11',
+        },
+        {
+          id: 'rj3',
+          kind: 'info',
+          title: 'Le Battleflow fait glisser les cartes',
+          body: [
+            'Quand vous posez une carte en recharge, toutes les cartes déjà présentes à cette position glissent d’un cran vers la sortie.',
+            'La carte qui quitte la dernière position revient dans votre main.',
+          ],
+          warn: 'Une carte ne revient donc en main que si vous en jouez d’autres à la même position. Un tour sans carte jouée ne fait rien remonter.',
+          crop: { book: 'rencontre', page: 11, x: 0.058, y: 0.222, w: 0.28, h: 0.19 },
+          ref: 'Encounter — Battleflow — p.11',
+        },
+        {
+          id: 'rj4',
+          kind: 'action',
+          title: 'Se déplacer',
+          body: [
+            'Le déplacement vient d’une carte : « Move X » vous laisse avancer jusqu’à X cases, « Move exactly X » vous oblige à les faire toutes.',
+            'On ne traverse ni un obstacle, ni un autre personnage.',
+          ],
+          components: ['plateau-jeu'],
+          crop: { book: 'rencontre', page: 9, x: 0.062, y: 0.552, w: 0.263, h: 0.255 },
+          ref: 'Encounter — Movement — p.9',
+        },
+        {
+          id: 'rj5',
+          kind: 'action',
+          title: 'Jouer un objet',
+          body: [
+            'Un objet se joue à tout moment de votre tour, autant que vous voulez, si sa condition est remplie.',
+            'Il coûte son Animus et part en recharge comme une capacité — mais un objet ne déclenche pas de Battleflow.',
+          ],
+          components: ['objets-communs', 'objets-uniques'],
+          tip: 'Un objet sans numéro de recharge sert une fois par rencontre : posez-le face cachée après usage.',
+          crop: { book: 'rencontre', page: 16, x: 0.128, y: 0.075, w: 0.312, h: 0.572 },
+          ref: 'Encounter — Playing Item Cards — p.16',
+        },
+        {
+          id: 'rj6',
+          kind: 'info',
+          title: 'Les interruptions',
+          body: [
+            'Une capacité marquée d’une main s’utilise hors de votre tour : pendant le tour d’un autre joueur, ou pendant la phase de rencontre.',
+            'Il n’y a pas de limite au nombre d’interruptions, tant que la condition est remplie et l’Animus payé.',
+          ],
+          components: ['cartes-capacite'],
+          crop: { book: 'rencontre', page: 16, x: 0.128, y: 0.655, w: 0.55, h: 0.135 },
+          ref: 'Encounter — Other Icons — p.16',
+        },
+        {
+          id: 'rj7',
+          kind: 'info',
+          title: 'Le compagnon joue autrement',
+          body: [
+            'Un compagnon n’a pas de main : sa carte de Compagnon porte deux capacités, toujours disponibles.',
+            'Il a +2 de défense en permanence, et regagne 2 Animus par round.',
+          ],
+          components: ['cartes-compagnon'],
+          only: [1, 2, 3, 4],
+          crop: { book: 'rencontre', page: 9, x: 0.062, y: 0.04, w: 0.261, h: 0.175 },
+          ref: 'Encounter — Companions — p.9',
+        },
+        {
+          id: 'rj8',
+          kind: 'action',
+          title: 'Recharger ses paquets de Puissance',
+          body: [
+            'Quand un paquet de Puissance est vide, remélangez sa défausse dedans.',
+            'Certaines cartes vous laissent le faire à volonté : vous choisissez quelles couleurs vous remélangez, mais toujours une défausse entière.',
+          ],
+          components: ['cartes-puissance'],
+          ref: 'Encounter — Refresh Your Might Decks — p.16',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-attaque',
+      title: 'Attaquer',
+      kind: 'play',
+      goal: 'Tirer ses cartes, compter les dégâts, et briser un emplacement.',
+      steps: [
+        {
+          id: 'ra1',
+          kind: 'info',
+          title: 'Portée et ligne de vue',
+          body: [
+            'Une attaque sans portée indiquée est au corps à corps : la cible doit être sur une case adjacente.',
+            'Une portée se compte en cases jusqu’à celle de la cible, la vôtre non comprise. Une attaque à distance demande en plus la ligne de vue.',
+          ],
+          crop: { book: 'rencontre', page: 12, x: 0.128, y: 0.075, w: 0.29, h: 0.41 },
+          ref: 'Encounter — Range — p.12',
+        },
+        {
+          id: 'ra2',
+          kind: 'info',
+          title: 'La ligne de vue, coin à coin',
+          body: [
+            'Tracez une ligne du coin le plus proche de votre case au coin le plus proche de la case visée : si elle touche un obstacle, même d’un coin, la vue est coupée.',
+            'Les personnages, alliés comme ennemis, ne bloquent jamais la vue.',
+          ],
+          components: ['obstacles'],
+          tip: 'Si les deux cases sont en ligne droite, on mesure de milieu à milieu, ce qui dégage souvent la vue.',
+          crop: { book: 'rencontre', page: 12, x: 0.121, y: 0.5, w: 0.841, h: 0.461 },
+          ref: 'Encounter — Line of Sight — p.12',
+        },
+        {
+          id: 'ra3',
+          kind: 'action',
+          title: 'Choisir ses cartes de Puissance',
+          body: [
+            'Vous tirez une carte de chaque couleur présente sur votre piste de Puissance, et autant de cartes blanches que vous voulez.',
+            'Le nombre de blanches se décide avant de tirer, et ne se rattrape pas.',
+          ],
+          components: ['cartes-puissance', 'cubes'],
+          crop: { book: 'rencontre', page: 13, x: 0.058, y: 0.072, w: 0.385, h: 0.126 },
+          ref: 'Encounter — Making an Attack — p.13',
+        },
+        {
+          id: 'ra4',
+          kind: 'info',
+          title: 'Deux cartes vierges et l’attaque échoue',
+          body: [
+            'Une seule vierge ne fait rien. Deux vierges ou plus font manquer l’attaque entière : aucun dégât, et aucun effet annexe.',
+            'Sinon, la somme des valeurs tirées est votre dégât.',
+          ],
+          components: ['cartes-puissance'],
+          crop: { book: 'rencontre', page: 13, x: 0.04, y: 0.36, w: 0.44, h: 0.452 },
+          ref: 'Encounter — Making an Attack — p.13',
+        },
+        {
+          id: 'ra5',
+          kind: 'action',
+          title: 'Un critique fait tirer une carte de plus',
+          body: [
+            'Une carte marquée d’un critique en fait tirer une autre de la même couleur, dont la valeur s’ajoute. Un critique sur cette carte-là recommence.',
+            'Les vierges tirées à cause d’un critique ne font jamais manquer l’attaque.',
+          ],
+          components: ['cartes-puissance'],
+          crop: { book: 'rencontre', page: 13, x: 0.498, y: 0.071, w: 0.366, h: 0.646 },
+          ref: 'Encounter — Criticals — p.13',
+        },
+        {
+          id: 'ra6',
+          kind: 'action',
+          title: 'Renforcer avant de tirer',
+          body: [
+            'Le mot-clé « Empowered X », ou un jeton Empowered x3, monte X de vos cartes d’une couleur : blanc vers jaune, jaune vers rouge, rouge vers noir.',
+            'La même carte peut monter plusieurs fois, sans jamais dépasser le noir. Cela se décide avant le tirage.',
+          ],
+          components: ['jetons-combat', 'cartes-puissance'],
+          crop: { book: 'rencontre', page: 14, x: 0.128, y: 0.072, w: 0.815, h: 0.42 },
+          ref: 'Encounter — Empowering Cards — p.14',
+        },
+        {
+          id: 'ra7',
+          kind: 'check',
+          title: 'La règle de la détermination',
+          body: [
+            'Une attaque manquée après toutes vos relances vous donne un jeton de combat de votre choix.',
+            'Vous récupérez en plus tous les jetons de relance, Empowered x3 et létalité dépensés dans cette attaque.',
+          ],
+          components: ['jetons-combat'],
+          tip: 'Une attaque manquée rapporte donc toujours quelque chose.',
+          crop: { book: 'rencontre', page: 13, x: 0.068, y: 0.81, w: 0.405, h: 0.155 },
+          ref: 'Encounter — The Determination Rule — p.13',
+        },
+        {
+          id: 'ra8',
+          kind: 'action',
+          title: 'Des dégâts aux points de vie',
+          body: [
+            'Divisez le dégât par la valeur de défense de la cible et arrondissez à l’inférieur : c’est le nombre de points de vie perdus.',
+            'La défense d’un boss est en haut de son plateau de règles spéciales ; celle d’un sbire, dans son encadré.',
+          ],
+          components: ['regles-speciales'],
+          crop: { book: 'rencontre', page: 15, x: 0.062, y: 0.292, w: 0.263, h: 0.51 },
+          ref: 'Encounter — Damage and Hit Point Loss — p.15',
+        },
+        {
+          id: 'ra9',
+          kind: 'action',
+          title: 'Quel dé de points de vie',
+          body: [
+            'Sur une grande créature, visez le dé le plus proche de vous ; à égalité, vous choisissez, et vous pouvez choisir après le tirage.',
+            'Chaque point de vie perdu baisse le dé d’un cran. À zéro, retirez le dé : l’emplacement est brisé.',
+          ],
+          components: ['plateau-rencontre', 'des'],
+          crop: { book: 'rencontre', page: 15, x: 0.062, y: 0.035, w: 0.263, h: 0.245 },
+          ref: 'Encounter — Which Hit Point Die to Damage — p.15',
+        },
+        {
+          id: 'ra10',
+          kind: 'check',
+          title: 'Briser un emplacement déclenche une réaction',
+          body: [
+            'Vérifiez d’abord si l’étape change. Puis tirez et résolvez la carte d’étape du dessus, en prenant pour cible le personnage qui a brisé l’emplacement.',
+            'Cette réaction passe avant toute autre cible désignée. Retournez ensuite la carte d’étape suivante face visible.',
+          ],
+          components: ['cartes-etape'],
+          warn: 'Les sbires ne déclenchent pas de réaction, sauf mention contraire sur le plateau de règles spéciales.',
+          crop: { book: 'rencontre', page: 15, x: 0.308, y: 0.035, w: 0.3, h: 0.724 },
+          ref: 'Encounter — Breaking a Location — p.15',
+        },
+        {
+          id: 'ra11',
+          kind: 'info',
+          title: 'Frapper un emplacement déjà brisé',
+          body: [
+            'Vous pouvez attaquer une grande créature même là où il n’y a plus de dé : les dégâts vont au dé le plus proche encore en place.',
+            'Les bonus liés à l’emplacement visé, eux, s’appliquent quand même.',
+          ],
+          components: ['plateau-rencontre'],
+          crop: { book: 'rencontre', page: 15, x: 0.61, y: 0.152, w: 0.265, h: 0.337 },
+          ref: 'Encounter — Damage to a Broken Location — p.15',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-ennemi',
+      title: 'La phase de rencontre',
+      kind: 'play',
+      goal: 'Faire jouer l’ennemi sans hésiter : la carte, la cible, le déplacement, l’attaque.',
+      steps: [
+        {
+          id: 're1',
+          kind: 'action',
+          title: 'Retourner la carte d’étape',
+          body: [
+            'Résolvez la carte d’étape visible, étape par étape, dans l’ordre numéroté. Une étape impossible est simplement ignorée.',
+            'Puis défaussez-la et retournez la suivante face visible.',
+          ],
+          components: ['cartes-etape'],
+          crop: { book: 'rencontre', page: 18, x: 0.125, y: 0.128, w: 0.275, h: 0.178 },
+          ref: 'Encounter — Draw Stage Card — p.18',
+        },
+        {
+          id: 're2',
+          kind: 'info',
+          title: 'Les trois étapes de la rencontre',
+          body: [
+            'Le paquet passe de I à II puis à III : la bête change de comportement à mesure qu’elle souffre.',
+            'L’étape avance quand les cinq premières cartes de l’étape en cours ont été tirées, ou quand le plateau de règles spéciales le déclenche.',
+          ],
+          components: ['cartes-etape', 'regles-speciales'],
+          crop: { book: 'rencontre', page: 18, x: 0.107, y: 0.728, w: 0.834, h: 0.23 },
+          ref: 'Encounter — Encounter Stages — p.18',
+        },
+        {
+          id: 're3',
+          kind: 'info',
+          title: 'La règle d’or : nord, puis ouest',
+          body: [
+            'Chaque fois qu’un choix se présente à l’ennemi — quelle case, quelle direction, quelle cible — prenez la plus au nord.',
+            'S’il y a égalité au nord, prenez la plus à l’ouest. Les bords du plateau portent les points cardinaux.',
+          ],
+          components: ['plateau-jeu'],
+          warn: 'C’est la règle à retenir en premier : elle tranche la plupart des hésitations d’une rencontre.',
+          crop: { book: 'rencontre', page: 19, x: 0.063, y: 0.03, w: 0.367, h: 0.3 },
+          ref: 'Encounter — Golden Rule — p.19',
+        },
+        {
+          id: 're4',
+          kind: 'action',
+          title: 'Choisir la cible, dans l’ordre',
+          body: [
+            '1. Une réaction vise celui qui a brisé l’emplacement. 2. Sinon, la cible nommée par la carte ou le plateau de règles spéciales.',
+            '3. Sinon, l’Oathsworn le plus proche en ligne de vue — le moins de déplacement à faire. 4. À égalité et en meute, celui qui est déjà au contact d’un autre ennemi de la meute. 5. Sinon, nord puis ouest.',
+          ],
+          warn: 'Un allié n’est jamais la cible de l’ennemi de tête : « Oathsworn » désigne les personnages complets et les compagnons.',
+          crop: { book: 'rencontre', page: 19, x: 0.462, y: 0.037, w: 0.425, h: 0.536 },
+          ref: 'Encounter — Choosing a Target — p.19',
+        },
+        {
+          id: 're5',
+          kind: 'action',
+          title: 'Déplacer l’ennemi',
+          body: [
+            'L’ennemi prend toujours le chemin le plus court pour arriver au contact de sa cible ; entre deux chemins de même longueur, nord puis ouest.',
+            'À la fin de son mouvement, tournez-le pour qu’il fasse face à sa cible.',
+          ],
+          components: ['figurines'],
+          crop: { book: 'rencontre', page: 20, x: 0.128, y: 0.098, w: 0.82, h: 0.315 },
+          ref: 'Encounter — Enemy Movement — pp.20-21',
+        },
+        {
+          id: 're6',
+          kind: 'info',
+          title: 'Une grande créature écrase tout',
+          body: [
+            'Elle traverse obstacles et personnages. À l’arrivée, tout ce qui se trouve sous son socle est poussé vers l’extérieur, et les obstacles sont détruits.',
+            'Ce qu’elle n’a fait que traverser n’est pas déplacé.',
+          ],
+          components: ['obstacles'],
+          crop: { book: 'rencontre', page: 21, x: 0.062, y: 0.035, w: 0.29, h: 0.4 },
+          ref: 'Encounter — Large Enemy Movement — p.21',
+        },
+        {
+          id: 're7',
+          kind: 'action',
+          title: 'L’attaque ennemie, dans l’ordre',
+          body: [
+            'Vérifiez si l’attaque est brisée. Les Oathsworn jouent leurs effets « avant le tirage ». Tirez les cartes ennemies sans les révéler.',
+            'La cible peut alors jouer une carte de capacité pour sa défense. Révélez, jouez les effets « après le tirage », résolvez.',
+          ],
+          components: ['cartes-puissance-ennemi'],
+          crop: { book: 'rencontre', page: 22, x: 0.122, y: 0.098, w: 0.28, h: 0.245 },
+          ref: 'Encounter — Enemy Attacks — p.22',
+        },
+        {
+          id: 're8',
+          kind: 'info',
+          title: 'Les ennemis ne manquent jamais',
+          body: [
+            'Ils ignorent les vierges et les critiques : une vierge vaut zéro, un critique ne fait rien tirer de plus.',
+            'Le total est divisé par votre défense, arrondi à l’inférieur, et vous perdez ce nombre de points de vie.',
+          ],
+          components: ['cartes-puissance-ennemi'],
+          crop: { book: 'rencontre', page: 22, x: 0.668, y: 0.105, w: 0.265, h: 0.24 },
+          ref: 'Encounter — Resolving Enemy Damage — p.22',
+        },
+        {
+          id: 're9',
+          kind: 'action',
+          title: 'Se défendre avec une carte de capacité',
+          body: [
+            'Une fois par attaque, avant la révélation, la cible peut jouer une carte de sa main pour la valeur de défense imprimée en bas.',
+            'Cela ne coûte aucun Animus, aucun autre effet de la carte ne se résout, et la carte part en recharge en déclenchant le Battleflow.',
+          ],
+          components: ['cartes-capacite', 'jetons-combat'],
+          tip: 'Se défendre ne coûte rien et fait glisser les cartes de cette position : c’est aussi un moyen de faire revenir une carte en main.',
+          crop: { book: 'rencontre', page: 22, x: 0.395, y: 0.362, w: 0.27, h: 0.275 },
+          ref: 'Encounter — Playing Defensive Ability Cards — p.22',
+        },
+        {
+          id: 're10',
+          kind: 'info',
+          title: 'Une attaque brisée frappe moins fort',
+          body: [
+            'Certaines attaques portent une icône de partie du corps. Si l’emplacement correspondant du plateau de rencontre est brisé, l’attaque l’est aussi.',
+            'Tirez alors une carte de moins, en retirant la plus forte : noir avant rouge, rouge avant jaune, jaune avant blanc.',
+          ],
+          components: ['plateau-rencontre'],
+          crop: { book: 'rencontre', page: 22, x: 0.122, y: 0.345, w: 0.28, h: 0.27 },
+          ref: 'Encounter — Broken Attacks — p.22',
+        },
+        {
+          id: 're11',
+          kind: 'action',
+          title: 'Activer les sbires',
+          body: [
+            'À la fin de la phase, les sbires que la carte d’étape n’a pas déjà activés jouent, du plus proche de sa cible au plus loin.',
+            'Ils suivent l’encadré du plateau de règles spéciales, et choisissent leur cible à part : l’Oathsworn, l’allié ou le personnage ami le plus proche en ligne de vue.',
+          ],
+          components: ['regles-speciales', 'figurines'],
+          crop: { book: 'rencontre', page: 23, x: 0.058, y: 0.052, w: 0.28, h: 0.29 },
+          ref: 'Encounter — Activating Minions — p.23',
+        },
+        {
+          id: 're12',
+          kind: 'info',
+          title: 'La meute frappe d’un seul coup',
+          body: [
+            'Quand plusieurs ennemis « Mob » attaquent le même personnage, additionnez leurs Puissances et ne tirez qu’une seule attaque.',
+            'Tous les sbires sont déplacés avant que la moindre attaque ne soit résolue.',
+          ],
+          crop: { book: 'rencontre', page: 23, x: 0.332, y: 0.068, w: 0.28, h: 0.273 },
+          ref: 'Encounter — Mob Attacks — p.23',
+        },
+      ],
+    },
+
+    {
+      id: 'renc-fin',
+      title: 'Finir la rencontre',
+      kind: 'play',
+      goal: 'Savoir quand la rencontre s’arrête, et ce qu’on inscrit ensuite.',
+      steps: [
+        {
+          id: 'rf1',
+          kind: 'info',
+          title: 'Un Oathsworn à zéro tombe',
+          body: [
+            'Sa figurine quitte le plateau. À son tour suivant, son joueur prend un allié du paquet de la Compagnie et continue avec lui.',
+            'Si les quatre Oathsworn sont tombés, la rencontre est perdue.',
+          ],
+          components: ['cartes-allie', 'figurines'],
+          warn: 'En variante Hardcore, un Oathsworn à zéro n’est pas inconscient : il est mort.',
+          crop: { book: 'rencontre', page: 17, x: 0.058, y: 0.035, w: 0.295, h: 0.332 },
+          ref: 'Encounter — Unconscious Oathsworn — p.17',
+        },
+        {
+          id: 'rf2',
+          kind: 'place',
+          title: 'L’allié entre en jeu',
+          body: [
+            'Prenez sa figurine et posez le jeton de suivi de son numéro sur sa carte. Un dé de points de vie réglé sur 6, deux gemmes d’Animus.',
+            'Placez-le sur une case vide de n’importe quel bord du plateau.',
+          ],
+          components: ['cartes-allie', 'jetons-suivi', 'des', 'animus'],
+          crop: { book: 'rencontre', page: 17, x: 0.058, y: 0.382, w: 0.295, h: 0.28 },
+          ref: 'Encounter — Allies in Combat — p.17',
+        },
+        {
+          id: 'rf3',
+          kind: 'info',
+          title: 'La rencontre s’arrête de deux façons',
+          body: [
+            'Victoire : le dernier dé de points de vie quitte le plateau de rencontre. Les sbires restants fuient, et vous passez à l’épilogue du chapitre.',
+            'Défaite : les quatre Oathsworn sont tombés. Vous pouvez alors passer à l’épilogue quand même, ou rejouer la rencontre.',
+          ],
+          crop: { book: 'rencontre', page: 24, x: 0.125, y: 0.122, w: 0.445, h: 0.205 },
+          ref: 'Encounter — Ending the Encounter — p.24',
+        },
+        {
+          id: 'rf4',
+          kind: 'action',
+          title: 'Rejouer la rencontre',
+          body: [
+            'Cochez d’abord 4 cases sur la piste de KO — c’est votre score pour cette rencontre, quoi qu’il arrive ensuite.',
+            'Puis remontez la rencontre : points de vie au maximum, tous les jetons de combat retirés puis trois jetons au choix, plus les jetons permanents.',
+          ],
+          components: ['fiches', 'jetons-combat'],
+          tip: 'Les alliés morts pendant la tentative ratée reviennent dans le paquet : ils ne sont pas archivés.',
+          crop: { book: 'rencontre', page: 24, x: 0.125, y: 0.322, w: 0.445, h: 0.267 },
+          ref: 'Encounter — Ending the Encounter — p.24',
+        },
+        {
+          id: 'rf5',
+          kind: 'check',
+          title: 'Niveau, butin et pertes',
+          body: [
+            'L’épilogue vous dira de faire les comptes, dans cet ordre : niveau, butin, pertes.',
+            'Niveau : la Compagnie monte d’un cran. Butin : 3 objets communs du prochain chapitre, 2 objets uniques de celui-ci, puis les paquets d’objets sont remplacés.',
+          ],
+          components: ['objets-communs', 'objets-uniques'],
+          crop: { book: 'rencontre', page: 24, x: 0.582, y: 0.048, w: 0.365, h: 0.585 },
+          ref: 'Encounter — Tally Level, Loot and Losses — p.24',
+        },
+        {
+          id: 'rf6',
+          kind: 'check',
+          title: 'Les pertes se paient maintenant',
+          body: [
+            'Une case de piste de KO par Oathsworn tombé, ajustée par la difficulté, et une carte de blessure pour chacun d’eux.',
+            'Tous les Oathsworn perdent un objet équipé pendant la rencontre — deux s’ils sont tombés. Les alliés morts sont archivés.',
+          ],
+          components: ['fiches', 'cartes-soin', 'objets-communs'],
+          warn: 'Les jetons de combat non dépensés se défaussent à la fin du chapitre : ils ne passent pas au suivant.',
+          crop: { book: 'rencontre', page: 24, x: 0.582, y: 0.552, w: 0.365, h: 0.205 },
+          ref: 'Encounter — Tally Level, Loot and Losses — p.24',
+        },
+      ],
+    },
+
+    {
+      id: 'niveaux',
+      title: 'Monter de niveau',
+      kind: 'play',
+      goal: 'Savoir ce que la Compagnie gagne entre deux chapitres.',
+      steps: [
+        {
+          id: 'nv1',
+          kind: 'info',
+          title: 'Un niveau par chapitre',
+          body: [
+            'Toute la Compagnie commence au niveau 1 et gagne un niveau à l’épilogue de chaque chapitre.',
+            'Le tableau des niveaux dit ce que ce niveau apporte : cartes de capacité, jeton permanent, Animus, ou un trait de Compagnie.',
+          ],
+          components: ['fiches'],
+          crop: { book: 'rencontre', page: 26, x: 0.128, y: 0.043, w: 0.82, h: 0.634 },
+          ref: 'Encounter — Oathsworn Levels — p.26',
+        },
+        {
+          id: 'nv2',
+          kind: 'action',
+          title: 'Débloquer des cartes',
+          body: [
+            'Un personnage complet débloque toutes les cartes de capacité de son niveau ; un compagnon, ses cartes d’archétype.',
+            'Débloquer n’est pas prendre en main : la main reste de sept cartes, choisies à chaque rencontre.',
+          ],
+          components: ['cartes-capacite', 'cartes-archetype'],
+          crop: { book: 'rencontre', page: 27, x: 0.058, y: 0.032, w: 0.405, h: 0.32 },
+          ref: 'Encounter — Full Character: Ability Card — p.27',
+        },
+        {
+          id: 'nv3',
+          kind: 'action',
+          title: 'Le trait de Compagnie Libre',
+          body: [
+            'Aux niveaux qui en donnent un, la Compagnie choisit un trait et le coche sur sa feuille : Bushcraft, Endurance, Scavenger, True Grit…',
+            'Ces traits servent surtout pendant l’histoire : relances de tests, sac à dos plus grand, soins moins chers.',
+          ],
+          components: ['fiches'],
+          crop: { book: 'rencontre', page: 27, x: 0.058, y: 0.358, w: 0.405, h: 0.585 },
+          ref: 'Encounter — Free Company Trait — p.27',
+        },
+        {
+          id: 'nv4',
+          kind: 'info',
+          title: 'Changer d’Oathsworn en cours de campagne',
+          body: [
+            'Au début d’un chapitre, avant l’histoire, vous pouvez remplacer un Oathsworn par un autre : la montée de niveau rapide le met au niveau du chapitre d’un coup.',
+            'Vous l’équipez alors d’objets communs d’un chapitre inférieur au niveau de la Compagnie.',
+          ],
+          components: ['fiches', 'objets-communs'],
+          crop: { book: 'rencontre', page: 26, x: 0.128, y: 0.682, w: 0.82, h: 0.288 },
+          ref: 'Encounter — Quick Leveling and Swapping — p.26',
         },
       ],
     },
@@ -1528,8 +2464,8 @@ export const oathsworn: Tutorial = {
           kind: 'check',
           title: 'Où vous en étiez',
           body: [
-            'Vous vous êtes arrêté entre l’histoire et la rencontre : la feuille de Compagnie porte les cases cochées, et vos jetons de combat sont dans les sacs. Reprenez à la rencontre.',
-            'Vous vous êtes arrêté après une rencontre : c’est un nouveau chapitre qui commence, avec une nouvelle histoire.',
+            'Vous vous êtes arrêté entre l’histoire et la rencontre : la feuille de Compagnie porte les cases cochées, et vos jetons de combat sont dans les sacs. Les personnages se remontent d’abord, puis le plateau — voir la fin de ce chapitre.',
+            'Vous vous êtes arrêté après une rencontre : c’est un nouveau chapitre qui commence, avec une nouvelle histoire, et un niveau de plus.',
           ],
           components: ['fiches'],
           ref: 'Saving the Game — p.15',
@@ -1554,7 +2490,7 @@ export const oathsworn: Tutorial = {
             'Jeton de suivi de régénération à la valeur de la fiche, gemmes d’Animus sur la réserve, figurine devant vous.',
           ],
           components: ['plateaux', 'des', 'jetons-suivi', 'animus', 'figurines'],
-          crop: { page: 7, x: 0.47, y: 0.018, w: 0.45, h: 0.225 },
+          crop: { page: 7, x: 0.47, y: 0.018, w: 0.497, h: 0.224 },
           ref: 'Full Character Setup — p.7',
         },
         {
@@ -1619,14 +2555,49 @@ export const oathsworn: Tutorial = {
         },
         {
           id: 'rp10',
+          kind: 'place',
+          title: 'Si vous repreniez à la rencontre',
+          body: [
+            'Vous vous étiez arrêté entre les deux moitiés : l’histoire est faite, c’est le plateau qu’il faut monter.',
+            'Reprenez la mise en place de la rencontre du livre de rencontre, en dix gestes — mais sans refaire la mise en place des personnages : elle est déjà sortie des sacs.',
+          ],
+          components: ['plateau-jeu', 'plateau-rencontre', 'cartes-etape'],
+          crop: { book: 'rencontre', page: 6, x: 0.128, y: 0.1, w: 0.49, h: 0.072 },
+          ref: 'Encounter — Encounter Setup — p.6',
+        },
+        {
+          id: 'rp11',
+          kind: 'check',
+          title: 'Ce que la feuille de Compagnie vous rappelle',
+          body: [
+            'Trois cases cochées entre l’histoire et la rencontre : l’objet unique supplémentaire gagné sur la piste de Temps, le plateau de règles spéciales déjà révélé, et l’embuscade.',
+            'Vos jetons de combat étaient dans les sacs : ressortez-les, ils servent maintenant.',
+          ],
+          components: ['fiches', 'jetons-combat', 'regles-speciales'],
+          crop: { book: 'rencontre', page: 25, x: 0.068, y: 0.332, w: 0.395, h: 0.165 },
+          ref: 'Encounter — Saving the Game — p.25',
+        },
+        {
+          id: 'rp12',
+          kind: 'check',
+          title: 'Points de vie : au maximum, toujours',
+          body: [
+            'La fiche de personnage ne porte des points de vie courants que si vous vous êtes arrêté après l’histoire.',
+            'Après une rencontre, elle n’en porte pas : un nouveau chapitre commence toujours au maximum de la difficulté choisie.',
+          ],
+          components: ['fiches', 'des'],
+          ref: 'Encounter — Saving the Game — p.25',
+        },
+        {
+          id: 'rp13',
           kind: 'info',
           title: 'Trois règles qu’on oublie entre deux séances',
           body: [
             'Les jetons de combat ne survivent pas à la fin d’un chapitre, mais les jetons permanents en redonnent au début du suivant.',
             'Un déplacement coûte une case de piste de Temps, quelle que soit la distance.',
-            'Un lieu sans jeton de lieu ne se visite pas.',
+            'En rencontre, la carte du dessus du paquet d’étape reste toujours face visible.',
           ],
-          ref: 'Time Track — p.11 ; Combat Tokens — p.13',
+          ref: 'Time Track — p.11 ; Encounter — Draw Stage Card — p.18',
         },
       ],
     },
@@ -1719,6 +2690,109 @@ export const oathsworn: Tutorial = {
     },
 
     {
+      id: 'r-rencontre',
+      title: 'Rappel : mener la rencontre',
+      kind: 'play',
+      modes: ['recap'],
+      goal: 'Les points de la rencontre qu’on se redemande à la table.',
+      steps: [
+        {
+          id: 'rr8',
+          kind: 'info',
+          title: 'Le round',
+          body: [
+            'Récupération : chacun regagne sa régénération d’Animus. Phase Oathsworn : autant de tours que vous voulez, jusqu’à ce que tous passent.',
+            'Phase de rencontre : la carte d’étape, puis les sbires. Fin de round : ce qui devait attendre la fin.',
+          ],
+          crop: { book: 'rencontre', page: 8, x: 0.125, y: 0.044, w: 0.261, h: 0.248 },
+          ref: 'Encounter — Sequence of Play — p.8',
+        },
+        {
+          id: 'rr9',
+          kind: 'info',
+          title: 'La recharge et le Battleflow',
+          body: [
+            'Une carte jouée va sur sa position de recharge, et pousse d’un cran toutes les cartes déjà à cette position.',
+            'Celle qui sort de la dernière position revient en main. Un objet part en recharge mais ne pousse rien.',
+          ],
+          components: ['cartes-capacite'],
+          crop: { book: 'rencontre', page: 11, x: 0.058, y: 0.222, w: 0.28, h: 0.19 },
+          ref: 'Encounter — Battleflow — p.11',
+        },
+        {
+          id: 'rr10',
+          kind: 'info',
+          title: 'Attaquer',
+          body: [
+            'Une carte par couleur de votre piste, plus autant de blanches que vous voulez, décidé avant de tirer.',
+            'Deux vierges : l’attaque entière échoue. Sinon, la somme divisée par la défense, arrondie à l’inférieur, donne les points de vie perdus.',
+          ],
+          components: ['cartes-puissance'],
+          crop: { book: 'rencontre', page: 15, x: 0.062, y: 0.292, w: 0.263, h: 0.51 },
+          ref: 'Encounter — Making an Attack — p.13 ; Damage and Hit Point Loss — p.15',
+        },
+        {
+          id: 'rr11',
+          kind: 'info',
+          title: 'Briser un emplacement',
+          body: [
+            'Le dé à zéro quitte le plateau : vérifiez le changement d’étape, puis tirez une carte d’étape en réaction, ciblée sur celui qui a brisé.',
+            'Retournez ensuite la carte d’étape suivante face visible.',
+          ],
+          components: ['plateau-rencontre', 'cartes-etape'],
+          crop: { book: 'rencontre', page: 15, x: 0.308, y: 0.035, w: 0.3, h: 0.724 },
+          ref: 'Encounter — Breaking a Location — p.15',
+        },
+        {
+          id: 'rr12',
+          kind: 'info',
+          title: 'Nord, puis ouest',
+          body: [
+            'Tout choix laissé à l’ennemi — case, direction, cible — se tranche par la case la plus au nord, puis la plus à l’ouest.',
+          ],
+          crop: { book: 'rencontre', page: 19, x: 0.063, y: 0.03, w: 0.367, h: 0.3 },
+          ref: 'Encounter — Golden Rule — p.19',
+        },
+        {
+          id: 'rr13',
+          kind: 'info',
+          title: 'L’ennemi ne manque jamais',
+          body: [
+            'Les cartes ennemies ignorent vierges et critiques : une vierge vaut zéro, un critique ne fait rien tirer de plus.',
+            'La cible peut jouer une carte de sa main pour sa défense, gratuitement, avant la révélation.',
+          ],
+          components: ['cartes-puissance-ennemi'],
+          crop: { book: 'rencontre', page: 22, x: 0.668, y: 0.105, w: 0.265, h: 0.24 },
+          ref: 'Encounter — Resolving Enemy Damage — p.22',
+        },
+        {
+          id: 'rr14',
+          kind: 'info',
+          title: 'Tomber, et repartir',
+          body: [
+            'Un Oathsworn à zéro quitte le plateau ; son joueur reprend avec un allié au tour suivant, posé sur un bord.',
+            'Les quatre tombés, la rencontre est perdue : vous passez à l’épilogue ou vous rejouez.',
+          ],
+          components: ['cartes-allie'],
+          crop: { book: 'rencontre', page: 17, x: 0.058, y: 0.035, w: 0.295, h: 0.332 },
+          ref: 'Encounter — Unconscious Oathsworn — p.17',
+        },
+        {
+          id: 'rr15',
+          kind: 'info',
+          title: 'Les comptes de l’épilogue',
+          body: [
+            'Un niveau. Trois objets communs du prochain chapitre, deux objets uniques de celui-ci.',
+            'Une case de KO et une blessure par Oathsworn tombé, et un objet équipé perdu pour tout le monde.',
+          ],
+          components: ['objets-communs', 'objets-uniques', 'fiches'],
+          crop: { book: 'rencontre', page: 24, x: 0.582, y: 0.048, w: 0.365, h: 0.585 },
+          ref: 'Encounter — Tally Level, Loot and Losses — p.24',
+        },
+      ],
+    },
+
+    {
       id: 'debrief',
       title: 'Après cette première partie',
       kind: 'debrief',
@@ -1727,24 +2801,36 @@ export const oathsworn: Tutorial = {
         {
           id: 'z1',
           kind: 'info',
-          title: 'La rencontre vous attend',
+          title: 'Le chapitre est bouclé',
           body: [
-            'La seconde moitié du chapitre se joue sur le plateau, avec les figurines : c’est là que se règle ce que l’histoire a mis en place.',
-            'Ses règles sont dans l’Encounter Rule Book. Ce tutoriel ne les couvre pas.',
+            'Vous avez mené une histoire et une rencontre : c’est un chapitre entier d’Oathsworn, et la campagne en compte treize.',
+            'L’épilogue du livre d’histoire vous dit où reprendre au chapitre suivant.',
           ],
-          components: ['livrets'],
+          components: ['livrets', 'story-books'],
           crop: { page: 5, x: 0.72, y: 0.024, w: 0.246, h: 0.176 },
           ref: 'Game Overview — p.3',
+        },
+        {
+          id: 'z5',
+          kind: 'info',
+          title: 'Les effets spéciaux que vous n’avez pas croisés',
+          body: [
+            'L’annexe II du livret de rencontre décrit une vingtaine d’effets : zone d’effet, cône, vague, chaîne, charge, englouti, encagé, repoussé, poussé, lancé.',
+            'Le livret le dit lui-même : inutile de les apprendre. Lisez-en un quand une carte l’emploie.',
+          ],
+          crop: { book: 'rencontre', page: 29, x: 0.062, y: 0.032, w: 0.29, h: 0.125 },
+          ref: 'Encounter — Appendix II — pp.29-31',
         },
         {
           id: 'z2',
           kind: 'info',
           title: 'Ce que la campagne va ajouter',
           body: [
-            'Des cartes d’événement nouvelles dans les deux paquets, des objets de chapitres supérieurs, des archétypes, des alliés, et l’A’Dendri Grove Maiden.',
-            'La montée de niveau et le changement de personnage passent par le système de niveau rapide de l’autre livret.',
+            'Des cartes d’événement nouvelles dans les deux paquets, des objets de chapitres supérieurs, des archétypes, des alliés.',
+            'La Grove Maiden et ses bioformes, la Huntress et ses faucons : deux personnages à part, décrits dans l’annexe III, à ouvrir bien plus tard.',
           ],
-          ref: 'FAQ — p.17',
+          crop: { book: 'rencontre', page: 32, x: 0.128, y: 0.038, w: 0.405, h: 0.186 },
+          ref: 'FAQ — p.17 ; Encounter — Appendix III — p.32',
         },
         {
           id: 'z3',
@@ -1761,11 +2847,11 @@ export const oathsworn: Tutorial = {
           kind: 'check',
           title: 'Avant de ranger',
           body: [
-            'Résolvez les effets de fin d’histoire restés vides, remplissez les sacs de sauvegarde, archivez le reste.',
+            'Faites les comptes de l’épilogue — niveau, butin, pertes — puis remplissez les sacs de sauvegarde et archivez le reste.',
             'Et notez sur le journal où vous en êtes : c’est ce que vous relirez dans trois semaines.',
           ],
           components: ['journal', 'fiches'],
-          ref: 'Saving the Game — p.15',
+          ref: 'Saving the Game — p.15 ; Encounter — Saving the Game — p.25',
         },
       ],
     },

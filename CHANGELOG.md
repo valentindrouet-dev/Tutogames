@@ -17,6 +17,50 @@ comme complète.
 
 ---
 
+## v0.18 — 2026-09-05
+
+### Ajouté
+
+- **Un jeu peut porter plusieurs livrets.** Certains éditeurs coupent leurs
+  règles en deux livres qui se suivent à la table. Ce n'est pas deux jeux :
+  c'est le même, et le tutoriel suit le chapitre dans l'ordre où on le joue.
+  - `source.books` déclare les livrets supplémentaires, chacun avec son PDF,
+    son dossier d'assets et son propre `pageOffset` — les deux livrets
+    d'*Oathsworn* sont paginés à partir de 1, un décalage unique ne pourrait
+    pas corriger les deux.
+  - Une découpe nomme le sien par `crop.book` ; sans clé, elle vient du livret
+    principal, et les six autres jeux n'ont rien à changer.
+  - `bookOf(tutorial, crop)` résout le livret, `assetIdsOf(tutorial)` liste ses
+    dossiers, et `useManifests()` charge les manifestes ensemble.
+  - La pastille d'une découpe pleine page affiche le titre imprimé sur la
+    couverture du livret — « Encounter Rule Book p.13 » — pour que le joueur
+    sache quel livre ouvrir.
+- **Oathsworn couvre le chapitre entier.** La rencontre rejoint l'histoire :
+  144 étapes en 1re Partie (85 auparavant), 32 en Mise en Place, 13 en
+  Reprendre, 15 en Règles. Le second livret, livré en sept PDF, fait 35 pages.
+  - Six chapitres neufs : la mise en place de la rencontre en dix gestes, le
+    round et ses quatre phases, jouer son Oathsworn (recharge et Battleflow),
+    attaquer (portée, ligne de vue, cartes de Puissance, critiques, dégâts,
+    emplacements brisés), la phase de rencontre (cartes d'étape, règle du nord
+    puis ouest, cibles, déplacements, attaques ennemies, sbires), et finir la
+    rencontre (victoire, défaite, niveau, butin et pertes). Plus un chapitre
+    sur la montée de niveau.
+  - Le rappel gagne « Rappel : mener la rencontre », et la reprise trois
+    étapes pour reprendre entre les deux moitiés.
+  - Le glossaire VO passe de 81 à 157 termes.
+  - Le chapitre « Finir l'histoire » garde la sortie que le livret conseille
+    lui-même : pour une première séance de trois heures ou moins, on s'arrête
+    avant la rencontre.
+
+### Corrigé
+
+- Le texte d'une étape ne connaît pas le gras : les `**mots**` écrits dans les
+  consignes d'*Oathsworn* en v0.17 s'affichaient avec leurs astérisques. Les
+  marqueurs sont retirés — c'est la phrase qui porte l'insistance, comme dans
+  les six autres tutoriels.
+
+---
+
 ## v0.17 — 2026-09-05
 
 ### Ajouté
