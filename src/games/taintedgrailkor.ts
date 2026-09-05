@@ -257,6 +257,11 @@ export const taintedgrailkor: Tutorial = {
       glyph: 'die',
       tint: '#8e1420',
       crop: { page: 2, x: 0.41, y: 0.545, w: 0.35, h: 0.095 },
+      variants: [
+        { label: 'Dé standard', effect: 'Crânes et Graals : c’est lui qu’on lance quand une carte demande un jet.' },
+        { label: 'Dé Gardien', effect: 'Une direction, « rien », ou la défausse du gardien.', tint: '#8a2b2b' },
+        { label: 'Dé Durée', effect: 'Combien de temps un effet reste en jeu, quand la carte ne le dit pas elle-même.', tint: '#38bdf8' },
+      ],
     },
     {
       id: 'marqueurs-sante',
@@ -282,6 +287,10 @@ export const taintedgrailkor: Tutorial = {
       note: 'Les sombres pour les capacités différées et les activations, les clairs pour les situations liées à l’histoire.',
       glyph: 'token',
       crop: { page: 2, x: 0.395, y: 0.79, w: 0.265, h: 0.135 },
+      variants: [
+        { label: 'Temps sombre', qty: '20 marqueurs', effect: 'Le temps qui passe pour de bon : il fait avancer le statut « Le temps passe ».', tint: '#27272a' },
+        { label: 'Temps clair', qty: '6 marqueurs', effect: 'Le temps réversible : certains effets le retirent au lieu de le laisser courir.', tint: '#d4d4d8' },
+      ],
     },
     {
       id: 'marqueurs-quete',

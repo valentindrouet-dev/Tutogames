@@ -209,6 +209,10 @@ export const bitoku: Tutorial = {
       note: 'Action en haut, type en bas. Un Pèlerin qui atteint la case Portail fait l’action immédiatement.',
       glyph: 'tile',
       crop: { page: 19, x: 0.75, y: 0.19, w: 0.17, h: 0.32 },
+      variants: [
+        { label: 'Type A', qty: '8 tuiles', effect: 'Une des deux familles de portails. Le côté visible décide de ce que la traversée rapporte.' },
+        { label: 'Type B', qty: '8 tuiles', effect: 'L’autre famille. La mise en place indique laquelle poser à chaque emplacement.' },
+      ],
     },
     {
       id: 'rochers',
@@ -252,6 +256,11 @@ export const bitoku: Tutorial = {
       glyph: 'token',
       tint: '#d9741a',
       crop: { page: 9, x: 0.73, y: 0.84, w: 0.22, h: 0.07 },
+      variants: [
+        { label: '+1', effect: 'Monte la valeur d’un dé de 1 avant de le placer. Jamais au-delà de 6.', tint: '#84cc16' },
+        { label: '+2', effect: 'Monte la valeur d’un dé de 2. Même plafond.', tint: '#eab308' },
+        { label: '+3', effect: 'Monte la valeur d’un dé de 3. Même plafond.', tint: '#e11d48' },
+      ],
     },
     {
       id: 'hikaru',

@@ -850,6 +850,75 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 .part-detail-name { font-size: calc(26px * var(--text-scale)); font-weight: 750; letter-spacing: -0.02em; }
 .part-detail-note { color: var(--fg-dim); font-size: calc(17px * var(--text-scale)); line-height: 1.45; }
 
+/*
+ * Les varietes d'un composant, en aide de jeu : une ligne par type, la
+ * vignette a gauche quand elle existe. Deux colonnes des que la place le
+ * permet — sur un iPad en paysage, six types tiennent sans defiler.
+ */
+.part-types {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: calc(12px * var(--text-scale));
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--fg-dim);
+  background: var(--bg-3);
+  border: 1px solid var(--stroke-soft);
+  white-space: nowrap;
+}
+.variants {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--stroke);
+}
+.variant {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--bg-2);
+  border: 1px solid var(--stroke-soft);
+  border-left: 3px solid var(--part-tint, var(--stroke));
+}
+/*
+ * Une fiche qui porte une aide de jeu rend la photo du composant plus
+ * modeste : ce qu'on vient chercher, c'est la liste des types.
+ */
+.part-detail-aid { grid-template-columns: 190px minmax(0, 1fr); }
+.part-detail-aid .visual { min-height: 140px; max-height: 190px; }
+@media (max-width: 720px) { .part-detail-aid { grid-template-columns: 1fr; } }
+
+.variant-thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+/* Un symbole doit se voir en entier : on ne le recadre pas. */
+.variant-thumb .thumb-img { object-fit: contain; }
+.variant-txt { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.variant-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.variant-label { font-size: calc(17px * var(--text-scale)); font-weight: 700; }
+.variant-qty {
+  font-family: var(--mono);
+  font-size: calc(12px * var(--text-scale));
+  color: var(--fg-faint);
+}
+.variant-effect {
+  margin: 0;
+  color: var(--fg-dim);
+  font-size: calc(15px * var(--text-scale));
+  line-height: 1.4;
+}
+
 .kv { display: flex; flex-direction: column; gap: 10px; }
 .kv-row { display: flex; justify-content: space-between; gap: 20px; font-size: calc(16px * var(--text-scale)); }
 .kv-row dt { color: var(--fg-faint); }

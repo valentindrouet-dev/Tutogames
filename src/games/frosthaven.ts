@@ -402,6 +402,12 @@ export const frosthaven: Tutorial = {
       glyph: 'board',
       tint: '#8fd3f4',
       crop: { page: 23, x: 0.54, y: 0.17, w: 0.42, h: 0.3 },
+      // Les trois colonnes du plateau : c'est là que se joue l'infusion.
+      variants: [
+        { label: 'Fort', effect: 'Le jeton vient d’être infusé, ce round. N’importe quel personnage peut le consommer pour l’effet d’une de ses cartes.', tint: '#84cc16' },
+        { label: 'Faiblissant', effect: 'Le jeton a passé un round. Dernière chance de le consommer : il recule à la fin de ce round.', tint: '#eab308' },
+        { label: 'Inerte', effect: 'Plus rien à consommer. Un élément infusé repart directement en « fort », même depuis l’inerte.', tint: '#64708a' },
+      ],
     },
     {
       id: 'butin',
@@ -427,6 +433,24 @@ export const frosthaven: Tutorial = {
       note: 'Ils se rangent dans le plateau de jetons, à portée de tous.',
       glyph: 'token',
       crop: { page: 73, x: 0.26, y: 0.86, w: 0.4, h: 0.07 },
+      // Les conditions, telles que les pages 28 et 29 les décrivent. C'est
+      // l'aide de jeu qu'on cherche à chaque fin de tour.
+      variants: [
+        { label: 'Wound', effect: '1 dégât au début de chaque tour de la figure. Retiré par un soin.', tint: '#e11d48' },
+        { label: 'Brittle', effect: 'Les prochains dégâts subis sont doublés. Retiré par un soin.', tint: '#e11d48' },
+        { label: 'Bane', effect: '10 dégâts à la fin du prochain tour de la figure. Retiré par un soin.', tint: '#8a2b2b' },
+        { label: 'Poison', effect: 'Toutes les attaques subies font +1 dégât. Un soin la retire, mais ne rend alors aucun point de vie.', tint: '#84cc16' },
+        { label: 'Immobilize', effect: 'Aucune capacité Move, jusqu’à la fin du prochain tour de la figure.', tint: '#64708a' },
+        { label: 'Disarm', effect: 'Aucune capacité Attack, jusqu’à la fin du prochain tour.', tint: '#64708a' },
+        { label: 'Impair', effect: 'Aucun objet, jusqu’à la fin du prochain tour.', tint: '#64708a' },
+        { label: 'Stun', effect: 'Ni capacité ni objet, jusqu’à la fin du prochain tour. On choisit quand même ses deux cartes : elles sont défaussées sans effet. Un repos long se joue normalement.', tint: '#a855f7' },
+        { label: 'Muddle', effect: 'Désavantage sur ses attaques, jusqu’à la fin du prochain tour.', tint: '#a855f7' },
+        { label: 'Invisible', effect: 'Ne peut être ni focus ni cible d’un ennemi, jusqu’à la fin de son prochain tour.', tint: '#38bdf8' },
+        { label: 'Strengthen', effect: 'Avantage sur toutes ses attaques, jusqu’à la fin de son prochain tour.', tint: '#38bdf8' },
+        { label: 'Regenerate', effect: 'Dure jusqu’aux prochains dégâts subis.', tint: '#38bdf8' },
+        { label: 'Bless', effect: 'Une carte « 2x » mélangée dans le paquet de modificateurs. Elle retourne à la réserve une fois tirée.', tint: '#eab308' },
+        { label: 'Curse', effect: 'Une carte « null » mélangée dans le paquet de modificateurs. Elle retourne à la réserve une fois tirée.', tint: '#27272a' },
+      ],
     },
     {
       id: 'livres',

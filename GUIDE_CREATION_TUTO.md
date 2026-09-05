@@ -326,6 +326,53 @@ de recouper avec le livret.
   disent déjà. Si vous paraphrasez, supprimez la note.
 - `glyph` est le pictogramme de secours affiché tant que la découpe n'existe pas.
 
+#### Les variétés d'un composant : l'aide de jeu de la fiche
+
+Beaucoup de matériel se présente en plusieurs types qu'un débutant ne
+distingue pas encore : six symboles sur les jetons Exploration de *Nemesis*,
+cinq jetons de combat dans *Oathsworn*, quatorze conditions dans *Frosthaven*.
+Le livret les décrit une fois, page 15 ou en annexe, et le joueur y retourne
+dix fois par partie.
+
+`Component.variants` met cette page-là dans la fiche du composant :
+
+```ts
+{
+  id: 'exploration',
+  name: 'Jetons Exploration',
+  qty: '20 jetons',
+  note: 'Posés face cachée sur chaque tuile Salle…',
+  glyph: 'token',
+  variants: [
+    {
+      label: 'Silence',
+      effect: 'Rien ne se passe : pas de jet de bruit pour ce déplacement…',
+      crop: { page: 15, x: 0.052, y: 0.202, w: 0.05, h: 0.037 },
+      tint: '#64708a',
+    },
+    // …
+  ],
+}
+```
+
+La fiche affiche la liste sous la photo, deux colonnes sur un iPad en paysage,
+et la vignette du matériel montre « 6 types » pour dire qu'il y a quelque
+chose à ouvrir. `npm run crops` rend les vignettes des variétés comme les
+autres découpes.
+
+Trois règles pour que ça reste une aide et pas un doublon du livret :
+
+1. **Des variétés d'un même composant, rien d'autre.** Une règle qui vaut pour
+   tout le lot va dans `note` ; une règle de jeu va dans une étape. La liste
+   répond à « lequel ai-je en main ? », pas à « comment on joue ? ».
+2. **`effect` se lit en trois secondes.** Une à trois phrases, l'essentiel
+   d'abord. Ce n'est pas la place des cas particuliers.
+3. **Une vignette quand reconnaître à l'œil compte.** Un symbole gravé sur un
+   jeton, une face de dé : oui. Quatre couleurs de cartes : le `tint` suffit.
+
+`npm run aids` liste ce que chaque jeu décrit déjà, et signale les composants
+dont le nom ou la quantité annonce plusieurs sortes sans liste écrite.
+
 ### Étape 8 — Découper les visuels
 
 Deux voies, à utiliser dans cet ordre.
@@ -840,6 +887,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.20 | `Component.variants` : les variétés d'un composant, en aide de jeu dans sa fiche, avec vignette et couleur. Étape 8 : « Les variétés d'un composant », et `npm run aids` pour voir ce qui reste à décrire. 97 types de matériel écrits sur les sept jeux. |
 | 2026-09-05 | v0.19 | Étape 4 : « Le solo n'est pas la même partie, en moins nombreux », et `npm run players` pour relever ce que chaque effectif voit. Les sept tutoriels relus à 1 joueur ; *Nemesis* passe de 3 à 16 étapes propres au solo. |
 | 2026-09-05 | v0.18 | Le texte d'une étape est du texte brut, sans gras ni markdown. Un jeu peut porter **plusieurs livrets** : `source.books`, `crop.book`, `bookOf()`, un dossier d'assets par livret, et la pastille d'une découpe pleine page qui nomme le livret. Étape 3 : la section « Un jeu livré en deux livrets », et pourquoi on ne les fusionne pas. *Oathsworn* couvre désormais le chapitre entier, histoire et rencontre. |
 | 2026-09-05 | v0.17 | Étape 8e : `npm run snap` recale les rectangles sur le bloc qu'ils visent, après mesure des colonnes page par page. Une étape qui cite ses composants ne découpe plus la planche de matériel. Septième tutoriel : *Oathsworn : Into the Deepwood*, dont le livret Histoire est livré en quatre PDF et dont seule la moitié Histoire est couverte, la Rencontre ayant son propre livret. |

@@ -17,6 +17,41 @@ comme complète.
 
 ---
 
+## v0.20 — 2026-09-05
+
+### Ajouté
+
+- **La fiche d'un composant devient une aide de jeu.** Beaucoup de matériel se
+  présente en plusieurs types qu'un débutant ne distingue pas encore : six
+  symboles sur les jetons Exploration de *Nemesis*, cinq jetons de combat dans
+  *Oathsworn*, quatorze conditions dans *Frosthaven*. Le livret les décrit une
+  fois, page 15 ou en annexe, et le joueur y retourne dix fois par partie.
+  - `Component.variants` porte la liste : un libellé, ce que le type fait, sa
+    quantité s'il y a lieu, sa couleur de repérage, et sa vignette découpée
+    dans le PDF quand reconnaître le symbole à l'œil compte.
+  - On tape sur « Jetons Exploration » dans le matériel, et les six effets
+    sont là — Silence, Danger, Slime, Feu, Panne, Portes — avec le symbole de
+    chacun. Sans quitter l'étape en cours, sans rouvrir le livret.
+  - La vignette du composant affiche « 6 types » pour dire qu'il y a quelque
+    chose à ouvrir, et la fiche réduit la photo quand elle porte une aide.
+  - **97 types décrits sur les sept jeux.** *Nemesis* : jetons Exploration,
+    jetons Intrus, faces des deux dés, pions Porte, tuiles Moteur, objectifs,
+    couleurs d'objet. *Oathsworn* : jetons de combat et de statut de l'annexe I
+    avec leurs neuf symboles, couleurs de Puissance, dés, cartes d'étape,
+    soins et blessures, tuiles d'effet. *Frosthaven* : les trois colonnes du
+    plateau d'éléments et les quatorze conditions. *Expeditions* : les huit
+    catégories de Gloire. *Bitoku*, *Tainted Grail* et *Rois de la Ruine* :
+    amulettes, portails, dés, cartes de fin.
+
+### Outils
+
+- **`npm run aids`** liste ce que chaque jeu décrit déjà, avec le nombre de
+  vignettes, et signale les composants dont le nom, la quantité ou la note
+  annonce plusieurs sortes sans liste écrite.
+- `npm run crops` rend maintenant aussi les vignettes des variétés.
+
+---
+
 ## v0.19 — 2026-09-05
 
 ### Corrigé

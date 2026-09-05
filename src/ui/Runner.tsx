@@ -10,7 +10,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
-import type { Component, Crop, Mode, Tutorial } from '../engine/types'
+import type { Component, Crop, Mode, Tutorial, Variant } from '../engine/types'
 import { MODE_INFO, assetIdsOf, bookOf, playerLabel } from '../engine/types'
 import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
 import { voSpansFor } from '../engine/vo'
@@ -63,6 +63,37 @@ interface Props {
   onPrefs?: (p: Prefs) => void
   onOpenSettings?: () => void
   onExit: () => void
+}
+
+/**
+ * Les variétés d'un composant, en aide de jeu.
+ *
+ * Six symboles de jeton Exploration, cinq jetons de combat, quatre couleurs
+ * de Puissance : le livret les décrit une fois, et le joueur y retourne dix
+ * fois par partie. La fiche du matériel les garde sous la main, avec leur
+ * vignette quand la reconnaître à l'œil compte.
+ */
+function Variants({ tutorial, list }: { tutorial: Tutorial; list: Variant[] }) {
+  return (
+    <div className="variants">
+      {list.map((v) => (
+        <div className="variant" key={v.label} style={v.tint ? ({ '--part-tint': v.tint } as CSSProperties) : undefined}>
+          {v.crop && (
+            <span className="variant-thumb">
+              <Thumb book={bookOf(tutorial, v.crop)} crop={v.crop} glyph="token" name={v.label} />
+            </span>
+          )}
+          <div className="variant-txt">
+            <div className="variant-head">
+              <span className="variant-label">{v.label}</span>
+              {v.qty && <span className="variant-qty">{v.qty}</span>}
+            </div>
+            <p className="variant-effect">{v.effect}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export function Runner({
@@ -392,7 +423,10 @@ export function Runner({
                       />
                     </span>
                     <span className="part-txt">
-                      <span className="part-name">{c.name}</span>
+                      <span className="part-name">
+                        {c.name}
+                        {c.variants && <span className="part-types">{c.variants.length} types</span>}
+                      </span>
                       {c.qty && <span className="part-qty">{c.qty}</span>}
                     </span>
                   </button>
@@ -448,7 +482,7 @@ export function Runner({
 
         {part && (
           <Sheet title="Matériel" onClose={() => setPart(null)} style={panel}>
-            <div className="part-detail">
+            <div className={`part-detail${part.variants ? ' part-detail-aid' : ''}`}>
               <div className="visual">
                 <Visual
                   book={bookOf(tutorial, part.crop)}
@@ -464,6 +498,7 @@ export function Runner({
                 {part.note && <p className="part-detail-note">{part.note}</p>}
               </div>
             </div>
+            {part.variants && <Variants tutorial={tutorial} list={part.variants} />}
           </Sheet>
         )}
 
@@ -487,7 +522,10 @@ export function Runner({
                     />
                   </span>
                   <span className="part-txt">
-                    <span className="part-name">{c.name}</span>
+                    <span className="part-name">
+                      {c.name}
+                      {c.variants && <span className="part-types">{c.variants.length} types</span>}
+                    </span>
                     {c.qty && <span className="part-qty">{c.qty}</span>}
                   </span>
                 </button>

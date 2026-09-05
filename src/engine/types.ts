@@ -144,6 +144,36 @@ export const MODE_INFO: Record<Mode, ModeInfo> = {
  * Un élément de matériel du jeu. C'est ce que le joueur doit reconnaître
  * physiquement sur sa table : on l'illustre par une découpe du PDF.
  */
+/**
+ * Une variété d'un même composant : ce qui la distingue, et ce qu'elle fait.
+ *
+ * Beaucoup de matériel se présente en plusieurs types qu'un débutant ne
+ * distingue pas encore : six symboles sur les jetons Exploration de *Nemesis*,
+ * cinq jetons de combat dans *Oathsworn*, quatre couleurs de Puissance. Le
+ * livret les décrit une fois, page 15 ou en annexe, et le joueur y retourne
+ * dix fois par partie.
+ *
+ * Les déclarer ici, c'est mettre cette page-là dans la fiche du composant :
+ * on tape sur « Jetons Exploration » et on a les six effets sous les yeux,
+ * sans quitter l'étape en cours. C'est l'aide de jeu que la boîte ne fournit
+ * pas toujours.
+ *
+ * À réserver aux **variétés d'un même composant**. Une règle qui s'applique au
+ * composant entier va dans `note` ; une règle de jeu va dans une étape.
+ */
+export interface Variant {
+  /** Ce qui est imprimé dessus, ou ce qui la distingue à l'œil. */
+  label: string
+  /** Quantité de cette variété, si le livret la donne. */
+  qty?: string
+  /** Ce qu'elle fait, en une à trois phrases. C'est le texte de l'aide de jeu. */
+  effect: string
+  /** Découpe du symbole ou de la carte, quand la reconnaître à l'œil compte. */
+  crop?: Crop
+  /** Couleur de repérage, quand la variété en a une. */
+  tint?: string
+}
+
 export interface Component {
   id: string
   /** Nom exact utilisé dans les règles, pour que le joueur puisse recouper. */
@@ -158,6 +188,11 @@ export interface Component {
   glyph: Glyph
   /** Couleur d'accent, pour le repérage visuel rapide. */
   tint?: string
+  /**
+   * Les variétés de ce composant, quand il en a plusieurs qui ne font pas la
+   * même chose. Affichées dans la fiche du matériel, en aide de jeu.
+   */
+  variants?: Variant[]
 }
 
 /** Faces d'un dé simulé, pour les séquences didactiques. */

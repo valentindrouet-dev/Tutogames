@@ -419,6 +419,10 @@ export const oathsworn: Tutorial = {
       glyph: 'card',
       tint: '#9a2c1f',
       crop: { page: 4, x: 0.322, y: 0.383, w: 0.19, h: 0.1 },
+      variants: [
+        { label: 'Carte de soin', effect: 'Achetée chez l’Apothecary. Mélangée au paquet de blessures : quand vous devriez prendre une blessure, une carte de soin tirée l’annule.', tint: '#84cc16' },
+        { label: 'Carte de blessure', effect: 'Prise en tombant à zéro point de vie, ou en finissant une rencontre à 1 ou 2. Elle reste en main et se joue avant toute autre carte, à votre premier tour de chaque round.', tint: '#8a2b2b' },
+      ],
     },
     {
       id: 'cartes-evenement',
@@ -487,6 +491,12 @@ export const oathsworn: Tutorial = {
       glyph: 'card',
       tint: '#9a2c1f',
       crop: { page: 5, x: 0.428, y: 0.328, w: 0.375, h: 0.085 },
+      variants: [
+        { label: 'Blanc', effect: 'Les valeurs les plus faibles, et le plus de cartes vierges. On en tire autant qu’on veut, en pariant sur le nombre.', tint: '#d4d4d8' },
+        { label: 'Jaune', effect: 'Une carte par cube jaune de votre piste de Puissance. Un cran au-dessus du blanc.', tint: '#eab308' },
+        { label: 'Rouge', effect: 'Une carte par cube rouge. Valeurs fortes, vierges plus rares.', tint: '#e11d48' },
+        { label: 'Noir', effect: 'Une carte par cube noir. Le haut de l’échelle : c’est là que montent les cartes renforcées.', tint: '#27272a' },
+      ],
     },
     {
       id: 'des',
@@ -495,6 +505,12 @@ export const oathsworn: Tutorial = {
       note: '28 dés de Puissance, 15 dés de points de vie rouges, 2 dés de direction, 4 dés de suivi.',
       glyph: 'die',
       crop: { page: 5, x: 0.425, y: 0.185, w: 0.375, h: 0.2 },
+      variants: [
+        { label: 'Dés de Puissance', qty: '28 dés', effect: 'Ils remplacent les paquets de Puissance, à tout moment et joueur par joueur. Blanc, jaune, rouge, noir : un dé par couleur de votre piste.' },
+        { label: 'Dés de points de vie', qty: '15 dés rouges', effect: 'Un par personnage sur son plateau, et un par emplacement du plateau de rencontre. On les tourne, on ne les lance jamais.', tint: '#e11d48' },
+        { label: 'Dés de direction', qty: '2 dés', effect: 'Pour les effets qui envoient un ennemi ou un personnage dans une direction au hasard.' },
+        { label: 'Dés de suivi', qty: '4 dés à 12 faces', effect: 'Pour tenir un compte que le matériel ne prévoit pas : tours d’un effet, cumul d’un statut.' },
+      ],
     },
     {
       id: 'cubes',
@@ -512,6 +528,39 @@ export const oathsworn: Tutorial = {
       glyph: 'token',
       tint: '#1f4d3f',
       crop: { page: 5, x: 0.34, y: 0.418, w: 0.175, h: 0.1 },
+      // Annexe I du livret de rencontre : les cinq jetons, et quand les
+      // dépenser. C'est la page que l'on rouvre à chaque attaque.
+      variants: [
+        {
+          label: 'Défense',
+          effect: 'Après qu’un dégât est tiré contre vous, dépensez-en autant que vous voulez : chacun monte votre défense de 1 pour ce calcul. 7 dégâts contre 2 de défense font 3 points de vie ; un jeton porte la défense à 3, et vous n’en perdez que 2.',
+          crop: { book: 'rencontre', page: 28, x: 0.152, y: 0.116, w: 0.065, h: 0.05 },
+          tint: '#38bdf8',
+        },
+        {
+          label: '+2 Animus',
+          effect: 'À tout moment de la rencontre : 2 gemmes d’Animus passent de la réserve à la zone active. Compagnons et alliés s’en servent autrement — voir page 9.',
+          crop: { book: 'rencontre', page: 28, x: 0.152, y: 0.3, w: 0.065, h: 0.05 },
+          tint: '#eab308',
+        },
+        {
+          label: 'Nouveau tirage',
+          effect: 'Après avoir tiré vos cartes de Puissance, histoire comme rencontre : chaque jeton retire une carte et en tire une autre. On peut relancer une carte déjà relancée, et décider après avoir vu les cartes gagnées par un critique.',
+          crop: { book: 'rencontre', page: 28, x: 0.152, y: 0.402, w: 0.065, h: 0.05 },
+        },
+        {
+          label: 'Empowered x3',
+          effect: 'Avant de tirer : chaque jeton fait monter trois fois de couleur, blanc vers jaune vers rouge vers noir. Trois montées sur une carte, ou réparties sur deux ou trois. Jamais sur les cartes tirées grâce à un critique, et jamais réparti entre deux attaques.',
+          crop: { book: 'rencontre', page: 28, x: 0.152, y: 0.581, w: 0.065, h: 0.05 },
+          tint: '#7d5c10',
+        },
+        {
+          label: 'Battleflow',
+          effect: 'À tout moment de la rencontre : faites glisser d’un cran toutes les cartes d’une même position de recharge, comme si vous veniez d’y poser une carte.',
+          crop: { book: 'rencontre', page: 28, x: 0.149, y: 0.812, w: 0.07, h: 0.053 },
+          tint: '#1f4d3f',
+        },
+      ],
     },
     {
       id: 'jetons-suivi',
@@ -529,6 +578,32 @@ export const oathsworn: Tutorial = {
       glyph: 'token',
       tint: '#9a2c1f',
       crop: { page: 5, x: 0.19, y: 0.412, w: 0.152, h: 0.13 },
+      variants: [
+        {
+          label: 'Poison',
+          effect: 'Ses effets sont décrits sur le plateau de règles spéciales du chapitre : ils changent d’un ennemi à l’autre.',
+          crop: { book: 'rencontre', page: 28, x: 0.562, y: 0.13, w: 0.065, h: 0.05 },
+          tint: '#84cc16',
+        },
+        {
+          label: 'Saignement',
+          effect: 'Un personnage qui en porte perd 1 point de vie ou plus quand le jeton se déclenche. Le déclenchement vient d’une carte de capacité, ou d’une carte d’étape pour un ennemi.',
+          crop: { book: 'rencontre', page: 28, x: 0.562, y: 0.211, w: 0.065, h: 0.05 },
+          tint: '#e11d48',
+        },
+        {
+          label: 'Estropié',
+          effect: 'Le personnage ne peut plus se déplacer volontairement jusqu’à la fin de la prochaine phase Oathsworn — y compris par une carte. Il peut jouer la carte, mais pas ce qui demande un déplacement.',
+          crop: { book: 'rencontre', page: 28, x: 0.562, y: 0.303, w: 0.065, h: 0.05 },
+          tint: '#64708a',
+        },
+        {
+          label: 'Létalité',
+          effect: 'Propre au Cur : ses capacités en donnent, et il les dépense pour renforcer ses attaques. Le détail est sur son plateau de personnage.',
+          crop: { book: 'rencontre', page: 28, x: 0.562, y: 0.473, w: 0.065, h: 0.05 },
+          tint: '#8a2b2b',
+        },
+      ],
     },
     {
       id: 'animus',
@@ -590,6 +665,11 @@ export const oathsworn: Tutorial = {
       note: 'Ce que l’ennemi fait à chaque round. Trois dos : I, II, III, les trois étapes.',
       glyph: 'card',
       crop: { page: 5, x: 0.1, y: 0.235, w: 0.29, h: 0.105 },
+      variants: [
+        { label: 'Étape I', effect: 'Le premier tiers du paquet. L’ennemi ouvre prudemment. On passe à l’étape II après cinq cartes, ou quand le plateau de règles spéciales le déclenche.', tint: '#84cc16' },
+        { label: 'Étape II', effect: 'La bête a compris. Cinq cartes de plus, ou le déclencheur du plateau de règles spéciales, et l’on passe à III.', tint: '#eab308' },
+        { label: 'Étape III', effect: 'La fin de partie de l’ennemi. Paquet vide : on remélange les cartes III de la défausse pour en refaire un.', tint: '#e11d48' },
+      ],
     },
     {
       id: 'cartes-puissance-ennemi',
@@ -616,6 +696,11 @@ export const oathsworn: Tutorial = {
       glyph: 'fire',
       tint: '#8a2b2b',
       crop: { page: 5, x: 0.05, y: 0.555, w: 0.115, h: 0.105 },
+      variants: [
+        { label: 'Feu', effect: 'Un personnage qui occupe une case de feu à la phase de fin de round retire une tuile et perd 1 point de vie.', tint: '#f97316' },
+        { label: 'Eau', effect: 'Entrer sur une case d’eau coûte 2 de déplacement au lieu de 1, une seule fois par tour. La tuile reste en place.', tint: '#38bdf8' },
+        { label: 'Nuage toxique', effect: 'Les autres tuiles d’effet — nuage toxique, sang, poison — sont décrites sur le plateau de règles spéciales du chapitre, quand il les emploie.', tint: '#84cc16' },
+      ],
     },
     {
       id: 'gabarit',

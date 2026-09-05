@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.19** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.20** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -53,6 +53,11 @@ une découpe pleine page dit de quel livret vient la page.
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
 et adapte son contenu.
+
+**Le matériel porte ses propres aides de jeu.** Un composant qui existe en
+plusieurs types — les six symboles des jetons Exploration de *Nemesis*, les
+quatorze conditions de *Frosthaven* — affiche la liste dans sa fiche, avec le
+symbole de chacun. On tape dessus en pleine partie, on lit, on referme.
 
 **En solo, vous avez les règles du solo.** Ce n'est pas la même partie en moins
 nombreux : le tutoriel sort le paquet d'objectifs Solo de *Nemesis*, l'Automa
@@ -163,6 +168,7 @@ version.json    source unique du numéro de version
 | `npm run grid -- <pdf> <page>` | Rend une page sous une grille de coordonnées, pour repérer les découpes |
 | `npm run snap -- <jeu> [--write]` | Recale les découpes d'un tutoriel sur le bloc qu'elles visent |
 | `npm run players -- [jeu]` | Montre ce que chaque effectif voit, et repère les étapes écrites pour une table pleine |
+| `npm run aids` | Liste les aides de jeu du matériel, et ce qui reste à décrire |
 | `npm run vo` | Contrôle les glossaires de version originale, jeu par jeu |
 
 ## Crédits

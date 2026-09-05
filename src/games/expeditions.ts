@@ -204,6 +204,18 @@ export const expeditions: Tutorial = {
       glyph: 'token',
       tint: '#e08a2e',
       crop: { page: 1, x: 0.665, y: 0.605, w: 0.29, h: 0.04 },
+      // Les huit catégories du Campement : ce qu'il faut atteindre pour
+      // poser une étoile. Quatre étoiles posées déclenchent la fin de partie.
+      variants: [
+        { label: '4 quêtes', effect: 'Résolvez quatre cartes Quête.' },
+        { label: '4 météorites', effect: 'Fondez quatre cartes Météorite.' },
+        { label: '4 objets', effect: 'Améliorez quatre cartes Objet.' },
+        { label: 'Corruption du Lieu 20', effect: 'Combattez la Corruption du lieu numéro 20 — celle que le sac ne contient pas.' },
+        { label: '7 Corruption', effect: 'Combattez sept jetons Corruption.' },
+        { label: '8 cartes', effect: 'Ayez huit cartes dans votre main.' },
+        { label: '7 ouvriers', effect: 'Ayez sept meeples Ouvrier.' },
+        { label: '5 Plans', effect: 'Ayez cinq jetons Plan.' },
+      ],
     },
     {
       id: 'corruption',

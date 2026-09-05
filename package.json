@@ -16,6 +16,7 @@
     "grid": "node tools/grid.mjs",
     "snap": "node tools/snap.mjs",
     "players": "node tools/players.mjs",
+    "aids": "node tools/aids.mjs",
     "vo": "node tools/vo-check.mjs"
   },
   "dependencies": {

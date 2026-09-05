@@ -246,6 +246,46 @@ export const nemesis: Tutorial = {
       glyph: 'token',
       tint: '#22d3ee',
       crop: { page: 3, x: 0.056, y: 0.704, w: 0.129, h: 0.06 },
+      // Les six effets spéciaux du verso, page 15 du livret : l'aide de jeu
+      // qu'on va rechercher dix fois par partie.
+      variants: [
+        {
+          label: 'Silence',
+          effect: 'Rien ne se passe : pas de jet de bruit pour ce déplacement. Si vous avez un marqueur Slime sur votre plateau, résolvez l’effet Danger à la place.',
+          crop: { page: 15, x: 0.052, y: 0.202, w: 0.05, h: 0.037 },
+          tint: '#64708a',
+        },
+        {
+          label: 'Danger',
+          effect: 'Pas de jet de bruit. Tout Intrus d’une salle adjacente qui n’est pas en combat vient dans cette salle — bloqué par une porte, il ne bouge pas mais la détruit. Aucun Intrus adjacent, ou tous en combat : un marqueur Bruit dans chaque couloir relié qui n’en a pas.',
+          crop: { page: 15, x: 0.052, y: 0.295, w: 0.05, h: 0.037 },
+          tint: '#a855f7',
+        },
+        {
+          label: 'Slime',
+          effect: 'Placez un marqueur standard sur la case Slime de votre plateau : vous êtes couvert de slime. Un seul à la fois. Il transforme tous vos Silence en Danger.',
+          crop: { page: 15, x: 0.052, y: 0.497, w: 0.05, h: 0.037 },
+          tint: '#84cc16',
+        },
+        {
+          label: 'Feu',
+          effect: 'Placez un marqueur Feu dans cette salle. Finir son tour dans une salle en feu coûte 1 blessure légère ; le 8ᵉ marqueur Feu du jeu fait exploser le vaisseau.',
+          crop: { page: 15, x: 0.052, y: 0.582, w: 0.05, h: 0.037 },
+          tint: '#f97316',
+        },
+        {
+          label: 'Panne',
+          effect: 'Placez un marqueur Panne dans cette salle : son action est indisponible, la Fouille reste possible. Le 8ᵉ marqueur Panne du jeu fait exploser le vaisseau.',
+          crop: { page: 15, x: 0.052, y: 0.669, w: 0.05, h: 0.037 },
+          tint: '#38bdf8',
+        },
+        {
+          label: 'Portes',
+          effect: 'Placez un pion Porte dans le couloir que vous venez d’emprunter. Porte fermée : plus personne n’y passe, mais un Intrus attiré la détruit.',
+          crop: { page: 15, x: 0.052, y: 0.757, w: 0.05, h: 0.037 },
+          tint: '#e11d48',
+        },
+      ],
     },
     {
       id: 'moteurs',
@@ -255,6 +295,10 @@ export const nemesis: Tutorial = {
       glyph: 'tile',
       tint: '#34d399',
       crop: { page: 3, x: 0.052, y: 0.531, w: 0.21, h: 0.079 },
+      variants: [
+        { label: 'Opérationnel', effect: 'Le moteur tourne. Il faut au moins deux moteurs sur trois opérationnels au contrôle de victoire, sinon le vaisseau explose.', tint: '#84cc16' },
+        { label: 'Endommagé', effect: 'À réparer avec l’action de la salle Moteur. Personne ne connaît l’état des moteurs avant de les révéler.', tint: '#e11d48' },
+      ],
     },
     {
       id: 'coordonnees',
@@ -299,6 +343,15 @@ export const nemesis: Tutorial = {
       glyph: 'token',
       tint: '#ef4444',
       crop: { page: 3, x: 0.199, y: 0.702, w: 0.129, h: 0.06 },
+      // Ce que donne chaque jeton tiré du sac, phase Événement.
+      variants: [
+        { label: 'Larve', qty: '4 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Adulte.', tint: '#84cc16' },
+        { label: 'Rôdeur', qty: '1 au départ', effect: 'Retirez ce jeton du sac et remplacez-le par un jeton Hybride.', tint: '#22d3ee' },
+        { label: 'Adulte', qty: '3 + 1 par joueur', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#f97316' },
+        { label: 'Hybride', qty: '1 au départ', effect: 'Tous les joueurs résolvent un jet de bruit, dans l’ordre. Ceux en combat en sont exemptés. Le jeton retourne dans le sac.', tint: '#a78bfa' },
+        { label: 'Reine', qty: '1', effect: 'Un personnage dans le nid ? La Reine y arrive et déclenche une rencontre. Sinon, ajoutez un jeton Œuf sur le plateau Intrus. Le jeton retourne dans le sac.', tint: '#ef4444' },
+        { label: 'Vierge', qty: '1', effect: 'Ajoutez 1 jeton Adulte dans le sac. S’il n’en reste plus, rien ne se passe. Le jeton retourne dans le sac.', tint: '#64708a' },
+      ],
     },
     {
       id: 'figurines',
@@ -386,6 +439,11 @@ export const nemesis: Tutorial = {
       glyph: 'card',
       tint: '#fbbf24',
       crop: { page: 3, x: 0.363, y: 0.276, w: 0.175, h: 0.082 },
+      variants: [
+        { label: 'Corporation', effect: 'Les ordres de votre employeur. Un par joueur en début de partie, à plusieurs.' },
+        { label: 'Personnel', effect: 'Votre propre intérêt. Un par joueur en début de partie, à plusieurs. Certains demandent qu’un autre joueur ne survive pas.' },
+        { label: 'Solo / Coop', effect: 'Le paquet des modes solo et coopératif. En solo, on en pioche 2 dans ce paquet-là, et pas dans les deux autres.', tint: '#38bdf8' },
+      ],
     },
     {
       id: 'attaques',
@@ -422,6 +480,12 @@ export const nemesis: Tutorial = {
       glyph: 'card',
       tint: '#34d399',
       crop: { page: 3, x: 0.579, y: 0.345, w: 0.152, h: 0.074 },
+      variants: [
+        { label: 'Rouge — militaire', qty: '30 cartes', effect: 'Armes et munitions. Ce que les autres devinent quand ils voient le dos rouge dans votre inventaire.', tint: '#e11d48' },
+        { label: 'Jaune — technique', qty: '30 cartes', effect: 'Outils et matériel de réparation.', tint: '#eab308' },
+        { label: 'Vert — médical', qty: '30 cartes', effect: 'Soins, antidotes, pansements.', tint: '#84cc16' },
+        { label: 'Bleu — fabriqué', qty: '12 cartes', effect: 'Objets que l’on assemble en cours de partie, pas dans les salles.', tint: '#38bdf8' },
+      ],
     },
     {
       id: 'inventaires',
@@ -439,6 +503,25 @@ export const nemesis: Tutorial = {
       glyph: 'die',
       tint: '#22d3ee',
       crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
+      variants: [
+        {
+          label: 'Résultat 1, 2, 3 ou 4',
+          effect: 'Placez un marqueur Bruit dans le couloir de ce numéro, relié à votre salle. Un couloir n’accueille jamais deux marqueurs : s’il y en a déjà un, c’est une rencontre.',
+          crop: { page: 15, x: 0.345, y: 0.398, w: 0.175, h: 0.055 },
+        },
+        {
+          label: 'Danger',
+          effect: 'Tout Intrus d’une salle adjacente qui n’est pas en combat vient dans cette salle. Bloqué par une porte, il ne bouge pas mais la détruit. Aucun Intrus adjacent : un marqueur Bruit dans chaque couloir relié qui n’en a pas.',
+          crop: { page: 15, x: 0.342, y: 0.58, w: 0.05, h: 0.05 },
+          tint: '#a855f7',
+        },
+        {
+          label: 'Silence',
+          effect: 'Aucun marqueur Bruit. Avec un marqueur Slime sur votre plateau, résolvez Danger à la place.',
+          crop: { page: 15, x: 0.345, y: 0.778, w: 0.05, h: 0.048 },
+          tint: '#64708a',
+        },
+      ],
     },
     {
       id: 'de-combat',
@@ -448,6 +531,38 @@ export const nemesis: Tutorial = {
       glyph: 'die',
       tint: '#ef4444',
       crop: { page: 2, x: 0.558, y: 0.89, w: 0.084, h: 0.04 },
+      // Les cinq résultats du dé, page 19 : le tableau qu'on relit à chaque
+      // corps-à-corps tant qu'on ne le sait pas par cœur.
+      variants: [
+        {
+          label: 'Face rouge',
+          effect: 'Vous manquez la cible et subissez 1 blessure grave.',
+          crop: { page: 19, x: 0.052, y: 0.277, w: 0.036, h: 0.033 },
+          tint: '#e11d48',
+        },
+        {
+          label: 'Un crochet',
+          effect: 'Larve ou Rôdeur : 1 dégât. Tout autre Intrus : vous manquez et subissez 1 blessure grave.',
+          crop: { page: 19, x: 0.052, y: 0.318, w: 0.036, h: 0.027 },
+        },
+        {
+          label: 'Deux crochets',
+          effect: 'Larve, Rôdeur ou Adulte : 1 dégât. Hybride ou Reine : vous manquez et subissez 1 blessure grave.',
+          crop: { page: 19, x: 0.052, y: 0.363, w: 0.036, h: 0.028 },
+        },
+        {
+          label: 'Une touche',
+          effect: '1 dégât, quel que soit le type de l’Intrus visé.',
+          crop: { page: 19, x: 0.052, y: 0.414, w: 0.036, h: 0.031 },
+          tint: '#84cc16',
+        },
+        {
+          label: 'Deux touches',
+          effect: '1 dégât quand même, quel que soit le type de l’Intrus. Le corps-à-corps ne fait jamais plus d’un dégât.',
+          crop: { page: 19, x: 0.052, y: 0.461, w: 0.036, h: 0.031 },
+          tint: '#84cc16',
+        },
+      ],
     },
     {
       id: 'marqueurs-bruit',
@@ -499,6 +614,11 @@ export const nemesis: Tutorial = {
       note: 'Debout = porte fermée, couché = porte détruite. Toutes les portes sont ouvertes au début de la partie.',
       glyph: 'door',
       crop: { page: 3, x: 0.056, y: 0.448, w: 0.129, h: 0.062 },
+      variants: [
+        { label: 'Ouverte', effect: 'Pas de pion dans le couloir. Tout le monde y passe. Toutes les portes sont ouvertes en début de partie.' },
+        { label: 'Fermée', effect: 'Pion posé debout : ni personnage ni Intrus ne peut emprunter ce couloir, ni y lancer de grenade. Un Intrus attiré par le bruit la détruit au lieu d’avancer.', tint: '#e11d48' },
+        { label: 'Détruite', effect: 'Pion couché : le couloir est de nouveau praticable, et la porte ne peut plus être refermée.', tint: '#64708a' },
+      ],
     },
     {
       id: 'scanner',

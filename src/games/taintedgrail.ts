@@ -319,6 +319,11 @@ export const taintedgrail: Tutorial = {
       glyph: 'die',
       tint: '#9d3220',
       crop: { page: 3, x: 0.826, y: 0.208, w: 0.124, h: 0.094 },
+      variants: [
+        { label: 'Direction', effect: 'Le gardien se déplace dans cette direction, comme le montre la carte Lieu.' },
+        { label: 'Rien', effect: 'Le gardien ne bouge pas ce tour-ci.', tint: '#64708a' },
+        { label: 'Défausse', effect: 'Le gardien défausse : c’est la face qui vous laisse souffler.', tint: '#84cc16' },
+      ],
     },
     {
       id: 'mourant',
@@ -328,6 +333,10 @@ export const taintedgrail: Tutorial = {
       glyph: 'card',
       tint: '#9d3220',
       crop: { page: 3, x: 0.038, y: 0.618, w: 0.312, h: 0.136 },
+      variants: [
+        { label: 'Vous Êtes Mourant', effect: 'Attachée au plateau quand votre Santé tombe à 0. Elle dit ce qu’il faut faire pour ne pas mourir, et sous quel délai.', tint: '#9d3220' },
+        { label: 'Vous Devenez Fou', effect: 'Attachée quand votre Terreur atteint le haut de sa piste. Même principe, sur l’esprit.', tint: '#a855f7' },
+      ],
     },
   ],
 

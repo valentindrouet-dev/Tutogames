@@ -101,7 +101,11 @@ function booksOf(t) {
     if (key && !entry.crops.has(key)) entry.crops.set(key, crop)
   }
   add(t.cover)
-  for (const c of t.components) add(c.crop)
+  for (const c of t.components) {
+    add(c.crop)
+    // Les variétés d'un composant ont leur propre vignette.
+    for (const v of c.variants ?? []) add(v.crop)
+  }
   for (const ch of t.chapters) for (const s of ch.steps) add(s.crop)
   return [...books.values()]
 }
