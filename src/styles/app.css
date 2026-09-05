@@ -260,6 +260,39 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
+/*
+ * Version originale. Le materiel du joueur n'est pas en francais : un drapeau
+ * sur la carte du jeu previent avant d'ouvrir, un bouton VO dans le bandeau
+ * donne les termes de l'etape, et la feuille les aligne en deux colonnes —
+ * le mot du tutoriel a gauche, celui imprime sur la boite a droite.
+ */
+.chip-flag { padding: 6px 9px; }
+.chip-flag svg { width: 22px; height: 22px; margin: -4px -3px; }
+
+.btn-vo { padding: 0 15px; gap: 8px; font-size: calc(15px * var(--text-scale)); letter-spacing: 0.08em; }
+.btn-vo svg { width: 26px; height: 26px; margin: 0 -4px; }
+
+.vo-list { display: flex; flex-direction: column; gap: 2px; }
+.vo-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 4px 18px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: calc(16px * var(--text-scale));
+  line-height: 1.35;
+}
+.vo-row:nth-child(odd) { background: var(--veil); }
+.vo-fr { color: var(--fg-dim); }
+.vo-en { margin: 0; font-weight: 680; }
+.vo-note {
+  display: block;
+  margin-top: 2px;
+  font-size: calc(13px * var(--text-scale));
+  font-weight: 500;
+  color: var(--fg-faint);
+}
+
 .resume-bar {
   display: flex;
   align-items: center;

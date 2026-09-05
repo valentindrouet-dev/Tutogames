@@ -13,7 +13,8 @@
     "merge": "node tools/merge-pdf.mjs",
     "extract": "node tools/extract-images.mjs",
     "crops": "node tools/crops.mjs",
-    "grid": "node tools/grid.mjs"
+    "grid": "node tools/grid.mjs",
+    "vo": "node tools/vo-check.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",

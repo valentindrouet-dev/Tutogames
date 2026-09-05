@@ -19,6 +19,8 @@ rules/*.pdf
 !rules/Frosthaven_Rules_-_Part_2.pdf
 !rules/Frosthaven_Rules_-_Part_3.pdf
 !rules/Bitoku_Rulebook_FR_V1_Light.pdf
+!rules/Nemesis\ -\ Rules\ VO.pdf
+!rules/Tainted\ Grail\ Rois\ de\ la\ Ruine\ -\ Regles.pdf
 # « Frosthaven - Regles.pdf » est la fusion des trois parties (npm run merge) :
 # il se refait en une commande et reste local.
 rules/*.txt

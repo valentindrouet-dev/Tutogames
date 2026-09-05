@@ -17,6 +17,43 @@ comme complète.
 
 ---
 
+## v0.15 — 2026-09-05
+
+### Ajouté
+
+- **Bouton VO.** Le tutoriel est en français, la boîte ne l'est pas toujours :
+  un jeu peut désormais porter un glossaire de la version originale. Le bouton
+  VO du bandeau montre d'abord les termes que l'étape affichée emploie, puis le
+  glossaire entier ; la fiche du jeu sur l'accueil le montre en entier.
+  - *Nemesis* : 94 termes relevés dans le « Nemesis Rulebook » — les Intrus
+    (Larve → Larva, Rôdeur → Creeper, Hybride → Breeder), les salles, les
+    actions, les marqueurs, les cartes, les deux dés.
+  - *Frosthaven* : 135 termes du « Frosthaven Rulebook » pour tout ce que le
+    tutoriel a traduit. Les mots que le tutoriel garde déjà en anglais — Move,
+    Attack, Shield, les conditions — n'y sont pas : il n'y a rien à traduire.
+  - Un **drapeau britannique** à côté de la durée, sur l'accueil, signale ces
+    jeux avant même de les ouvrir. Un jeu dont le matériel est en français n'a
+    ni drapeau ni bouton.
+  - La correspondance est automatique : chaque étape est comparée au glossaire
+    sur une forme normalisée (accents, ponctuation et pluriels neutralisés),
+    donc un terme ajouté au glossaire apparaît partout où il est employé.
+- **Tainted Grail : Rois de la Ruine**, sixième tutoriel, sur les règles
+  françaises. Mise en place de la campagne en 13 étapes, les quatre
+  personnages, le cours du jour (aube, journée, crépuscule), les six actions,
+  les lieux et leurs faces Wyrd, les Pierres de Passage, les Gardiens et leur
+  dé, une rencontre de combat et une rencontre de diplomatie complètes, la
+  progression, la mort et la folie. Reprendre déroule la procédure de
+  sauvegarde de la page 20 à l'envers. Thème clair gris-bleu, distinct du
+  parchemin chaud de *La Chute d'Avalon* : les deux jeux se reconnaissent d'un
+  coup d'œil sur l'accueil.
+- **Icône du site et de l'écran d'accueil.** Trois cartes en éventail et la
+  coche du tutoriel, aux couleurs du titre de l'accueil. `favicon.svg` pour
+  l'onglet des navigateurs récents, `icon-32.png` en repli, `icon-180.png` pour
+  l'écran d'accueil iPad, et les icônes du manifeste. L'onglet n'avait aucune
+  icône jusqu'ici : le `<link rel="icon">` manquait.
+
+---
+
 ## v0.14 — 2026-09-04
 
 ### Ajouté

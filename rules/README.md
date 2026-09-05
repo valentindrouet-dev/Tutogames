@@ -17,6 +17,8 @@ propriétaire du dépôt :
 | `Expeditions - Regles FR.pdf` | `src/games/expeditions.ts` |
 | `Frosthaven_Rules_-_Part_1.pdf`, `_Part_2.pdf`, `_Part_3.pdf` | `src/games/frosthaven.ts`, après fusion en `Frosthaven - Regles.pdf` par `npm run merge` (fichier local, non versionné) |
 | `Bitoku_Rulebook_FR_V1_Light.pdf` | `src/games/bitoku.ts` |
+| `Tainted Grail Rois de la Ruine - Regles.pdf` | `src/games/taintedgrailkor.ts` |
+| `Nemesis - Rules VO.pdf` | Aucun tutoriel : c'est la source du glossaire VO de `src/games/nemesis.ts`. |
 
 Le nom du fichier attendu est déclaré dans `source.pdf` du tutoriel : c'est là
 que `npm run crops` va chercher le PDF pour rendre les découpes.

@@ -63,6 +63,131 @@ export const nemesis: Tutorial = {
   // Couverture du livret : ce que le joueur reconnaît sur l'écran d'accueil.
   cover: { page: 1, x: 0.03, y: 0.3, w: 0.94, h: 0.32 },
 
+  /*
+   * Le tutoriel est écrit d'après les règles françaises ; beaucoup de boîtes
+   * sont en anglais. Les termes ci-dessous sont ceux du « Nemesis Rulebook »,
+   * dans l'ordre où on les rencontre : le vaisseau, les Intrus, le
+   * personnage, les cartes, les marqueurs, les actions, la manche, les
+   * blessures, puis les salles.
+   */
+  vo: {
+    language: 'anglais',
+    edition: 'Nemesis Rulebook, Awaken Realms',
+    terms: [
+      // Le vaisseau et le plateau
+      { fr: 'plateau de jeu', en: 'Board', note: 'Recto-verso ; le côté standard est le basic side.' },
+      { fr: 'salle', en: 'Room' },
+      { fr: 'tuile Salle', en: 'Room tile', note: 'Room tiles « 1 » = Basic Rooms, « 2 » = Additional Rooms.' },
+      { fr: 'couloir', en: 'Corridor' },
+      { fr: 'couloirs techniques', en: 'Technical Corridors' },
+      { fr: 'jeton Exploration', en: 'Exploration token' },
+      { fr: 'compteur d’objets', en: 'Item Counter' },
+      { fr: 'piste temporelle', en: 'Time Track' },
+      { fr: 'marqueur Temps', en: 'Time marker' },
+      { fr: 'autodestruction', en: 'Self-Destruct Sequence', note: 'La piste est le Self-Destruct Track.' },
+      { fr: 'piste Destination', en: 'Destination Track' },
+      { fr: 'marqueur Destination', en: 'Destination marker' },
+      { fr: 'carte Coordonnées', en: 'Coordinates card' },
+      { fr: 'nacelle de secours', en: 'Escape Pod', note: 'Verrouillée = Locked, déverrouillée = Unlocked.' },
+      { fr: 'section d’évacuation', en: 'Evacuation Section', note: 'Sections « A » et « B » du plateau.' },
+      { fr: 'tuile Moteur', en: 'Engine token', note: 'Opérationnel = Working, endommagé = Damaged.' },
+
+      // Les Intrus
+      { fr: 'Intrus', en: 'Intruder' },
+      { fr: 'Larve', en: 'Larva', note: 'Pluriel Larvae sur le livret.' },
+      { fr: 'Rôdeur', en: 'Creeper' },
+      { fr: 'Adulte', en: 'Adult Intruder' },
+      { fr: 'Hybride', en: 'Breeder' },
+      { fr: 'Reine', en: 'Queen' },
+      { fr: 'jeton vierge', en: 'Blank token' },
+      { fr: 'sac Intrus', en: 'Intruder bag' },
+      { fr: 'plateau Intrus', en: 'Intruder board' },
+      { fr: 'jeton Intrus', en: 'Intruder token' },
+      { fr: 'symbole d’Intrus', en: 'Intruder Symbol' },
+      { fr: 'jeton Œuf', en: 'Intruder Egg token' },
+      { fr: 'jeton Carcasse', en: 'Intruder Carcass token' },
+      { fr: 'carte Point faible', en: 'Intruder Weakness card' },
+      { fr: 'tache de sang', en: '« blood » icon', note: 'Le chiffre en haut à gauche des cartes Attaque d’Intrus.' },
+      { fr: 'retraite', en: 'Retreat', note: 'L’icône est une flèche blanche dans la tache de sang.' },
+      { fr: 'rencontre', en: 'Encounter' },
+      { fr: 'attaque-surprise', en: 'Surprise Attack' },
+      { fr: 'carte Attaque d’Intrus', en: 'Intruder Attack card' },
+      { fr: 'marqueur Dégâts', en: 'Injury marker', note: 'Injury pour un Intrus, Wound pour un personnage.' },
+
+      // Le personnage
+      { fr: 'personnage', en: 'Character' },
+      { fr: 'plateau individuel', en: 'Character board' },
+      { fr: 'carte Rôle', en: 'Character draft card' },
+      { fr: 'inventaire', en: 'Inventory card holder' },
+      { fr: 'aide de jeu', en: 'Help card', note: 'Elle porte votre Player Number et se retourne côté Pass.' },
+      { fr: 'jeton Premier joueur', en: 'First Player token' },
+      { fr: 'carte Objectif', en: 'Objective card' },
+      { fr: 'objectif Corporation', en: 'Corporate Objective' },
+      { fr: 'objectif personnel', en: 'Personal Objective' },
+      { fr: 'cadavre', en: 'Character Corpse' },
+      { fr: 'corps lourd', en: 'Heavy Object' },
+      { fr: 'arme', en: 'Weapon' },
+      { fr: 'munition', en: 'Ammo' },
+
+      // Les cartes
+      { fr: 'carte Action', en: 'Action card' },
+      { fr: 'carte Contamination', en: 'Contamination card', note: 'Le mot caché à chercher au Scanner est INFECTED.' },
+      { fr: 'carte Événement', en: 'Event card' },
+      { fr: 'carte Blessure grave', en: 'Serious Wound card' },
+      { fr: 'carte Objet', en: 'Item card' },
+      { fr: 'objet fabriqué', en: 'Crafted Item' },
+      { fr: 'Vêtements', en: 'Clothes' },
+      { fr: 'Antidote', en: 'Antidote' },
+
+      // Les marqueurs
+      { fr: 'marqueur Bruit', en: 'Noise marker' },
+      { fr: 'marqueur Feu', en: 'Fire marker' },
+      { fr: 'marqueur Panne', en: 'Malfunction marker' },
+      { fr: 'marqueur standard', en: 'Status marker' },
+      { fr: 'marqueur Slime', en: 'Slime marker' },
+      { fr: 'Signal', en: 'Signal' },
+      { fr: 'pion Porte', en: 'Door token' },
+      { fr: 'Scanner', en: 'Scanner', note: 'Scanner une carte se dit to Scan.' },
+
+      // Les actions
+      { fr: 'déplacement', en: 'Movement' },
+      { fr: 'déplacement vigilant', en: 'Careful Movement' },
+      { fr: 'tir', en: 'Shoot' },
+      { fr: 'corps-à-corps', en: 'Melee Attack' },
+      { fr: 'ramasser un corps lourd', en: 'Pick up Heavy Object' },
+      { fr: 'échange', en: 'Trade' },
+      { fr: 'fabriquer', en: 'Craft Item' },
+      { fr: 'fouiller', en: 'Search', note: 'Action de la Storage Room : Search for an Item.' },
+      { fr: 'action de salle', en: 'Room Action' },
+      { fr: 'fuir', en: 'Escape', note: 'Character Escape dans le livret.' },
+      { fr: 'jet de bruit', en: 'Noise roll' },
+      { fr: 'dé de bruit', en: 'Noise die', note: 'Résultats : 1 à 4, Silence, Danger.' },
+      { fr: 'dé de combat', en: 'Combat die', note: 'Les d6 sont aussi appelés Attack dice.' },
+
+      // La manche
+      { fr: 'manche', en: 'turn' },
+      { fr: 'tour', en: 'round', note: 'Le tour d’un joueur, deux actions.' },
+      { fr: 'phase Joueur', en: 'Player Phase' },
+      { fr: 'phase Événement', en: 'Event Phase' },
+      { fr: 'passer', en: 'pass' },
+      { fr: 'dégâts du feu', en: 'Fire Damage' },
+
+      // Blessures et contamination
+      { fr: 'blessure légère', en: 'Light Wound' },
+      { fr: 'blessure grave', en: 'Serious Wound' },
+      { fr: 'panser', en: 'Dress' },
+      { fr: 'soigner', en: 'Heal' },
+
+      // Les salles nommées
+      { fr: 'hibernatorium', en: 'Hibernatorium' },
+      { fr: 'cockpit', en: 'Cockpit' },
+      { fr: 'nid', en: 'Nest' },
+      { fr: 'laboratoire', en: 'Laboratory' },
+      { fr: 'relais de transmission', en: 'Comms Room' },
+      { fr: 'salle des Douches', en: 'Shower Room' },
+    ],
+  },
+
   scope: {
     covered: [
       'La mise en place complète, des 20 étapes officielles',

@@ -266,6 +266,40 @@ export interface Players {
   notes?: Record<number, string>
 }
 
+/**
+ * Un terme du jeu et ce qui est imprimé à sa place sur le matériel de la
+ * version originale.
+ */
+export interface VoTerm {
+  /** Le terme tel que le tutoriel l'écrit. */
+  fr: string
+  /** Le terme tel qu'il est imprimé sur la boîte du joueur. */
+  en: string
+  /** Où on le lit, ou ce qui prête à confusion. Une ligne au plus. */
+  note?: string
+}
+
+/**
+ * Glossaire de la version originale.
+ *
+ * Un tutoriel est écrit en français, mais la boîte posée sur la table ne
+ * l'est pas toujours : les règles de *Nemesis* et de *Frosthaven* sont ici
+ * traduites, alors que les cartes, les tuiles et les plateaux du joueur
+ * portent leurs noms anglais. Le glossaire fait le pont, et le bouton VO
+ * du bandeau montre à chaque étape les termes qu'elle emploie.
+ *
+ * Un tutoriel dont le matériel est en français n'a pas de `vo` : ni bouton,
+ * ni drapeau sur l'écran d'accueil.
+ */
+export interface Vo {
+  /** Langue du matériel, telle qu'elle s'écrit dans une phrase. */
+  language: string
+  /** Édition à laquelle le glossaire correspond. */
+  edition?: string
+  /** Les termes, dans l'ordre où on les rencontre dans le jeu. */
+  terms: VoTerm[]
+}
+
 export interface Tutorial {
   id: string
   title: string
@@ -299,6 +333,11 @@ export interface Tutorial {
    * Cadrez sur le titre, en bandeau large — environ 3 pour 1.
    */
   cover?: Crop
+  /**
+   * Glossaire de la version originale, quand le matériel du joueur n'est pas
+   * en français. Absent = rien à traduire, et pas de bouton VO.
+   */
+  vo?: Vo
   /** Ce que le tutoriel couvre volontairement, et ce qu'il laisse de côté. */
   scope: { covered: string[]; skipped: string[] }
   components: Component[]

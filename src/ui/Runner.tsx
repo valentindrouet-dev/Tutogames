@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'r
 import type { Component, Mode, Tutorial } from '../engine/types'
 import { MODE_INFO, playerLabel } from '../engine/types'
 import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
+import { voTermsIn } from '../engine/vo'
 import {
   clampPosition, componentsOf, indexOf, next, prev, stepAt, totalSteps, viewFor,
 } from '../engine/tutorial'
@@ -24,9 +25,10 @@ import { useManifest, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
+import { VoList } from './Vo'
 import { themeBackground, themePanel, themeStyle } from './theme'
 import {
-  Alert, ArrowLeft, ArrowRight, Bulb, Check, Grid, Home, List, Settings, Trophy, STEP_KIND,
+  Alert, ArrowLeft, ArrowRight, Bulb, Check, FlagEn, Grid, Home, List, Settings, Trophy, STEP_KIND,
 } from './icons'
 
 /** Écran de fin : ce qu'on vient de terminer n'est pas la même chose selon le mode. */
@@ -77,6 +79,7 @@ export function Runner({
   const [part, setPart] = useState<Component | null>(null)
   const [index, setIndex] = useState(false)
   const [jump, setJump] = useState(false)
+  const [vo, setVo] = useState(false)
   const [finished, setFinished] = useState(false)
 
   // Toute mutation de l'état passe par ici : la sauvegarde suit la
@@ -94,6 +97,13 @@ export function Runner({
   const total = useMemo(() => totalSteps(view), [view])
   const position = indexOf(view, save.chapter, save.step)
   const parts = useMemo(() => (step ? componentsOf(tutorial, step) : []), [tutorial, step])
+
+  // Les termes du glossaire que cette étape emploie : c'est ce que le bouton
+  // VO montre en premier, avant le glossaire entier.
+  const voHere = useMemo(
+    () => (tutorial.vo && step ? voTermsIn(tutorial.vo.terms, step, parts, chapter?.title) : []),
+    [tutorial.vo, step, parts, chapter],
+  )
 
   // Précharge les visuels de l'étape suivante pendant que le joueur lit
   // celle-ci : au tap sur « Fait », l'image est déjà là.
@@ -250,6 +260,18 @@ export function Runner({
         </div>
 
         <div className="topbar-spacer" />
+
+        {tutorial.vo && (
+          <button
+            type="button"
+            className="btn btn-ghost btn-vo"
+            onClick={() => setVo(true)}
+            aria-label={`Termes de la version ${tutorial.vo.language}`}
+          >
+            <FlagEn aria-hidden />
+            VO
+          </button>
+        )}
 
         {mode !== 'setup' && (
           <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
@@ -427,6 +449,30 @@ export function Runner({
               {part.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{part.qty}</div>}
               {part.note && <p className="part-detail-note">{part.note}</p>}
             </div>
+          </div>
+        </Sheet>
+      )}
+
+      {vo && tutorial.vo && (
+        <Sheet title={`Termes en ${tutorial.vo.language}`} onClose={() => setVo(false)} style={panel}>
+          <p className="sheet-lead">
+            Le tutoriel est en français, votre boîte ne l’est pas. En face de chaque mot,
+            ce qui est imprimé sur le matériel
+            {tutorial.vo.edition ? ` (${tutorial.vo.edition})` : ''}.
+          </p>
+
+          <div>
+            <div className="section-label">Dans cette étape</div>
+            {voHere.length ? (
+              <VoList terms={voHere} />
+            ) : (
+              <p className="part-detail-note">Aucun terme propre au jeu dans cette étape.</p>
+            )}
+          </div>
+
+          <div>
+            <div className="section-label">Tout le jeu — {tutorial.vo.terms.length} termes</div>
+            <VoList terms={tutorial.vo.terms} />
           </div>
         </Sheet>
       )}

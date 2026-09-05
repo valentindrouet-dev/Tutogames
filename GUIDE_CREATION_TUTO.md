@@ -430,7 +430,52 @@ le livret :
   est irrécupérable si on l'a rangé, et où reprendre. 5 à 7 étapes, et dites
   dès la première que le jeu n'a pas de sauvegarde officielle.
 
-### Étape 11 — Relire à voix haute
+### Étape 11 — Écrire le glossaire VO, si la boîte n'est pas en français
+
+Un joueur qui possède *Nemesis* en anglais lit « Rôdeur » dans le tutoriel et
+cherche une carte qui porte « Creeper ». Le champ `vo` fait le pont :
+
+```ts
+vo: {
+  language: 'anglais',
+  edition: 'Nemesis Rulebook, Awaken Realms',
+  terms: [
+    { fr: 'Rôdeur', en: 'Creeper' },
+    { fr: 'marqueur Dégâts', en: 'Injury marker',
+      note: 'Injury pour un Intrus, Wound pour un personnage.' },
+  ],
+},
+```
+
+Le bouton VO du bandeau montre **d'abord les termes de l'étape affichée**, puis
+le glossaire entier ; la fiche du jeu, sur l'accueil, le montre en entier. Un
+drapeau à côté de la durée prévient avant même d'ouvrir le jeu. Un tutoriel
+sans `vo` n'a ni bouton ni drapeau : c'est le cas de tous les jeux dont le
+matériel est en français.
+
+**La correspondance est automatique.** `voTermsIn()` compare le texte de
+l'étape — titre, corps, `warn`, `tip`, et le nom des composants affichés — au
+glossaire, sur une forme normalisée : minuscules, accents retirés, ponctuation
+ramenée à des espaces, « s » final enlevé de chaque mot. « Jetons Œuf d'Intrus »
+retrouve donc l'entrée « jeton Œuf ». Vous n'avez rien à déclarer étape par
+étape : un terme ajouté au glossaire apparaît partout où il est employé.
+
+Trois règles pour un glossaire utile :
+
+- **Le `fr` doit être le mot que le tutoriel écrit**, au singulier. Un terme que
+  vous n'employez jamais ne sortira jamais ; ce n'est pas grave, il reste dans
+  le glossaire complet, que le joueur consulte à la table.
+- **N'y mettez pas ce qui n'a pas besoin d'être traduit.** Le tutoriel
+  *Frosthaven* garde déjà Move, Attack, Shield et les conditions en anglais :
+  les faire figurer ne dirait rien au joueur.
+- **La `note` sert aux pièges**, pas à la paraphrase : « Injury pour un Intrus,
+  Wound pour un personnage » vaut mieux que « le marqueur de dégâts ».
+
+Comptez une trentaine de termes pour un jeu simple, une centaine pour un jeu à
+campagne. `npm run vo` donne la moyenne par étape, les étapes sans aucun terme
+et les entrées jamais rencontrées ; `npm run vo -- nemesis` pour un seul jeu.
+
+### Étape 12 — Relire à voix haute
 
 Lisez le tutoriel comme si vous guidiez quelqu'un. Toute phrase que vous
 n'auriez pas dite à l'oral n'a rien à faire à l'écran.
@@ -657,4 +702,5 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |
 | 2026-09-04 | v0.12 | Quatrième mode : `reprise`. Section « Écrire la reprise », qui distingue le jeu à sauvegarde officielle du jeu d'une séance. `MODE_INFO` gagne un libellé court d'un mot pour les boutons carrés. |
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
+| 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
 | 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |

@@ -6,16 +6,17 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.14** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.15** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
 | Jeu | Éditeur | Joueurs | 1re Partie | Reprendre | Mise en Place | Règles |
 |---|---|---|---|---|---|---|
-| Nemesis | Awaken Realms | 1 à 5 | 65 étapes | 6 | 21 | 7 |
+| Nemesis 🇬🇧 | Awaken Realms | 1 à 5 | 65 étapes | 6 | 21 | 7 |
 | Tainted Grail : La Chute d'Avalon | Awaken Realms | 1 à 4 | 92 étapes | 13 | 22 | 8 |
+| Tainted Grail : Rois de la Ruine | Awaken Realms | 1 à 4 | 82 étapes | 12 | 14 | 11 |
 | Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 6 | 13 | 8 |
-| Frosthaven | Cephalofair Games | 1 à 4 | 106 étapes | 13 | 17 | 17 |
+| Frosthaven 🇬🇧 | Cephalofair Games | 1 à 4 | 106 étapes | 13 | 17 | 17 |
 | Bitoku | Devir / IELLO | 1 à 4 | 81 étapes | 8 | 23 | 11 |
 
 ## Quatre façons d'ouvrir un jeu
@@ -29,6 +30,14 @@ identifié par des images découpées dans le PDF des règles officielles.
   contrôle de la table laissée montée.
 - **Règles** — vous y avez joué, mais il y a longtemps. Les points de règles
   dans l'ordre, résumés.
+
+### Le bouton VO
+
+Deux boîtes de la table sont en anglais : *Nemesis* et *Frosthaven*. Le drapeau
+🇬🇧 les signale sur l'accueil, à côté de la durée, et un bouton **VO** dans le
+bandeau du tutoriel donne, à chaque étape, les termes anglais de ce qu'elle
+emploie — plus le glossaire complet en dessous. Un jeu dont le matériel est en
+français n'a ni drapeau ni bouton.
 
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,
@@ -135,6 +144,7 @@ version.json    source unique du numéro de version
 | `npm run extract -- <pdf> <id>` | Extrait les découpes candidates du PDF |
 | `npm run crops` | Pré-découpe les visuels référencés par les tutoriels |
 | `npm run grid -- <pdf> <page>` | Rend une page sous une grille de coordonnées, pour repérer les découpes |
+| `npm run vo` | Contrôle les glossaires de version originale, jeu par jeu |
 
 ## Crédits
 
@@ -150,3 +160,7 @@ Frosthaven est un jeu d'Isaac Childres édité par Cephalofair Games ; le
 tutoriel est une traduction des règles anglaises, livrées en trois PDF.
 Bitoku est un jeu de Germán P. Millán édité par Devir ; le tutoriel s'appuie
 sur les règles françaises de IELLO (traduction MeepleRules.fr).
+Tainted Grail : Rois de la Ruine est un jeu de Krzysztof Piskorski et Marcin
+Świerkot édité par Awaken Realms ; le tutoriel s'appuie sur les règles
+françaises. Les glossaires VO citent les livrets anglais de Nemesis et de
+Frosthaven.

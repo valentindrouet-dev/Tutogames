@@ -18,9 +18,10 @@ import type { Prefs } from '../engine/prefs'
 import { clearSave, formatClock, listSaves } from '../engine/progress'
 import { totalSteps, viewFor } from '../engine/tutorial'
 import { Sheet } from './Sheet'
+import { VoList } from './Vo'
 import { Visual } from './Visual'
 import { themePanel, themeStyle } from './theme'
-import { Check, Circle, Info, MODE_ICON, Play, Settings, Users } from './icons'
+import { Check, Circle, FlagEn, Info, MODE_ICON, Play, Settings, Users } from './icons'
 import version from '../../version.json'
 
 interface Props {
@@ -166,6 +167,18 @@ export function Home({ tutorials, onStart, prefs, onOpenSettings }: Props) {
             </ul>
           </div>
 
+          {about.vo && (
+            <div>
+              <div className="section-label">
+                Termes en {about.vo.language} — {about.vo.terms.length}
+              </div>
+              <p className="part-detail-note" style={{ marginBottom: 12 }}>
+                Pendant le tutoriel, le bouton VO du bandeau montre ceux de l’étape affichée.
+              </p>
+              <VoList terms={about.vo.terms} />
+            </div>
+          )}
+
           <div>
             <div className="section-label">Laissé de côté pour cette première partie</div>
             <ul className="list-check">
@@ -222,6 +235,17 @@ function GameCard({
             {tutorial.players.min} à {tutorial.players.max}
           </span>
           <span className="chip">~{tutorial.minutes} min</span>
+          {/* Matériel en anglais : le drapeau prévient avant même d'ouvrir. */}
+          {tutorial.vo && (
+            <span
+              className="chip chip-flag"
+              role="img"
+              aria-label={`Matériel en ${tutorial.vo.language}`}
+              title={`Matériel en ${tutorial.vo.language} — termes VO dans le tutoriel`}
+            >
+              <FlagEn aria-hidden />
+            </span>
+          )}
           <span className="game-card-spacer" />
           <button type="button" className="btn btn-ghost btn-icon" onClick={onAbout} aria-label={`${tutorial.title} — détails`}>
             <Info aria-hidden />

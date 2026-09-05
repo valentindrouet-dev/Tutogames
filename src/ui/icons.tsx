@@ -176,3 +176,25 @@ export const SortIcon = (p: P) => (
 export const Users = (p: P) => (
   <svg {...base} {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /><path d="M16 5.6a3.2 3.2 0 0 1 0 6" /><path d="M17.5 14.9c1.9.5 3.2 2.2 3.2 4.6" /></svg>
 )
+
+/**
+ * Drapeau britannique : le seul pictogramme en couleurs de l'application.
+ * Il signale, sur l'accueil comme dans le bandeau, un jeu dont le matériel
+ * est en anglais. Le dessin est simplifié — à 16 px, les diagonales décalées
+ * du vrai pavillon ne se distinguent pas.
+ */
+export const FlagEn = (p: P) => (
+  <svg viewBox="0 0 24 24" fill="none" {...p}>
+    <clipPath id="tg-flag-en">
+      <rect x="1" y="4" width="22" height="16" rx="2.4" />
+    </clipPath>
+    <g clipPath="url(#tg-flag-en)">
+      <rect x="1" y="4" width="22" height="16" fill="#012169" />
+      <path d="M1 4 23 20M23 4 1 20" fill="none" stroke="#ffffff" strokeWidth="4.4" />
+      <path d="M1 4 23 20M23 4 1 20" fill="none" stroke="#c8102e" strokeWidth="2" />
+      <path d="M12 4V20M1 12H23" fill="none" stroke="#ffffff" strokeWidth="6.4" />
+      <path d="M12 4V20M1 12H23" fill="none" stroke="#c8102e" strokeWidth="3.6" />
+    </g>
+    <rect x="1" y="4" width="22" height="16" rx="2.4" fill="none" stroke="rgba(0,0,0,0.3)" strokeWidth="1" />
+  </svg>
+)
