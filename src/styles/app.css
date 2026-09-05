@@ -621,11 +621,18 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
   width: 100%;
 }
 
-/* Découpe pré-calculée : un <img>, dimensionné par l'image, jamais déformé. */
+/*
+ * Decoupe pre-calculee : un <img>, dimensionne par l'image, jamais deforme.
+ *
+ * La hauteur limite est reprise en dur de `.visual` (58vh, moins ses 12px de
+ * marge interieure et son filet) : le conteneur n'a pas de hauteur definie,
+ * donc un `max-height: 100%` ne s'y resout pas — une decoupe en hauteur
+ * debordait, et le cadre la rognait en haut et en bas.
+ */
 .crop-img {
   display: block;
   max-width: 100%;
-  max-height: 100%;
+  max-height: calc(58vh - 26px);
   width: auto;
   height: auto;
   border-radius: 8px;

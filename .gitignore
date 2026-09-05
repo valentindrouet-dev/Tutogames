@@ -21,8 +21,12 @@ rules/*.pdf
 !rules/Bitoku_Rulebook_FR_V1_Light.pdf
 !rules/Nemesis\ -\ Rules\ VO.pdf
 !rules/Tainted\ Grail\ Rois\ de\ la\ Ruine\ -\ Regles.pdf
-# « Frosthaven - Regles.pdf » est la fusion des trois parties (npm run merge) :
-# il se refait en une commande et reste local.
+!rules/Oathsworn\ -\ Rules\ 1.pdf
+!rules/Oathsworn\ -\ Rules\ 2.pdf
+!rules/Oathsworn\ -\ Rules\ 3.pdf
+!rules/Oathsworn\ -\ Rules\ 4.pdf
+# « Frosthaven - Regles.pdf » et « Oathsworn - Regles.pdf » sont les fusions
+# des parties (npm run merge) : elles se refont en une commande et restent locales.
 rules/*.txt
 
 # Aperçus et bundle temporaire produits par `npm run extract` / `npm run crops`.

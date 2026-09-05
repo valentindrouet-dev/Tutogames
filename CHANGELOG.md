@@ -17,6 +17,63 @@ comme complète.
 
 ---
 
+## v0.17 — 2026-09-05
+
+### Ajouté
+
+- **Oathsworn : Into the Deepwood** (Shadowborne Games, Jamie Jolly), 1 à 4
+  joueurs, quatre modes : 85 étapes en 1re Partie, 20 en Mise en Place, 10 en
+  Reprendre, 7 en Règles. La boîte est en anglais : la fiche porte le drapeau
+  🇬🇧 et le tutoriel un glossaire de 81 termes, surlignés dans les consignes.
+  - Le livret officiel est livré en **quatre PDF** ; `npm run merge` les réunit
+    en un seul livret de 20 pages, dont la page imprimée N est la N-ième page
+    du PDF (`pageOffset: 0`).
+  - **Périmètre.** Un chapitre se joue en deux temps : l'Histoire, qui se lit
+    dans le Story Book avec les cartes de cité, puis la Rencontre, qui se joue
+    sur le plateau avec les figurines. Le PDF fourni est le « Story Rule Book »
+    seul ; le tutoriel couvre donc l'Histoire de bout en bout et s'arrête au
+    seuil de la Rencontre — ce que le livret lui-même conseille pour une
+    première séance de trois heures ou moins. La Rencontre est annoncée dès le
+    briefing et listée dans `scope.skipped`.
+  - Sont couverts : former une Compagnie Libre de quatre Oathsworn, la mise en
+    place d'un personnage complet et d'un compagnon, les onze étapes de la mise
+    en place de l'histoire, les cinq niveaux de difficulté et la variante
+    Hardcore, la navigation sur la carte, la piste de Temps et ses trois
+    familles d'effets, les objets, le sac à dos, le fer, les indices, les
+    alliés, les jetons de combat et permanents, les tests et leurs critiques,
+    les décisions secrètes, le round de combat, le Banksmith et l'Apothecary,
+    la sauvegarde dans les sacs et sa reprise.
+  - Les noms imprimés sur le matériel restent en anglais là où les traduire
+    égarerait le joueur : Banksmith, Apothecary, Animus, Battleflow.
+
+### Modifié
+
+- Les six étapes du chapitre « Le matériel » n'ont plus de découpe de page :
+  elles citent chacune leurs composants, dont les photos montrent déjà la
+  planche de matériel. Une découpe de la même page en plus ne disait rien de
+  neuf.
+
+### Corrigé
+
+- Une découpe **en hauteur** débordait de son cadre, qui la rognait en haut et
+  en bas : `.visual` n'a pas de hauteur définie, donc le `max-height: 100%` de
+  l'image ne s'y résolvait pas. La limite est désormais reprise en dur de son
+  cadre. Tous les jeux en profitent — la moitié des découpes d'Oathsworn sont
+  des colonnes de texte, plus hautes que larges.
+
+### Outils
+
+- **`npm run snap -- <jeu>`** recale les découpes sur le bloc qu'elles visent :
+  tant qu'un bord tranche dans du noir, on le repousse, et on s'arrête à la
+  première vraie respiration — une gouttière en largeur, une interligne franche
+  en hauteur. Le déplacement est plafonné à 9 % de la page : on recale, on ne
+  recadre pas. Sans `--write`, le script se contente de montrer ce qui
+  bougerait. Il rattrape le détail, pas l'erreur de colonne : les 118
+  rectangles d'Oathsworn sont passés par là, puis ont été repris à la main,
+  page par page, après mesure des colonnes sous grille décimale.
+
+---
+
 ## v0.16 — 2026-09-05
 
 ### Modifié

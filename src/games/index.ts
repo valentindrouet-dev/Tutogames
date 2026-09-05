@@ -11,7 +11,8 @@ import { bitoku } from './bitoku'
 import { expeditions } from './expeditions'
 import { frosthaven } from './frosthaven'
 import { nemesis } from './nemesis'
+import { oathsworn } from './oathsworn'
 import { taintedgrail } from './taintedgrail'
 import { taintedgrailkor } from './taintedgrailkor'
 
-export const TUTORIALS: Tutorial[] = [nemesis, taintedgrail, taintedgrailkor, expeditions, frosthaven, bitoku]
+export const TUTORIALS: Tutorial[] = [nemesis, taintedgrail, taintedgrailkor, expeditions, frosthaven, bitoku, oathsworn]

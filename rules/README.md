@@ -19,6 +19,7 @@ propriétaire du dépôt :
 | `Bitoku_Rulebook_FR_V1_Light.pdf` | `src/games/bitoku.ts` |
 | `Tainted Grail Rois de la Ruine - Regles.pdf` | `src/games/taintedgrailkor.ts` |
 | `Nemesis - Rules VO.pdf` | Aucun tutoriel : c'est la source du glossaire VO de `src/games/nemesis.ts`. |
+| `Oathsworn - Rules 1.pdf` … `Rules 4.pdf` | `src/games/oathsworn.ts`, après fusion en `Oathsworn - Regles.pdf` par `npm run merge` (fichier local, non versionné) |
 
 Le nom du fichier attendu est déclaré dans `source.pdf` du tutoriel : c'est là
 que `npm run crops` va chercher le PDF pour rendre les découpes.

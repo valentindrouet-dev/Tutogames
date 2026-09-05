@@ -350,6 +350,37 @@ défauts ne se voient qu'à l'œil :
   pages du livret *Tainted Grail*. Dans ce cas, changez de source : la photo
   produit du même élément dans la liste du matériel fait toujours l'affaire.
 
+**e) Recaler les rectangles — `npm run snap`.**
+
+Un rectangle écrit à la main coupe presque toujours quelque chose : une lettre
+à droite, la légende sous une photo, la dernière ligne d'un paragraphe. Le
+script regarde l'encre autour du rectangle : tant que le bord tranche dans du
+noir, il le repousse, et il s'arrête à la première vraie respiration — une
+gouttière en largeur, une interligne franche en hauteur. Le déplacement est
+plafonné à 9 % de la page : il recale, il ne recadre pas.
+
+```bash
+npm run snap -- mon-jeu             # montre ce qui bougerait
+npm run snap -- mon-jeu --write     # réécrit src/games/mon-jeu.ts
+npm run crops -- mon-jeu            # puis on re-découpe
+```
+
+Il rattrape le détail, pas l'erreur de colonne. **Mesurez d'abord les colonnes
+de chaque page** sous grille décimale (`npm run grid`) : un livret sur trois
+colonnes n'a pas la même gouttière d'une page à l'autre, et un rectangle calé
+sur les colonnes de la page 10 coupera le texte de la page 11. Le recalage
+automatique passe ensuite, puis la planche contact tranche.
+
+Le script propose, il ne décide pas : relisez chaque déplacement avant
+`--write`. Il élargit volontiers une découpe jusqu'au numéro de page ou à la
+vigne décorative de la marge, qui sont de l'encre comme une autre.
+
+> **Une étape qui cite ses composants n'a pas besoin de découper la planche de
+> matériel.** Les photos des composants montrent déjà ce que la page montre :
+> une découpe de la même planche en plus ne dit rien de neuf, et elle est
+> toujours moins lisible que les photos. Les six étapes du chapitre
+> « Le matériel » d'*Oathsworn* n'ont donc pas de `crop`.
+
 ### Étape 9 — Écrire les chapitres
 
 Découpage recommandé, éprouvé sur Nemesis :
@@ -716,4 +747,5 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-05 | v0.17 | Étape 8e : `npm run snap` recale les rectangles sur le bloc qu'ils visent, après mesure des colonnes page par page. Une étape qui cite ses composants ne découpe plus la planche de matériel. Septième tutoriel : *Oathsworn : Into the Deepwood*, dont le livret Histoire est livré en quatre PDF et dont seule la moitié Histoire est couverte, la Rencontre ayant son propre livret. |
 | 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |

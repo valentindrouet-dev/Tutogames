@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.16** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.17** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -18,6 +18,7 @@ identifié par des images découpées dans le PDF des règles officielles.
 | Expeditions : Après Scythe | Stonemaier / Matagot | 1 à 5 | 43 étapes | 6 | 13 | 8 |
 | Frosthaven 🇬🇧 | Cephalofair Games | 1 à 4 | 106 étapes | 13 | 17 | 17 |
 | Bitoku | Devir / IELLO | 1 à 4 | 81 étapes | 8 | 23 | 11 |
+| Oathsworn : Into the Deepwood 🇬🇧 | Shadowborne Games | 1 à 4 | 85 étapes | 10 | 20 | 7 |
 
 ## Quatre façons d'ouvrir un jeu
 
@@ -33,7 +34,8 @@ identifié par des images découpées dans le PDF des règles officielles.
 
 ### Les termes en anglais
 
-Deux boîtes de la table sont en anglais : *Nemesis* et *Frosthaven*. Le drapeau
+Trois boîtes de la table sont en anglais : *Nemesis*, *Frosthaven* et
+*Oathsworn*. Le drapeau
 🇬🇧 les signale sur l'accueil, à côté de la durée. Dans le tutoriel, les mots
 dont le matériel porte un autre nom sont **surlignés dans les consignes** : un
 survol à la souris, une tape sur l'iPad, et la bulle donne le terme imprimé.
@@ -146,6 +148,7 @@ version.json    source unique du numéro de version
 | `npm run extract -- <pdf> <id>` | Extrait les découpes candidates du PDF |
 | `npm run crops` | Pré-découpe les visuels référencés par les tutoriels |
 | `npm run grid -- <pdf> <page>` | Rend une page sous une grille de coordonnées, pour repérer les découpes |
+| `npm run snap -- <jeu> [--write]` | Recale les découpes d'un tutoriel sur le bloc qu'elles visent |
 | `npm run vo` | Contrôle les glossaires de version originale, jeu par jeu |
 
 ## Crédits
@@ -164,5 +167,8 @@ Bitoku est un jeu de Germán P. Millán édité par Devir ; le tutoriel s'appuie
 sur les règles françaises de IELLO (traduction MeepleRules.fr).
 Tainted Grail : Rois de la Ruine est un jeu de Krzysztof Piskorski et Marcin
 Świerkot édité par Awaken Realms ; le tutoriel s'appuie sur les règles
-françaises. Les glossaires VO citent les livrets anglais de Nemesis et de
-Frosthaven.
+françaises.
+Oathsworn : Into the Deepwood est un jeu de Jamie Jolly édité par Shadowborne
+Games ; le tutoriel est une traduction du « Story Rule Book » anglais, livré en
+quatre PDF. Les glossaires VO citent les livrets anglais de Nemesis, de
+Frosthaven et d'Oathsworn.
