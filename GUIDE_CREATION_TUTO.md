@@ -447,24 +447,36 @@ vo: {
 },
 ```
 
-Le bouton VO du bandeau montre **d'abord les termes de l'étape affichée**, puis
-le glossaire entier ; la fiche du jeu, sur l'accueil, le montre en entier. Un
-drapeau à côté de la durée prévient avant même d'ouvrir le jeu. Un tutoriel
-sans `vo` n'a ni bouton ni drapeau : c'est le cas de tous les jeux dont le
+**Les termes sont surlignés dans la consigne elle-même**, en gras et à la
+couleur d'accent du jeu : le joueur voit du premier coup d'œil quels mots ne
+sont pas ceux imprimés sur son matériel. Un survol à la souris, une tape sur
+l'iPad, et une bulle donne le terme original — et la `note`, s'il y en a une.
+Le bouton VO du bandeau coupe ou remet le surlignage, et le réglage est
+enregistré ; un drapeau à côté de la durée prévient avant même d'ouvrir le
+jeu, et la fiche du jeu porte le glossaire entier. Un tutoriel sans `vo` n'a
+ni surlignage, ni bouton, ni drapeau : c'est le cas de tous les jeux dont le
 matériel est en français.
 
-**La correspondance est automatique.** `voTermsIn()` compare le texte de
-l'étape — titre, corps, `warn`, `tip`, et le nom des composants affichés — au
-glossaire, sur une forme normalisée : minuscules, accents retirés, ponctuation
-ramenée à des espaces, « s » final enlevé de chaque mot. « Jetons Œuf d'Intrus »
-retrouve donc l'entrée « jeton Œuf ». Vous n'avez rien à déclarer étape par
-étape : un terme ajouté au glossaire apparaît partout où il est employé.
+**La correspondance est automatique.** `voSpansFor()` compare le texte de
+l'étape — titre, lignes, `warn`, `tip` — au glossaire, sur une forme
+normalisée : minuscules, accents retirés, ponctuation ramenée à des espaces,
+« s » final enlevé de chaque mot. « Jetons Œuf d'Intrus » retrouve donc
+l'entrée « jeton Œuf », et c'est le mot **tel qu'il est écrit** qui est
+surligné. Vous n'avez rien à déclarer étape par étape : un terme ajouté au
+glossaire apparaît partout où il est employé.
+
+Deux règles gardent le texte lisible plutôt que bariolé, et elles sont dans le
+moteur, pas dans votre fichier : un terme n'est marqué **qu'une fois par
+étape**, à sa première apparition, et **le terme le plus long gagne** —
+« carte Attaque d'Intrus » est marqué d'un bloc, sans que « carte Action » ni
+« Intrus » viennent le découper. Comptez cinq à six mots surlignés par étape ;
+au-delà de la dizaine, c'est que le glossaire contient trop de mots courants.
 
 Trois règles pour un glossaire utile :
 
 - **Le `fr` doit être le mot que le tutoriel écrit**, au singulier. Un terme que
-  vous n'employez jamais ne sortira jamais ; ce n'est pas grave, il reste dans
-  le glossaire complet, que le joueur consulte à la table.
+  vous n'employez jamais ne sera jamais surligné ; ce n'est pas grave, il reste
+  dans le glossaire complet, que le joueur consulte sur la fiche du jeu.
 - **N'y mettez pas ce qui n'a pas besoin d'être traduit.** Le tutoriel
   *Frosthaven* garde déjà Move, Attack, Shield et les conditions en anglais :
   les faire figurer ne dirait rien au joueur.
@@ -702,5 +714,6 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.10 | Les trois modes tiennent sur une ligne, en boutons carrés à pictogramme (`MODE_ICON`). Les réglages accueillent le tri des jeux, catalogue ou alphabétique. |
 | 2026-09-04 | v0.12 | Quatrième mode : `reprise`. Section « Écrire la reprise », qui distingue le jeu à sauvegarde officielle du jeu d'une séance. `MODE_INFO` gagne un libellé court d'un mot pour les boutons carrés. |
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
+| 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
 | 2026-09-04 | v0.14 | `npm run merge` pour un livret livré en plusieurs PDF (Frosthaven). Encadrés sur le livret en anglais et sur le contenu sous autocollants scellés. Le rappel s'écrit toujours à part, jamais en réutilisant les chapitres didactiques. Reprise d'une campagne sans sauvegarde en cours de scénario. Quatrième et cinquième tutoriels : *Frosthaven* et *Bitoku*. |

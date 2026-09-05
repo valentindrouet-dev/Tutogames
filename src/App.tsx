@@ -42,6 +42,7 @@ export default function App() {
           players={screen.players}
           restart={screen.restart}
           prefs={prefs}
+          onPrefs={change}
           onOpenSettings={() => setSettings(true)}
           onExit={() => setScreen({ view: 'home' })}
         />

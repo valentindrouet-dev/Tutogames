@@ -6,7 +6,7 @@ Vous posez la tablette à côté de vous. Elle vous fait installer le jeu étape
 étape, puis vous accompagne pendant vos premières manches. Le matériel est
 identifié par des images découpées dans le PDF des règles officielles.
 
-**v0.15** — voir [CHANGELOG.md](CHANGELOG.md).
+**v0.16** — voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Jeux disponibles
 
@@ -31,13 +31,15 @@ identifié par des images découpées dans le PDF des règles officielles.
 - **Règles** — vous y avez joué, mais il y a longtemps. Les points de règles
   dans l'ordre, résumés.
 
-### Le bouton VO
+### Les termes en anglais
 
 Deux boîtes de la table sont en anglais : *Nemesis* et *Frosthaven*. Le drapeau
-🇬🇧 les signale sur l'accueil, à côté de la durée, et un bouton **VO** dans le
-bandeau du tutoriel donne, à chaque étape, les termes anglais de ce qu'elle
-emploie — plus le glossaire complet en dessous. Un jeu dont le matériel est en
-français n'a ni drapeau ni bouton.
+🇬🇧 les signale sur l'accueil, à côté de la durée. Dans le tutoriel, les mots
+dont le matériel porte un autre nom sont **surlignés dans les consignes** : un
+survol à la souris, une tape sur l'iPad, et la bulle donne le terme imprimé.
+Le bouton **VO** du bandeau coupe ou remet le surlignage ; la fiche du jeu
+porte le glossaire complet. Un jeu dont le matériel est en français n'a ni
+drapeau, ni surlignage.
 
 Chacun garde sa propre sauvegarde de progression. Le nombre d'étapes est celui
 de l'effectif conseillé : l'application demande combien vous êtes au démarrage,

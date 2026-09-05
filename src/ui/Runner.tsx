@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'r
 import type { Component, Mode, Tutorial } from '../engine/types'
 import { MODE_INFO, playerLabel } from '../engine/types'
 import { DEFAULT_PREFS, type Prefs } from '../engine/prefs'
-import { voTermsIn } from '../engine/vo'
+import { voSpansFor } from '../engine/vo'
 import {
   clampPosition, componentsOf, indexOf, next, prev, stepAt, totalSteps, viewFor,
 } from '../engine/tutorial'
@@ -25,7 +25,7 @@ import { useManifest, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
-import { VoList } from './Vo'
+import { VoScope, VoText } from './Vo'
 import { themeBackground, themePanel, themeStyle } from './theme'
 import {
   Alert, ArrowLeft, ArrowRight, Bulb, Check, FlagEn, Grid, Home, List, Settings, Trophy, STEP_KIND,
@@ -59,12 +59,14 @@ interface Props {
   /** true pour repartir de zéro, false pour reprendre la sauvegarde. */
   restart: boolean
   prefs?: Prefs
+  /** Pour la bascule VO du bandeau, enregistrée avec les autres réglages. */
+  onPrefs?: (p: Prefs) => void
   onOpenSettings?: () => void
   onExit: () => void
 }
 
 export function Runner({
-  tutorial, mode, players, restart, prefs = DEFAULT_PREFS, onOpenSettings, onExit,
+  tutorial, mode, players, restart, prefs = DEFAULT_PREFS, onPrefs, onOpenSettings, onExit,
 }: Props) {
   const view = useMemo(() => viewFor(tutorial, players, mode), [tutorial, players, mode])
 
@@ -79,7 +81,6 @@ export function Runner({
   const [part, setPart] = useState<Component | null>(null)
   const [index, setIndex] = useState(false)
   const [jump, setJump] = useState(false)
-  const [vo, setVo] = useState(false)
   const [finished, setFinished] = useState(false)
 
   // Toute mutation de l'état passe par ici : la sauvegarde suit la
@@ -98,12 +99,16 @@ export function Runner({
   const position = indexOf(view, save.chapter, save.step)
   const parts = useMemo(() => (step ? componentsOf(tutorial, step) : []), [tutorial, step])
 
-  // Les termes du glossaire que cette étape emploie : c'est ce que le bouton
-  // VO montre en premier, avant le glossaire entier.
-  const voHere = useMemo(
-    () => (tutorial.vo && step ? voTermsIn(tutorial.vo.terms, step, parts, chapter?.title) : []),
-    [tutorial.vo, step, parts, chapter],
-  )
+  // Surlignage des termes de la version originale. Un terme n'est marqué
+  // qu'une fois par étape, dans l'ordre où le joueur lit : titre, lignes,
+  // avertissement, conseil.
+  const voOn = Boolean(tutorial.vo) && prefs.voMarks
+  const marks = useMemo(() => {
+    if (!tutorial.vo || !voOn || !step) return null
+    const body = step.body ?? []
+    const spans = voSpansFor(tutorial.vo.terms, [step.title, ...body, step.warn ?? '', step.tip ?? ''])
+    return { title: spans[0], body: spans.slice(1, 1 + body.length), warn: spans[1 + body.length], tip: spans[2 + body.length] }
+  }, [tutorial.vo, voOn, step])
 
   // Précharge les visuels de l'étape suivante pendant que le joueur lit
   // celle-ci : au tap sur « Fait », l'image est déjà là.
@@ -247,125 +252,231 @@ export function Runner({
 
   return (
     <div className="app" style={theme}>
-      <header className="topbar">
-        <button type="button" className="btn btn-ghost btn-icon" onClick={onExit} aria-label="Retour à l'accueil">
-          <Home aria-hidden />
-        </button>
-
-        <div className="topbar-id">
-          <span className="topbar-title">{tutorial.title}</span>
-          <span className="topbar-sub">
-            {MODE_INFO[mode].label.toUpperCase()} · {playerLabel(tutorial.players, players).toUpperCase()}
-          </span>
-        </div>
-
-        <div className="topbar-spacer" />
-
-        {tutorial.vo && (
-          <button
-            type="button"
-            className="btn btn-ghost btn-vo"
-            onClick={() => setVo(true)}
-            aria-label={`Termes de la version ${tutorial.vo.language}`}
-          >
-            <FlagEn aria-hidden />
-            VO
+      <VoScope language={tutorial.vo?.language ?? 'anglais'}>
+        <header className="topbar">
+          <button type="button" className="btn btn-ghost btn-icon" onClick={onExit} aria-label="Retour à l'accueil">
+            <Home aria-hidden />
           </button>
-        )}
 
-        {mode !== 'setup' && (
-          <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
-            <Grid aria-hidden />
-          </button>
-        )}
-
-        {onOpenSettings && (
-          <button type="button" className="btn btn-ghost btn-icon" onClick={onOpenSettings} aria-label="Réglages">
-            <Settings aria-hidden />
-          </button>
-        )}
-
-        <Timer elapsedMs={save.elapsedMs} runningSince={save.runningSince} onToggle={toggleTimer} />
-      </header>
-
-      <nav className="chapters" aria-label="Chapitres">
-        {view.chapters.map((c, i) => (
-          <button
-            key={c.id}
-            type="button"
-            className={`chapter-pill${i === save.chapter ? ' active' : i < save.chapter ? ' done' : ''}`}
-            onClick={() => update({ chapter: i, step: 0 })}
-          >
-            <span className="chapter-pill-num">{i + 1}</span>
-            {c.title}
-          </button>
-        ))}
-      </nav>
-
-      <div className="progress">
-        <div className="progress-fill" style={{ width: `${(position / Math.max(total - 1, 1)) * 100}%` }} />
-      </div>
-
-      <main className="stage">
-        <div className="stage-main">
-          <div className="step-head">
-            <span className="step-kind" style={{ '--kind': kind.tint } as CSSProperties}>
-              <kind.Icon aria-hidden /> {kind.label}
+          <div className="topbar-id">
+            <span className="topbar-title">{tutorial.title}</span>
+            <span className="topbar-sub">
+              {MODE_INFO[mode].label.toUpperCase()} · {playerLabel(tutorial.players, players).toUpperCase()}
             </span>
-            {/* Aller directement à n'importe quelle étape du chapitre. */}
-            <button type="button" className="btn btn-ghost step-jump" onClick={() => setJump(true)}>
-              <List aria-hidden />
-              Étape {save.step + 1} / {chapter.steps.length}
-            </button>
           </div>
 
-          <h1 className="step-title">{step.title}</h1>
+          <div className="topbar-spacer" />
 
-          {step.body?.length ? (
-            <ul className="step-body">
-              {step.body.map((line, i) => (
-                <li className="step-line" key={i}>{line}</li>
-              ))}
-            </ul>
-          ) : null}
-
-          {step.warn && (
-            <div className="callout callout-warn">
-              <Alert aria-hidden /><span>{step.warn}</span>
-            </div>
+          {tutorial.vo && onPrefs && (
+            <button
+              type="button"
+              className={`btn btn-ghost btn-vo${voOn ? ' on' : ''}`}
+              onClick={() => onPrefs({ ...prefs, voMarks: !prefs.voMarks })}
+              aria-pressed={voOn}
+              aria-label={`Surligner les termes en ${tutorial.vo.language}`}
+              title={`Termes en ${tutorial.vo.language} : ${voOn ? 'surlignés dans les consignes' : 'masqués'}`}
+            >
+              <FlagEn aria-hidden />
+              VO
+            </button>
           )}
 
-          {step.widget && <WidgetView widget={step.widget} resetKey={step.id} />}
-
-          {step.tip && (
-            <div className="callout callout-tip">
-              <Bulb aria-hidden /><span>{step.tip}</span>
-            </div>
+          {mode !== 'setup' && (
+            <button type="button" className="btn btn-ghost btn-icon" onClick={() => setIndex(true)} aria-label="Index du matériel">
+              <Grid aria-hidden />
+            </button>
           )}
 
-          {step.ref && <div className="step-ref">Règles officielles — {step.ref}</div>}
+          {onOpenSettings && (
+            <button type="button" className="btn btn-ghost btn-icon" onClick={onOpenSettings} aria-label="Réglages">
+              <Settings aria-hidden />
+            </button>
+          )}
+
+          <Timer elapsedMs={save.elapsedMs} runningSince={save.runningSince} onToggle={toggleTimer} />
+        </header>
+
+        <nav className="chapters" aria-label="Chapitres">
+          {view.chapters.map((c, i) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`chapter-pill${i === save.chapter ? ' active' : i < save.chapter ? ' done' : ''}`}
+              onClick={() => update({ chapter: i, step: 0 })}
+            >
+              <span className="chapter-pill-num">{i + 1}</span>
+              {c.title}
+            </button>
+          ))}
+        </nav>
+
+        <div className="progress">
+          <div className="progress-fill" style={{ width: `${(position / Math.max(total - 1, 1)) * 100}%` }} />
         </div>
 
-        <aside className="stage-visual">
-          <div className="visual">
-            <Visual
-              assetId={tutorial.source.assetId}
-              pageOffset={tutorial.source.pageOffset}
-              crop={step.crop ?? parts[0]?.crop}
-              glyph={parts[0]?.glyph ?? 'board'}
-              name={step.title}
-            />
+        <main className="stage">
+          <div className="stage-main">
+            <div className="step-head">
+              <span className="step-kind" style={{ '--kind': kind.tint } as CSSProperties}>
+                <kind.Icon aria-hidden /> {kind.label}
+              </span>
+              {/* Aller directement à n'importe quelle étape du chapitre. */}
+              <button type="button" className="btn btn-ghost step-jump" onClick={() => setJump(true)}>
+                <List aria-hidden />
+                Étape {save.step + 1} / {chapter.steps.length}
+              </button>
+            </div>
+
+            <h1 className="step-title"><VoText text={step.title} spans={marks?.title} /></h1>
+
+            {step.body?.length ? (
+              <ul className="step-body">
+                {step.body.map((line, i) => (
+                  <li className="step-line" key={i}>
+                    {/* La puce et le texte sont les deux seuls enfants du
+                        conteneur flex : sans cette enveloppe, chaque terme
+                        surligné deviendrait un élément flex, avec sa
+                        gouttière. */}
+                    <span><VoText text={line} spans={marks?.body[i]} /></span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
+            {step.warn && (
+              <div className="callout callout-warn">
+                <Alert aria-hidden /><span><VoText text={step.warn} spans={marks?.warn} /></span>
+              </div>
+            )}
+
+            {step.widget && <WidgetView widget={step.widget} resetKey={step.id} />}
+
+            {step.tip && (
+              <div className="callout callout-tip">
+                <Bulb aria-hidden /><span><VoText text={step.tip} spans={marks?.tip} /></span>
+              </div>
+            )}
+
+            {step.ref && <div className="step-ref">Règles officielles — {step.ref}</div>}
           </div>
 
-          {parts.length > 0 && (
-            <div className="parts">
-              {parts.map((c) => (
+          <aside className="stage-visual">
+            <div className="visual">
+              <Visual
+                assetId={tutorial.source.assetId}
+                pageOffset={tutorial.source.pageOffset}
+                crop={step.crop ?? parts[0]?.crop}
+                glyph={parts[0]?.glyph ?? 'board'}
+                name={step.title}
+              />
+            </div>
+
+            {parts.length > 0 && (
+              <div className="parts">
+                {parts.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className="part"
+                    style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
+                    onClick={() => setPart(c)}
+                  >
+                    <span className="part-thumb">
+                      <Thumb
+                        assetId={tutorial.source.assetId}
+                        pageOffset={tutorial.source.pageOffset}
+                        crop={c.crop}
+                        glyph={c.glyph}
+                        name={c.name}
+                      />
+                    </span>
+                    <span className="part-txt">
+                      <span className="part-name">{c.name}</span>
+                      {c.qty && <span className="part-qty">{c.qty}</span>}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </aside>
+        </main>
+
+        <footer className="actionbar">
+          <button
+            type="button"
+            className="btn btn-lg btn-ghost btn-icon"
+            onClick={goPrev}
+            disabled={position === 0}
+            aria-label="Étape précédente"
+          >
+            <ArrowLeft aria-hidden />
+          </button>
+
+          <span className="actionbar-count">{position + 1}/{total}</span>
+
+          <button type="button" className="btn btn-lg btn-primary" onClick={goNext}>
+            {isLast ? <><Check aria-hidden /> Terminer</> : <>{step.kind === 'info' ? 'Compris' : 'Fait'} <ArrowRight aria-hidden /></>}
+          </button>
+        </footer>
+
+        {jump && (
+          <Sheet title={chapter.title} onClose={() => setJump(false)} style={panel}>
+            <p className="sheet-lead">{chapter.goal}</p>
+            <ol className="jump-list">
+              {chapter.steps.map((s, i) => {
+                const k = STEP_KIND[s.kind]
+                return (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      className={`jump-item${i === save.step ? ' current' : ''}${save.done.includes(s.id) ? ' done' : ''}`}
+                      onClick={() => { update({ step: i }); setJump(false) }}
+                    >
+                      <span className="jump-num">{i + 1}</span>
+                      <span className="jump-icon" style={{ '--kind': k.tint } as CSSProperties}>
+                        <k.Icon aria-hidden />
+                      </span>
+                      <span className="jump-title">{s.title}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ol>
+          </Sheet>
+        )}
+
+        {part && (
+          <Sheet title="Matériel" onClose={() => setPart(null)} style={panel}>
+            <div className="part-detail">
+              <div className="visual">
+                <Visual
+                  assetId={tutorial.source.assetId}
+                  pageOffset={tutorial.source.pageOffset}
+                  crop={part.crop}
+                  glyph={part.glyph}
+                  name={part.name}
+                  tint={part.tint}
+                />
+              </div>
+              <div>
+                <div className="part-detail-name">{part.name}</div>
+                {part.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{part.qty}</div>}
+                {part.note && <p className="part-detail-note">{part.note}</p>}
+              </div>
+            </div>
+          </Sheet>
+        )}
+
+        {index && (
+          <Sheet title={`Matériel — ${tutorial.title}`} onClose={() => setIndex(false)} style={panel}>
+            <div className="parts-index">
+              {tutorial.components.map((c) => (
                 <button
                   key={c.id}
                   type="button"
                   className="part"
                   style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
-                  onClick={() => setPart(c)}
+                  onClick={() => { setIndex(false); setPart(c) }}
                 >
                   <span className="part-thumb">
                     <Thumb
@@ -383,129 +494,9 @@ export function Runner({
                 </button>
               ))}
             </div>
-          )}
-        </aside>
-      </main>
-
-      <footer className="actionbar">
-        <button
-          type="button"
-          className="btn btn-lg btn-ghost btn-icon"
-          onClick={goPrev}
-          disabled={position === 0}
-          aria-label="Étape précédente"
-        >
-          <ArrowLeft aria-hidden />
-        </button>
-
-        <span className="actionbar-count">{position + 1}/{total}</span>
-
-        <button type="button" className="btn btn-lg btn-primary" onClick={goNext}>
-          {isLast ? <><Check aria-hidden /> Terminer</> : <>{step.kind === 'info' ? 'Compris' : 'Fait'} <ArrowRight aria-hidden /></>}
-        </button>
-      </footer>
-
-      {jump && (
-        <Sheet title={chapter.title} onClose={() => setJump(false)} style={panel}>
-          <p className="sheet-lead">{chapter.goal}</p>
-          <ol className="jump-list">
-            {chapter.steps.map((s, i) => {
-              const k = STEP_KIND[s.kind]
-              return (
-                <li key={s.id}>
-                  <button
-                    type="button"
-                    className={`jump-item${i === save.step ? ' current' : ''}${save.done.includes(s.id) ? ' done' : ''}`}
-                    onClick={() => { update({ step: i }); setJump(false) }}
-                  >
-                    <span className="jump-num">{i + 1}</span>
-                    <span className="jump-icon" style={{ '--kind': k.tint } as CSSProperties}>
-                      <k.Icon aria-hidden />
-                    </span>
-                    <span className="jump-title">{s.title}</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ol>
-        </Sheet>
-      )}
-
-      {part && (
-        <Sheet title="Matériel" onClose={() => setPart(null)} style={panel}>
-          <div className="part-detail">
-            <div className="visual">
-              <Visual
-                assetId={tutorial.source.assetId}
-                pageOffset={tutorial.source.pageOffset}
-                crop={part.crop}
-                glyph={part.glyph}
-                name={part.name}
-                tint={part.tint}
-              />
-            </div>
-            <div>
-              <div className="part-detail-name">{part.name}</div>
-              {part.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{part.qty}</div>}
-              {part.note && <p className="part-detail-note">{part.note}</p>}
-            </div>
-          </div>
-        </Sheet>
-      )}
-
-      {vo && tutorial.vo && (
-        <Sheet title={`Termes en ${tutorial.vo.language}`} onClose={() => setVo(false)} style={panel}>
-          <p className="sheet-lead">
-            Le tutoriel est en français, votre boîte ne l’est pas. En face de chaque mot,
-            ce qui est imprimé sur le matériel
-            {tutorial.vo.edition ? ` (${tutorial.vo.edition})` : ''}.
-          </p>
-
-          <div>
-            <div className="section-label">Dans cette étape</div>
-            {voHere.length ? (
-              <VoList terms={voHere} />
-            ) : (
-              <p className="part-detail-note">Aucun terme propre au jeu dans cette étape.</p>
-            )}
-          </div>
-
-          <div>
-            <div className="section-label">Tout le jeu — {tutorial.vo.terms.length} termes</div>
-            <VoList terms={tutorial.vo.terms} />
-          </div>
-        </Sheet>
-      )}
-
-      {index && (
-        <Sheet title={`Matériel — ${tutorial.title}`} onClose={() => setIndex(false)} style={panel}>
-          <div className="parts-index">
-            {tutorial.components.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                className="part"
-                style={{ '--part-tint': c.tint ?? tutorial.theme.accent } as CSSProperties}
-                onClick={() => { setIndex(false); setPart(c) }}
-              >
-                <span className="part-thumb">
-                  <Thumb
-                    assetId={tutorial.source.assetId}
-                    pageOffset={tutorial.source.pageOffset}
-                    crop={c.crop}
-                    glyph={c.glyph}
-                    name={c.name}
-                  />
-                </span>
-                <span className="part-txt">
-                  <span className="part-name">{c.name}</span>
-                  {c.qty && <span className="part-qty">{c.qty}</span>}
-                </span>
-              </button>
-            ))}
-          </div>
-        </Sheet>
-      )}
+          </Sheet>
+        )}
+    </VoScope>
     </div>
   )
 }

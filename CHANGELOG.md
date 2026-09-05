@@ -17,6 +17,35 @@ comme complète.
 
 ---
 
+## v0.16 — 2026-09-05
+
+### Modifié
+
+- **Les termes de la version originale sont surlignés dans les consignes**, au
+  lieu d'être listés dans une feuille à part. Les mots dont le matériel du
+  joueur porte un autre nom apparaissent en gras, à la couleur d'accent du jeu,
+  soulignés d'un pointillé ; un survol à la souris ou une tape sur l'iPad
+  ouvre une bulle avec le terme imprimé et sa précision éventuelle.
+  - Un terme n'est marqué **qu'une fois par étape**, à sa première apparition,
+    et le terme le plus long gagne : « carte Attaque d'Intrus » est marqué d'un
+    bloc. Cinq à six mots surlignés par étape en moyenne.
+  - Le repérage se fait sur le texte réel de l'étape (`voSpansFor`), en
+    conservant la position de chaque mot : c'est le mot **tel qu'il est écrit**,
+    accents, majuscules et pluriel compris, qui est surligné.
+- Le bouton **VO** du bandeau devient une **bascule** : il coupe ou remet le
+  surlignage, et le choix est enregistré avec les autres réglages. La feuille
+  qui listait les termes de l'étape disparaît ; le glossaire complet reste sur
+  la fiche du jeu, à l'accueil.
+- Les réglages accueillent « Termes en anglais : surlignés ou masqués ».
+
+### Corrigé
+
+- Une ligne de consigne est désormais enveloppée dans un `span` : sans elle,
+  chaque mot surligné devenait un élément du conteneur flex de la ligne, avec
+  sa gouttière — le texte se disloquait.
+
+---
+
 ## v0.15 — 2026-09-05
 
 ### Ajouté

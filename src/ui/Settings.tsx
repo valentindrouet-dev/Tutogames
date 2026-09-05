@@ -1,18 +1,18 @@
 /**
  * Réglages de l'application.
  *
- * Trois réglages, pas plus : la taille du texte, la clarté du fond, l'ordre
- * des jeux. Chacun se montre lui-même — les tailles sont écrites à leur
- * taille, les clartés sont des pastilles de la couleur qu'elles produisent,
- * l'ordre est écrit dans l'ordre qu'il produit. Rien à lire pour comprendre
- * ce qu'un bouton va faire.
+ * Quatre réglages, pas plus : la taille du texte, la clarté du fond, le
+ * surlignage des termes en anglais, l'ordre des jeux. Chacun se montre
+ * lui-même — les tailles sont écrites à leur taille, les clartés sont des
+ * pastilles de la couleur qu'elles produisent, l'ordre est écrit dans
+ * l'ordre qu'il produit. Rien à lire pour comprendre ce qu'un bouton fait.
  */
 
 import type { Prefs } from '../engine/prefs'
-import { DEFAULT_PREFS, LIFTS, SORTS, TEXT_SCALES, shade } from '../engine/prefs'
+import { DEFAULT_PREFS, LIFTS, SORTS, TEXT_SCALES, VO_MARKS, shade } from '../engine/prefs'
 import type { Theme } from '../engine/types'
 import { Sheet } from './Sheet'
-import { Contrast, SortIcon, TextSize } from './icons'
+import { Contrast, FlagEn, SortIcon, TextSize } from './icons'
 import { themePanel } from './theme'
 
 interface Props {
@@ -82,6 +82,30 @@ export function Settings({ prefs, onChange, onClose, theme }: Props) {
           S'applique par-dessus les couleurs du jeu, sans changer leur contraste.
         </p>
       </div>
+      <div>
+        <div className="section-label"><FlagEn aria-hidden /> Termes en anglais</div>
+        <div className="pref-row">
+          {VO_MARKS.map((o) => (
+            <button
+              key={String(o.value)}
+              type="button"
+              className={`pref-btn${o.value === prefs.voMarks ? ' picked' : ''}`}
+              onClick={() => onChange({ ...prefs, voMarks: o.value })}
+            >
+              {/* L'étiquette montre ce que le réglage produit dans le texte. */}
+              <span className="pref-glyph">
+                {o.value ? <span className="vo-mark">Intrus</span> : 'Intrus'}
+              </span>
+              <span className="pref-btn-label">{o.label}</span>
+            </button>
+          ))}
+        </div>
+        <p className="sheet-lead">
+          Nemesis et Frosthaven ont leur matériel en anglais. Les mots concernés sont
+          surlignés dans les consignes ; le terme imprimé s'affiche au survol ou à la tape.
+        </p>
+      </div>
+
       <div>
         <div className="section-label"><SortIcon aria-hidden /> Ordre des jeux</div>
         <div className="pref-row">

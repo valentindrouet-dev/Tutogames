@@ -271,6 +271,72 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 
 .btn-vo { padding: 0 15px; gap: 8px; font-size: calc(15px * var(--text-scale)); letter-spacing: 0.08em; }
 .btn-vo svg { width: 26px; height: 26px; margin: 0 -4px; }
+/* Bascule : eteinte, le bouton dit lui-meme que le surlignage est coupe. */
+.btn-vo:not(.on) { opacity: 0.45; }
+.btn-vo.on { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+/*
+ * Le terme surligne dans la consigne. C'est un bouton, mais il doit se lire
+ * comme un mot : ni cadre, ni fond, seulement la couleur d'accent, la graisse
+ * et un pointille qui promet qu'il se passe quelque chose au survol.
+ */
+.vo-mark {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--accent);
+  font-weight: 750;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  text-decoration-thickness: from-font;
+  cursor: help;
+  /* La zone tactile deborde du mot sans decaler la ligne. */
+  -webkit-tap-highlight-color: transparent;
+}
+.vo-mark.open,
+.vo-mark:hover {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+/*
+ * La bulle. Position fixe : le texte de l'etape defile dans un conteneur qui
+ * la decouperait, et le survol d'un mot du titre doit rester lisible.
+ */
+.vo-tip {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 280px;
+  padding: 10px 14px;
+  border-radius: var(--r);
+  background: var(--bg-3);
+  border: 1px solid var(--stroke);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+  transform: translate(-50%, 10px);
+  pointer-events: none;
+  animation: vo-pop 120ms ease-out;
+}
+.vo-tip[data-above] { transform: translate(-50%, calc(-100% - 10px)); }
+.vo-tip-en {
+  font-size: calc(17px * var(--text-scale));
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.25;
+}
+.vo-tip-note {
+  font-size: calc(13px * var(--text-scale));
+  color: var(--fg-faint);
+  line-height: 1.35;
+}
+@keyframes vo-pop { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .vo-tip { animation: none; } }
 
 .vo-list { display: flex; flex-direction: column; gap: 2px; }
 .vo-row {

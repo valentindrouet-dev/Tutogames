@@ -24,6 +24,11 @@ export interface Prefs {
    * Zéro laisse les couleurs du jeu telles que son auteur les a réglées.
    */
   lift: number
+  /**
+   * Surligner, dans les consignes, les termes dont le matériel du joueur
+   * porte un autre nom. Sans effet sur un jeu sans glossaire.
+   */
+  voMarks: boolean
 }
 
 export const TEXT_SCALES = [
@@ -35,12 +40,17 @@ export const TEXT_SCALES = [
 
 export const LIFTS = [-2, -1, 0, 1, 2]
 
+export const VO_MARKS: { value: boolean; label: string }[] = [
+  { value: true, label: 'Surlignés' },
+  { value: false, label: 'Masqués' },
+]
+
 export const SORTS: { value: SortOrder; glyph: string; label: string }[] = [
   { value: 'catalogue', glyph: '1 · 2 · 3', label: 'Catalogue' },
   { value: 'alpha', glyph: 'A → Z', label: 'Alphabétique' },
 ]
 
-export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0, sort: 'catalogue' }
+export const DEFAULT_PREFS: Prefs = { textScale: 1, lift: 0, sort: 'catalogue', voMarks: true }
 
 function clamp(n: number, min: number, max: number): number {
   return Math.min(Math.max(n, min), max)
@@ -55,6 +65,8 @@ export function loadPrefs(): Prefs {
       textScale: clamp(Number(p.textScale) || 1, 1, 1.5),
       lift: clamp(Math.round(Number(p.lift) || 0), -2, 2),
       sort: p.sort === 'alpha' ? 'alpha' : 'catalogue',
+      // Absent des réglages enregistrés avant la v0.16 : actif par défaut.
+      voMarks: p.voMarks !== false,
     }
   } catch {
     // Stockage indisponible : les réglages par défaut restent utilisables.
