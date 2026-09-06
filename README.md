@@ -76,10 +76,15 @@ Deux boutons du bandeau prennent le relais une fois la partie lancée :
   *Nemesis* : l'enjeu et la victoire, l'index des 25 salles avec le coût et
   l'effet de chacune, les objets et les corps, les marqueurs et les portes, les
   moments spéciaux, et le résumé des règles de la dernière page du livret.
+  Ailleurs : les cinq Mechas d'*Expeditions*, les cinq régions de *Bitoku*
+  valeur de dé par valeur de dé, les onze effets spéciaux d'*Oathsworn*, les
+  neuf variantes de *Frosthaven*. 26 fiches sur les sept jeux.
 - **Index** — tous les mots du jeu par ordre alphabétique, avec un champ de
-  recherche. 181 entrées pour *Nemesis*. Taper sur une ligne ouvre la fiche
-  d'où elle vient ; les fiches s'empilent, et refermer la dernière rend la
-  précédente intacte.
+  recherche. 669 entrées sur les sept jeux, de 69 pour *Rois de la Ruine* à 181
+  pour *Nemesis*. Taper sur une ligne ouvre la fiche d'où elle vient ; les
+  fiches s'empilent, et refermer la dernière rend la précédente intacte.
+  Sur un jeu au matériel anglais, la recherche marche dans les deux langues :
+  taper « surgery » sort « Bloc opératoire ».
 
 **Ce qui ne vient pas du livret est signalé comme tel.** Les conseils de jeu
 recueillis ailleurs portent un globe, une couleur qui ne sert qu'à ça, et le

@@ -540,12 +540,24 @@ Découpage recommandé, éprouvé sur Nemesis :
 | Sortir / conclure | `play` | Comment on quitte la partie, et ce qu'il faut avoir préparé |
 | Gagner | `debrief` | Conditions de victoire, et ce qu'on emporte à la table |
 
-Visez **8 à 12 chapitres** et **80 à 120 étapes** — Nemesis en compte 91, le
-tutoriel *Tainted Grail*, qui installe une campagne entière, 92, et *Oathsworn*
-144. En dessous, on survole ; au-dessus, on abandonne avant la fin. Un livret
-de 84 pages comme celui de *Frosthaven* déborde forcément : on y accepte une
-centaine d'étapes en première partie, mais on ne rogne pas sur les trois autres
-modes pour autant.
+**La volumétrie se cale sur le livret, pas sur un chiffre.** Comptez à peu
+près **trois à quatre étapes par page de règles**, hors pages d'histoire, de
+matériel et d'annexes de contenu. C'est ce qui donne, sur les sept tutoriels :
+
+| Jeu | Pages de règles | Étapes (1ʳᵉ partie) | Aides de jeu |
+|---|---|---|---|
+| *Expeditions* | 16 | 49 | 4 |
+| *Rois de la Ruine* | 44 | 85 | 2 |
+| *Bitoku* | 32 | 84 | 5 |
+| *Nemesis* | 28 | 91 | 6 |
+| *Tainted Grail* | 24 | 98 | 4 |
+| *Frosthaven* | 84 | 110 | 2 |
+| *Oathsworn* | 55 (deux livrets) | 147 | 3 |
+
+En dessous, on survole ; très au-dessus, on abandonne avant la fin. Un livret
+énorme déborde forcément : on accepte alors qu'une partie de la référence
+passe en **aide de jeu** plutôt qu'en étape — c'est exactement à ça qu'elles
+servent. Ce qu'on ne fait jamais, c'est rogner sur les trois autres modes.
 
 > **Un tutoriel couvre tout ce qui arrive en partie.** On ne renvoie plus le
 > joueur au livret pour un pan entier de règles : les lieux, les objets, les
@@ -999,11 +1011,18 @@ Règles d'écriture :
 - **`ref`** sur chaque entrée : une aide de jeu qui ne dit pas d'où elle sort
   ne peut pas être vérifiée.
 
-Prévoyez **4 à 7 fiches**, pas plus. Pour un jeu à plateau, celles qui
-reviennent toujours : l'enjeu et la victoire, l'index des lieux, les objets,
-les marqueurs, les moments spéciaux, et le résumé des règles de la dernière
-page du livret. Les `icon` disponibles : `goal`, `rooms`, `items`, `markers`,
-`moments`, `combat`, `summary`.
+Prévoyez **2 à 6 fiches**, selon le jeu. Deux suffisent quand le livret a déjà
+une bonne page de référence à reprendre ; six sont nécessaires quand il faut
+un index de lieux. Celles qui reviennent toujours :
+
+- **l'enjeu et le décompte** — comment on gagne, et ce qui ne rapporte rien ;
+- **le résumé des règles**, s'il y en a un en dernière page du livret ;
+- **l'index des lieux**, quand le jeu en a et qu'ils portent des actions ;
+- **les icônes**, quand une case ou une carte ne se lit pas sans lexique ;
+- **les variantes et modes**, qui sont des règles écrites qu'on saute d'habitude.
+
+Les `icon` disponibles : `goal`, `rooms`, `items`, `markers`, `moments`,
+`combat`, `summary`.
 
 ### `index` — l'index alphabétique, presque gratuit
 
@@ -1037,8 +1056,10 @@ alimenté par `voPrintedIn`). Un joueur avec la boîte anglaise devant lui tape
 « surgery » et tombe sur « Bloc opératoire ». C'est gratuit — **à condition que
 le glossaire VO contienne le terme**. Voir l'encadré ci-dessous.
 
-Après écriture, comptez : **150 entrées et plus** pour un jeu de la taille de
-Nemesis. Beaucoup moins veut dire que les aides de jeu sont trop maigres.
+Après écriture, comptez. Sur les sept tutoriels, l'index va de **69 entrées**
+(*Rois de la Ruine*, dont le livret tient dans une page de résumé) à **181**
+(*Nemesis*, avec ses 25 salles). Beaucoup moins que le jeu ne le mérite veut
+dire que les aides de jeu sont trop maigres.
 
 ### Hors livret : signaler ce qui ne vient pas du PDF
 
@@ -1112,6 +1133,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-06 | v1.00 | La V2 déployée sur les sept jeux : un `brief` chacun, 26 aides de jeu, 669 entrées d'index. La volumétrie se cale sur le nombre de pages du livret (trois à quatre étapes par page) plutôt que sur un chiffre fixe, et le tableau des sept tutoriels sert d'étalon. Le nombre d'aides passe à « 2 à 6, selon le jeu ». |
 | 2026-09-06 | v0.24 | Le surlignage et la bascule VO marchent dans tous les panneaux, chacun portant sa bascule dans son en-tête. L'index se cherche dans les deux langues (`IndexRow.printed`, `voPrintedIn`) : encadré « Le glossaire VO doit couvrir les aides de jeu ». `npm run vo` compte les termes des aides à part. |
 | 2026-09-05 | v0.23 | La V2 : un tutoriel couvre tout ce qui arrive en partie. Nouvelle section 10 — `brief` (l'enjeu du jeu), `aids` (les aides de jeu, sous leur bouton du bandeau) et l'index alphabétique, calculé depuis les aides et le matériel. Une marque unique pour ce qui ne vient pas du livret (`ext`, `extTip`, `extSource`). Sections 6, 7 et 9 reprises : volumétrie à 8-12 chapitres et 80-120 étapes, `skipped` limité aux cartes, aux modes optionnels et aux extensions. Les panneaux s'empilent, un jeu n'a qu'une partie enregistrée. |
 | 2026-09-05 | v0.22 | Le bouton VO remplace le mot français par le terme imprimé, accordé en genre de phrase et en nombre. Étape 11 : « Le mode sur la boîte, et le pluriel », et `enPlural` pour les irréguliers. Le réglage des termes passe à trois choix. |

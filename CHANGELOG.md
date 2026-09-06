@@ -17,6 +17,58 @@ comme complète.
 
 ---
 
+## v1.00 — 2026-09-06 — « V2 sur les sept jeux »
+
+La V2 est déployée partout. Les sept tutoriels disent maintenant **pourquoi**
+on joue avant de dire comment, couvrent tout ce qui arrive en partie, et
+gardent sous la main de quoi répondre à n'importe quelle question sans rouvrir
+le livret. C'est ce qui fait passer l'application en 1.00.
+
+### Ajouté
+
+- **Un `brief` par jeu** : où l'on est, comment on gagne, ce qu'on cherche à
+  faire tour après tour, les erreurs qui coûtent la partie, et les premiers
+  tours. Ces derniers sortent des livrets et portent la marque « hors livret ».
+- **26 aides de jeu au total**, réparties sur les sept jeux :
+  - *Nemesis* (6) : l'enjeu, l'index des 25 salles, les objets et les corps,
+    les marqueurs et les portes, les moments spéciaux, le résumé du livret.
+  - *Tainted Grail* (4) : l'enjeu et la mort, la progression et l'équipement,
+    le monde (menhirs, gardiens, groupes), les trois modes.
+  - *Rois de la Ruine* (2) : le résumé des règles de la p.44, les modes
+    Histoire et Défi modificateur par modificateur.
+  - *Expeditions* (4) : l'enjeu et le décompte, le tour et les actions, la
+    lecture d'une récompense, les cinq Mechas.
+  - *Frosthaven* (2) : la référence rapide de la p.84, les neuf variantes.
+  - *Bitoku* (5) : l'ascension de A à H, les cinq régions valeur par valeur,
+    les icônes, les Visions et les Chemins, le Tengu en solo.
+  - *Oathsworn* (3) : le glossaire complet, les onze effets spéciaux de
+    l'annexe II, le mode Action Immédiate.
+- **669 entrées d'index** au total, de 69 pour *Rois de la Ruine* à 181 pour
+  *Nemesis*. Toutes calculées depuis les aides, le matériel et les variantes.
+- **Des règles qui n'étaient nulle part** : les cinq capacités de Mecha
+  d'*Expeditions* et ses icônes de récompense ; la progression au crépuscule,
+  les gardiens et les trois modes de *Tainted Grail* ; les modes Histoire et
+  Défi de *Rois de la Ruine* ; les neuf variantes de *Frosthaven* ; les onze
+  effets spéciaux et le mode Action Immédiate d'*Oathsworn*.
+- **34 termes de plus au glossaire VO de *Frosthaven***, pour que son index
+  se cherche aussi en anglais.
+
+### Modifié
+
+- **`scope.skipped` se limite désormais à trois choses**, sur les sept jeux :
+  le texte des cartes, les modes ou contenus scellés que la campagne débloque,
+  et l'histoire elle-même. Plus un seul renvoi à une page du livret pour une
+  règle qui arrive en partie.
+- Le contenu des sept jeux passe en `contentVersion` 2.0.
+- `npm run vo` compte aussi les termes des entrées d'index écrites à la main :
+  « jamais rencontré » désigne enfin un terme réellement inutilisé.
+- `GUIDE_CREATION_TUTO.md` : la volumétrie se cale sur le nombre de pages du
+  livret (trois à quatre étapes par page), avec le tableau des sept tutoriels ;
+  le nombre d'aides de jeu passe de « 4 à 7 » à « 2 à 6, selon le jeu », avec
+  la liste de celles qui reviennent toujours.
+
+---
+
 ## v0.24 — 2026-09-06
 
 ### Ajouté

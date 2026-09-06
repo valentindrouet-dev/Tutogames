@@ -78,6 +78,12 @@ for (const t of TUTORIALS) {
     }
   }
 
+  // Les entrées d'index écrites à la main emploient elles aussi les termes.
+  for (const e of t.index ?? []) {
+    const fake = { id: e.term, title: e.term, kind: 'info', body: [...(e.body ?? []), e.see ?? ''] }
+    voTermsIn(t.vo.terms, fake, [], '').forEach((h) => seen.add(h.fr))
+  }
+
   const total = rows.reduce((sum, r) => sum + r.n, 0)
   const top = [...rows].sort((a, b) => b.n - a.n).slice(0, 3)
   const empty = rows.filter((r) => r.n === 0)

@@ -29,7 +29,7 @@ export const frosthaven: Tutorial = {
   title: 'Frosthaven',
   tagline:
     'Un avant-poste aux confins du nord, une compagnie de mercenaires, et des scénarios enchaînés en campagne. La suite de Gloomhaven.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Cephalofair Games',
   author: 'Isaac Childres',
   players: {
@@ -235,6 +235,33 @@ export const frosthaven: Tutorial = {
       { fr: 'artisanat', en: 'crafting' },
       { fr: 'potion', en: 'potion' },
       { fr: 'table d’alchimie', en: 'alchemy chart' },
+
+      // Les termes des aides de jeu et de la référence rapide. Sans eux,
+      // l'index ne serait cherchable qu'en français.
+      { fr: 'référence rapide', en: 'Quick Reference' },
+      { fr: 'conversion d’or', en: 'gold conversion' },
+      { fr: 'dégâts de piège', en: 'trap damage' },
+      { fr: 'expérience bonus', en: 'bonus experience' },
+      { fr: 'capacité ciblée', en: 'targeted ability' },
+      { fr: 'mouvement forcé', en: 'forced movement' },
+      { fr: 'commander une figurine', en: 'commanding figures' },
+      { fr: 'manipuler les tuiles', en: 'manipulating tiles' },
+      { fr: 'perforation', en: 'Pierce' },
+      { fr: 'infusion élémentaire', en: 'elemental infusion' },
+      { fr: 'icône de mélange', en: 'shuffle icon' },
+      { fr: 'marque d’atout', en: 'perk mark' },
+      { fr: 'mode détendu', en: 'casual mode' },
+      { fr: 'mode solo', en: 'solo mode' },
+      { fr: 'information ouverte', en: 'open information' },
+      { fr: 'classe croisée', en: 'crossover class' },
+      { fr: 'amélioration temporaire', en: 'temporary enhancement' },
+      { fr: 'hasard réduit', en: 'reduced randomness' },
+      { fr: 'mort permanente', en: 'permanent death' },
+      { fr: 'respécialisation', en: 'character respeccing' },
+      { fr: 'donjon aléatoire', en: 'random dungeon' },
+      { fr: 'carte de salle', en: 'random room card' },
+      { fr: 'carte de mise en place', en: 'random setup card' },
+      { fr: 'communication limitée', en: 'limited communication' },
     ],
   },
 
@@ -249,15 +276,382 @@ export const frosthaven: Tutorial = {
       'Les tuiles de carte et les overlays : portes, pièges, terrains, obstacles, trésors',
       'La fin d’un scénario, réussi ou perdu, et la phase d’avant-poste qui suit',
       'La reprise d’une campagne à partir des fiches et du paquet de bâtiments',
+      'Les neuf variantes officielles : mode détendu, solo, information ouverte, classes croisées, améliorations temporaires, hasard réduit, mort permanente, respécialisation, donjons aléatoires',
+      'La référence rapide et les variantes en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Le contenu sous autocollants scellés : étapes 10, 13 et 14 de la mise en place, et les suivants',
-      'Les nouvelles classes et les enveloppes de bâtiment, débloquées par la campagne',
-      'Les améliorations de cartes (bâtiment 44), les faveurs (bâtiment 81) et le puzzle book',
-      'Les donjons aléatoires, la mort permanente, la respécialisation et les autres variantes',
-      'Le détail des six classes : traits, cartes et invocations',
+      'Le contenu sous autocollants scellés : c’est la campagne qui les ouvre, pas un tutoriel',
+      'Les nouvelles classes et les enveloppes de bâtiment, débloquées en jouant',
+      'Le texte des cartes de capacité, d’objet, de bâtiment et d’événement, qui se lit quand elles sortent',
+      'L’index des trésors et le puzzle book, qui sont du contenu à découvrir',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Frosthaven se joue en scénarios, mais la campagne est le vrai jeu : ce
+   * qu'on gagne dans un scénario sert au suivant, et la ville se construit
+   * entre deux. Un joueur qui traite chaque scénario comme une partie isolée
+   * passe à côté de l'essentiel.
+   */
+  brief: {
+    pitch: [
+      'Frosthaven, un avant-poste ruiné à l’extrême nord des Terres Gelées. Le conseil de Gloomhaven vous y envoie le remettre debout.',
+      'Vous êtes une poignée de mercenaires. Chacun a une raison personnelle d’être là, et une quête qui le fera partir un jour.',
+      'La campagne alterne deux temps : un scénario, où l’on se bat sur une carte d’hexagones, et une phase d’avant-poste, où l’on reconstruit la ville.',
+    ],
+    win: [
+      'Un scénario se gagne en remplissant son objectif — le plus souvent tuer tous les ennemis — avant que le groupe ne s’épuise.',
+      'Un personnage est épuisé quand ses points de vie tombent à 0, ou qu’il ne peut plus jouer deux cartes ni faire un repos long. Tout le groupe épuisé : scénario perdu.',
+      'La campagne, elle, ne se gagne pas en un soir : on débloque des scénarios, on construit des bâtiments, on fait progresser des personnages qui finiront par prendre leur retraite.',
+      'Un scénario perdu n’arrête rien : on rentre à Frosthaven pour une phase d’avant-poste, ou on le rejoue tout de suite.',
+    ],
+    doing: [
+      'Chaque manche, vous choisissez 2 cartes de votre main en aveugle. L’une donne l’initiative, les deux donnent une action du haut et une action du bas.',
+      'Votre main est votre temps de vie : jouer une carte la met en jeu, un repos long en récupère la moitié en en perdant une. À court de cartes, vous êtes épuisé.',
+      'Vous ne pouvez pas dire à vos camarades ce que vous avez en main. La coordination se fait par gestes et allusions — c’est une règle, pas une convention.',
+      'Le scénario donne de l’or, de l’expérience, du butin et des ressources. La phase d’avant-poste les transforme en bâtiments, en objets et en niveaux.',
+      'Les éléments — feu, glace, air, terre, lumière, ténèbres — s’infusent quand on les crée et se consomment au tour suivant. C’est le seul moyen de gagner du tempo.',
+    ],
+    traps: [
+      'Jouer toutes ses cartes fortes en début de scénario. Ce sont vos points de vie déguisés.',
+      'Oublier le repos long : il rend la moitié de vos cartes perdues, mais il coûte un tour entier à l’initiative 99.',
+      'Croire qu’un élément infusé dure. Il passe de « fort » à « faible » à la fin du tour, et disparaît au tour suivant.',
+      'Faire son butin après avoir tué le dernier monstre : le scénario s’arrête dès l’objectif rempli, et le butin resté au sol est perdu.',
+    ],
+    first: [
+      'Le niveau de scénario recommandé est la moyenne des niveaux de personnage divisée par 2, arrondie au supérieur. En solo, ajoutez 1 avant de diviser.',
+      'Choisissez le premier scénario au niveau recommandé, pas en dessous : le butin et l’expérience suivent le niveau.',
+      'Regardez l’initiative de vos camarades avant de décider si vous frappez ou si vous vous déplacez. Le tour de table se joue dans cet ordre.',
+      'Ramassez le butin en passant : une case de butin se ramasse gratuitement quand on finit son mouvement dessus.',
+      'Un personnage épuisé n’a pas perdu la campagne. Il perd juste son scénario ; les autres peuvent encore le terminer.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  aids: [
+    {
+      id: 'reference',
+      title: 'Référence rapide',
+      lead: 'Le rappel de la dernière page du livret, par catégorie.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Commencer un scénario',
+          entries: [
+            {
+              id: 'rf-debut',
+              term: 'Mise en place, dans l’ordre',
+              body: [
+                'Choisissez un scénario, résolvez un événement de route si nécessaire.',
+                'Posez les tuiles de carte, récupérez les monstres et mélangez leurs paquets de capacité, sortez les overlays, montez la première salle.',
+                'Mélangez les paquets de modificateurs d’attaque, lisez l’entrée du scénario.',
+                'Distribuez et choisissez les objectifs de bataille, posez le plateau de jetons, montez le paquet de butin.',
+                'Choisissez vos objets, puis vos cartes de capacité. Réglez les cadrans de vie au maximum et les cadrans d’expérience à zéro.',
+                'Appliquez les effets d’événement et de scénario.',
+              ],
+              ref: 'Référence rapide — p.84 · Mise en place — p.8',
+            },
+            {
+              id: 'rf-niveau',
+              term: 'Niveau du scénario',
+              body: [
+                'Recommandé : moyenne des niveaux de personnage divisée par 2, arrondie au supérieur.',
+                'Niveau 0 à 7. Le niveau de monstre suit le niveau de scénario.',
+                'Conversion d’or : 2, 2, 3, 3, 4, 4, 5, 6. Dégâts de piège : 2, 3, 4, 5, 6, 7, 8, 9.',
+                'Terrain dangereux : 1, 2, 2, 2, 3, 3, 3, 4. Expérience bonus : 4, 6, 8, 10, 12, 14, 16, 18.',
+              ],
+              ref: 'Référence rapide — p.84 · Niveau du scénario — p.16',
+            },
+          ],
+        },
+        {
+          title: 'La manche',
+          entries: [
+            {
+              id: 'rf-manche',
+              term: 'Phase de scénario',
+              body: [
+                '1. Choix des cartes. 2. Ordre d’initiative. 3. Tours des personnages et des monstres. 4. Fin de manche.',
+              ],
+              ref: 'Référence rapide — p.84 · Phase de scénario — p.18',
+            },
+            {
+              id: 'rf-fin-manche',
+              term: 'Fin de manche, dans l’ordre',
+              body: [
+                '1. Déclenchez les effets de fin de manche.',
+                '2. Mélangez tous les paquets dont une carte a révélé l’icône de mélange.',
+                '3. Retirez tous les bonus de manche des zones actives.',
+                '4. Effectuez les repos courts, si vous le souhaitez.',
+                '5. Déplacez tous les éléments infusés d’un cran vers la gauche.',
+              ],
+              ref: 'Référence rapide — p.84 · Fin de manche — p.46',
+            },
+          ],
+        },
+        {
+          title: 'Attaquer',
+          entries: [
+            {
+              id: 'rf-ordre',
+              term: 'Ordre de modification d’une attaque',
+              body: [
+                '1. Appliquez tous les bonus et malus d’attaque.',
+                '2. Piochez et appliquez une carte de modificateur d’attaque.',
+                '3. Appliquez le bonus de bouclier de la cible.',
+                '4. Appliquez les effets de perforation et de terrain dangereux.',
+              ],
+              ref: 'Référence rapide — p.84 · Modification d’attaque — p.25',
+            },
+            {
+              id: 'rf-timing',
+              term: 'Quand un effet d’attaque s’applique',
+              body: [
+                '+X Attaque et Perforation : pendant la résolution des dégâts.',
+                '+X Cible, Conditions, Mouvement forcé, autres effets ajoutés : après la résolution de l’attaque.',
+                'Infusions élémentaires : à la fin du tour.',
+              ],
+              ref: 'Référence rapide — p.84 · Effets d’attaque — p.26',
+            },
+            {
+              id: 'rf-ciblees',
+              term: 'Capacités ciblées',
+              body: [
+                'Six sortes : Attaque (p.25), Conditions (p.28), Soin (p.29), Mouvement forcé (p.32), Commander une figurine (p.33), Manipuler les tuiles (p.33).',
+              ],
+              ref: 'Référence rapide — p.84 · Capacités ciblées — p.21',
+            },
+          ],
+        },
+        {
+          title: 'Terminer un scénario',
+          entries: [
+            {
+              id: 'rf-fin-tous',
+              term: 'Perdu ou réussi, dans les deux cas',
+              body: [
+                'Récupérez tous les objets et cartes de capacité défaussés et perdus.',
+                'Remettez les cadrans de vie au maximum.',
+                'Retirez toutes les conditions.',
+                'Retirez des paquets de modificateurs toutes les cartes de bénédiction, de malédiction et de −1.',
+                'Gagnez l’expérience des cadrans, et l’or des cartes de butin.',
+              ],
+              ref: 'Référence rapide — p.84 · Fin de scénario — p.47',
+            },
+            {
+              id: 'rf-perdu',
+              term: 'Si le scénario est perdu, au choix',
+              body: [
+                'Rentrer à Frosthaven pour une phase d’avant-poste, en gagnant les ressources des cartes de butin.',
+                'OU rejouer le scénario immédiatement, sans gagner les ressources des cartes de butin.',
+              ],
+              ref: 'Référence rapide — p.84',
+            },
+            {
+              id: 'rf-reussi',
+              term: 'Si le scénario est réussi',
+              body: [
+                'Gagnez les ressources des cartes de butin.',
+                'Cochez les objectifs de bataille atteints, et les marques d’atout pour les maîtrises.',
+                'Lisez la conclusion, gagnez toutes les récompenses, gagnez (4 − C) inspiration, mettez la carte à jour.',
+                'Rentrez à Frosthaven pour une phase d’avant-poste, ou enchaînez sur un scénario lié.',
+              ],
+              ref: 'Référence rapide — p.84',
+            },
+            {
+              id: 'rf-avant-poste',
+              term: 'Phase d’avant-poste',
+              body: [
+                '1. Passage du temps. 2. Événement d’avant-poste. 3. Opérations des bâtiments. 4. Temps libre. 5. Construction.',
+              ],
+              ref: 'Référence rapide — p.84 · Phase d’avant-poste — p.59',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'variantes',
+      title: 'Variantes de jeu',
+      lead: 'Les six façons officielles de changer les règles de la campagne.',
+      icon: 'goal',
+      groups: [
+        {
+          entries: [
+            {
+              id: 'vr-casual',
+              term: 'Mode détendu',
+              body: [
+                'Le groupe peut jouer n’importe quel scénario débloqué, sans en respecter les conditions.',
+                'Tous les effets de campagne sont ignorés : pas d’événement, pas de passage du temps, ni expérience, ni butin, ni trésor, ni coche, ni progression de quête, ni récompense, ni déblocage.',
+                'Le résultat n’a aucun effet sur la campagne. Un scénario terminé en mode détendu peut être rejoué en campagne si le groupe en remplit les conditions.',
+              ],
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-solo',
+              term: 'Mode solo',
+              body: [
+                'Un joueur seul contrôle deux personnages ou plus.',
+                'La difficulté augmente : prenez la moyenne des niveaux, AJOUTEZ 1, puis divisez par 2 et arrondissez au supérieur.',
+                'Exemple : trois personnages de niveau 4 donnent un scénario de niveau 2 à plusieurs, et de niveau 3 en solo.',
+              ],
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-ouverte',
+              term: 'Information ouverte',
+              body: [
+                'Le groupe partage exactement les cartes qu’il a en main et discute librement de ses plans pendant le choix des cartes.',
+                'Ce n’est pas la façon recommandée de jouer. La difficulté se calcule alors comme en mode solo.',
+              ],
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-croisees',
+              term: 'Classes croisées',
+              body: [
+                'Toute classe débloquée dans un autre jeu Gloomhaven peut créer un personnage dans Frosthaven, et réciproquement.',
+                'Les classes gardent leurs améliorations, au risque de déséquilibrer la partie.',
+              ],
+              note: 'De nouvelles fiches de personnage pour ces classes croisées sont disponibles chez l’éditeur.',
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-temporaires',
+              term: 'Améliorations temporaires',
+              body: [
+                'Les autocollants d’amélioration sont retirés quand un personnage prend sa retraite — collez-les sur les protège-cartes plutôt que sur les cartes.',
+                'Coût réduit : calculez le coût normal, retirez 20 or si l’action porte déjà une amélioration, puis retirez 20 %, arrondi au supérieur.',
+              ],
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-hasard',
+              term: 'Hasard réduit',
+              body: [
+                'Traitez toutes les cartes « nul » et « bénédiction » comme des −2, et toutes les cartes « ×2 » et « malédiction » comme des +2.',
+                'L’icône de mélange s’applique quand même.',
+              ],
+              note: 'Les effets d’objet qui parlent des cartes « nul » ou « ×2 » ne sont pas affectés.',
+              ref: 'Variantes de jeu — p.69',
+            },
+            {
+              id: 'vr-mort',
+              term: 'Mort permanente',
+              body: [
+                'À 0 point de vie, un personnage meurt au lieu d’être épuisé. Il peut encore s’épuiser par manque de cartes, et survit alors.',
+                'À sa mort, il quitte la campagne à la fin du scénario. Sa quête personnelle retourne au paquet, son matériel dans sa boîte, ses objets à la réserve, ses ressources à Frosthaven, son or est perdu.',
+                'Le joueur crée un nouveau personnage au Temps libre de la phase d’avant-poste suivante.',
+              ],
+              warn: 'Un personnage épuisé garde désormais sa figurine sur la carte : il peut être ciblé, ne peut rien faire, et compte comme initiative 99 pour le focus.',
+              ref: 'Mort permanente — p.70',
+            },
+            {
+              id: 'vr-respec',
+              term: 'Respécialisation',
+              body: [
+                'Au Temps libre de la phase d’avant-poste, un personnage peut payer 10 fois son niveau en or pour refaire tous ses choix de cartes.',
+                'Il rend toutes les cartes de sa réserve qui ne sont ni de niveau 1 ni de niveau X, puis rechoisit à chaque niveau jusqu’au sien.',
+              ],
+              ref: 'Respécialisation — p.70',
+            },
+            {
+              id: 'vr-donjons',
+              term: 'Donjons aléatoires',
+              body: [
+                'Trois salles générées au hasard, à vider de leurs monstres pour terminer le donjon. En campagne ou en mode détendu, sans événement de route.',
+                'Chaque salle se révèle quand un personnage en ouvre la porte : tirez une carte de salle et une carte de mise en place.',
+                'Montez le paquet de butin avec 24 cartes : 12 cartes d’argent, 2 de chaque ressource matérielle, 1 de chaque herbe.',
+              ],
+              note: 'Les pénalités des cartes s’appliquent par palier : aucune pour la première salle, mineure pour la deuxième, majeure pour la troisième — à la difficulté recommandée.',
+              ref: 'Donjons aléatoires — p.70',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Épuisement',
+      body: [
+        'Un personnage est épuisé si ses points de vie tombent à 0, ou s’il ne peut ni jouer deux cartes ni faire un repos long à l’étape de choix.',
+        'Il retire sa figurine de la carte et ne joue plus du scénario. Tout le groupe épuisé : scénario perdu.',
+      ],
+      ref: 'Épuisement — p.20',
+    },
+    {
+      term: 'Repos court',
+      body: [
+        'À la fin d’une manche, si votre défausse compte au moins 2 cartes : remélangez-la et perdez une carte au hasard.',
+        'Vous pouvez payer 1 point de vie pour rejeter la perte et en perdre une autre à la place.',
+      ],
+      ref: 'Repos — p.19',
+    },
+    {
+      term: 'Repos long',
+      body: [
+        'Se déclare à l’étape de choix des cartes, à la place de deux cartes. Vous jouez à l’initiative 99.',
+        'Récupérez tous vos objets épuisés, gagnez 2 points de vie, puis remélangez votre défausse en perdant une carte de votre choix.',
+      ],
+      ref: 'Repos — p.19',
+    },
+    {
+      term: 'Initiative',
+      body: [
+        'Le chiffre au centre de la carte que vous avez placée en premier. Il décide de votre place dans le tour de table.',
+        'Un repos long joue toujours à 99, donc en dernier.',
+      ],
+      ref: 'Ordre d’initiative — p.18',
+    },
+    {
+      term: 'Éléments',
+      body: [
+        'Six : feu, glace, air, terre, lumière, ténèbres. Une capacité qui les crée les infuse à droite du plateau.',
+        'À la fin de la manche, chaque élément infusé glisse d’un cran vers la gauche : fort, puis faible, puis inerte.',
+        'On les consomme en jouant une capacité qui le demande.',
+      ],
+      ref: 'Éléments — p.23',
+    },
+    {
+      term: 'Communication limitée',
+      body: [
+        'Vous ne pouvez jamais montrer ni nommer précisément les cartes de votre main.',
+        'Les allusions sont permises. C’est une règle du jeu, pas une convention de table.',
+        'La variante « Information ouverte » lève cette règle, contre une difficulté augmentée.',
+      ],
+      ref: 'Communication limitée — p.18 · Variantes — p.69',
+    },
+    {
+      term: 'Objectif de bataille',
+      body: [
+        'Un objectif secret distribué au début du scénario. Rempli, il donne une coche.',
+        'Les coches servent à gagner des atouts entre deux scénarios.',
+      ],
+      ref: 'Objectifs de bataille — p.10',
+    },
+    {
+      term: 'Focus d’un monstre',
+      body: [
+        'Le monstre vise le personnage qu’il peut atteindre en dépensant le moins de mouvement, en tenant compte de sa portée.',
+        'À égalité, celui dont l’initiative est la plus basse.',
+      ],
+      ref: 'Focus — p.38',
+    },
+    {
+      term: 'Inspiration',
+      body: [
+        'Gagnée à la fin d’un scénario réussi : (4 − C), où C est le nombre de personnages.',
+        'Elle sert dans la phase d’avant-poste.',
+      ],
+      ref: 'Fin de scénario — p.47',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -514,6 +908,19 @@ export const frosthaven: Tutorial = {
           warn: 'Une partie du livret est sous autocollants scellés. Ces étapes ne sont pas décrites ici : quand une étape le dit, suivez votre livret.',
         },
         {
+          id: 'b1b',
+          kind: 'info',
+          title: 'Où vous êtes, et qui vous êtes',
+          body: [
+            'Frosthaven, un avant-poste ruiné à l’extrême nord des Terres Gelées. Le conseil de Gloomhaven vous y envoie le remettre debout.',
+            'Vous êtes une poignée de mercenaires. Chacun a une raison personnelle d’être là, et une quête qui le fera partir un jour.',
+            'La campagne alterne deux temps : un scénario, où l’on se bat sur une carte d’hexagones, et une phase d’avant-poste, où l’on reconstruit la ville.',
+          ],
+          tip: 'La campagne est le vrai jeu. Ce qu’on gagne dans un scénario sert au suivant, et la ville se construit entre deux.',
+          components: ['livres', 'feuille-campagne'],
+          ref: 'Getting Started — p.3',
+        },
+        {
           id: 'b2',
           kind: 'info',
           title: 'Le but : garder l’avant-poste de Frosthaven',
@@ -522,6 +929,34 @@ export const frosthaven: Tutorial = {
             'Entre deux scénarios, vous revenez à Frosthaven pour la phase d’avant-poste (Outpost Phase) : construire, monter de niveau, acheter.',
           ],
           ref: 'Getting Started — p.3',
+        },
+        {
+          id: 'b2b',
+          kind: 'info',
+          title: 'Comment on perd un scénario',
+          body: [
+            'Un scénario se gagne en remplissant son objectif — le plus souvent, tuer tous les ennemis.',
+            'Un personnage est épuisé quand ses points de vie tombent à 0, ou quand il ne peut plus jouer deux cartes ni faire un repos long.',
+            'Tout le groupe épuisé, le scénario est perdu. Mais la campagne, elle, continue : on rentre pour une phase d’avant-poste, ou on rejoue.',
+          ],
+          warn: 'Votre main de cartes est votre temps de vie. Jouer vos cartes fortes trop tôt, c’est raccourcir le scénario.',
+          components: ['cartes-capacite'],
+          ref: 'Épuisement — p.20 · Fin de scénario — p.47',
+        },
+        {
+          id: 'b2c',
+          kind: 'info',
+          title: 'Vos premiers scénarios',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Jouez au niveau recommandé, pas en dessous : le butin et l’expérience suivent le niveau du scénario.',
+            'Regardez l’initiative de vos camarades avant de décider si vous frappez ou si vous vous déplacez : le tour de table se joue dans cet ordre.',
+            'Ramassez le butin en passant. Une case de butin se ramasse gratuitement quand on finit son mouvement dessus.',
+            'Un personnage épuisé n’a pas perdu la campagne. Il perd son scénario ; les autres peuvent encore le terminer.',
+          ],
+          warn: 'Ces conseils ne sont pas dans le livret de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
         },
         {
           id: 'b3',
@@ -2218,20 +2653,35 @@ export const frosthaven: Tutorial = {
         {
           id: 'd2',
           kind: 'info',
-          title: 'Ce qui n’a pas été enseigné',
+          title: 'Neuf façons de changer les règles',
           body: [
-            'Le contenu sous autocollants, les enveloppes et les boîtes scellées : la campagne dit quand les ouvrir.',
-            'Les améliorations de cartes (page 77, à ne pas lire avant le bâtiment 44), les faveurs, le puzzle book, les donjons aléatoires, les variantes.',
+            'Mode détendu : tout scénario débloqué, sans condition et sans effet sur la campagne. Mode solo : un joueur, deux personnages, +1 au calcul du niveau.',
+            'Information ouverte : on montre sa main, contre la difficulté du mode solo. Classes croisées : n’importe quelle classe Gloomhaven débloquée.',
+            'Améliorations temporaires : autocollants sur les protège-cartes, coût réduit de 20 or puis de 20 %. Hasard réduit : « nul » et bénédiction valent −2, « ×2 » et malédiction valent +2.',
+            'Mort permanente, respécialisation à 10 or par niveau, et donjons aléatoires en trois salles générées.',
           ],
-          ref: 'Variants — p.69 ; Random Dungeons — p.70',
+          tip: 'Le détail des neuf est dans les aides de jeu, sous « Variantes de jeu ».',
+          ref: 'Game Variants — p.69 ; Random Dungeons — p.70',
+        },
+        {
+          id: 'd2b',
+          kind: 'info',
+          title: 'Ce qui reste sous scellés',
+          body: [
+            'Le contenu sous autocollants, les enveloppes et les boîtes scellées : la campagne dit quand les ouvrir, jamais avant.',
+            'Les améliorations de cartes (page 77) ne se lisent pas avant d’avoir construit le bâtiment 44. L’index des trésors et le puzzle book non plus.',
+          ],
+          warn: 'Ce tutoriel n’en dit rien, et son index non plus : lire ces pages en avance gâche la campagne.',
+          ref: 'Getting Started — p.3',
         },
         {
           id: 'd3',
           kind: 'check',
-          title: 'Trois pages à garder ouvertes',
+          title: 'Ce que vous emportez à la table',
           body: [
-            'Page 74 : le guide du tour de monstre. Page 76 : les rappels. Page 84 : la référence rapide.',
-            'L’index, pages 80 et 81, donne la page de chaque terme.',
+            'Vous avez toutes les règles d’un scénario, de la phase d’avant-poste, de la reprise de campagne et des neuf variantes.',
+            'Le bouton Aides de jeu garde la référence rapide et les variantes sous la main ; le bouton Index cherche n’importe quel mot, en français ou en anglais.',
+            'Dans le livret : page 74 le guide du tour de monstre, page 76 les rappels, page 84 la référence rapide.',
           ],
           crop: { page: 84, x: 0.05, y: 0.03, w: 0.9, h: 0.94 },
           ref: 'Index — p.80',

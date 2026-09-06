@@ -32,7 +32,7 @@ export const oathsworn: Tutorial = {
   title: 'Oathsworn',
   tagline:
     'Les cités survivantes ont scellé un pacte : des compagnies libres traquent les cauchemars de la Forêt Profonde. Vous avez prêté le serment.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Shadowborne Games',
   author: 'Jamie Jolly',
   players: {
@@ -297,15 +297,395 @@ export const oathsworn: Tutorial = {
       'Faire jouer l’ennemi : cartes d’étape, règle du nord puis ouest, cibles, déplacements, attaques, sbires',
       'Finir la rencontre : victoire, défaite, rejouer, niveau, butin et pertes',
       'Sauvegarder la campagne dans les sacs, et la reprendre à l’un ou l’autre des deux temps',
+      'Les onze effets spéciaux de l’annexe II : zone, cône, vague, chaîne, charge, recul, poussée, lancer, cage, absorption, mains nues',
+      'Le mode Action Immédiate, pour jouer une rencontre sans l’histoire',
+      'Le glossaire, les effets spéciaux et les modes en aides de jeu consultables en partie',
     ],
     skipped: [
       'L’histoire elle-même : elle est dans le Story Book et l’application',
-      'Les capacités des douze personnages, carte par carte, et leurs archétypes',
-      'Les effets spéciaux de l’annexe II, sauf ceux du chapitre 1 : ils se lisent quand une carte les emploie',
+      'Le texte des cartes de capacité, d’objet, d’événement et d’étape, qui se lit quand elles sortent',
       'La Grove Maiden, la Huntress et leurs bioformes, qui arrivent bien plus tard dans la campagne',
-      'Le mode Action Immédiate, signalé mais pas déroulé',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Oathsworn est une campagne narrative où l'on perd souvent. Le joueur qui
+   * cherche à « gagner » chaque rencontre s'y trompe : ce qui compte, c'est
+   * de traverser le chapitre, et une défaite fait avancer l'histoire aussi
+   * sûrement qu'une victoire.
+   */
+  brief: {
+    pitch: [
+      'L’Empire s’effondre, et la brume avale ses provinces. Ce qui en sort n’a plus de nom : les Sombres, des bêtes qui n’auraient pas dû exister.',
+      'Vous êtes une Compagnie Libre de quatre Oathsworn : des mercenaires liés par un serment, les seuls qui acceptent encore d’aller vers la brume.',
+      'La campagne se lit dans le Story Book. Chaque déplacement sur la carte ouvre un chapitre, chaque chapitre finit souvent par une rencontre.',
+    ],
+    win: [
+      'Il n’y a pas de score. Oathsworn est une campagne en chapitres : on avance en traversant le chapitre, quoi qu’il arrive.',
+      'Perdre une rencontre ne termine pas la campagne : l’histoire continue autrement, avec ses conséquences.',
+      'Ce qui vous limite vraiment, c’est la piste de Temps. Elle avance à chaque déplacement, et ce qu’elle déclenche ne se rattrape pas.',
+      'Les décisions secrètes que vous prenez en chapitre changent la suite. Elles se prennent à l’aveugle, et elles engagent tout le monde.',
+    ],
+    doing: [
+      'Sur la carte : vous choisissez où aller, et chaque chemin coûte du Temps. Un lieu visité donne un chapitre du Story Book.',
+      'En chapitre : vous faites des tests en tirant des cartes de Puissance, vous échangez, vous soignez, vous décidez.',
+      'En rencontre : chaque Oathsworn joue une carte de capacité par round, en payant son coût en Animus, et le Battleflow décide de la recharge.',
+      'Attaquer, c’est tirer des cartes de Puissance jusqu’à en révéler une blanche — puis compter, en retirant la défense.',
+      'L’ennemi, lui, est un paquet de cartes d’étape. On les lit, on applique la règle du nord puis ouest, et on subit.',
+    ],
+    traps: [
+      'Dépenser tout son Animus au premier round. C’est votre carburant pour toute la rencontre, et il se recharge lentement.',
+      'Oublier de retirer la défense de l’ennemi avant de compter les dégâts.',
+      'Croire qu’une carte blanche est une mauvaise nouvelle. Elle arrête le tirage, mais tout ce qui est déjà sorti compte.',
+      'Traîner sur la carte : chaque chemin coûte du Temps, et la piste ne redescend jamais.',
+    ],
+    first: [
+      'Répartissez les archétypes : un tank, un soigneur, un frappeur, un contrôleur. Une compagnie de quatre frappeurs meurt vite.',
+      'En rencontre, regardez la carte d’étape AVANT de jouer : elle vous dit ce que l’ennemi va faire, et ce qu’il faut éviter.',
+      'Les jetons de combat sont plus précieux qu’ils n’en ont l’air. Un Redraw au bon moment vaut mieux qu’une carte de plus.',
+      'Ne visez pas toujours le même emplacement du corps : briser deux emplacements différents rapporte souvent plus qu’en achever un.',
+      'Jouez la première rencontre en difficulté normale. Le jeu est déjà dur ; Hardcore est pour la deuxième campagne.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  aids: [
+    {
+      id: 'glossaire',
+      title: 'Glossaire du jeu',
+      lead: 'Les mots-clés, les icônes et les jetons, avec leur page.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Les quatre phases d’un round de rencontre',
+          entries: [
+            { id: 'gl-refresh', term: 'Refresh Phase', body: ['La phase de récupération, en ouverture du round.'], ref: 'Encounter Rule Book — p.8' },
+            { id: 'gl-oathsworn', term: 'Oathsworn Phase', body: ['La phase où les Oathsworn agissent, chacun à son tour.'], ref: 'Encounter Rule Book — pp.8-17' },
+            { id: 'gl-encounter', term: 'Encounter Phase', body: ['La phase où l’ennemi joue sa carte d’étape.'], ref: 'Encounter Rule Book — pp.18-23' },
+            { id: 'gl-endround', term: 'End of Round Phase', body: ['La fin du round : on nettoie, et on recommence.'], ref: 'Encounter Rule Book — p.24' },
+          ],
+        },
+        {
+          title: 'Mots-clés',
+          lead: 'S = Story Rule Book, E = Encounter Rule Book.',
+          entries: [
+            { id: 'gl-basic', term: 'Basic Check', body: ['Le test de base de l’histoire.'], ref: 'Story Rule Book — p.14' },
+            { id: 'gl-breaking', term: 'Breaking a Location', body: ['Briser un emplacement du corps de l’ennemi.'], ref: 'Story Rule Book — p.15' },
+            { id: 'gl-critical', term: 'Critical', body: ['Un critique, en test comme en attaque.'], ref: 'Story Rule Book — p.14 · Encounter — p.13' },
+            { id: 'gl-empowered', term: 'Empowered', body: ['Renforcé : le jeton et son effet.'], ref: 'Story Rule Book — p.16 · Encounter — p.14' },
+            { id: 'gl-ignore', term: 'Ignore the highest card', body: ['Ignorer la carte la plus haute du tirage.'], ref: 'Encounter Rule Book — p.29' },
+            { id: 'gl-los', term: 'Line of Sight', body: ['La ligne de vue, entre deux hexagones.'], ref: 'Encounter Rule Book — p.12' },
+            { id: 'gl-minion', term: 'Minion', body: ['Un sbire.'], ref: 'Encounter Rule Book — pp.15, 23' },
+            { id: 'gl-miss', term: 'Miss / Hit', body: ['Manquer ou toucher.'], ref: 'Encounter Rule Book — p.13' },
+            { id: 'gl-mob', term: 'Mob', body: ['Un groupe de sbires traité comme un ensemble.'], ref: 'Encounter Rule Book — p.23' },
+            { id: 'gl-move-e', term: 'Move (Encounter)', body: ['Le déplacement en rencontre.'], ref: 'Encounter Rule Book — pp.20-21' },
+            { id: 'gl-move-s', term: 'Move (Oathsworn)', body: ['Le déplacement d’un Oathsworn.'], ref: 'Encounter Rule Book — p.9' },
+            { id: 'gl-obstacle', term: 'Obstacle', body: ['Un hexagone qu’on ne traverse pas.'], ref: 'Encounter Rule Book — p.5' },
+            { id: 'gl-range', term: 'Range', body: ['La portée d’une attaque ou d’un effet.'], ref: 'Encounter Rule Book — p.12' },
+            { id: 'gl-reaction', term: 'Reaction', body: ['Une réaction déclenchée hors de son tour.'], ref: 'Encounter Rule Book — p.15' },
+            { id: 'gl-round', term: 'Round of Combat', body: ['Le round de combat de l’histoire.'], ref: 'Story Rule Book — p.15' },
+            { id: 'gl-straight', term: 'Straight line', body: ['La ligne droite, pour les effets qui la demandent.'], ref: 'Encounter Rule Book — pp.12, 20' },
+            { id: 'gl-target', term: 'Target', body: ['La cible d’une attaque ou d’un effet.'], ref: 'Encounter Rule Book — pp.12, 19' },
+            { id: 'gl-trading', term: 'Trading', body: ['L’échange d’objets entre Oathsworn.'], ref: 'Story Rule Book — p.15' },
+          ],
+        },
+        {
+          title: 'Jetons',
+          entries: [
+            {
+              id: 'gl-combat-tokens',
+              term: 'Jetons de combat',
+              body: [
+                'Defense, +2 Animus, Redraw, Empowered ×3, Battleflow.',
+                'Ils se dépensent en rencontre, une fois chacun.',
+              ],
+              ref: 'Annexe I — Story p.16, Encounter p.28',
+            },
+            {
+              id: 'gl-status-tokens',
+              term: 'Jetons de statut',
+              body: ['Poison, Bleed, Crippled, Lethality.'],
+              ref: 'Annexe I — Story p.16, Encounter p.28',
+            },
+            {
+              id: 'gl-general-tokens',
+              term: 'Jetons généraux',
+              body: [
+                'Jeton de lieu (Story p.10), jeton d’indice (Story p.12), jeton de Temps (Story p.11).',
+                'Fer (Story p.12), jeton de suivi (Story p.7).',
+              ],
+              ref: 'Glossaire — Encounter p.35',
+            },
+          ],
+        },
+        {
+          title: 'Icônes',
+          entries: [
+            { id: 'gl-hp', term: 'Hit Points', body: ['Les points de vie, sur les dés de vie de l’ennemi.'], ref: 'Encounter Rule Book — p.15' },
+            { id: 'gl-interrupt', term: 'Interrupt', body: ['Une interruption : elle se joue hors de son tour.'], ref: 'Encounter Rule Book — p.16' },
+            { id: 'gl-battleflow', term: 'Battleflow', body: ['La recharge des cartes de capacité.'], ref: 'Encounter Rule Book — p.11' },
+            { id: 'gl-defense', term: 'Defense', body: ['La défense, retirée des dégâts.'], ref: 'Encounter Rule Book — pp.15, 22' },
+            { id: 'gl-attack', term: 'Attack', body: ['L’attaque.'], ref: 'Encounter Rule Book — pp.13, 22' },
+            { id: 'gl-animus', term: 'Animus', body: ['Le carburant des capacités.'], ref: 'Encounter Rule Book — p.8' },
+            { id: 'gl-body', term: 'Encounter Body Parts', body: ['Les emplacements du corps de l’ennemi.'], ref: 'Encounter Rule Book — pp.15, 22' },
+            { id: 'gl-might', term: 'Might', body: ['Les cartes de Puissance : blanche, jaune, rouge, noire.'], ref: 'Story Rule Book — p.13' },
+            { id: 'gl-tiles', term: 'Fire & Water Tiles', body: ['Les tuiles de feu et d’eau.'], ref: 'Encounter Rule Book — p.9' },
+            { id: 'gl-cooldown', term: 'Cooldown', body: ['Le compte à rebours d’une capacité.'], ref: 'Encounter Rule Book — p.11' },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'effets',
+      title: 'Effets spéciaux (Annexe II)',
+      lead: 'Les onze effets de l’annexe, en clair. Ils se lisent quand une carte les emploie.',
+      icon: 'combat',
+      groups: [
+        {
+          title: 'Attaques de zone',
+          entries: [
+            {
+              id: 'ef-aoe',
+              term: 'Area of Effect (AoE)',
+              body: [
+                'L’attaque couvre plusieurs hexagones. L’hexagone jaune est celui où se tient le personnage qui résout l’effet ; les rouges sont ceux qui sont touchés.',
+                'Sans hexagone jaune, c’est l’hexagone central qui doit être à portée et en ligne de vue de l’attaquant.',
+                'Sauf mention contraire, une AoE touche tout le monde dans la zone, amis compris. On tire l’attaque une fois et on applique les mêmes dégâts à toutes les cibles.',
+              ],
+              warn: 'Si l’AoE couvre plusieurs hexagones d’un grand personnage, n’attaquez PAS chaque dé de vie : ajoutez 1 aux dégâts totaux par hexagone supplémentaire. Les dégâts vont à l’emplacement le plus proche de l’attaquant.',
+              ref: 'Annexe II — Encounter p.29',
+            },
+            {
+              id: 'ef-cone',
+              term: 'Cone Attacks',
+              body: [
+                'Une AoE en arc de 120°, partant des 3 hexagones adjacents à la face avant de l’attaquant.',
+                'Elles indiquent une portée : le nombre d’hexagones affectés depuis la source. Certaines sont sans limite.',
+              ],
+              note: 'Les attaques en cône ne sont pas affectées par la ligne de vue.',
+              ref: 'Annexe II — Encounter p.30',
+            },
+            {
+              id: 'ef-wave',
+              term: 'Wave Attacks',
+              body: [
+                'Elles affectent tous les personnages dans une ligne de 3 hexagones de large, entre la source et le bord du plateau.',
+                'La direction est toujours celle où le plus grand nombre d’ennemis sera touché, même pendant une réaction.',
+                'La ligne n’est bloquée ni par les obstacles ni par la ligne de vue. On tire l’attaque une fois et on l’applique à tous.',
+              ],
+              ref: 'Annexe II — Encounter p.31',
+            },
+            {
+              id: 'ef-chain',
+              term: 'Chain Attacks',
+              body: [
+                'L’attaque touche plusieurs personnages l’un après l’autre. On ne peut pas viser deux fois le même.',
+                'La première cible doit être à portée. Les suivantes doivent être en ligne de vue de la cible précédente, à une distance au plus égale à la portée de chaîne.',
+                'On ne tire les dégâts qu’UNE fois. Puis, pour chaque cible après la première, on ignore la carte de Puissance la plus basse — une pour la deuxième cible, deux pour la troisième, trois pour la quatrième.',
+              ],
+              warn: 'Ne confondez pas la portée de l’attaque et la portée de chaîne : ce sont deux nombres différents.',
+              note: 'Après la chaîne, l’attaquant se place sur l’hexagone vide le plus proche de la dernière cible — sauf attaque à distance. Un ennemi termine face à la dernière cible touchée.',
+              ref: 'Annexe II — Encounter p.29',
+            },
+            {
+              id: 'ef-charge',
+              term: 'Charge Through X',
+              body: [
+                'L’attaquant avance en ligne droite de X hexagones, en traversant les autres personnages, et ne s’arrête qu’à un obstacle ou au bord du plateau.',
+                'Un personnage d’un seul hexagone s’arrête à tout obstacle, et est « poussé » sur l’hexagone vide le plus proche s’il finit sur quelqu’un.',
+                'Un grand personnage traverse les obstacles et les détruit au passage ; ceux qu’il recouvre en fin de course sont poussés.',
+                'Après le déplacement, tous les personnages du trajet sont attaqués : on tire une fois et on applique à tous.',
+              ],
+              note: 'Contre une grande cible, le joueur choisit l’un des dés de vie traversés.',
+              ref: 'Annexe II — Encounter p.30',
+            },
+          ],
+        },
+        {
+          title: 'Déplacements forcés',
+          entries: [
+            {
+              id: 'ef-knockback',
+              term: 'Knockback',
+              body: [
+                'Le personnage est repoussé en ligne droite, en s’éloignant de la source, du nombre d’hexagones indiqué.',
+                'Le recul a lieu même si l’attaque tue le personnage. Plusieurs reculs simultanés se résolvent en même temps.',
+                'Repoussé dans un obstacle : il perd 1 PV du dé le plus proche et reste sur l’hexagone adjacent. Repoussé sur quelqu’un : les DEUX perdent 1 PV.',
+              ],
+              warn: 'Repoussé au-delà du bord du plateau, on s’arrête au bord — ce n’est pas une collision.',
+              note: 'Plusieurs hexagones possibles : appliquez la règle du nord puis ouest. La source d’un recul causé par un grand personnage est son hexagone central.',
+              ref: 'Annexe II — Encounter p.30',
+            },
+            {
+              id: 'ef-knockback-large',
+              term: 'Repousser un grand personnage',
+              body: [
+                'Il ne recule que de la moitié des hexagones indiqués, arrondi au supérieur.',
+                'Repoussé dans un obstacle, il le DÉTRUIT et reste sur l’hexagone d’avant.',
+                'Il perd 1 point de vie par collision, personnages et obstacles confondus.',
+              ],
+              ref: 'Annexe II — Encounter p.30',
+            },
+            {
+              id: 'ef-pushed',
+              term: 'Pushed',
+              body: [
+                'Comme Knockback, mais personne ne perd de point de vie.',
+                'Le personnage s’éloigne en ligne droite vers un hexagone libre. Si l’hexagone visé contient quelqu’un ou un obstacle, il va sur l’hexagone libre le plus proche, au plus près de la direction d’origine.',
+              ],
+              note: 'Un grand ennemi dont le centre atterrit sur un personnage le pousse de deux hexagones.',
+              ref: 'Annexe II — Encounter p.31',
+            },
+            {
+              id: 'ef-thrown',
+              term: 'Thrown',
+              body: [
+                'Posez un jeton de suivi sur un hexagone vide adjacent à la cible : c’est votre objet lancé. Vous le ramassez gratuitement en entrant sur cet hexagone.',
+                'Arme lancée : toutes vos armes sont considérées comme lancées, et vous êtes Unarmed jusqu’à les récupérer.',
+                'Bouclier, armure ou équipement lancé : vous n’en avez plus ni la défense ni les capacités jusqu’à récupération. Suivez la nouvelle défense avec un jeton de suivi.',
+              ],
+              ref: 'Annexe II — Encounter p.31',
+            },
+          ],
+        },
+        {
+          title: 'États',
+          entries: [
+            {
+              id: 'ef-caged',
+              term: 'Caged',
+              body: [
+                'Le personnage ne peut plus rien faire pour ce round et tout le suivant, sauf : passer, tenter de s’échapper, jouer des cartes en défense quand il est attaqué, et jouer des jetons de combat.',
+                'Pour s’échapper : à son tour, dépenser 3 Animus — 1 pour un compagnon — et réussir un Survival Check. +2 au test par Oathsworn ou allié adjacent.',
+                'On peut retenter autant de fois qu’on veut pendant la phase Oathsworn, mais une seule fois par tour.',
+              ],
+              warn: 'Toujours caged à la fin du round suivant : le personnage subit les effets d’échec décrits sur la carte d’étape, et n’est plus caged.',
+              note: 'Donnez-lui la carte d’étape comme rappel. Il la rend quand l’effet prend fin.',
+              ref: 'Annexe II — Encounter p.29',
+            },
+            {
+              id: 'ef-consumed',
+              term: 'Consumed',
+              body: [
+                'Le personnage est retiré du plateau. Il ne peut ni bouger, ni jouer de carte de Blessure, de Capacité ou d’Objet.',
+                'Une fois par tour, il peut dépenser 3 Animus — 1 s’il est compagnon — pour attaquer l’emplacement qui l’a avalé, indiqué sur la carte d’étape. Aucune carte de capacité n’est requise.',
+                'Il garde ses jetons de combat, sa puissance et sa défense d’objet. Il ne peut être la cible d’aucune attaque, même de réaction — on vise l’emplacement à la place.',
+              ],
+              warn: 'Tout effet Consumed se déclenche au début de chaque phase Oathsworn ET de chaque phase de rencontre.',
+              note: 'Il est libéré si tous les dés de vie de l’emplacement sont brisés, ou si l’emplacement a perdu 6 points de vie depuis. Suivez ces 6 PV sur un dé à six faces. Il revient alors sur l’hexagone vide le plus proche de l’emplacement, règle du nord puis ouest, et tout son Animus actif passe en réserve.',
+              ref: 'Annexe II — Encounter p.30',
+            },
+            {
+              id: 'ef-unarmed',
+              term: 'Unarmed',
+              body: [
+                'Vous ne pouvez pas utiliser la puissance de vos armes, mais vous tirez autant de cartes blanches que vous voulez.',
+                'Vous ne pouvez pas utiliser les capacités d’arme ; les autres capacités d’objet restent disponibles.',
+                'Tous les jetons de combat s’utilisent normalement.',
+              ],
+              ref: 'Annexe II — Encounter p.31',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'modes',
+      title: 'Difficulté et mode Action Immédiate',
+      lead: 'Comment régler le jeu, et comment jouer une rencontre sans l’histoire.',
+      icon: 'goal',
+      groups: [
+        {
+          entries: [
+            {
+              id: 'mo-instant',
+              term: 'Mode Action Immédiate',
+              body: [
+                'Il joue les rencontres sans l’histoire complète : un résumé, quelques tests, des récompenses, un échange, puis le combat.',
+                'Il demande la mise en place des personnages, puis les étapes 1 à 8 de la mise en place de l’histoire, puis la page correspondante du livre de rencontre.',
+              ],
+              note: 'C’est le mode à choisir pour une démonstration, ou pour rejouer une rencontre seule.',
+              ref: 'Instant Action Mode — Story p.9',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Règle du nord puis ouest',
+      body: [
+        'La règle de départage de tout le jeu : à égalité entre plusieurs hexagones ou plusieurs cibles, on prend le plus au nord, puis le plus à l’ouest.',
+        'Elle sert au ciblage de l’ennemi, aux déplacements forcés et au replacement des personnages.',
+      ],
+      ref: 'Encounter Rule Book — p.19',
+    },
+    {
+      term: 'Carte de Puissance',
+      aliases: ['Might Deck'],
+      body: [
+        'Quatre couleurs : blanche, jaune, rouge, noire. On tire jusqu’à révéler une carte blanche, qui arrête le tirage.',
+        'Tout ce qui est déjà sorti compte : une carte blanche n’annule rien.',
+      ],
+      ref: 'Story Rule Book — p.13',
+    },
+    {
+      term: 'Animus',
+      body: [
+        'Le carburant des capacités. On le dépense pour jouer une carte, et il se recharge lentement.',
+        'Il se répartit entre une zone active et une réserve.',
+      ],
+      ref: 'Encounter Rule Book — p.8',
+    },
+    {
+      term: 'Piste de Temps',
+      body: [
+        'Elle avance à chaque déplacement sur la carte, et ne redescend jamais.',
+        'Trois familles d’effets s’y déclenchent, et une carte d’événement peut tomber.',
+      ],
+      ref: 'Story Rule Book — p.11',
+    },
+    {
+      term: 'Décision secrète',
+      body: [
+        'Un choix pris à l’aveugle par toute la Compagnie pendant un chapitre.',
+        'Il engage tout le monde, et change la suite de l’histoire.',
+      ],
+      ref: 'Story Rule Book — p.14',
+    },
+    {
+      term: 'Carte d’étape',
+      aliases: ['Stage Card'],
+      body: [
+        'Le paquet qui joue l’ennemi. On la lit, on applique ce qu’elle dit, et on subit.',
+        'Elle sert aussi de rappel pour les effets Caged et Consumed.',
+      ],
+      ref: 'Encounter Rule Book — p.18',
+    },
+    {
+      term: 'Emplacement du corps',
+      aliases: ['Body Part'],
+      body: [
+        'Les zones de l’ennemi qu’on peut viser. Chacune a ses dés de vie et sa défense.',
+        'Briser un emplacement change ce que l’ennemi peut faire.',
+      ],
+      ref: 'Encounter Rule Book — pp.15, 22',
+    },
+    {
+      term: 'Hardcore',
+      body: [
+        'Une variante de difficulté supplémentaire, en plus des cinq niveaux du jeu.',
+        'À réserver à une deuxième campagne.',
+      ],
+      ref: 'Story Rule Book — p.7',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -732,6 +1112,47 @@ export const oathsworn: Tutorial = {
           components: ['livrets'],
           crop: { page: 4, x: 0.13, y: 0.072, w: 0.29, h: 0.205 },
           ref: 'Game Overview — p.3',
+        },
+        {
+          id: 'b1b',
+          kind: 'info',
+          title: 'Où vous êtes, et qui vous êtes',
+          body: [
+            'L’Empire s’effondre, et la brume avale ses provinces. Ce qui en sort n’a plus de nom : les Sombres, des bêtes qui n’auraient pas dû exister.',
+            'Vous êtes une Compagnie Libre de quatre Oathsworn : des mercenaires liés par un serment, les seuls qui acceptent encore d’aller vers la brume.',
+            'La campagne se lit dans le livre d’histoire. Chaque déplacement sur la carte ouvre un chapitre, et chaque chapitre finit souvent par une rencontre.',
+          ],
+          components: ['plateau-jeu', 'livrets'],
+          ref: 'Game Overview — p.3',
+        },
+        {
+          id: 'b1c',
+          kind: 'info',
+          title: 'On perd souvent, et ce n’est pas grave',
+          body: [
+            'Il n’y a pas de score. On avance en traversant les chapitres, quoi qu’il arrive dans chacun.',
+            'Perdre une rencontre ne termine pas la campagne : l’histoire continue autrement, avec ses conséquences.',
+            'Ce qui vous limite vraiment, c’est la piste de Temps. Elle avance à chaque déplacement, et ne redescend jamais.',
+          ],
+          warn: 'Les décisions secrètes se prennent à l’aveugle et engagent toute la Compagnie. Elles changent la suite de l’histoire.',
+          components: ['piste-temps', 'jetons-temps'],
+          ref: 'Game Overview — p.3 · Time Track — p.11',
+        },
+        {
+          id: 'b1d',
+          kind: 'info',
+          title: 'Vos premières rencontres',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Répartissez les archétypes : un tank, un soigneur, un frappeur, un contrôleur. Une compagnie de quatre frappeurs meurt vite.',
+            'En rencontre, lisez la carte d’étape AVANT de jouer : elle vous dit ce que l’ennemi va faire, et ce qu’il faut éviter.',
+            'Ne dépensez pas tout votre Animus au premier round. C’est votre carburant pour toute la rencontre.',
+            'Ne visez pas toujours le même emplacement du corps : briser deux emplacements différents rapporte souvent plus qu’en achever un.',
+            'Jouez la première rencontre en difficulté normale. Le jeu est déjà dur ; Hardcore est pour la deuxième campagne.',
+          ],
+          warn: 'Ces conseils ne sont pas dans les livrets de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
         },
         {
           id: 'b2',
