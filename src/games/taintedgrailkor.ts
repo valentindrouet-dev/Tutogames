@@ -23,7 +23,7 @@ export const taintedgrailkor: Tutorial = {
   title: 'Rois de la Ruine',
   tagline:
     'À l’ouest d’Avalon, coupés du Vrai Roi par les brumes, trois héros sont revenus changés. On les appelle désormais les Rois de la Ruine.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Awaken Realms',
   author: 'Krzysztof Piskorski, Marcin Świerkot',
   players: {
@@ -84,15 +84,407 @@ export const taintedgrailkor: Tutorial = {
       'Une rencontre de diplomatie, durée et affinité',
       'Le crépuscule : repos, récupération, progression, visions',
       'Sauvegarder la campagne, et la reprendre',
+      'Les modes Histoire et Défi, modificateur par modificateur',
+      'Le résumé des règles et les variantes en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Les règles secrètes de la page 37, à ne pas lire sans permission',
+      'Les règles secrètes de la page 37, à ne pas lire sans permission du jeu',
       'L’histoire elle-même : le journal d’exploration s’en charge',
-      'Le guide d’initiation, qui a son propre livret et son paquet',
-      'Le détail des cartes Combat et Diplomatie de chaque personnage',
-      'Les modes Histoire et Défi, signalés mais pas déroulés',
+      'Le guide d’initiation, qui a son propre livret et son propre paquet',
+      'Le texte des cartes Combat, Diplomatie, Objet, Secret et Événement',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Comme *La Chute d'Avalon*, Rois de la Ruine est une campagne : il n'y a
+   * pas de score, et le joueur qui cherche une condition de victoire ne la
+   * trouvera pas. Ce qu'il faut savoir tient en deux choses — ce qui fait
+   * avancer l'histoire, et ce qui l'arrête.
+   */
+  brief: {
+    pitch: [
+      'L’ouest d’Avalon, coupé du reste du monde par les brumes du Wyrd. Un peuple isolé y survit, sans nouvelles du Vrai Roi.',
+      'Vous êtes l’un de ses quatre héros. Les Pierres de Passage qui tenaient la région en place s’effacent une à une.',
+      'Le monde tient dans un journal d’exploration : chaque lieu renvoie à un paragraphe, et chaque paragraphe décide de la suite.',
+    ],
+    win: [
+      'Il n’y a pas de score. On avance de chapitre en chapitre, et on gagne en atteignant la fin du dernier vivant.',
+      'Ce qui vous arrête est concret : votre Santé tombe à 0, ou vous devenez fou, ou le monde autour de vous s’efface faute de Pierre de Passage active.',
+      'Le statut « Le temps passe » est le compte à rebours du chapitre : il s’en gagne des parties, et il change ce que vous trouverez.',
+    ],
+    doing: [
+      'Chaque journée, chacun dépense son Énergie en actions, dans l’ordre qu’il veut, jusqu’à ce que le groupe décide de terminer la journée.',
+      'Activer une Pierre de Passage est l’acte central : c’est ce qui garde les lieux voisins hors du Wyrd et ouvre le terrain.',
+      'Les rencontres se jouent en cartes. En combat, on abat le potentiel de l’ennemi ; en diplomatie, on tient jusqu’au bout de la durée.',
+      'Au crépuscule, on se repose, on récupère et on dépense son Expérience pour progresser.',
+      'Un lieu portant le symbole Vision cache une vision : elle se lit à la fin de l’entrée de ce lieu dans le journal.',
+    ],
+    traps: [
+      'Terminer un tour dans un lieu marqué du Wyrd : vous soufflez, vous perdez 2 Santé et gagnez 2 Terreur.',
+      'Laisser un Gardien vous suivre. À chaque aube on lance son dé, et il vous rattrape.',
+      'Manquer une Pierre de Passage avant qu’elle ne s’estompe. Le terrain se referme derrière vous.',
+      'Croire qu’un paquet Combat ou Diplomatie peut descendre sous 10 cartes : c’est le minimum, quoi qu’on retire.',
+    ],
+    first: [
+      'Lisez la fin de l’entrée du journal de chaque lieu marqué du symbole Vision : c’est de la matière gratuite pour la suite.',
+      'Activez les Pierres de Passage tôt, avant d’en avoir besoin. Une région ouverte se traverse ; une région fermée se contourne.',
+      'À plusieurs, restez dans le même lieu au premier chapitre : les rencontres se combattent en groupe.',
+      'Une carte défaussée d’un paquet Combat n’est pas perdue : la réserve de progression la ramènera.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  aids: [
+    {
+      id: 'resume',
+      title: 'Résumé des règles',
+      lead: 'Le rappel de la dernière page du livret, par catégorie.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Cours du jour',
+          entries: [
+            {
+              id: 'rs-aube',
+              term: 'I. L’aube',
+              body: [
+                '1. Résolvez les effets de l’aube.',
+                '2. Retirez 1 Terreur et 1 Énergie de chaque carte.',
+                '3. Retournez sur leur face Wyrd les cartes Lieu qui ne touchent pas une Pierre de Passage.',
+                '4. Jetez le dé pour chaque Gardien.',
+                '5. Videz la zone Événements Actifs, sauf ceux marqués d’un sablier.',
+                '6. Révélez et lisez une nouvelle carte Événement.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-journee',
+              term: 'II. La journée',
+              body: [
+                'Les joueurs effectuent des actions dans l’ordre de leur choix, jusqu’à ce que tout le monde décide de terminer la journée.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-crepuscule',
+              term: 'III. Le crépuscule',
+              body: [
+                '1. Résolvez les effets de crépuscule.',
+                '2. Repos : si vous êtes épuisé, gagnez 4 Énergie ; sinon, placez votre marqueur Énergie sur sa case de départ.',
+                '3. Récupérez : dépensez 1 Nourriture une fois pour gagner 1 Santé et 1 Énergie, et perdre 1 Terreur.',
+                '4. Souffle du Wyrd : si vous êtes dans un lieu face Wyrd, perdez 2 Santé et gagnez 2 Terreur.',
+                '5. Faites progresser votre personnage en dépensant de l’Expérience.',
+                '6. Modifiez vos paquets — chaque paquet doit garder au moins 10 cartes.',
+                '7. Si votre lieu porte le symbole Vision, lisez la vision à la fin de son entrée dans le journal.',
+                '8. Commencez le jour suivant.',
+              ],
+              warn: 'Le marqueur Énergie ne peut jamais dépasser votre marqueur de limite.',
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-gardien',
+              term: 'Le dé Gardien, à l’aube',
+              body: [
+                'Point cardinal : déplacez le Gardien vers le lieu relié dans cette direction. Pas de lieu par là ? Vers le lieu relié au numéro le plus élevé.',
+                '« X » : résolvez la première option qui s’applique — un personnage dans son lieu, on résout la rencontre ; un coin de ce lieu porte une Pierre de Passage, on l’estompe ; sinon, il va vers le lieu relié au numéro le plus élevé.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+          ],
+        },
+        {
+          title: 'Combat et diplomatie',
+          entries: [
+            {
+              id: 'rs-debut',
+              term: 'Début de la rencontre',
+              body: [
+                'Chaque membre du groupe pioche 3 cartes de son paquet. Vous pouvez choisir de faire une nouvelle pioche.',
+                'En diplomatie : placez le dé sur le numéro indiqué par la durée de la rencontre, et un marqueur universel sur la case de seuil de la piste Affinité.',
+                'Consultez les traits de l’ennemi ou de l’adversaire.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-tour',
+              term: 'Le tour, en cinq étapes',
+              body: [
+                'I. Choix du personnage actif : posez un marqueur sur son plateau.',
+                'II. Activation : retirez 1 de chaque carte à capacité différée, résolvez la capacité si vous retirez le dernier ; puis jouez une ou plusieurs cartes de votre main.',
+                'III. Attaque ennemie ou réponse adverse, selon la carte Rencontre.',
+                'IV. Vérification de la disponibilité : tout le groupe activé, on passe à l’étape V ; sinon on retourne à l’étape I.',
+                'V. Fin du tour : défaussez jusqu’à 3 cartes en main, piochez 1 carte chacun, retirez les marqueurs d’activation, nouveau tour.',
+              ],
+              warn: 'Les cartes supplémentaires doivent pouvoir gagner un bonus pour être jouées.',
+              note: 'En combat, sans carte jouée, résolvez l’attaque d’opportunité. Vous pouvez vous replier à tout moment : passez à l’étape III puis terminez.',
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-fin',
+              term: 'Fin de la rencontre',
+              body: [
+                'Combat : dès que les dégâts au potentiel de combat atteignent la valeur de la rencontre, vous gagnez et recevez le butin.',
+                'Diplomatie : dès que le dernier point de durée est perdu, résolvez la conclusion et terminez.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-mort',
+              term: 'Mort, fuite et repli',
+              body: [
+                'Avec la carte « Vous êtes mourant ! », que vous ayez fui ou que l’ennemi se soit replié, terminez la rencontre mais ne gagnez pas le butin.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-entretien',
+              term: 'Entretien de la rencontre',
+              body: [
+                'Perdu contre un Gardien : placez sa silhouette dans votre lieu. Sinon, remettez la carte Rencontre au bas de son paquet.',
+                'Mélangez ensuite les paquets Combat et Diplomatie, cartes en main, séquence et défausse comprises.',
+                'Retirez tous les marqueurs des plateaux Personnage.',
+              ],
+              note: 'Rencontre survenue pendant l’exploration : poursuivez-la en appliquant tous les effets supplémentaires nécessaires.',
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-panique',
+              term: 'Panique',
+              body: [
+                'Elle se produit chaque fois que vous devenez fou.',
+                'Pendant l’étape 2 de votre activation, au lieu de jouer une carte de votre main, placez la carte du dessus de votre paquet à la fin de la séquence et résolvez-la. Les cartes supplémentaires peuvent ensuite être jouées normalement.',
+                'Et vous passez l’étape de pioche pendant l’étape de fin de tour.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-defausse',
+              term: 'Défausser le haut d’un paquet',
+              body: [
+                'Si vous devez défausser une carte de votre main et que vous n’en avez pas, rien ne se passe.',
+                'Chaque fois qu’un dégât devrait être retiré du potentiel de combat alors qu’il est vide, le dernier personnage actif défausse autant de cartes.',
+                'Chaque fois qu’un effet fait descendre le marqueur sous le minimum de la piste Affinité, idem.',
+              ],
+              ref: 'Résumé des règles — p.44',
+            },
+            {
+              id: 'rs-plus-cartes',
+              term: 'Plus de cartes dans le paquet',
+              body: ['Si un personnage doit piocher et que son paquet est vide, rien ne se produit : la rencontre continue.'],
+              ref: 'Résumé des règles — p.44',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'variantes',
+      title: 'Modes Histoire et Défi',
+      lead: 'Comment rendre la campagne plus douce ou plus dure.',
+      icon: 'goal',
+      groups: [
+        {
+          title: 'Mode Histoire',
+          lead: 'Pour profiter de l’histoire sans craindre l’échec. Vous n’êtes pas obligé de tout appliquer.',
+          entries: [
+            {
+              id: 'va-objets',
+              term: 'Objets de départ',
+              body: ['À la préparation des paquets Secret et Objet, chaque personnage obtient 1 objet « A ».'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-genie',
+              term: 'Génie tactique',
+              body: [
+                'Obtenez la carte Secret 49 : vous jouez des cartes supplémentaires sans avoir à gagner le bonus.',
+                'Les séquences intéressantes deviennent beaucoup plus faciles à monter.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-rencontres',
+              term: 'Rencontres et événements',
+              body: ['Montez les paquets Rencontre, et placez les événements aléatoires, comme s’il y avait un personnage de moins — minimum 1.'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-limiteur',
+              term: 'Limiteur de santé',
+              body: [
+                'Retirez le marqueur de limite en plastique et marquez votre Santé avec un marqueur universel.',
+                'Votre Santé ne limite plus votre Énergie.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-pierre-h',
+              term: 'Coût de Pierre de Passage (Histoire)',
+              body: [
+                'Les coûts supplémentaires de l’action « Activer une Pierre de Passage » deviennent : payez 1 Magie par personnage,',
+                'ou payez le « Prix du sang » : 2 Santé par personnage, et gagnez 1 Terreur par personnage.',
+                'Dans les deux cas, le coût en Énergie reste le même.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-progression-h',
+              term: 'Progression (Histoire)',
+              body: ['Quand vous faites progresser votre paquet Combat ou Diplomatie, piochez une carte de plus.'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-temps',
+              term: 'Passage du temps',
+              body: ['La première fois que vous gagnez une ou plusieurs parties du statut « Le temps passe » dans un chapitre, gagnez-en une de moins.'],
+              ref: 'Variantes — p.36',
+            },
+          ],
+        },
+        {
+          title: 'Mode Défi',
+          lead: 'Plus stimulant, mais plus impitoyable. Là aussi, vous pouvez n’en appliquer qu’une partie.',
+          entries: [
+            {
+              id: 'va-renforcees',
+              term: 'Rencontres renforcées',
+              body: ['Obtenez la carte Secret 48 : chaque attaque ennemie et chaque réponse adverse gagne un effet supplémentaire.'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-fuir',
+              term: 'Fuir le combat et éviter la diplomatie',
+              body: [
+                'En combat, après l’attaque ennemie, lancez un dé pour fuir : 1-3, vous restez au combat ; 4-6, vous fuyez avec succès.',
+                'Lorsque vous évitez la diplomatie, résolvez la réponse adverse, sauf si la rencontre indique autre chose.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-evenements',
+              term: 'Événements',
+              body: ['Placez les Événements Aléatoires comme s’il y avait un personnage EN PLUS dans la partie.'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-pierre-d',
+              term: 'Coût de Pierre de Passage (Défi)',
+              body: [
+                'L’action « Activer une Pierre de Passage » coûte 1 Énergie de plus par personnage.',
+                'Cela affecte les paiements normaux comme le « Prix du sang ».',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-progression-d',
+              term: 'Progression (Défi)',
+              body: [
+                '3 Exp : piochez 2 cartes Combat ou 2 cartes Diplomatie de votre réserve, gardez-en 1.',
+                '3 Exp + 1 Exp par point déjà pris dans la paire opposée : 1 point dans cette paire de caractéristiques.',
+                '5 Exp + 5 Exp par compétence déjà prise dans la paire opposée : 1 compétence dans cette paire.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-objets-d',
+              term: 'Objets (Défi)',
+              body: ['Vous ne transportez que 5 objets au maximum. Les secrets ne comptent pas.'],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-repos',
+              term: 'Repos classique',
+              body: [
+                'Chaque personnage DOIT payer 1 Nourriture à chaque Repos. Il gagne alors 1 Santé et perd 1 Terreur normalement, mais ne gagne pas d’Énergie supplémentaire.',
+                'Qui ne paie pas : s’il était épuisé ce tour-ci, il perd 1 Santé ; sinon, il place son marqueur Énergie sur la valeur 4.',
+              ],
+              ref: 'Variantes — p.36',
+            },
+            {
+              id: 'va-stabilite',
+              term: 'Stabilité limitée',
+              body: ['Chaque fois que vous gagnez une partie du statut « Le temps passe », estompez la Pierre de Passage la plus éloignée de tous les personnages.'],
+              ref: 'Variantes — p.36',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Pierre de Passage',
+      body: [
+        'Ce qui tient un lieu hors du Wyrd. À l’aube, tout lieu qui n’en touche pas une est retourné sur sa face Wyrd.',
+        'On l’active par une action, contre de l’Énergie et un coût supplémentaire.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Face Wyrd',
+      body: [
+        'La face sombre d’une carte Lieu. Terminer son crépuscule dans un tel lieu coûte 2 Santé et 2 Terreur : c’est le Souffle du Wyrd.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Le temps passe',
+      body: [
+        'Le statut qui sert de compte à rebours au chapitre. Il s’en gagne des parties au fil du jeu.',
+        'Le mode Histoire en donne une de moins la première fois ; le mode Défi estompe une Pierre de Passage à chaque fois.',
+      ],
+      ref: 'Variantes — p.36',
+    },
+    {
+      term: 'Potentiel de combat',
+      body: [
+        'La réserve de points de l’ennemi. Dès que les dégâts subis atteignent la valeur de la rencontre, le combat est gagné.',
+        'Un dégât qui devrait être retiré d’un potentiel vide fait défausser des cartes au dernier personnage actif.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Piste Affinité',
+      body: [
+        'L’équivalent diplomatique du potentiel de combat. Un marqueur universel démarre sur la case de seuil.',
+        'Un effet qui le pousse sous le minimum fait défausser des cartes au dernier personnage actif.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Épuisé',
+      body: [
+        'Votre marqueur Énergie est à zéro. Au Repos, un personnage épuisé gagne 4 Énergie ; les autres remettent simplement leur marqueur à sa case de départ.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Vision',
+      body: [
+        'Un lieu portant le symbole Vision cache un texte : il se lit à la fin de son entrée dans le journal d’exploration, au crépuscule.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Capacité différée',
+      body: [
+        'Une carte qui porte un compte à rebours. On en retire 1 à chaque activation ; le dernier retiré déclenche la capacité.',
+      ],
+      ref: 'Résumé des règles — p.44',
+    },
+    {
+      term: 'Règles secrètes',
+      body: [
+        'Page 37 du livret. Elles ne se lisent pas avant que le jeu n’en donne la permission.',
+        'Ce tutoriel n’y touche pas, et ne les résume nulle part.',
+      ],
+      ref: 'Règles secrètes — p.37',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -388,6 +780,34 @@ export const taintedgrailkor: Tutorial = {
           ],
           crop: { page: 4, x: 0.11, y: 0.6, w: 0.82, h: 0.32 },
           ref: 'Introduction — p.4',
+        },
+        {
+          id: 'b2b',
+          kind: 'info',
+          title: 'Comment on perd, et ce qui fait avancer',
+          body: [
+            'Il n’y a pas de score. On avance de chapitre en chapitre, et on gagne en atteignant la fin du dernier vivant.',
+            'Ce qui vous arrête est concret : votre Santé tombe à 0, vous devenez fou, ou le monde s’efface faute de Pierre de Passage active.',
+            'Le statut « Le temps passe » est le compte à rebours du chapitre. Il s’en gagne des parties au fil du jeu, et il change ce que vous trouverez.',
+          ],
+          warn: 'Activer une Pierre de Passage est l’acte central : c’est ce qui garde les lieux voisins hors du Wyrd et ouvre le terrain devant vous.',
+          components: ['pierres'],
+          ref: 'Introduction — p.4',
+        },
+        {
+          id: 'b2c',
+          kind: 'info',
+          title: 'Vos premiers jours',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Lisez la fin de l’entrée du journal de chaque lieu marqué du symbole Vision : c’est de la matière gratuite pour la suite.',
+            'Activez les Pierres de Passage tôt, avant d’en avoir besoin. Une région ouverte se traverse ; une région fermée se contourne.',
+            'À plusieurs, restez dans le même lieu au premier chapitre : les rencontres se combattent en groupe.',
+            'Une carte défaussée d’un paquet Combat n’est pas perdue : la réserve de progression la ramènera.',
+          ],
+          warn: 'Ces conseils ne sont pas dans le livret de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
         },
         {
           id: 'b3',
@@ -1708,11 +2128,25 @@ export const taintedgrailkor: Tutorial = {
         {
           id: 'z4',
           kind: 'check',
-          title: 'Ce que ce tutoriel n’a pas enseigné',
+          title: 'Rendre la campagne plus douce, ou plus dure',
           body: [
-            'Les règles secrètes de la page 37, à ne pas lire sans permission — les Rois de la Ruine en font partie.',
-            'Le guide d’initiation, qui a son propre livret. Et l’histoire, qui est tout le jeu : elle est dans le journal.',
+            'Mode Histoire : un objet « A » à chacun au départ, la carte Secret 49, les paquets Rencontre montés comme s’il y avait un personnage de moins, le limiteur de santé retiré, un coût de Pierre de Passage allégé, une carte de plus à la progression, et une part de moins du statut « Le temps passe ».',
+            'Mode Défi : la carte Secret 48, un dé pour fuir le combat, les événements montés comme s’il y avait un personnage de plus, 1 Énergie de plus par Pierre de Passage, une progression plus chère, 5 objets au maximum, le Repos classique, et une Pierre estompée à chaque « Le temps passe ».',
           ],
+          tip: 'Vous n’êtes pas obligé de tout appliquer. Le détail est dans les aides de jeu, sous « Modes Histoire et Défi ».',
+          ref: 'Variantes — p.36',
+        },
+        {
+          id: 'x-fin',
+          kind: 'check',
+          title: 'Ce que vous emportez à la table',
+          body: [
+            'Vous avez toutes les règles : le jour, les six actions, le monde et ses Pierres de Passage, les deux rencontres, le crépuscule, la mort et les variantes.',
+            'Ce qui reste, c’est l’histoire — le journal d’exploration, et le texte des cartes.',
+            'Le bouton Aides de jeu garde le résumé du livret et les variantes sous la main ; le bouton Index cherche n’importe quel mot.',
+          ],
+          warn: 'Les règles secrètes de la page 37 ne se lisent pas avant que le jeu n’en donne la permission. Ce tutoriel n’y touche pas, et son index non plus.',
+          tip: 'Le guide d’initiation a son propre livret et son propre paquet : si c’est votre toute première partie, il vaut la peine.',
           ref: 'Comment utiliser ce livret de règles — p.4',
         },
       ],

@@ -20,7 +20,7 @@ export const taintedgrail: Tutorial = {
   title: 'Tainted Grail',
   tagline:
     'Les menhirs d’Avalon s’éteignent un à un et le Wyrd engloutit l’île. Vous partez chercher de l’aide avant qu’il ne reste plus rien à sauver.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Awaken Realms',
   author: 'Krzysztof Piskorski, Marcin Świerkot',
   players: {
@@ -81,15 +81,562 @@ export const taintedgrail: Tutorial = {
       'Relier les clés : caractéristique, bonus, magique, gratuite',
       'Une rencontre de diplomatie et la piste Affinité',
       'Les neuf étapes de l’aube, et les menhirs qui s’éteignent',
+      'Les quêtes, les tâches, les pions Quête et les statuts',
+      'La progression au crépuscule : paquets, caractéristiques, compétences',
+      'Les gardiens, les groupes, la mort, la folie et la Grâce de la Toute-Mère',
+      'Les modes Histoire, Défi et Jeu libre',
+      'L’enjeu, la progression, le monde et les modes en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Le journal d’exploration et le déroulement du chapitre 1',
-      'Les quêtes, les tâches et les pions Quête',
-      'La progression avancée : compétences, caractéristiques, réserves',
-      'La mort, la folie et la Grâce de la Toute-Mère',
-      'Les modes Histoire et Défi, et le jeu libre',
+      'Le contenu du journal d’exploration : c’est l’histoire, elle se lit en jouant',
+      'Le texte des cartes Lieu, Événement, Secret, Objet et Compétence',
+      'Le déroulement narratif du chapitre 1, qui dépend de vos choix',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Tainted Grail est une campagne, pas une partie : on ne « gagne » pas au
+   * sens habituel, on survit assez longtemps pour lire la suite. Un joueur
+   * qui attend un décompte final ne comprend pas ce qu'il fait, et un joueur
+   * qui ignore le compte à rebours des menhirs perd sans avoir vu venir.
+   */
+  brief: {
+    pitch: [
+      'Avalon, longtemps après le roi Arthur. Un réseau de menhirs tenait le monde en place ; il s’éteint, et le Wyrd — un brouillard qui dévore le réel — engloutit l’île pan par pan.',
+      'Vous êtes quelques survivants partis du village de Cuanacht. Vous n’avez ni armée ni prophétie : juste des jours devant vous, et de moins en moins de terre sous les pieds.',
+      'Le monde tient dans un journal d’exploration : chaque lieu que vous atteignez renvoie à un paragraphe, et chaque paragraphe décide de la suite.',
+    ],
+    win: [
+      'Il n’y a pas de score. Tainted Grail est une campagne en chapitres : on gagne en atteignant la fin d’un chapitre vivant, et en enchaînant sur le suivant.',
+      'Ce qui vous fait perdre est très concret : votre Santé tombe à 0, votre Terreur atteint le bout de sa piste, ou le dernier menhir s’éteint.',
+      'Si tous les personnages meurent, la partie est perdue pour tout le monde. La Grâce de la Toute-Mère permet de reprendre au début du chapitre, avec des ressources prédéfinies.',
+      'Vos quêtes sont le fil de l’histoire : ce sont elles qui font avancer le chapitre. Les tâches, elles, sont profitables mais ne mènent jamais à sa fin.',
+    ],
+    doing: [
+      'Chaque jour, chaque personnage prend une action et une seule — voyager, agir sur un lieu, explorer, inspecter ou activer un menhir, ou passer.',
+      'Tout coûte quelque chose. L’Énergie limite ce que vous pouvez faire aujourd’hui ; la Nourriture, la Richesse, la Magie et la Réputation paient le reste.',
+      'Activer un menhir est l’acte central du jeu : il rallume une portée, révèle les lieux voisins, et repousse le Wyrd de quelques jours.',
+      'Les rencontres se jouent en cartes, en combat ou en diplomatie, et se gagnent en reliant des clés — pas en tapant plus fort.',
+      'Vous progressez au crépuscule : dépenser de l’Expérience pour améliorer une caractéristique, ajouter des cartes à un paquet, ou acheter une compétence.',
+    ],
+    traps: [
+      'Laisser les menhirs s’éteindre pendant qu’on explore. Un lieu retiré vous coûte 2 Énergie et 2 Terreur, et le monde rétrécit.',
+      'Explorer sans réserve : la Nourriture se dépense à chaque crépuscule, et une journée sans manger coûte de la Santé et de la Terreur.',
+      'Piocher les cartes Rencontre en solitaire. En groupe, on peut combattre ensemble et se payer les coûts d’action mutuellement.',
+      'Croire que les tâches font avancer le chapitre. Seules les quêtes le font.',
+    ],
+    first: [
+      'Vérifiez vos quêtes actives avant chaque action. Le journal a plus de mille entrées ; c’est votre quête qui vous dit laquelle vous concerne.',
+      'Inspecter un menhir coûte peu et vous dit ce qu’il faudra pour l’allumer. Faites-le bien avant d’en avoir besoin.',
+      'Restez groupés au premier chapitre : les rencontres se combattent à plusieurs, et un personnage seul dans un lieu dangereux s’en sort mal.',
+      'Explorez un même lieu plusieurs fois. Les meilleures trouvailles ne sont pas dans la première entrée du journal.',
+      'Gardez toujours de quoi tenir deux ou trois jours d’avance en Nourriture. C’est le seul filet du jeu.',
+    ],
+    extSource: 'conseils généraux du livret, p.13, et guides en ligne',
+  },
+
+  aids: [
+    {
+      id: 'enjeu',
+      title: 'L’enjeu, la mort et la campagne',
+      lead: 'Ce qui fait avancer l’histoire, et ce qui l’arrête.',
+      icon: 'goal',
+      groups: [
+        {
+          title: 'Faire avancer l’histoire',
+          entries: [
+            {
+              id: 'en-quetes',
+              term: 'Quêtes',
+              body: [
+                'Les missions principales : ce sont elles, et elles seules, qui mènent à la fin du chapitre.',
+                'Elles arrivent sur des cartes Événement ou Secret, reconnaissables au symbole de quête dans leur coin.',
+                'Une carte contenant une quête se place à haute voix dans la pile Quête Active, à côté du paquet Événement.',
+              ],
+              warn: 'Ne défaussez jamais une carte contenant une quête avant que le jeu ne vous dise clairement de le faire.',
+              ref: 'Événements, Quêtes et Tâches — p.11',
+            },
+            {
+              id: 'en-taches',
+              term: 'Tâches',
+              body: [
+                'Des missions secondaires, sans carte ni condition de fin, données par des indices dans le journal.',
+                'Elles élargissent vos connaissances et sont souvent profitables, mais ne font pas avancer le chapitre.',
+                'Elles s’accomplissent à tout moment, tant que le lieu concerné n’est pas retiré du plateau.',
+              ],
+              note: 'Prenez des notes : rien ne les suit à votre place.',
+              ref: 'Événements, Quêtes et Tâches — p.11',
+            },
+            {
+              id: 'en-pions-quete',
+              term: 'Pions Quête',
+              body: [
+                'Ils marquent la progression d’une quête ou d’une tâche sur un cadran.',
+                'Un cadran doté d’un pion Quête n’est PAS réduit à chaque aube : seuls les cadrans Temps le sont.',
+              ],
+              ref: 'Pions Quête — p.11',
+            },
+            {
+              id: 'en-journal',
+              term: 'Journal d’exploration',
+              body: [
+                'Le livret qui contient l’histoire. La plupart des actions d’exploration y renvoient par un numéro.',
+                'Lisez le chapitre « Utiliser le Journal d’Exploration » avant votre première utilisation.',
+              ],
+              ref: 'Journal d’Exploration — p.12',
+            },
+            {
+              id: 'en-statuts',
+              term: 'Statuts',
+              body: [
+                'Des déclencheurs d’histoire cochés sur la fiche de sauvegarde, qui valent pour tout le groupe.',
+                'Les changements plus intimes — une maladie, une aura magique — passent par des cartes Secret Personnel.',
+              ],
+              ref: 'Statuts et fiche de sauvegarde — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Mourir',
+          entries: [
+            {
+              id: 'en-mourant',
+              term: 'Aux portes de la mort',
+              body: [
+                'Votre Santé tombe à 0 : attachez la carte « Vous Êtes Mourant » à votre plateau.',
+                'Terminez immédiatement la rencontre en cours en appliquant les règles de cette carte.',
+                'À partir de là, chaque action peut être la dernière. Le statut laisse un peu de temps, pas beaucoup.',
+              ],
+              ref: 'Mort et Folie — p.13',
+            },
+            {
+              id: 'en-mort',
+              term: 'Mort d’un personnage',
+              body: [
+                'En solitaire, la mort du personnage termine la partie.',
+                'En coopératif, on peut reprendre un personnage resté en boîte, faire sa mise en place, et le placer dans le lieu révélé au plus petit numéro.',
+                'Les objets du défunt restent dans le lieu où il est tombé. Les récupérer est une action de Lieu à coût 0.',
+              ],
+              warn: 'Si tous les personnages meurent, la partie est perdue pour tout le monde.',
+              note: 'Les secrets du défunt sont partagés entre les autres — sauf les secrets « Personnel », qui disparaissent avec lui.',
+              ref: 'Mort et Folie — p.13',
+            },
+            {
+              id: 'en-folie',
+              term: 'Folie',
+              body: [
+                'Votre Terreur atteint l’une des deux dernières cases de sa piste : attachez la carte « Vous Devenez Fou ».',
+                'Des cauchemars rendent désormais l’exploration et les voyages plus difficiles.',
+              ],
+              ref: 'Mort et Folie — p.13',
+            },
+            {
+              id: 'en-grace',
+              term: 'Grâce de la Toute-Mère',
+              body: [
+                'Si tout le groupe a péri et que vous ne voulez pas tout reprendre : cochez le statut « Sauvés par la Déesse » et lisez le paragraphe 500 du Livre des Secrets.',
+                'Vous repartez du début du chapitre avec des ressources prédéfinies, sans perdre la campagne.',
+              ],
+              warn: 'Le jeu n’est pas conçu pour qu’on y recoure souvent. Si c’est le cas, mieux vaut reprendre en mode Histoire.',
+              ref: 'Grâce de la Toute-Mère — p.13',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'progression',
+      title: 'Progression et équipement',
+      lead: 'Dépenser son Expérience, et ce que portent les personnages.',
+      icon: 'items',
+      groups: [
+        {
+          title: 'Progresser, au crépuscule',
+          lead: 'L’Expérience est la monnaie de la progression.',
+          entries: [
+            {
+              id: 'pr-paquets',
+              term: 'Améliorer ses paquets Combat et Diplomatie',
+              cost: '2 Exp',
+              body: [
+                'Piochez les 3 premières cartes de votre pile Réserve de Progression.',
+                'Choisissez-en 1 et ajoutez-la au paquet correspondant. Remélangez les deux autres dans votre pile.',
+              ],
+              warn: 'Chaque paquet doit toujours contenir au moins 15 cartes.',
+              note: 'Au crépuscule, vous pouvez aussi retirer des cartes de vos paquets : elles retournent à la Réserve de Progression, jamais à la boîte.',
+              ref: 'Progression des Personnages — p.12',
+            },
+            {
+              id: 'pr-caracs',
+              term: 'Augmenter une caractéristique',
+              body: [
+                'Le coût dépend du TOTAL de la paire de caractéristiques opposées, pas de la seule que vous montez.',
+                '1er point de la paire : 2 Exp. 2e : 4. 3e : 6. 4e : 8. 5e et au-delà : 10 Exp.',
+              ],
+              note: 'Les cinq caractéristiques vont par paires opposées : Agression, Courage, Empathie, Pragmatisme, Prudence, Spiritualité.',
+              ref: 'Progression des Personnages — p.12',
+            },
+            {
+              id: 'pr-competences',
+              term: 'Acheter une compétence',
+              body: [
+                'À partir du 3ᵉ point gagné dans une caractéristique, choisissez une carte Compétence de la caractéristique correspondante.',
+                'Glissez-la au bord de votre plateau Personnage.',
+              ],
+              warn: 'Une carte Compétence est recto verso et porte deux compétences mutuellement exclusives : en gagnant la carte, vous choisissez un côté et renoncez à l’autre.',
+              note: 'Chaque carte Compétence affiche un point de la caractéristique, qui compte dans votre total.',
+              ref: 'Progression des Personnages — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Objets et équipement',
+          entries: [
+            {
+              id: 'pr-motscles',
+              term: 'Les cinq mots-clés d’objet',
+              body: [
+                'Arme, Armure, Bouclier, Compagnon, Relique.',
+                'Vous pouvez posséder autant d’objets que vous voulez, mais jamais utiliser deux objets du même mot-clé à la fois.',
+              ],
+              note: 'À chaque aube, si vous en avez plusieurs du même mot-clé, vous choisissez lesquels rester actifs.',
+              ref: 'Objets et Équipement — p.12',
+            },
+            {
+              id: 'pr-artisanat',
+              term: 'Symbole « A » — objets d’artisanat',
+              body: [
+                'Les seuls objets fabricables par les personnages.',
+                'Une action ou une récompense qui demande de piocher une carte Objet d’artisanat fait piocher jusqu’à trouver la première carte marquée « A ». Remélangez le paquet ensuite.',
+              ],
+              ref: 'Objets et Équipement — p.12',
+            },
+            {
+              id: 'pr-echange',
+              term: 'Échanger des objets',
+              body: [
+                'Deux personnages d’un même lieu échangent librement leurs objets, sans action ni rencontre.',
+                'Tout objet échangé est placé face cachée : il ne s’utilise qu’à partir de l’aube suivante.',
+              ],
+              ref: 'Objets et Équipement — p.12',
+            },
+            {
+              id: 'pr-secrets',
+              term: 'Cartes Secret',
+              body: [
+                'Des objets et pouvoirs numérotés liés à l’histoire. Ils ne sont jamais ajoutés au paquet Objet standard.',
+                'Ils ne peuvent jamais être perdus ni vendus, et ne sont pas affectés par les règles des objets transportables.',
+              ],
+              warn: 'Un secret doté du mot-clé « Personnel » ne se transfère jamais à un autre personnage. Un secret doté de « Global » s’applique à tous.',
+              ref: 'Secrets — p.12',
+            },
+            {
+              id: 'pr-retourner',
+              term: 'Retourner une carte',
+              body: [
+                'Certaines cartes Objet se retournent en rencontre pour indiquer qu’elles ont été utilisées.',
+                'À la fin du combat ou de la diplomatie, remettez-les face visible.',
+              ],
+              ref: 'Retourner des Cartes — p.12',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'monde',
+      title: 'Le monde : menhirs, gardiens, groupes',
+      lead: 'Ce qui bouge sur le plateau entre deux actions.',
+      icon: 'rooms',
+      groups: [
+        {
+          title: 'Menhirs et Wyrd',
+          entries: [
+            {
+              id: 'mo-activer',
+              term: 'Activer un menhir',
+              body: [
+                'C’est l’action inscrite au dos de la carte Lieu, reproduite dans le journal d’exploration. Son texte donne le coût et la mise en place.',
+                'Une fois activé, révélez les lieux voisins situés dans son rayon d’action.',
+              ],
+              warn: 'On ne peut pas activer un menhir dans un lieu qui n’affiche pas le symbole menhir à côté de son nom.',
+              ref: 'Menhirs et Wyrd — p.11',
+            },
+            {
+              id: 'mo-prolonger',
+              term: 'Prolonger un menhir',
+              body: [
+                'Réactiver un menhir encore actif étend sa durée. Toute puissance restante sur son cadran est perdue et remplacée.',
+                'Ne posez pas de nouvelle figurine de menhir sur un lieu déjà activé.',
+              ],
+              ref: 'Menhirs et Wyrd — p.11',
+            },
+            {
+              id: 'mo-retire',
+              term: 'Lieu retiré par le Wyrd',
+              body: [
+                'Tous les personnages présents perdent 2 Énergie et gagnent 2 Terreur, puis se déplacent vers le lieu relié le plus proche — au choix en cas d’égalité.',
+                'Ce déplacement n’est pas un voyage. Tous les éléments de jeu présents sont défaussés, Gardiens compris.',
+              ],
+              ref: 'Menhirs et Wyrd — p.11',
+            },
+            {
+              id: 'mo-dernier',
+              term: 'Le dernier menhir s’éteint',
+              body: [
+                'Ne retirez pas les dernières cartes Lieu. Les personnages peuvent continuer d’interagir avec elles.',
+                'Mais ils perdent 2 Énergie et gagnent 2 Terreur à chaque aube, jusqu’à mourir ou à rallumer un menhir.',
+              ],
+              ref: 'Menhirs et Wyrd — p.11',
+            },
+            {
+              id: 'mo-souche',
+              term: 'Numéro de lieu « souche »',
+              body: [
+                'Quand un lieu change de version, son numéro change aussi et il gagne un nouveau chapitre du journal.',
+                'Le numéro d’origine reste imprimé à côté du nouveau : c’est le numéro souche.',
+                'Servez-vous du souche pour relier les clés de direction, jamais du nouveau.',
+              ],
+              ref: 'Numéros de lieu « souche » — p.11',
+            },
+          ],
+        },
+        {
+          title: 'Gardiens',
+          lead: 'Les adversaires que vous avez fuis continuent à vous chercher. Lancez le dé Gardien à chaque aube.',
+          entries: [
+            {
+              id: 'mo-de',
+              term: 'Le dé Gardien',
+              body: [
+                'Point cardinal : déplacez le gardien dans la direction indiquée — le résultat W est le lieu à l’ouest.',
+                'Rien : il ne bouge pas.',
+                'Défausse : retirez-le du plateau et replacez sa carte au bas de son paquet Rencontre.',
+              ],
+              ref: 'Gardiens — p.12',
+            },
+            {
+              id: 'mo-deplacement',
+              term: 'Déplacement d’un gardien',
+              body: [
+                'Vers un lieu non révélé ou non relié : il va plutôt dans le lieu relié doté du plus grand numéro.',
+                'S’il reste dans un lieu occupé par des personnages, la rencontre se déclenche immédiatement.',
+                'S’il arrive dans un lieu occupé, ou si un personnage arrive dans le sien, la rencontre se déclenche aussi.',
+              ],
+              note: 'Tous les personnages présents doivent combattre en groupe. Plusieurs gardiens : vous choisissez l’ordre des rencontres.',
+              ref: 'Gardiens — p.12',
+            },
+            {
+              id: 'mo-vaincu',
+              term: 'Gardien vaincu',
+              body: ['Remettez sa carte au bas de son paquet d’origine.'],
+              ref: 'Gardiens — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Groupes',
+          entries: [
+            {
+              id: 'mo-groupe',
+              term: 'Action de groupe',
+              body: [
+                'Les personnages d’un même lieu peuvent effectuer une action ensemble. Ils forment alors un groupe.',
+                'On ne rejoint une action qu’AVANT qu’elle commence. Une fois lancée, plus personne n’entre ni ne sort.',
+              ],
+              ref: 'Groupes et Actions de Groupe — p.11',
+            },
+            {
+              id: 'mo-partage',
+              term: 'Ce qu’on partage en groupe',
+              body: [
+                'Les membres échangent librement Nourriture, Richesse, cartes Objet et Secret, à tout moment.',
+                'Chacun peut dépenser sa propre Énergie ou Magie à la place d’un autre membre.',
+                'Une action déjà effectuée par un membre du groupe peut être refaite par un autre.',
+              ],
+              warn: 'L’action unique est la seule exception : pour l’utiliser, le personnage actif doit payer au moins 1 Énergie.',
+              ref: 'Groupes et Actions de Groupe — p.11',
+            },
+            {
+              id: 'mo-quitter',
+              term: 'Quitter ou dissoudre un groupe',
+              body: [
+                'Toute action de groupe doit être approuvée par l’ensemble des membres.',
+                'Qui ne veut pas participer quitte le groupe avant que l’action commence. On peut aussi partir en milieu de journée.',
+                'Exception : un membre incapable de payer un coût d’action requis quitte le groupe d’office, et les autres effectuent l’action.',
+              ],
+              note: 'À la fin d’une rencontre, les membres du groupe peuvent le quitter s’ils fuient ou sont exclus par « Vous Êtes Mourant ».',
+              ref: 'Groupes et Actions de Groupe — p.11',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'modes',
+      title: 'Modes Histoire, Défi et Jeu libre',
+      lead: 'Comment rendre la campagne plus douce ou plus dure.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Mode Histoire',
+          lead: 'Pour profiter de l’histoire sans craindre l’échec en permanence. Appliquez un ou plusieurs de ces modificateurs.',
+          entries: [
+            {
+              id: 'md-rencontres',
+              term: 'Mise en place des rencontres',
+              body: ['Au début de chaque chapitre, montez le paquet Rencontre comme si la partie comptait un personnage de moins.'],
+              ref: 'Mode Histoire — p.22',
+            },
+            {
+              id: 'md-marqueurs',
+              term: 'Marqueurs en T',
+              body: [
+                'Retirez du jeu le marqueur en T de limite de Santé et indiquez votre Santé avec un marqueur ordinaire.',
+                'Votre Santé ne limite plus votre Énergie, et vous ne paniquez plus en combat ni en diplomatie.',
+              ],
+              ref: 'Mode Histoire — p.22',
+            },
+            {
+              id: 'md-menhirs',
+              term: 'Coût des menhirs',
+              body: [
+                'Chaque coût d’activation demande un type de ressource de moins, au choix.',
+                'Au lieu de payer 2 Énergie ET 2 Richesse par joueur, payez soit l’un soit l’autre.',
+              ],
+              note: 'Certaines activations peuvent devenir gratuites. Les conditions spéciales, elles, s’appliquent toujours.',
+              ref: 'Mode Histoire — p.22',
+            },
+            {
+              id: 'md-objets',
+              term: 'Objets de départ',
+              body: ['À l’étape V de la mise en place du monde, chaque personnage pioche et conserve 1 objet d’artisanat au hasard.'],
+              ref: 'Mode Histoire — p.22',
+            },
+          ],
+        },
+        {
+          title: 'Mode Défi',
+          lead: 'Pour un groupe qui maîtrise déjà le jeu. Vous pouvez n’en appliquer qu’une partie.',
+          entries: [
+            {
+              id: 'md-t-inverse',
+              term: 'Marqueur Santé retourné',
+              body: [
+                'Chaque joueur retourne son marqueur en T de Santé, le haut du symbole Cœur pointant vers le bas de la piste.',
+                'Les personnages blessés deviennent plus sensibles à la panique et à la perte d’énergie, et la récupération est limitée.',
+              ],
+              ref: 'Mode Défi — p.22',
+            },
+            {
+              id: 'md-secret42',
+              term: 'Carte Secret 42',
+              body: ['Prenez-la au début de la partie : les habitants de l’île vous apprécient moins.'],
+              ref: 'Mode Défi — p.22',
+            },
+            {
+              id: 'md-progression',
+              term: 'Progression ralentie',
+              body: [
+                'Les seuils d’Expérience montent : 5, 5, 10, 15, 20, 25 puis 30 Exp selon le palier.',
+                'Tout point supplémentaire coûte 5 Exp de plus que le précédent.',
+              ],
+              ref: 'Mode Défi — p.22',
+            },
+          ],
+        },
+        {
+          title: 'Jeu libre',
+          entries: [
+            {
+              id: 'md-libre',
+              term: 'Jeu libre',
+              body: [
+                'Au début de la campagne, chaque joueur choisit librement sa tuile Personnage, y compris parmi ceux des autres.',
+                'Les paquets Combat et Diplomatie peuvent également être composés librement.',
+                'La variante ouvre de nouvelles stratégies, au prix de l’équilibre prévu.',
+              ],
+              ref: 'Jeu libre — p.22',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Wyrd',
+      body: [
+        'Le brouillard primordial qui engloutit Avalon. Les lieux hors de portée d’un menhir actif s’y effacent, à l’aube.',
+        'Les personnages présents perdent alors 2 Énergie et gagnent 2 Terreur.',
+      ],
+      ref: 'Menhirs et Wyrd — p.11',
+    },
+    {
+      term: 'Chroniqueur',
+      body: [
+        'Le joueur qui tient la fiche de sauvegarde et note l’état du monde : les lieux, les gardiens, les cadrans.',
+        'À la sauvegarde, il range le plateau ; chacun sauvegarde son propre personnage.',
+      ],
+      ref: 'Sauvegarder la partie — p.13',
+    },
+    {
+      term: 'Sauvegarder la partie',
+      body: [
+        'Recommandé à la fin d’un chapitre, quand le journal ou une carte Événement y invite.',
+        'Chaque joueur note son personnage sur la fiche ; le chroniqueur note l’état du monde et range les paquets par séparateurs.',
+        'Pour reprendre, on inverse la procédure.',
+      ],
+      ref: 'Sauvegarder la partie — p.13',
+    },
+    {
+      term: 'Retirer une carte de la partie',
+      body: [
+        'Différent de défausser : la carte retourne dans la boîte, à l’extérieur des compartiments de sauvegarde.',
+        'Elle ne fait plus partie de la campagne et ne peut plus revenir, sauf effet qui l’autorise expressément.',
+      ],
+      ref: 'Défausser et Retirer des Cartes — p.13',
+    },
+    {
+      term: 'Ajouter ou retirer des joueurs',
+      body: [
+        'À chaque nouvelle session, entre 1 et 4 personnages, comme vous voulez.',
+        'Les secrets d’un personnage retiré sont distribués à ceux qui restent — sauf les secrets personnels.',
+        'Une recrue arrive dans le lieu d’un ancien, avec ses paquets et ses ressources de départ.',
+      ],
+      ref: 'Ajouter ou Retirer des Joueurs — p.13',
+    },
+    {
+      term: 'Déplacement spécial',
+      body: [
+        'Certaines cartes déplacent un personnage vers « le lieu révélé doté du plus petit numéro », ou vers n’importe quel lieu relié.',
+        'Ce n’est pas un voyage : aucune Énergie, aucun coût. Mais on révèle bien les lieux voisins et les effets immédiats.',
+      ],
+      ref: 'Déplacement spécial — p.11',
+    },
+    {
+      term: 'Caractéristiques',
+      body: [
+        'Six valeurs, en trois paires opposées : Agression, Courage, Empathie, Pragmatisme, Prudence, Spiritualité.',
+        'Elles servent à relier les clés en rencontre, et conditionnent l’achat des compétences.',
+      ],
+      ref: 'Caractéristiques des personnages — p.10',
+    },
+    {
+      term: 'Réserve de Progression',
+      body: [
+        'Vos cartes Combat et Diplomatie non encore utilisées, en pile à côté de votre plateau.',
+        'On y pioche pour améliorer un paquet, et les cartes retirées y retournent.',
+      ],
+      ref: 'Progression des Personnages — p.12',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -376,6 +923,19 @@ export const taintedgrail: Tutorial = {
           tip: 'Le chronomètre en haut à droite tourne pendant la partie. Vous pouvez le mettre en pause ; il reprend même si vous fermez l’application.',
         },
         {
+          id: 'b1b',
+          kind: 'info',
+          title: 'Où vous êtes, et ce qui a mal tourné',
+          body: [
+            'Avalon, longtemps après le roi Arthur. Un réseau de menhirs tenait le monde en place ; il s’éteint.',
+            'Le Wyrd, un brouillard qui dévore le réel, engloutit l’île pan par pan. Ce qu’il recouvre cesse d’exister.',
+            'Vous êtes quelques survivants partis du village de Cuanacht. Ni armée, ni prophétie : des jours devant vous, et de moins en moins de terre sous les pieds.',
+          ],
+          tip: 'Le monde tient dans un journal d’exploration : chaque lieu renvoie à un paragraphe, et chaque paragraphe décide de la suite.',
+          components: ['journal'],
+          ref: 'Introduction — p.4',
+        },
+        {
           id: 'b2',
           kind: 'info',
           title: 'Ce que le jeu vous demande',
@@ -386,6 +946,36 @@ export const taintedgrail: Tutorial = {
           ],
           components: ['fig-menhir', 'cadrans'],
           ref: 'Menhirs et Wyrd — p.11',
+        },
+        {
+          id: 'b2b',
+          kind: 'info',
+          title: 'Comment on perd, et comment on avance',
+          body: [
+            'Il n’y a pas de score. On gagne en atteignant la fin d’un chapitre vivant, et en enchaînant sur le suivant.',
+            'Trois façons de perdre : votre Santé tombe à 0, votre Terreur atteint le bout de sa piste, ou le dernier menhir s’éteint.',
+            'Ce qui fait avancer le chapitre, ce sont vos QUÊTES, et elles seules. Les tâches sont profitables, mais ne mènent jamais à sa fin.',
+            'Si tout le groupe meurt, la Grâce de la Toute-Mère permet de reprendre au début du chapitre plutôt que de tout recommencer.',
+          ],
+          warn: 'En solitaire, la mort du personnage termine la partie. En coopératif, on peut reprendre un personnage resté en boîte.',
+          components: ['pions-quete', 'mourant'],
+          ref: 'Mort et Folie — p.13 · Quêtes et Tâches — p.11',
+        },
+        {
+          id: 'b2c',
+          kind: 'info',
+          title: 'Vos premiers jours',
+          ext: true,
+          extSource: 'conseils du livret p.13 et guides en ligne',
+          body: [
+            'Vérifiez vos quêtes actives avant chaque action. Le journal a plus de mille entrées ; c’est votre quête qui vous dit laquelle vous concerne.',
+            'Inspectez les menhirs tôt : l’inspection coûte peu et vous dit ce qu’il faudra pour les allumer.',
+            'Explorez un même lieu plusieurs fois. Les meilleures trouvailles ne sont pas dans la première entrée du journal.',
+            'Restez groupés au premier chapitre : les rencontres se combattent à plusieurs, et on peut se payer les coûts d’action mutuellement.',
+            'Gardez toujours deux ou trois jours d’avance en Nourriture. C’est le seul filet du jeu.',
+          ],
+          warn: 'Le livret donne les quatre premiers ; le dernier vient de l’usage. Aucun n’est une règle.',
+          ref: 'Conseils généraux — p.13',
         },
         {
           id: 'b3',
@@ -2042,16 +2632,55 @@ export const taintedgrail: Tutorial = {
           ref: 'Sauvegarder la Partie — p.13',
         },
         {
-          id: 'x5',
-          kind: 'check',
-          title: 'Ce que ce tutoriel n’a pas couvert',
+          id: 'x4b',
+          kind: 'info',
+          title: 'Progresser au crépuscule',
           body: [
-            'Les quêtes et tâches en détail, l’activation d’un menhir, la progression avancée.',
-            'La folie, la mort, la Grâce de la Toute-Mère.',
-            'Les modes Histoire et Défi, et le jeu libre — tout est page 22.',
+            'L’Expérience s’y dépense. 2 Exp : piochez 3 cartes de votre Réserve de Progression, gardez-en 1 pour un paquet.',
+            'Augmenter une caractéristique coûte selon le TOTAL de sa paire opposée : 2 Exp pour le 1ᵉʳ point de la paire, 4 pour le 2ᵉ, 6, 8, puis 10 au-delà.',
+            'À partir du 3ᵉ point d’une caractéristique, prenez une carte Compétence de cette caractéristique.',
           ],
-          tip: 'Le résumé des règles, page 24 du livret, tient sur une page : gardez-le sous la main pour vos prochaines séances.',
+          warn: 'Chaque paquet Combat et Diplomatie garde toujours au moins 15 cartes. Une carte Compétence porte deux compétences au recto et au verso : en choisir une, c’est renoncer à l’autre.',
+          tip: 'Le bouton Aides de jeu garde les coûts sous la main, sous « Progression et équipement ».',
+          components: ['cartes-competence', 'cartes-avancees'],
+          ref: 'Progression des Personnages — p.12',
+        },
+        {
+          id: 'x4c',
+          kind: 'info',
+          title: 'Les gardiens vous cherchent',
+          body: [
+            'Un adversaire que vous avez fui reste sur le plateau, sur le lieu de votre fuite.',
+            'À chaque aube, lancez le dé Gardien : point cardinal, il se déplace ; Rien, il reste ; Défausse, il quitte le plateau.',
+            'S’il partage un lieu avec des personnages, la rencontre se déclenche immédiatement — et tous ceux qui sont là combattent en groupe.',
+          ],
+          warn: 'Un gardien qui devrait aller vers un lieu non révélé ou non relié va plutôt dans le lieu relié au plus grand numéro.',
+          components: ['de-gardien'],
+          ref: 'Gardiens — p.12',
+        },
+        {
+          id: 'x5',
+          kind: 'info',
+          title: 'Rendre la campagne plus douce, ou plus dure',
+          body: [
+            'Mode Histoire : montez le paquet Rencontre comme s’il y avait un personnage de moins, retirez le marqueur en T de Santé, allégez d’un type de ressource le coût des menhirs, et donnez un objet d’artisanat à chacun au départ.',
+            'Mode Défi : retournez le marqueur en T de Santé, prenez la carte Secret 42, et allongez les paliers d’Expérience à 5, 5, 10, 15, 20, 25 puis 30.',
+            'Jeu libre : chacun choisit librement sa tuile Personnage et compose ses paquets Combat et Diplomatie.',
+          ],
+          tip: 'Vous pouvez n’en appliquer qu’une partie. Le détail est dans les aides de jeu, sous « Modes Histoire, Défi et Jeu libre ».',
           ref: 'Variantes & Appendices — p.22',
+        },
+        {
+          id: 'x5b',
+          kind: 'check',
+          title: 'Ce que vous emportez à la table',
+          body: [
+            'Vous avez toutes les règles de la campagne : le jour, les rencontres, les menhirs, la progression, la mort et les modes.',
+            'Ce qui reste, c’est l’histoire — le journal d’exploration, et le texte des cartes.',
+            'Le bouton Aides de jeu garde l’enjeu, la progression, le monde et les modes sous la main ; le bouton Index cherche n’importe quel mot.',
+          ],
+          tip: 'Le résumé des règles, page 24 du livret, tient sur une page : gardez-le pour vos prochaines séances.',
+          ref: 'Résumé des règles — p.24',
         },
         {
           id: 'x6',
