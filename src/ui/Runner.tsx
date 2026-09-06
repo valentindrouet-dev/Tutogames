@@ -26,7 +26,7 @@ import { useManifests, visualUrl, warm } from '../engine/assets'
 import { WidgetView } from './widgets'
 import { Timer } from './Timer'
 import { Sheet } from './Sheet'
-import { AidSheet, AidsSheet, OutsideMark } from './Aids'
+import { AidSheet, AidsSheet, OutsideMark, voAction, type VoProps } from './Aids'
 import { IndexRowSheet, IndexSheet } from './IndexSheet'
 import { VoScope, VoText } from './Vo'
 import { themeBackground, themePanel, themeStyle } from './theme'
@@ -94,10 +94,17 @@ interface Props {
  * fois par partie. La fiche du matériel les garde sous la main, avec leur
  * vignette quand la reconnaître à l'œil compte.
  */
-function Variants({ tutorial, list }: { tutorial: Tutorial; list: Variant[] }) {
+function Variants({ tutorial, list, vo }: { tutorial: Tutorial; list: Variant[]; vo: VoProps }) {
+  // Un repérage par variété : l'étiquette et son effet. Sur une liste de six
+  // faces de dé, marquer le terme une seule fois pour tout le tableau ne
+  // servirait à rien — on veut le mot imprimé en face de chaque ligne.
+  const marks = tutorial.vo && vo.marks
+    ? list.map((v) => voSpansFor(tutorial.vo!.terms, [v.label, v.effect]))
+    : null
+
   return (
     <div className="variants">
-      {list.map((v) => (
+      {list.map((v, i) => (
         <div className="variant" key={v.label} style={v.tint ? ({ '--part-tint': v.tint } as CSSProperties) : undefined}>
           {v.crop && (
             <span className="variant-thumb">
@@ -106,10 +113,14 @@ function Variants({ tutorial, list }: { tutorial: Tutorial; list: Variant[] }) {
           )}
           <div className="variant-txt">
             <div className="variant-head">
-              <span className="variant-label">{v.label}</span>
+              <span className="variant-label">
+                <VoText text={v.label} spans={marks?.[i][0]} way={vo.way} />
+              </span>
               {v.qty && <span className="variant-qty">{v.qty}</span>}
             </div>
-            <p className="variant-effect">{v.effect}</p>
+            <p className="variant-effect">
+              <VoText text={v.effect} spans={marks?.[i][1]} way={vo.way} />
+            </p>
           </div>
         </div>
       ))}
@@ -170,6 +181,19 @@ export function Runner({
   // conseil. `way` décide de la langue affichée, pas du repérage.
   const way = prefs.voMode === 'vo' ? 'vo' : 'fr'
   const voOn = Boolean(tutorial.vo) && prefs.voMode !== 'off'
+
+  // Ce que les panneaux reçoivent : la langue affichée, la bascule, et le
+  // fait que le lecteur ait ou non demandé le surlignage. La bascule est
+  // absente si les termes sont masqués — le réglage est plus fort que le
+  // bouton.
+  const vo: VoProps = useMemo(() => ({
+    tutorial,
+    way,
+    marks: voOn,
+    onWay: onPrefs && voOn
+      ? (w: typeof way) => onPrefs({ ...prefs, voMode: w })
+      : undefined,
+  }), [tutorial, way, voOn, onPrefs, prefs])
   const marks = useMemo(() => {
     if (!tutorial.vo || !voOn || !step) return null
     const body = step.body ?? []
@@ -580,7 +604,14 @@ export function Runner({
 
           if (panel.kind === 'parts') {
             return (
-              <Sheet key={key} title={`Matériel — ${tutorial.title}`} onClose={closePanel} style={panel_} behind={behind}>
+              <Sheet
+                key={key}
+                title={`Matériel — ${tutorial.title}`}
+                onClose={closePanel}
+                style={panel_}
+                behind={behind}
+                action={voAction(vo)}
+              >
                 <div className="parts-index">
                   {tutorial.components.map((c) => (
                     <button
@@ -595,7 +626,11 @@ export function Runner({
                       </span>
                       <span className="part-txt">
                         <span className="part-name">
-                          {c.name}
+                          <VoText
+                            text={c.name}
+                            spans={tutorial.vo && voOn ? voSpansFor(tutorial.vo.terms, [c.name])[0] : undefined}
+                            way={way}
+                          />
                           {c.variants && <span className="part-types">{c.variants.length} types</span>}
                         </span>
                         {c.qty && <span className="part-qty">{c.qty}</span>}
@@ -609,19 +644,35 @@ export function Runner({
 
           if (panel.kind === 'part') {
             const c = panel.component
+            const cMarks = tutorial.vo && voOn
+              ? voSpansFor(tutorial.vo.terms, [c.name, c.note ?? ''])
+              : null
             return (
-              <Sheet key={key} title={c.name} onClose={closePanel} style={panel_} behind={behind}>
+              <Sheet
+                key={key}
+                title={c.name}
+                onClose={closePanel}
+                style={panel_}
+                behind={behind}
+                action={voAction(vo)}
+              >
                 <div className={`part-detail${c.variants ? ' part-detail-aid' : ''}`}>
                   <div className="visual">
                     <Visual book={bookOf(tutorial, c.crop)} crop={c.crop} glyph={c.glyph} name={c.name} tint={c.tint} />
                   </div>
                   <div>
-                    <div className="part-detail-name">{c.name}</div>
+                    <div className="part-detail-name">
+                      <VoText text={c.name} spans={cMarks?.[0]} way={way} />
+                    </div>
                     {c.qty && <div className="part-qty" style={{ marginBottom: 12 }}>{c.qty}</div>}
-                    {c.note && <p className="part-detail-note">{c.note}</p>}
+                    {c.note && (
+                      <p className="part-detail-note">
+                        <VoText text={c.note} spans={cMarks?.[1]} way={way} />
+                      </p>
+                    )}
                   </div>
                 </div>
-                {c.variants && <Variants tutorial={tutorial} list={c.variants} />}
+                {c.variants && <Variants tutorial={tutorial} list={c.variants} vo={vo} />}
               </Sheet>
             )
           }
@@ -633,6 +684,7 @@ export function Runner({
                 tutorial={tutorial}
                 style={panel_}
                 onClose={closePanel}
+                behind={behind}
                 onPick={(aid) => openPanel({ kind: 'aid', aid })}
               />
             )
@@ -647,17 +699,36 @@ export function Runner({
                 focus={panel.focus}
                 style={panel_}
                 onClose={closePanel}
+                behind={behind}
+                vo={vo}
               />
             )
           }
 
           if (panel.kind === 'index') {
             return (
-              <IndexSheet key={key} tutorial={tutorial} style={panel_} onClose={closePanel} onGo={goFromIndex} />
+              <IndexSheet
+                key={key}
+                tutorial={tutorial}
+                style={panel_}
+                onClose={closePanel}
+                onGo={goFromIndex}
+                behind={behind}
+                vo={vo}
+              />
             )
           }
 
-          return <IndexRowSheet key={key} row={panel.row} style={panel_} onClose={closePanel} />
+          return (
+            <IndexRowSheet
+              key={key}
+              row={panel.row}
+              style={panel_}
+              onClose={closePanel}
+              behind={behind}
+              vo={vo}
+            />
+          )
         })}
 
     </VoScope>

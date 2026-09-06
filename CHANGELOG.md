@@ -17,6 +17,40 @@ comme complète.
 
 ---
 
+## v0.24 — 2026-09-06
+
+### Ajouté
+
+- **La bascule VO est dans chaque panneau.** Le bandeau disparaît dès qu'on
+  ouvre une fiche, et c'est justement là — l'index des salles ouvert, la boîte
+  posée à côté — qu'on a besoin du mot imprimé. Le drapeau est donc dans
+  l'en-tête de la fiche matériel, de l'index du matériel, des aides de jeu et
+  de l'index alphabétique.
+- **Les termes sont surlignés et basculent dans les panneaux**, exactement
+  comme dans une étape : terme, effet, piège et note d'une entrée d'aide de
+  jeu, nom et note d'un composant, étiquette et effet de chaque variété, terme
+  et réponse d'une ligne d'index.
+- **L'index se cherche dans les deux langues.** Chaque ligne emporte,
+  invisible, les mots que le matériel imprime pour les termes qu'elle emploie
+  (`IndexRow.printed`, alimenté par `voPrintedIn`). Taper « surgery » sort
+  « Bloc opératoire », « storage » sort « Dépôt », « emergency room » sort
+  « Infirmerie ».
+- **41 termes de plus au glossaire de *Nemesis*** : les 25 salles, la
+  dépressurisation, les objets fabriqués, les outils, les conduits, les états
+  de moteur. Les noms de lieux sont ceux du livret anglais, qui ne suivent pas
+  le français — l'infirmerie est une « Emergency room », le bloc opératoire une
+  « Surgery », le dépôt un « Storage ».
+
+### Modifié
+
+- `npm run vo` compte les termes repérés dans les aides de jeu à part de ceux
+  des étapes : un terme « jamais rencontré » désigne maintenant un terme
+  réellement inutilisé, et non un terme qui ne sert que dans une fiche.
+- `GUIDE_CREATION_TUTO.md` : encadré « Le glossaire VO doit couvrir les aides
+  de jeu », et la règle correspondante dans la liste de contrôle.
+
+---
+
 ## v0.23 — 2026-09-05 — « V2 : jouer sans le livret »
 
 La V2 change ce qu'un tutoriel promet. Jusqu'ici il apprenait à jouer un

@@ -8,22 +8,32 @@
  * Rien n'est écrit deux fois. Les lignes sont **récoltées** dans les aides
  * de jeu, le matériel et les entrées écrites à la main du tutoriel — voir
  * `indexEntriesOf`. Taper sur une ligne ouvre la fiche d'où elle vient.
+ *
+ * **On cherche dans les deux langues.** Les entrées sont rangées sous leur
+ * nom français, mais la boîte posée à côté est parfois anglaise : chaque
+ * ligne emporte, invisible, les mots que le matériel imprime. Taper
+ * « surgery » sort « Bloc opératoire ».
  */
 
 import { useMemo, useRef, useState, type CSSProperties } from 'react'
 import type { Tutorial } from '../engine/types'
 import { type IndexRow, indexEntriesOf, lettersOf, searchIndex } from '../engine/tutorial'
+import { voSpansFor } from '../engine/vo'
 import { Sheet } from './Sheet'
+import { VoText } from './Vo'
+import { type VoProps, voAction } from './Aids'
 import { Close, Outside, Search } from './icons'
 
 export function IndexSheet({
-  tutorial, style, onClose, onGo,
+  tutorial, style, onClose, onGo, vo, behind,
 }: {
   tutorial: Tutorial
   style?: CSSProperties
   onClose: () => void
   /** Ouvre la fiche d'où vient la ligne. Sans cible, la ligne se lit sur place. */
   onGo: (row: IndexRow) => void
+  vo: VoProps
+  behind?: boolean
 }) {
   const [query, setQuery] = useState('')
   const all = useMemo(() => indexEntriesOf(tutorial), [tutorial])
@@ -42,7 +52,13 @@ export function IndexSheet({
   let last = ''
 
   return (
-    <Sheet title={`Index — ${tutorial.title}`} onClose={onClose} style={style}>
+    <Sheet
+      title={`Index — ${tutorial.title}`}
+      onClose={onClose}
+      style={style}
+      behind={behind}
+      action={voAction(vo)}
+    >
       <div className="index-search">
         <Search aria-hidden />
         <input
@@ -77,6 +93,9 @@ export function IndexSheet({
         {rows.map((r) => {
           const head = r.letter !== last ? r.letter : null
           last = r.letter
+          const spans = tutorial.vo && vo.marks
+            ? voSpansFor(tutorial.vo.terms, [r.term, r.body[0] ?? ''])
+            : null
           return (
             <div key={`${r.letter}-${r.term}`}>
               {head && <div className="index-letter" data-letter={head}>{head}</div>}
@@ -86,10 +105,14 @@ export function IndexSheet({
                 onClick={() => onGo(r)}
               >
                 <span className="index-term">
-                  {r.term}
+                  <VoText text={r.term} spans={spans?.[0]} way={vo.way} />
                   {r.ext && <Outside aria-hidden className="index-ext" />}
                 </span>
-                {r.body.length > 0 && <span className="index-body">{r.body[0]}</span>}
+                {r.body.length > 0 && (
+                  <span className="index-body">
+                    <VoText text={r.body[0]} spans={spans?.[1]} way={vo.way} />
+                  </span>
+                )}
                 {r.from && <span className="index-from">{r.from}</span>}
               </button>
             </div>
@@ -103,14 +126,18 @@ export function IndexSheet({
 
 /** Une ligne d'index lue sur place, quand elle ne renvoie vers aucune fiche. */
 export function IndexRowSheet({
-  row, style, onClose,
+  row, style, onClose, vo, behind,
 }: {
   row: IndexRow
   style?: CSSProperties
   onClose: () => void
+  vo: VoProps
+  behind?: boolean
 }) {
+  const t = vo.tutorial
+  const spans = t.vo && vo.marks ? voSpansFor(t.vo.terms, row.body) : null
   return (
-    <Sheet title={row.term} onClose={onClose} style={style}>
+    <Sheet title={row.term} onClose={onClose} style={style} behind={behind} action={voAction(vo)}>
       <div className={`aid-entry${row.ext ? ' ext' : ''}`}>
         <div className="aid-entry-txt">
           {row.ext && (
@@ -119,7 +146,9 @@ export function IndexRowSheet({
             </div>
           )}
           <ul className="aid-body">
-            {row.body.map((line, i) => <li key={i}>{line}</li>)}
+            {row.body.map((line, i) => (
+              <li key={i}><VoText text={line} spans={spans?.[i]} way={vo.way} /></li>
+            ))}
           </ul>
           {row.ref && <p className="aid-ref">{row.ref}</p>}
         </div>

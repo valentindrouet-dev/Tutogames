@@ -24,9 +24,16 @@ interface Props {
    * du dessus qui répond.
    */
   behind?: boolean
+  /**
+   * Bouton propre au panneau, posé dans son en-tête à gauche de la
+   * fermeture. C'est là que va la bascule VO : un panneau ouvert cache le
+   * bandeau, et on doit pouvoir changer la langue des termes sans le
+   * refermer.
+   */
+  action?: ReactNode
 }
 
-export function Sheet({ title, onClose, children, footer, style, behind = false }: Props) {
+export function Sheet({ title, onClose, children, footer, style, behind = false, action }: Props) {
   useEffect(() => {
     if (behind) return
     const onKey = (e: KeyboardEvent) => {
@@ -52,6 +59,7 @@ export function Sheet({ title, onClose, children, footer, style, behind = false 
       <div className="sheet" style={style} inert={behind}>
         <div className="sheet-head">
           <h2>{title}</h2>
+          {action}
           <button type="button" className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Fermer">
             <Close aria-hidden />
           </button>

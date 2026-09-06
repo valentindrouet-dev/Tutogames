@@ -22,9 +22,10 @@ import {
 } from 'react'
 import type { VoTerm } from '../engine/types'
 import type { VoSpan } from '../engine/vo'
+import { FlagEn } from './icons'
 
 /** Ce que la bulle affiche, et dans quel sens. */
-type Way = 'fr' | 'vo'
+export type Way = 'fr' | 'vo'
 
 /* ------------------------------------------------------------------ bulle */
 
@@ -258,5 +259,42 @@ export function VoList({ terms }: { terms: VoTerm[] }) {
         </div>
       ))}
     </dl>
+  )
+}
+
+/* ------------------------------------------------------------ la bascule */
+
+/**
+ * La bascule VO, telle qu'on la met dans l'en-tête d'un panneau.
+ *
+ * Le bandeau du tutoriel a la sienne, mais un panneau ouvert le recouvre —
+ * et c'est justement dans l'index des salles ou la fiche d'un composant
+ * qu'on a besoin du mot imprimé, la boîte ouverte sous les yeux. Le bouton
+ * est donc partout où il y a du texte de jeu à lire.
+ */
+export function VoButton({
+  language, way, onWay, compact = false,
+}: {
+  language: string
+  way: Way
+  onWay: (way: Way) => void
+  /** Dans un en-tête de panneau : pas de libellé, juste le drapeau. */
+  compact?: boolean
+}) {
+  const on = way === 'vo'
+  return (
+    <button
+      type="button"
+      className={`btn btn-ghost btn-vo${on ? ' on' : ''}${compact ? ' btn-icon' : ''}`}
+      onClick={() => onWay(on ? 'fr' : 'vo')}
+      aria-pressed={on}
+      aria-label={`Écrire les termes en ${language}`}
+      title={on
+        ? `Termes écrits en ${language}, comme sur votre matériel`
+        : `Écrire les termes en ${language}, comme sur votre matériel`}
+    >
+      <FlagEn aria-hidden />
+      {!compact && 'VO'}
+    </button>
   )
 }

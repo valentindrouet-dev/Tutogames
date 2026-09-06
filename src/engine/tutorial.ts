@@ -14,6 +14,7 @@ import {
   appliesTo, chapterModes, stepModes,
   type Aid, type AidEntry, type Chapter, type Component, type Mode, type Step, type Tutorial,
 } from './types'
+import { voPrintedIn } from './vo'
 
 /** Position dans un tutoriel : index de chapitre et d'étape, dans la vue. */
 export interface Position {
@@ -157,6 +158,12 @@ export interface IndexRow {
   ref?: string
   /** L'entrée sort du livret : signalée comme telle. */
   ext?: boolean
+  /**
+   * Botte de foin supplémentaire, jamais affichée : les mots imprimés sur le
+   * matériel pour les termes que cette ligne emploie. C'est ce qui permet de
+   * taper « surgery » et de tomber sur « Bloc opératoire ».
+   */
+  printed?: string
   target: IndexTarget
 }
 
@@ -201,12 +208,15 @@ function letterOf(term: string): string {
 export function indexEntriesOf(t: Tutorial): IndexRow[] {
   const rows: IndexRow[] = []
   const seen = new Set<string>()
+  const vo = t.vo?.terms ?? []
 
   const push = (row: IndexRow) => {
     const k = sortKey(row.term)
     if (!k || seen.has(k)) return
     seen.add(k)
-    rows.push(row)
+    // Ce que la boîte imprime pour les termes de cette ligne : invisible,
+    // mais cherchable.
+    rows.push(vo.length ? { ...row, printed: voPrintedIn(vo, [row.term, ...row.body]) } : row)
   }
 
   for (const aid of t.aids ?? []) {
@@ -288,8 +298,18 @@ export function lettersOf(rows: IndexRow[]): string[] {
 }
 
 /** Filtre l'index sur une saisie, sans tenir compte des accents. */
+/**
+ * Filtre l'index sur une saisie, sans tenir compte des accents — et dans les
+ * **deux langues** : la requête est comparée au terme, à sa réponse, et aux
+ * mots que le matériel imprime à leur place (`printed`). Taper « surgery »
+ * sort donc « Bloc opératoire », sans que l'entrée change d'apparence.
+ */
 export function searchIndex(rows: IndexRow[], query: string): IndexRow[] {
   const q = sortKey(query)
   if (!q) return rows
-  return rows.filter((r) => sortKey(r.term).includes(q) || r.body.some((b) => sortKey(b).includes(q)))
+  return rows.filter((r) => (
+    sortKey(r.term).includes(q)
+    || (r.printed ? sortKey(r.printed).includes(q) : false)
+    || r.body.some((b) => sortKey(b).includes(q))
+  ))
 }

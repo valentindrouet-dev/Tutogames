@@ -1524,3 +1524,7 @@ svg { flex: 0 0 auto; width: 22px; height: 22px; }
 /* Panneau du dessous d'une pile : visible, mais en retrait. */
 .sheet-backdrop.behind { background: transparent; }
 .sheet-backdrop.behind .sheet { filter: brightness(0.72) saturate(0.8); }
+
+/* La bascule VO dans l'en-tete d'un panneau : le drapeau seul, pas de libelle. */
+.sheet-head .btn-vo.btn-icon { min-width: 52px; padding: 0 14px; gap: 0; }
+.sheet-head .btn-vo.btn-icon svg { width: 24px; height: 24px; }

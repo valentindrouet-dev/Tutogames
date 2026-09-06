@@ -920,6 +920,9 @@ les deux modes de Pages). Pas de build manuel avant de pousser, mais un
 - [ ] Chaque aide de jeu a son `ref` par entrée, et chaque `id` d'entrée est unique.
 - [ ] L'index compte assez d'entrées pour le jeu (`indexEntriesOf`).
 - [ ] Tout ce qui ne vient pas du PDF porte `ext` / `extTip` et son `extSource`.
+- [ ] Si le jeu a un glossaire VO : les noms de lieux et d'objets des aides de
+      jeu y sont, et une recherche d'index en anglais sort bien l'entrée
+      française.
 - [ ] Accents et guillemets français vérifiés.
 - [ ] `contentVersion` incrémentée si le contenu a changé.
 - [ ] `npm run crops` relancé si un rectangle a changé, et les découpes
@@ -1028,6 +1031,12 @@ Le tri ignore les accents, les articles (`le`, `la`, `l'`, `des`…) et les
 numéros d'ordre : « l'Hibernatorium » se cherche à H, « 1. Contrôle des
 moteurs » à C. Vous n'avez rien à faire pour ça.
 
+**On cherche dans les deux langues.** Chaque ligne emporte, invisible, les
+mots que le matériel imprime pour les termes qu'elle emploie (`IndexRow.printed`,
+alimenté par `voPrintedIn`). Un joueur avec la boîte anglaise devant lui tape
+« surgery » et tombe sur « Bloc opératoire ». C'est gratuit — **à condition que
+le glossaire VO contienne le terme**. Voir l'encadré ci-dessous.
+
 Après écriture, comptez : **150 entrées et plus** pour un jeu de la taille de
 Nemesis. Beaucoup moins veut dire que les aides de jeu sont trop maigres.
 
@@ -1052,6 +1061,25 @@ mots : « guides de jeu en ligne », « retours de joueurs ».
 > d'une étape de règle est une règle. Un conseil va dans `extTip`, ou dans une
 > étape `ext` à lui. Et `ref` d'une étape hors livret vaut `'Aucune — hors
 > livret'` : elle ne cite pas une page qu'elle ne suit pas.
+
+### Le glossaire VO doit couvrir les aides de jeu
+
+Le surlignage et la bascule VO marchent **partout** : dans une étape, dans une
+fiche de matériel, dans une aide de jeu, dans l'index. Chaque panneau porte sa
+propre bascule, dans son en-tête — un panneau ouvert cache le bandeau, et c'est
+justement la boîte ouverte sous les yeux qu'on a besoin du mot imprimé.
+
+Conséquence pour l'écriture : **un jeu dont le matériel n'est pas en français
+doit avoir dans son glossaire les termes de ses aides de jeu**, pas seulement
+ceux de ses étapes. Les noms de lieux, surtout : c'est ce qu'on cherche le plus,
+et c'est ce qui se traduit le moins littéralement. Dans *Nemesis*, l'infirmerie
+est une « Emergency room » et le bloc opératoire une « Surgery » — impossible à
+deviner, indispensable à trouver.
+
+Sans le terme au glossaire, l'entrée reste dans l'index, mais elle n'est
+cherchable qu'en français. `npm run vo` compte désormais les termes repérés
+dans les aides de jeu à part de ceux des étapes : un terme « jamais rencontré »
+est un terme réellement inutilisé.
 
 ---
 
@@ -1084,6 +1112,7 @@ créditer la source ; il est affiché au joueur dans la fiche du jeu.
 | 2026-09-04 | v0.13 | Une seule typographie pour toute l'application : `titleFont`, `bodyFont`, `titleTransform`, `titleWeight` et `titleSpacing` sont retirés de `Theme`. Un jeu apporte ses couleurs et son rayon d'arrondi, plus sa police. |
 | 2026-09-05 | v0.16 | Les termes VO sont surlignés dans la consigne (`voSpansFor`, `VoText`, `VoScope`) et non plus listés dans une feuille : survol ou tape pour le terme original. Le bouton VO du bandeau devient une bascule, doublée d'un réglage. |
 | 2026-09-05 | v0.15 | Nouvelle étape « Écrire le glossaire VO » (`vo`, `voTermsIn`, bouton VO et drapeau sur l'accueil), pour les jeux dont le matériel n'est pas en français. Sixième tutoriel : *Tainted Grail : Rois de la Ruine*. |
+| 2026-09-06 | v0.24 | Le surlignage et la bascule VO marchent dans tous les panneaux, chacun portant sa bascule dans son en-tête. L'index se cherche dans les deux langues (`IndexRow.printed`, `voPrintedIn`) : encadré « Le glossaire VO doit couvrir les aides de jeu ». `npm run vo` compte les termes des aides à part. |
 | 2026-09-05 | v0.23 | La V2 : un tutoriel couvre tout ce qui arrive en partie. Nouvelle section 10 — `brief` (l'enjeu du jeu), `aids` (les aides de jeu, sous leur bouton du bandeau) et l'index alphabétique, calculé depuis les aides et le matériel. Une marque unique pour ce qui ne vient pas du livret (`ext`, `extTip`, `extSource`). Sections 6, 7 et 9 reprises : volumétrie à 8-12 chapitres et 80-120 étapes, `skipped` limité aux cartes, aux modes optionnels et aux extensions. Les panneaux s'empilent, un jeu n'a qu'une partie enregistrée. |
 | 2026-09-05 | v0.22 | Le bouton VO remplace le mot français par le terme imprimé, accordé en genre de phrase et en nombre. Étape 11 : « Le mode sur la boîte, et le pluriel », et `enPlural` pour les irréguliers. Le réglage des termes passe à trois choix. |
 | 2026-09-05 | v0.21 | Les composants à faces se décrivent face par face, vignette comprise : dé de bruit et symboles Intrus de *Nemesis*, les trois dés de *Rois de la Ruine*. Deux composants qui partageaient une photo de groupe sont recadrés chacun sur le sien. |

@@ -150,3 +150,28 @@ export function voSpansFor(terms: VoTerm[], texts: string[]): VoSpan[][] {
 
   return spans
 }
+
+/**
+ * Les mots imprimés sur le matériel pour tous les termes qu'un texte
+ * emploie, mis bout à bout.
+ *
+ * Sert à **chercher en anglais ce qui est écrit en français**. L'index de
+ * l'application range ses entrées sous leur nom français ; un joueur qui a
+ * la boîte anglaise devant lui, lui, cherche « surgery ». Chaque entrée
+ * emporte donc sa traduction dans sa botte de foin de recherche, sans que
+ * rien n'apparaisse à l'écran.
+ *
+ * Contrairement à `voSpansFor`, on ne cherche pas des mots entiers aux
+ * bonnes positions : on veut juste savoir quels termes sont là, et un terme
+ * peut y être plusieurs fois. Le test normalisé suffit.
+ */
+export function voPrintedIn(terms: VoTerm[], texts: string[]): string {
+  const hay = normalize(texts.join(' · '))
+  const out: string[] = []
+  for (const t of terms) {
+    if (!hay.includes(normalize(t.fr))) continue
+    out.push(t.en)
+    if (t.enPlural) out.push(t.enPlural)
+  }
+  return out.join(' ')
+}

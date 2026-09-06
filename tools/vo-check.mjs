@@ -63,6 +63,21 @@ for (const t of TUTORIALS) {
     }
   }
 
+  // Les aides de jeu emploient les mêmes termes, et le surlignage y marche
+  // aussi : un terme qui n'existe que là n'est pas un terme oublié. On les
+  // compte à part, pour ne pas fausser la moyenne par étape.
+  let aidHits = 0
+  for (const aid of t.aids ?? []) {
+    for (const g of aid.groups) {
+      for (const e of g.entries) {
+        const fake = { id: e.id, title: e.term, kind: 'info', body: [...e.body, e.note ?? '', e.warn ?? ''] }
+        const hits = voTermsIn(t.vo.terms, fake, [], aid.title)
+        hits.forEach((h) => seen.add(h.fr))
+        aidHits += hits.length
+      }
+    }
+  }
+
   const total = rows.reduce((sum, r) => sum + r.n, 0)
   const top = [...rows].sort((a, b) => b.n - a.n).slice(0, 3)
   const empty = rows.filter((r) => r.n === 0)
@@ -72,6 +87,8 @@ for (const t of TUTORIALS) {
   console.log(`  ${t.vo.terms.length} termes, ${rows.length} étapes, ${(total / rows.length).toFixed(1)} termes par étape`)
   console.log(`  étapes les plus fournies : ${top.map((r) => `${r.id} (${r.n})`).join(', ')}`)
   console.log(`  étapes sans terme : ${empty.length}${empty.length ? ` — ${empty.slice(0, 10).map((r) => r.id).join(' ')}` : ''}`)
+  const aidCount = (t.aids ?? []).reduce((n, a) => n + a.groups.reduce((m, g) => m + g.entries.length, 0), 0)
+  if (aidCount) console.log(`  aides de jeu : ${aidCount} entrées, ${aidHits} termes repérés`)
   console.log(`  jamais rencontrés : ${never.length ? never.join(' · ') : 'aucun'}`)
 
   // Le mode « sur la boîte » remplace le mot français par le terme imprimé,

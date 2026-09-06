@@ -178,13 +178,62 @@ export const nemesis: Tutorial = {
       { fr: 'panser', en: 'Dress' },
       { fr: 'soigner', en: 'Heal' },
 
-      // Les salles nommées
-      { fr: 'hibernatorium', en: 'Hibernatorium' },
-      { fr: 'cockpit', en: 'Cockpit' },
-      { fr: 'nid', en: 'Nest' },
+      // Les 11 salles de base « 1 ». Le nom imprimé sur la tuile ne suit pas
+      // toujours le français : l'infirmerie est une « Emergency room », le
+      // bloc opératoire une « Surgery ».
+      { fr: 'armurerie', en: 'Armory' },
+      { fr: 'bloc opératoire', en: 'Surgery' },
+      { fr: 'dépôt', en: 'Storage' },
+      { fr: 'génératrice', en: 'Generator' },
+      { fr: 'infirmerie', en: 'Emergency room' },
       { fr: 'laboratoire', en: 'Laboratory' },
+      { fr: 'nid', en: 'Nest' },
       { fr: 'relais de transmission', en: 'Comms Room' },
+      { fr: 'système anti-incendie', en: 'Fire Control System' },
+
+      // Les 9 salles supplémentaires « 2 »
+      { fr: 'cabines', en: 'Cabins' },
+      { fr: 'cantine', en: 'Canteen' },
+      { fr: 'centrale de commandement', en: 'Command Center' },
+      { fr: 'contrôle des nacelles', en: 'Hatch Control System' },
+      { fr: 'contrôle des sas', en: 'Airlock Control' },
       { fr: 'salle des Douches', en: 'Shower Room' },
+      { fr: 'salle de slime', en: 'Room covered with slime' },
+      { fr: 'salle des machines', en: 'Engine Control Room' },
+      { fr: 'salle vidéo', en: 'Monitoring room' },
+
+      // Les 5 salles spéciales
+      { fr: 'cockpit', en: 'Cockpit' },
+      { fr: 'hibernatorium', en: 'Hibernatorium' },
+      { fr: 'moteur', en: 'Engine' },
+
+      // Ce qu'on fait dans ces salles, et ce qu'on y trouve
+      { fr: 'dépressurisation', en: 'Emergency Airlock procedure' },
+      { fr: 'procédure chirurgicale', en: 'Surgery procedure' },
+      { fr: 'objet de quête', en: 'Quest Item' },
+      { fr: 'lance-flammes', en: 'Flamethrower' },
+      { fr: 'cocktail Molotov', en: 'Molotov Cocktail' },
+      { fr: 'Taser', en: 'Taser' },
+      { fr: 'Outils', en: 'Tools' },
+      { fr: 'pansements', en: 'Bandages' },
+      { fr: 'medikit', en: 'Medkit' },
+      { fr: 'grenade', en: 'Grenade' },
+      { fr: 'torche plasma', en: 'Plasma Torch' },
+      { fr: 'ordinateur', en: 'Computer' },
+      { fr: 'conduit', en: 'Air Vent' },
+      { fr: 'jeton Nacelle', en: 'Escape Pod token' },
+      { fr: 'point faible', en: 'Intruder Weakness' },
+      { fr: 'carcasse', en: 'Intruder Carcass' },
+      { fr: 'œuf', en: 'Egg' },
+      { fr: 'verrouillé', en: 'Locked' },
+      { fr: 'déverrouillé', en: 'Unlocked' },
+      { fr: 'hibernation', en: 'hibernation' },
+      { fr: 'coordonnées', en: 'Coordinates' },
+      { fr: 'destination', en: 'Destination' },
+      { fr: 'opérationnel', en: 'Operational' },
+      { fr: 'endommagé', en: 'Damaged' },
+      { fr: 'mode coopératif', en: 'Co-op Mode' },
+      { fr: 'mode solo', en: 'Solo Mode' },
     ],
   },
 
