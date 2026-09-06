@@ -19,7 +19,7 @@ export const expeditions: Tutorial = {
   title: 'Expeditions',
   tagline:
     'Une météorite est tombée en Sibérie et a réveillé un mal ancien. Vous menez votre propre expédition, en Mecha, pour en revenir couvert de gloire.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Stonemaier Games / Matagot',
   author: 'Jamey Stegmaier',
   players: {
@@ -70,15 +70,589 @@ export const expeditions: Tutorial = {
       'Révéler un lieu, y tirer sa Corruption, et la combattre',
       'Résoudre une quête, améliorer un objet, fondre une météorite',
       'Fanfaronner et les huit catégories de Gloire',
+      'Les icônes de récompense : sauver, balayer, renouveler, emprunter à un lieu voisin',
+      'Les capacités des cinq Mechas, une par une',
       'Le déclenchement de la fin de partie et le décompte',
+      'Les récompenses, le tour, la Gloire et les Mechas en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Le mode solo et le livret Automa',
-      'Le détail des 20 lieux et de leurs récompenses',
-      'Les capacités des cinq Mechas, au-delà de leur principe',
-      'Les variantes Scythe et la feuille Résultats',
+      'Le comportement de l’Automa en solo, qui a son propre livret dans la boîte',
+      'Le texte des cartes Quête, Objet, Météorite et Personnage, qui se lit quand elles sortent',
+      'La feuille Résultats, qui est un carnet de records et non une règle',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Expeditions se lit vite mais se comprend mal : on voit bien qu'on gagne
+   * des ressources, beaucoup moins pourquoi. Tout tient dans une phrase —
+   * on ne gagne pas en accumulant, on gagne en **transformant** ce qu'on
+   * accumule en jetons Gloire, et le plus tôt possible.
+   */
+  brief: {
+    pitch: [
+      'Sibérie, 1925. Une météorite s’est écrasée près de la Tunguska et a réveillé une corruption ancienne. Deux expéditions sont parties l’étudier ; aucune n’est revenue.',
+      'Vous êtes un héros de guerre qui finance la sienne. Vous partez du Campement à bord d’un Mecha, avec un Personnage, un Compagnon et rien d’autre.',
+      'Le plateau se découvre en marchant : chaque tuile Lieu se retourne quand un Mecha y entre, et sort du sac la Corruption qui l’occupe.',
+    ],
+    win: [
+      'Le plus riche gagne. Tout se compte en pièces à la fin, et rien d’autre ne compte.',
+      'Quatre sources : les jetons Gloire, les pièces gagnées en jeu, les Objets améliorés, et 2 $ par jeton Corruption.',
+      'Les jetons Gloire pèsent le plus lourd, et leur valeur dépend de vos quêtes : 5, 6, 8 ou 10 $ pièce pour 0, 1, 2 ou 3 quêtes résolues.',
+      'À égalité, c’est le joueur qui totalise le plus dans les catégories Gloire qui l’emporte — y compris celles où il n’a posé aucune étoile.',
+    ],
+    doing: [
+      'Vos cartes fabriquent deux ressources : la Puissance et la Ruse. Elles ne valent rien en fin de partie — ce sont des munitions, pas des points.',
+      'Vous les dépensez pour Combattre la Corruption, pour Résoudre des quêtes, et ce sont ces gestes-là qui remplissent les catégories Gloire.',
+      'Fanfaronner transforme une catégorie remplie en jeton Gloire. C’est la seule action qui marque vraiment.',
+      'Résoudre des quêtes tôt vaut double : chaque quête résolue augmente ce que rapportent TOUS vos jetons Gloire, y compris ceux déjà posés.',
+      'Tout votre tour est une question de rythme : le jeton Action vous impose d’alterner, et il faut savoir quand tout renouveler.',
+    ],
+    traps: [
+      'Empiler Puissance et Ruse sans jamais les dépenser. Elles plafonnent à 10 chacune, et ne valent pas un centime au décompte.',
+      'Poser sa quatrième Gloire trop tôt : elle déclenche la fin de partie, et chacun joue encore un dernier tour. Le déclencheur n’est pas forcément le vainqueur.',
+      'Fanfaronner avant d’avoir résolu ses quêtes : la Gloire est posée à 5 $ et ne remonte que si vous résolvez ensuite — donc résolvez d’abord.',
+      'Oublier qu’un lieu ne rend sa récompense Améliorer, Fondre ou Fanfaronner qu’une fois toute sa Corruption retirée.',
+    ],
+    first: [
+      'Regardez le Campement avant votre premier tour : les sept catégories vous disent ce que le jeu récompense. Choisissez-en deux ou trois, pas sept.',
+      'Le premier tour donne les trois actions. Servez-vous-en pour aller loin, pas pour grappiller à côté du Campement.',
+      'Une quête résolue vaut plus qu’une quête gardée en main : elle remonte la valeur de toutes vos étoiles, présentes et à venir.',
+      'Renouveler n’est pas un tour perdu : votre rang actif est votre main de demain, et une main vide n’a rien à jouer.',
+      'La Corruption est le seul point qui se ramasse par paquets. Deux jetons valent une Gloire de plus si vous atteignez sept.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  aids: [
+    {
+      id: 'enjeu',
+      title: 'L’enjeu et le décompte',
+      lead: 'Ce qui rapporte des pièces, et ce qui n’en rapporte pas.',
+      icon: 'goal',
+      groups: [
+        {
+          title: 'Le décompte final',
+          lead: 'Tout se compte en pièces. Le plus riche gagne.',
+          entries: [
+            {
+              id: 'sc-gloire',
+              term: 'Jetons Gloire',
+              cost: '5 à 10 $ pièce',
+              body: [
+                'Chaque jeton Gloire posé sur le Campement rapporte selon le nombre de Quêtes que vous avez résolues.',
+                '0 quête : 5 $. 1 quête : 6 $. 2 quêtes : 8 $. 3 quêtes ou plus : 10 $.',
+              ],
+              note: 'La valeur s’applique à tous vos jetons, y compris ceux posés avant la quête.',
+              ref: 'Fin de partie — p.13',
+            },
+            {
+              id: 'sc-pieces',
+              term: 'Pièces',
+              cost: 'valeur faciale',
+              body: ['La somme de vos pièces à la fin de la partie.'],
+              ref: 'Fin de partie — p.13',
+            },
+            {
+              id: 'sc-objets',
+              term: 'Objets améliorés',
+              body: ['Chaque Objet amélioré rapporte la valeur imprimée en bas à droite de sa carte.'],
+              ref: 'Fin de partie — p.13',
+            },
+            {
+              id: 'sc-corruption',
+              term: 'Jetons Corruption',
+              cost: '2 $ pièce',
+              body: [
+                'Chacun de vos jetons Corruption rapporte 2 $, celui de valeur 20 compris.',
+                'Ignorez au décompte les valeurs imprimées sur les jetons.',
+              ],
+              ref: 'Fin de partie — p.13',
+            },
+            {
+              id: 'sc-rien',
+              term: 'Ce qui ne rapporte rien',
+              body: [
+                'La Puissance et la Ruse restantes. Les Ouvriers. Les jetons Plan. Les cartes en main.',
+                'Ce sont des moyens, pas des points.',
+              ],
+              warn: 'Une piste de Puissance à 10 en fin de partie, c’est 10 points de dépense qu’on n’a pas faits.',
+              ref: 'Fin de partie — p.13',
+            },
+            {
+              id: 'sc-egalite',
+              term: 'Égalité',
+              body: [
+                'Le joueur à égalité qui totalise le plus dans les catégories Gloire l’emporte.',
+                'On compte alors toutes les catégories, même celles où il n’a pas d’étoile.',
+                'Si l’égalité persiste, victoire partagée.',
+              ],
+              ref: 'Fin de partie — p.13',
+            },
+          ],
+        },
+        {
+          title: 'Les catégories de Gloire',
+          lead: 'Huit cases sur le Campement, sept catégories : Ouvriers et jetons Plan n’en font qu’une.',
+          entries: [
+            { id: 'ct-quetes', term: 'Résoudre 4 Quêtes', body: ['Quatre cartes Quête glissées sous le bord supérieur de votre pupitre.'], ref: 'Catégories Gloire — p.11' },
+            { id: 'ct-meteorites', term: 'Fondre 4 Météorites', body: ['Quatre cartes Météorite glissées sous le bord inférieur de votre pupitre.'], ref: 'Catégories Gloire — p.11' },
+            { id: 'ct-objets', term: 'Améliorer 4 Objets', body: ['Quatre cartes Objet glissées sous le bord droit de votre pupitre.'], ref: 'Catégories Gloire — p.11' },
+            {
+              id: 'ct-lieu20',
+              term: 'Combattre la Corruption du Lieu 20',
+              body: ['Le Lieu 20 ne porte qu’un seul jeton, de valeur 20. Il a sa catégorie à lui.'],
+              ref: 'Catégories Gloire — p.11',
+            },
+            {
+              id: 'ct-corruption',
+              term: 'Posséder au moins 7 jetons Corruption',
+              body: ['Le jeton du Lieu 20 ne compte pas dans ce total.'],
+              ref: 'Catégories Gloire — p.11',
+            },
+            {
+              id: 'ct-cartes',
+              term: 'Contrôler au moins 8 cartes',
+              body: [
+                'Vos cartes en main et dans votre rang actif.',
+                'Les cartes résolues, fondues ou améliorées ne comptent pas : elles ne sont plus contrôlées.',
+              ],
+              ref: 'Catégories Gloire — p.11',
+            },
+            {
+              id: 'ct-ouvriers',
+              term: 'Posséder 7 Ouvriers, ou 5 jetons Plan',
+              body: ['Deux cases sur le plateau, une seule Gloire : réussir les deux ne rapporte qu’un jeton.'],
+              ref: 'Catégories Gloire — p.11',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'actions',
+      title: 'Le tour et les actions',
+      lead: 'Ce que le jeton Action autorise, et ce que chaque action fait.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Le jeton Action',
+          entries: [
+            {
+              id: 'ac-tour',
+              term: 'Un tour ordinaire',
+              body: [
+                'Glissez votre jeton Action pour couvrir Déplacer, Jouer OU Récolter.',
+                'Effectuez les 2 actions restées visibles, dans l’ordre de votre choix.',
+                'Le jeton reste là jusqu’à votre prochain tour Renouveler.',
+              ],
+              warn: 'Vous devez faire toutes les actions visibles que vous pouvez faire — ce n’est pas au choix.',
+              ref: 'Déroulement — p.4',
+            },
+            {
+              id: 'ac-triple',
+              term: 'Le tour à trois actions',
+              body: [
+                'Quand votre jeton Action est dans la case Renouveler au début du tour — au premier tour, et après chaque Renouveler.',
+                'Glissez-le dans la case vide, puis faites Déplacer, Jouer ET Récolter dans l’ordre de votre choix.',
+              ],
+              ref: 'Déroulement — p.4',
+            },
+            {
+              id: 'ac-renouveler',
+              term: 'Renouveler',
+              body: [
+                'Tour Renouveler : glissez votre jeton depuis Déplacer, Jouer ou Récolter sur la case Renouveler. C’est tout votre tour.',
+                'Replacez sur votre pupitre les Ouvriers posés sur vos cartes actives, puis reprenez toutes vos cartes actives en main.',
+              ],
+              warn: 'On ne peut Renouveler que si le jeton couvrait Déplacer, Jouer ou Récolter au début du tour.',
+              note: 'Une récompense Renouveler, elle, rend cartes et Ouvriers sans déplacer le jeton Action.',
+              ref: 'Renouveler — p.12',
+            },
+          ],
+        },
+        {
+          title: 'Les trois actions',
+          entries: [
+            {
+              id: 'ac-deplacer',
+              term: 'Déplacer',
+              body: [
+                'Déplacez votre Mecha dans un autre Lieu vide, à Portée de 1 à 3 Lieux.',
+                'Vous pouvez traverser des Lieux occupés ; ils comptent dans la distance.',
+                'Vous devez terminer ailleurs qu’au départ, et jamais sur une carte centrale.',
+              ],
+              warn: 'Une fois le Campement quitté, on n’y revient pas : ce n’est pas un Lieu.',
+              note: 'Aucune destination valide ? Ne bougez pas, l’action est simplement passée.',
+              ref: 'Déplacer — p.5',
+            },
+            {
+              id: 'ac-jouer',
+              term: 'Jouer',
+              body: [
+                'Posez 1 carte de votre main à droite de votre rang actif.',
+                'Dans l’ordre que vous voulez : gagnez sa Valeur Base (coin supérieur gauche), et/ou posez 1 Ouvrier de la couleur demandée pour activer sa capacité.',
+                'Les deux sont facultatifs.',
+              ],
+              warn: 'Puissance et Ruse plafonnent à 10 chacune. Au-delà, le surplus est perdu.',
+              note: 'Une carte ne porte jamais plus d’un Ouvrier. « Précédent » désigne la carte immédiatement à gauche dans le rang actif.',
+              ref: 'Jouer — p.6',
+            },
+            {
+              id: 'ac-recolter',
+              term: 'Récolter',
+              body: [
+                'Gagnez les récompenses visibles du Lieu où se trouve votre Mecha, lues au bas de la tuile.',
+                'Un symbole « / » veut dire « ou » : ne prenez que les récompenses d’un seul côté.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+          ],
+        },
+        {
+          title: 'Les capacités qui marquent',
+          lead: 'Elles viennent des cartes et des Lieux, pas du tour de base.',
+          entries: [
+            {
+              id: 'ac-combattre',
+              term: 'Combattre',
+              body: [
+                'Payez le coût du jeton Corruption le plus haut du Lieu où vous êtes — orange coûte de la Puissance, turquoise de la Ruse.',
+                'Prenez ce jeton sur votre pupitre. Vous pouvez enchaîner tant que vous pouvez payer.',
+                'Retirer le dernier jeton d’un Lieu révèle sa récompense cachée : Améliorer, Fondre ou Fanfaronner.',
+              ],
+              warn: 'Le Lieu 20 est le seul dont le jeton se paie en mélangeant les deux : 10 Puissance ET 10 Ruse.',
+              note: 'Un jeton Corruption détruit sans être gagné retourne dans le sac.',
+              ref: 'Combattre — p.8',
+            },
+            {
+              id: 'ac-resoudre',
+              term: 'Résoudre',
+              body: [
+                'Votre Mecha doit être sur le Lieu indiqué par la carte Quête que vous contrôlez.',
+                'Payez le coût inscrit à droite de la carte, gagnez la récompense en dessous.',
+                'Glissez la Quête sous le bord supérieur de votre pupitre, sous les précédentes.',
+              ],
+              warn: 'Quatre Quêtes résolues au maximum. La Corruption sur le Lieu n’empêche pas de Résoudre.',
+              note: 'Chaque quête résolue augmente ce que vaut chacun de vos jetons Gloire, même ceux déjà posés.',
+              ref: 'Résoudre — p.8',
+            },
+            {
+              id: 'ac-ameliorer',
+              term: 'Améliorer',
+              body: [
+                'Glissez 1 carte Objet sous le bord droit de votre pupitre, sous les précédentes, en ne laissant voir que sa capacité.',
+                'Sa partie continue est active pour le reste de la partie. Ses récompenses instantanées, elles, sont ignorées.',
+              ],
+              warn: 'Quatre Objets améliorés au maximum. La récompense Améliorer d’un Lieu n’apparaît qu’une fois sa Corruption retirée.',
+              note: 'Un Ouvrier posé sur la carte revient sur votre pupitre, immédiatement disponible.',
+              ref: 'Améliorer — p.10',
+            },
+            {
+              id: 'ac-fondre',
+              term: 'Fondre',
+              body: [
+                'Glissez 1 carte Météorite sous le bord inférieur de votre pupitre, tournée à 90°, en ne laissant voir que son bonus.',
+                'Gagnez aussitôt le bonus Fondre de TOUTES vos Météorites fondues, la nouvelle comprise.',
+              ],
+              warn: 'Quatre Météorites fondues au maximum.',
+              note: 'Posséder 1 puis 2 Météorites fondues débloque les effets « 1 » et « 2 » des cartes Météorite que vous jouez.',
+              ref: 'Fondre — p.10',
+            },
+            {
+              id: 'ac-fanfaronner',
+              term: 'Fanfaronner',
+              body: [
+                'Choisissez sur le Campement 1 catégorie dont vous avez atteint l’objectif et où vous n’avez pas déjà d’étoile.',
+                'Posez-y un jeton Gloire à votre couleur.',
+              ],
+              warn: 'Les jetons des autres joueurs ne vous bloquent pas. Le 4ᵉ jeton Gloire posé déclenche la fin de partie.',
+              ref: 'Fanfaronner — p.10',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'recompenses',
+      title: 'Lire une récompense',
+      lead: 'Les icônes des tuiles Lieu et des cartes, une par une.',
+      icon: 'markers',
+      groups: [
+        {
+          title: 'Gagner du matériel',
+          entries: [
+            {
+              id: 'rc-carte',
+              term: 'Gagner une carte',
+              body: [
+                'La carte arrive le plus à droite de votre rang actif, pas dans votre main.',
+                'Certaines récompenses donnent la carte du dessus de la Pioche ; d’autres font piocher 2 cartes et en garder 1, la seconde partant face visible dans le Tas.',
+              ],
+              note: 'Pioche vide ? Mélangez le Tas pour en faire une nouvelle. Le Highlander, lui, prend ses cartes gagnées en main.',
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-centrale',
+              term: 'Carte centrale',
+              body: [
+                'Les 5 cartes face visible posées entre les Lieux.',
+                'Une carte centrale « adjacente » est adjacente au Lieu où se trouve votre Mecha.',
+                'Chaque carte centrale gagnée est aussitôt remplacée par le dessus de la Pioche.',
+              ],
+              ref: 'Récolter — p.9 · Jouer — p.6',
+            },
+            {
+              id: 'rc-ouvrier',
+              term: 'Gagner un Ouvrier',
+              body: [
+                'Prenez-le dans la Réserve et posez-le sur votre pupitre : il est « disponible ».',
+                'Les Ouvriers sont limités à 10 par couleur. Réserve vide dans cette couleur, rien ne se passe.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-plan',
+              term: 'Jeton Plan',
+              body: [
+                'Gagné en révélant un Lieu face cachée, et par certaines récompenses.',
+                'Il ne vaut rien en pièces. Cinq d’entre eux valent une catégorie Gloire.',
+              ],
+              note: 'Les jetons Plan sont en nombre limité dans la Réserve.',
+              ref: 'Déplacer — p.5 · Récolter — p.10',
+            },
+          ],
+        },
+        {
+          title: 'Manipuler ses cartes',
+          entries: [
+            {
+              id: 'rc-balayer',
+              term: 'Balayer',
+              body: [
+                'Choisissez autant de cartes centrales que vous voulez parmi les 5 et mettez-les au Tas.',
+                'Remplacez-les une par une par le dessus de la Pioche.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-sauver',
+              term: 'Sauver',
+              body: [
+                'Reprenez en main 1 carte de votre rang actif.',
+                'L’Ouvrier qui s’y trouvait revient sur votre pupitre.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-renouveler',
+              term: 'Récompense Renouveler',
+              body: [
+                'Reprenez vos Ouvriers et vos cartes actives, comme au tour Renouveler.',
+                'Mais ne glissez PAS votre jeton Action : votre tour continue.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-jouer',
+              term: 'Jouer 1 carte de sa main',
+              body: ['Toutes les règles ordinaires de l’action Jouer s’appliquent.'],
+              ref: 'Récolter — p.9',
+            },
+          ],
+        },
+        {
+          title: 'Emprunter à côté',
+          entries: [
+            {
+              id: 'rc-adjacent',
+              term: 'Récompense d’un Lieu adjacent',
+              body: [
+                'Gagnez 1 seule des icônes de ce Lieu.',
+                'Le symbole « / » ne vous limite pas ici : vous choisissez librement.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+            {
+              id: 'rc-capacite',
+              term: 'Activer la capacité d’une carte adjacente',
+              body: [
+                'Vise les cartes centrales. Vous ne posez pas d’Ouvrier dessus.',
+                'Un effet continu ainsi activé ne dure que jusqu’à la fin de ce tour.',
+              ],
+              ref: 'Récolter — p.9',
+            },
+          ],
+        },
+        {
+          title: 'Découvrir un Lieu',
+          entries: [
+            {
+              id: 'rc-revelation',
+              term: 'Entrer sur un Lieu face cachée',
+              body: [
+                'Votre déplacement s’arrête là. Puis, dans l’ordre :',
+                '1. Gagnez le jeton Plan posé sur le Lieu.',
+                '2. Retournez la tuile face visible.',
+                '3. Tirez des jetons Corruption du sac, un par un, empilés face visible, jusqu’à atteindre le niveau de Corruption imprimé du Lieu.',
+              ],
+              warn: 'Le Lieu 20 est l’exception : on y pose le jeton de valeur 20 au lieu de piocher.',
+              note: 'Sac vide en cours de tirage : arrêtez, le Lieu reste en l’état.',
+              ref: 'Déplacer — p.5',
+            },
+            {
+              id: 'rc-cachee',
+              term: 'Récompense cachée d’un Lieu',
+              body: [
+                'Chaque Lieu du Centre et du Nord a une de ses récompenses recouverte par la Corruption.',
+                'C’est toujours Améliorer, Fondre ou Fanfaronner. Elle n’est récoltable qu’une fois le dernier jeton Corruption retiré.',
+              ],
+              ref: 'Récolter — p.10',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'mechas',
+      title: 'Les cinq Mechas',
+      lead: 'Chaque Mecha a une capacité continue, active toute la partie.',
+      icon: 'items',
+      groups: [
+        {
+          entries: [
+            {
+              id: 'me-tatanka',
+              term: 'Tatanka',
+              body: ['Vous pouvez Résoudre, Améliorer et Fondre jusqu’à 5 fois chacun, au lieu de 4.'],
+              ref: 'Capacités de Mecha — p.12',
+            },
+            {
+              id: 'me-arpenteur',
+              term: 'Arpenteur des marais',
+              body: ['La Portée de vos déplacements est de 1 à 4 Lieux, au lieu de 1 à 3.'],
+              ref: 'Capacités de Mecha — p.12',
+            },
+            {
+              id: 'me-odin',
+              term: 'La Colère d’Odin',
+              body: ['À tout moment de votre tour, détruisez 1 jeton Plan de votre pupitre pour gagner 1 Puissance, 1 Ruse ou 1 $.'],
+              note: 'Les jetons Plan n’ont aucune valeur en pièces : c’est le seul Mecha qui sait les convertir.',
+              ref: 'Capacités de Mecha — p.12',
+            },
+            {
+              id: 'me-bucheron',
+              term: 'Bûcheron',
+              body: [
+                'Chaque fois que vous Combattez, réduisez de 1 le coût du PREMIER jeton Corruption de chaque couleur.',
+                'Le jeton de valeur 20 du Lieu 20 tombe donc à 18.',
+              ],
+              note: 'Deuxième jeton orange dans le même Combattre : plein tarif. C’est bien un rabais par couleur, pas par jeton.',
+              ref: 'Capacités de Mecha — p.12',
+            },
+            {
+              id: 'me-highlander',
+              term: 'Highlander',
+              body: ['Les cartes que vous gagnez arrivent dans votre main, et non dans votre rang actif.'],
+              ref: 'Capacités de Mecha — p.12',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Portée',
+      body: [
+        'La distance d’un déplacement : 1 à 3 Lieux par défaut, 1 à 4 pour l’Arpenteur des marais.',
+        'Les Lieux traversés comptent, occupés ou non.',
+      ],
+      ref: 'Déplacer — p.5',
+    },
+    {
+      term: 'Rang actif',
+      body: [
+        'Les cartes posées à droite de votre pupitre. Elles restent dans l’ordre où elles ont été jouées.',
+        'Toute carte qui y arrive — jouée, gagnée ou défaussée — se place le plus à droite.',
+      ],
+      ref: 'Jouer — p.6',
+    },
+    {
+      term: 'Précédent',
+      body: ['La carte immédiatement à gauche dans votre rang actif.'],
+      ref: 'Jouer — p.6',
+    },
+    {
+      term: 'Valeur Base',
+      body: [
+        'Le chiffre en haut à gauche d’une carte : la Puissance et/ou la Ruse qu’elle donne quand on la joue.',
+        'Certaines cartes en donnent davantage si vous avez assez de Gloire ou de Météorites fondues.',
+      ],
+      ref: 'Jouer — p.6',
+    },
+    {
+      term: 'Couleur d’une carte',
+      body: ['C’est la couleur de l’Ouvrier imprimé dans son coin inférieur gauche : bleu, rouge, vert, jaune ou violet.'],
+      ref: 'Jouer — p.6',
+    },
+    {
+      term: 'Cartes que vous contrôlez',
+      body: [
+        'Vos cartes en main et celles de votre rang actif.',
+        'Une carte résolue, fondue ou améliorée n’est plus contrôlée : elle est glissée sous le pupitre.',
+      ],
+      ref: 'Jouer — p.6 · Catégories Gloire — p.11',
+    },
+    {
+      term: 'Tas',
+      body: ['La défausse commune, à côté de la Pioche. Pioche vide, on mélange le Tas pour en refaire une.'],
+      ref: 'Récolter — p.9',
+    },
+    {
+      term: 'Réserve',
+      body: ['Les Ouvriers et les jetons Plan disponibles au centre de la table. Les Ouvriers sont limités à 10 par couleur.'],
+      ref: 'Récolter — p.9',
+    },
+    {
+      term: 'Campement',
+      body: [
+        'Le point de départ de tous les Mechas, et le tableau des catégories de Gloire.',
+        'Il est adjacent à 3 Lieux. Une fois quitté, on n’y revient jamais : ce n’est pas un Lieu.',
+      ],
+      ref: 'Déplacer — p.5',
+    },
+    {
+      term: 'Lieu 20',
+      body: [
+        'Le seul Lieu dont la Corruption est un unique jeton de valeur 20, payé en 10 Puissance ET 10 Ruse.',
+        'Il a sa propre catégorie de Gloire, et vaut 2 $ comme tout jeton Corruption.',
+      ],
+      ref: 'Combattre — p.8',
+    },
+    {
+      term: 'Puissance',
+      aliases: ['Ruse'],
+      body: [
+        'Les deux ressources du jeu, suivies sur la piste de votre pupitre. Plafond : 10 chacune.',
+        'Elles servent à Combattre et à Résoudre. Elles ne valent rien au décompte.',
+      ],
+      ref: 'Jouer — p.6',
+    },
+    {
+      term: 'Mode solo',
+      body: [
+        'Expeditions se joue seul contre un Automa, décrit dans un livret séparé fourni avec la boîte.',
+        'Ce tutoriel installe la partie et déroule les règles communes ; le comportement de l’Automa se lit dans son livret.',
+      ],
+      ref: 'Livret Automa',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -273,6 +847,19 @@ export const expeditions: Tutorial = {
           tip: 'Le chronomètre en haut à droite tourne pendant la partie. Il reprend même si vous fermez l’application.',
         },
         {
+          id: 'b1b',
+          kind: 'info',
+          title: 'Où vous êtes, et ce que vous cherchez',
+          body: [
+            'Sibérie, 1925. Une météorite a réveillé une corruption ancienne près de la Tunguska, et deux expéditions envoyées l’étudier ne sont jamais revenues.',
+            'Vous financez la vôtre. Vous partez du Campement à bord d’un Mecha, avec un Personnage et un Compagnon.',
+            'Le plateau se découvre en marchant : chaque tuile Lieu se retourne quand un Mecha y entre, et sort du sac la Corruption qui l’occupe.',
+          ],
+          tip: 'Ce n’est pas un jeu d’exploration au sens propre : la carte est le décor. Ce que vous cherchez vraiment, ce sont les étoiles du Campement.',
+          components: ['campement', 'mechas'],
+          ref: 'Aperçu et objectif — p.1',
+        },
+        {
           id: 'b2',
           kind: 'info',
           title: 'Le but : être le plus riche',
@@ -283,6 +870,35 @@ export const expeditions: Tutorial = {
           warn: 'Ce n’est pas une course : le premier à quatre Gloire déclenche la fin, il ne gagne pas pour autant.',
           components: ['gloire', 'pieces'],
           ref: 'Fin de partie — p.13',
+        },
+        {
+          id: 'b2b',
+          kind: 'info',
+          title: 'Ce que vous faites de vos tours',
+          body: [
+            'Vos cartes fabriquent deux ressources : la Puissance et la Ruse. Elles ne valent rien au décompte — ce sont des munitions.',
+            'Vous les dépensez pour Combattre la Corruption et pour Résoudre des quêtes. Ce sont ces gestes qui remplissent les catégories du Campement.',
+            'Fanfaronner transforme une catégorie remplie en jeton Gloire. C’est la seule action qui marque vraiment.',
+          ],
+          warn: 'Une piste de Puissance à 10 en fin de partie, c’est 10 points de dépense qu’on n’a pas faits. Rien ne se garde.',
+          tip: 'Résolvez vos quêtes tôt : chaque quête résolue augmente ce que rapportent TOUS vos jetons Gloire, y compris ceux déjà posés.',
+          components: ['jetons-piste', 'quetes'],
+          ref: 'Fin de partie — p.13',
+        },
+        {
+          id: 'b2c',
+          kind: 'info',
+          title: 'Vos premiers tours',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Regardez le Campement avant de jouer : ses sept catégories vous disent ce que le jeu récompense. Choisissez-en deux ou trois, pas sept.',
+            'Le premier tour donne les trois actions. Servez-vous-en pour aller loin, pas pour grappiller à côté du Campement.',
+            'Renouveler n’est pas un tour perdu : votre rang actif est votre main de demain, et une main vide n’a rien à jouer.',
+            'La Corruption est le seul point qui se ramasse par paquets — sept jetons valent une catégorie entière.',
+          ],
+          warn: 'Ces conseils ne sont pas dans le livret de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
         },
         {
           id: 'b3',
@@ -614,9 +1230,25 @@ export const expeditions: Tutorial = {
           title: 'La capacité de votre Mecha',
           body: [
             'Chaque Mecha a une capacité continue, active toute la partie, imprimée sur son pupitre.',
-            'Portée de 4 lieux au lieu de 3, cinq résolutions au lieu de quatre, réduction du coût de Corruption…',
+            'Elle n’est pas un bonus de plus : elle décide de ce qui vous convient pendant toute la partie.',
           ],
-          tip: 'Lisez-la maintenant : elle change les choix qui vous conviennent pendant toute la partie.',
+          tip: 'Lisez-la maintenant, avant de choisir votre première direction.',
+          ref: 'Capacités de Mecha — p.12',
+        },
+        {
+          id: 't5b',
+          kind: 'info',
+          title: 'Les cinq capacités, en clair',
+          body: [
+            'Tatanka : Résoudre, Améliorer et Fondre jusqu’à 5 fois chacun, au lieu de 4.',
+            'Arpenteur des marais : Portée de 1 à 4 Lieux, au lieu de 1 à 3.',
+            'La Colère d’Odin : à tout moment de votre tour, détruisez 1 jeton Plan pour gagner 1 Puissance, 1 Ruse ou 1 $.',
+            'Bûcheron : quand vous Combattez, le PREMIER jeton Corruption de chaque couleur coûte 1 de moins.',
+            'Highlander : les cartes que vous gagnez arrivent dans votre main, et non dans votre rang actif.',
+          ],
+          warn: 'Le rabais du Bûcheron vaut par couleur, pas par jeton : un deuxième jeton orange dans le même Combattre est au plein tarif.',
+          tip: 'Ces cinq capacités sont dans les aides de jeu, sous « Les cinq Mechas ».',
+          components: ['mechas', 'pupitres'],
           ref: 'Capacités de Mecha — p.12',
         },
       ],
@@ -714,6 +1346,34 @@ export const expeditions: Tutorial = {
           ],
           warn: 'Une carte gagnée ou défaussée ne rapporte pas sa Valeur Base et n’accueille pas d’ouvrier.',
           ref: 'Récolter — p.9',
+        },
+        {
+          id: 'a8',
+          kind: 'info',
+          title: 'Les icônes de récompense qu’on ne devine pas',
+          body: [
+            'Sauver : reprenez en main une carte de votre rang actif. L’ouvrier qui s’y trouvait revient sur votre pupitre.',
+            'Récompense Renouveler : rendez ouvriers et cartes actives, mais NE glissez PAS votre jeton Action. Votre tour continue.',
+            'Récompense d’un lieu adjacent : gagnez une seule de ses icônes, et le « / » ne vous limite pas.',
+            'Activer une carte adjacente : vise les cartes centrales, sans y poser d’ouvrier. Un effet continu ainsi activé ne dure que ce tour.',
+          ],
+          tip: 'Le bouton Aides de jeu garde ces icônes sous la main, sous « Lire une récompense ».',
+          components: ['aides', 'ouvriers'],
+          ref: 'Récolter — pp.9-10',
+        },
+        {
+          id: 'a9',
+          kind: 'info',
+          title: 'Ce que le plateau vous limite',
+          body: [
+            'Puissance et Ruse plafonnent à 10 chacune. Le surplus est perdu, il ne se reporte pas.',
+            'Les ouvriers sont limités à 10 par couleur : réserve vide dans cette couleur, rien ne se passe.',
+            'Une carte ne porte jamais plus d’un ouvrier.',
+            'Les jetons Plan aussi sont en nombre limité dans la Réserve.',
+          ],
+          warn: 'Chaque catégorie du Campement est plafonnée à quatre — quatre quêtes, quatre objets, quatre météorites. Le Tatanka, lui, monte à cinq.',
+          components: ['jetons-piste', 'ouvriers', 'plans'],
+          ref: 'Jouer — p.6 · Récolter — p.9',
         },
       ],
     },

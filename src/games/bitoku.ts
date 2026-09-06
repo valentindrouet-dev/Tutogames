@@ -22,7 +22,7 @@ export const bitoku: Tutorial = {
   title: 'Bitoku',
   tagline:
     'Le grand esprit de la forêt tire sa révérence. Vous êtes l’un des Bitokus appelés à lui succéder, et vous avez quatre années pour le prouver.',
-  contentVersion: '1.0',
+  contentVersion: '2.0',
   publisher: 'Devir / IELLO',
   author: 'Germán P. Millán',
   players: {
@@ -78,14 +78,550 @@ export const bitoku: Tutorial = {
       'Les cinq régions de la forêt et leurs actions Forêt',
       'Les Bâtiments, les pistes Kodama, les Rochers d’Iwakura, les Mitamas et Libellules, les Cristaux',
       'Les Chemins de la sagesse, le Chemin de Bitoku, les cartes Vision',
-      'L’Automne, l’Hiver, et le décompte de l’ascension',
+      'L’Automne, l’Hiver, et les huit étapes du décompte de l’ascension',
+      'Le tour du Tengu en solo, et l’option de difficulté accrue',
+      'Les régions, les icônes, les Visions et le Tengu en aides de jeu consultables en partie',
     ],
     skipped: [
-      'Le Cycle d’Activation du Tengu, étape par étape',
-      'L’option de difficulté accrue des actions Forêt',
-      'Le détail des 29 cartes Yōkai et des 24 cartes Bitoku',
+      'Le texte des 29 cartes Yōkai, des 24 cartes Bitoku et des cartes Vision, qui se lit quand elles sortent',
+      'Le détail case par case du Cycle d’Activation du Tengu, qui se lit sur sa planche pendant son tour',
     ],
   },
+
+  /**
+   * L'enjeu du jeu, avant les règles.
+   *
+   * Bitoku est le jeu le plus dense de la bibliothèque, et son livret le dit
+   * lui-même dès la première page. Le risque n'est pas de mal jouer, c'est
+   * de jouer sans savoir ce qu'on poursuit : tout, absolument tout, se
+   * ramène à une seule piste.
+   */
+  brief: {
+    pitch: [
+      'Une forêt primitive, l’un des Cinq Cœurs du Monde. Le grand esprit qui la veille arrive au terme de son existence.',
+      'Vous êtes un Bitoku, un esprit candidat à sa succession. Vous avez quatre ans pour prouver que vous méritez cet honneur.',
+      'Quatre manches, quatre saisons chacune. À la fin du dernier Hiver a lieu l’ascension, et l’un de vous devient le nouveau grand esprit.',
+    ],
+    win: [
+      'Une seule monnaie : les Points de Vertu. Tout ce que vous faites en rapporte, directement ou à l’ascension.',
+      'Vous avancez au fur et à mesure sur le Chemin de l’esprit, qui borde le plateau. Celui qui va le plus loin gagne.',
+      'L’ascension ajoute huit décomptes : les fruits des Cristaux, l’ordre du tour, les types de Bitokus, les Trésors du lac, les Rochers d’Iwakura, les dés et ressources restants, les Visions, et les PV violets de votre plateau.',
+      'À égalité, c’est le joueur qui a réalisé le plus de Visions qui l’emporte ; puis le mieux placé dans l’ordre du tour.',
+    ],
+    doing: [
+      'Un tour d’Été, c’est un dé posé quelque part. Toute la partie tient dans le choix de l’endroit et de la valeur.',
+      'Chaque région de la forêt donne une chose et une seule : les Terres des Yomis donnent Mitamas et Libellules, les Escaliers donnent des points de mouvement, la Clairière de Jade donne des ressources, les Forges donnent Cristaux et Bâtiments.',
+      'Plus le dé est fort, plus l’action est généreuse — mais il doit être au moins aussi fort que tous les autres déjà présents dans la région.',
+      'Chaque piste que vous montez — Kodama, Chemin de Bitoku, Chemins de la sagesse — se transforme en PV à l’ascension. Rien n’est décoratif.',
+      'Vos cartes Vision sont vos objectifs personnels : elles rapportent gros, et coûtent des PV si vous les manquez.',
+    ],
+    traps: [
+      'Prendre une carte Vision sans avoir les moyens de la réaliser : une Vision manquée retire 1 ou 2 PV.',
+      'Croire que deux Visions peuvent partager le même élément. Chaque Cristal, chaque Bâtiment ne compte que pour une seule.',
+      'Garder ses ressources et ses dés : à l’ascension, ils ne rapportent qu’un quart de leur somme, arrondi à l’inférieur.',
+      'Poser un dé faible dans une région déjà occupée par un dé plus fort. C’est simplement interdit : le placement est perdu.',
+    ],
+    first: [
+      'Lisez vos deux premières cartes Vision avant votre premier dé : elles vous disent quelle direction prendre dans la forêt.',
+      'Les Escaliers de la connaissance sont la région la plus sous-estimée. Les points de mouvement font avancer les Pèlerins, et les Pèlerins font des PV à l’ascension.',
+      'Montez au moins un Kodama haut plutôt que trois à mi-hauteur : les Trésors du lac récompensent la première place, pas la présence.',
+      'Un Rocher d’Iwakura sans Pèlerin à côté ne rapporte rien. Prévoyez le Pèlerin en même temps que le Rocher.',
+      'Ordre du tour : la première place vaut 3 PV et le premier choix des dés. Elle se décide en Automne, par la position de vos dés dans la Demeure.',
+    ],
+    extSource: 'guides de jeu en ligne',
+  },
+
+  aids: [
+    {
+      id: 'enjeu',
+      title: 'L’enjeu et l’ascension',
+      lead: 'Ce qui rapporte des Points de Vertu, et dans quel ordre on compte.',
+      icon: 'goal',
+      groups: [
+        {
+          title: 'Le décompte de l’ascension, dans l’ordre',
+          lead: 'Après la phase d’Hiver de la quatrième manche.',
+          entries: [
+            {
+              id: 'as-a',
+              term: 'A. Récolter les fruits',
+              body: [
+                'Chaque joueur récolte les récompenses indiquées sur les Cristaux oniriques (violets) de son plateau individuel.',
+                'Dans l’ordre de votre choix.',
+              ],
+              ref: 'Décompte final — p.14',
+            },
+            {
+              id: 'as-b',
+              term: 'B. Premier parmi tant d’autres',
+              cost: '3 PV',
+              body: ['Le joueur en première position sur la piste Ordre du tour reçoit 3 PV.'],
+              ref: 'Décompte final — p.14',
+            },
+            {
+              id: 'as-c',
+              term: 'C. Les Bitokus s’inclinent devant vous',
+              body: [
+                'Comptez le nombre de types DIFFÉRENTS de Bitokus parmi vos cartes. Les doublons ne rapportent rien ici.',
+                '1 type : 1 PV. 2 : 2. 3 : 4. 4 : 7. 5 : 11. 6 : 16. 7 : 22.',
+              ],
+              note: 'Vous marquez quelle que soit votre progression sur le Chemin de Bitoku.',
+              ref: 'Décompte final — p.14',
+            },
+            {
+              id: 'as-d',
+              term: 'D. Trésors du lac',
+              body: [
+                'Pour chaque piste Kodama, le Kodama le plus avancé prend les PV les plus élevés de la tuile Trésor, le deuxième ceux du milieu, le troisième les plus faibles.',
+                'Kodamas sur la même case : additionnez les PV des positions disputées et partagez à parts égales, arrondi à l’inférieur.',
+              ],
+              note: 'La dernière case d’une piste Kodama n’accueille qu’un seul Kodama.',
+              ref: 'Décompte final — p.14',
+            },
+            {
+              id: 'as-e',
+              term: 'E. Les Rochers d’Iwakura résonnent',
+              body: [
+                'Chaque Pèlerin placé à côté d’un Rocher vous rapporte 1 PV par élément indiqué sur ce Rocher que vous possédez.',
+                'Les éléments se trouvent sur vos cartes Yōkai, vos tuiles Bâtiment ou vos tuiles Mitama.',
+              ],
+              warn: 'Un Rocher sans Pèlerin à côté ne rapporte rien. Un élément présent sur deux Rochers se compte deux fois.',
+              ref: 'Décompte final — p.15',
+            },
+            {
+              id: 'as-f',
+              term: 'F. Les gardiens rendent hommage',
+              body: [
+                'Additionnez la valeur de vos 3 dés et le nombre de ressources qu’il vous reste.',
+                'Divisez par 4, arrondi à l’inférieur. C’est votre gain en PV.',
+              ],
+              note: 'Autrement dit, garder des ressources rapporte très peu : elles valent mieux dépensées.',
+              ref: 'Décompte final — p.15',
+            },
+            {
+              id: 'as-g',
+              term: 'G. Visions révélées',
+              body: [
+                'Chaque carte Vision entièrement réalisée rapporte les PV indiqués.',
+                'Chaque Vision non réalisée en retire 1 ou 2, selon ce qui est écrit dessus.',
+              ],
+              warn: 'Un même élément de jeu ne peut servir qu’à une seule Vision. Deux Visions qui demandent un Bâtiment demandent deux Bâtiments.',
+              ref: 'Décompte final — p.15 · Cartes Vision — p.16',
+            },
+            {
+              id: 'as-h',
+              term: 'H. Destin accompli',
+              body: ['Additionnez les PV de fin de partie (en violet) imprimés dans les zones Bâtiment et Cristal de votre plateau individuel.'],
+              ref: 'Décompte final — p.15',
+            },
+            {
+              id: 'as-egalite',
+              term: 'Égalité',
+              body: [
+                'Le joueur ayant réalisé le plus de Visions gagne.',
+                'Si l’égalité persiste, le mieux placé sur la piste Ordre du tour.',
+              ],
+              ref: 'Décompte final — p.15',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'regions',
+      title: 'Les régions de la forêt',
+      lead: 'Où poser un dé, et ce que chaque valeur donne.',
+      icon: 'rooms',
+      groups: [
+        {
+          title: 'La règle commune',
+          entries: [
+            {
+              id: 'rg-regle',
+              term: 'Poser un dé dans une région',
+              body: [
+                'Votre dé doit avoir une valeur égale ou supérieure à celle de CHAQUE autre dé déjà présent dans cette région.',
+                'Vous choisissez ensuite une action Forêt dont la condition de valeur est remplie.',
+                'La valeur 1 fait toujours la même chose partout : avancer de 1 case votre Kodama de cette région.',
+              ],
+              warn: 'Un placement ne donne jamais plus d’une action Forêt et une action Bâtiment.',
+              ref: 'Les régions de la forêt — p.19',
+            },
+          ],
+        },
+        {
+          title: 'Les cinq régions',
+          entries: [
+            {
+              id: 'rg-yomis',
+              term: 'Les Terres des Yomis',
+              tag: 'Mitamas et Libellules',
+              body: [
+                '1 : avancez votre Kodama de cette région.',
+                '2 : payez le coût, obtenez 1 tuile Mitama OU 1 tuile Libellule.',
+                '3 : idem, avec 1 ressource de réduction sur le Mitama.',
+                '4 : idem, avec 1 ressource de réduction sur l’un ou l’autre.',
+                '6 : payez les deux coûts, avec 1 réduction sur l’un, et obtenez 1 Mitama ET 1 Libellule.',
+              ],
+              note: 'Cette région est liée au Sentier tortueux des Mitamas.',
+              ref: 'Les Terres des Yomis — p.19',
+            },
+            {
+              id: 'rg-escaliers',
+              term: 'Les Escaliers de la connaissance',
+              tag: 'points de mouvement',
+              body: [
+                '1 : avancez votre Kodama de cette région.',
+                '2 : gagnez 1 PM. 3 : gagnez 2 PM. 4 : gagnez 3 PM. 6 : gagnez 4 PM.',
+              ],
+              note: 'Cette région est liée aux Chemins de la sagesse, que les Pèlerins remontent avec des PM.',
+              ref: 'Les Escaliers de la connaissance — p.20',
+            },
+            {
+              id: 'rg-jade',
+              term: 'La Clairière de Jade',
+              tag: 'ressources',
+              body: [
+                '1 : avancez votre Kodama de cette région.',
+                '2 : prenez 1 bois ou 1 jade.',
+                '3 : prenez 1 ressource de votre choix.',
+                '4 : prenez 2 ressources de votre choix, dans n’importe quelle combinaison.',
+                '6 : prenez-en 3.',
+              ],
+              ref: 'La Clairière de Jade — p.21',
+            },
+            {
+              id: 'rg-forges',
+              term: 'Les Forges',
+              tag: 'Cristaux et Bâtiments',
+              body: [
+                '1 : avancez votre Kodama de cette région.',
+                '2 : construisez 1 Bâtiment sur un emplacement vide de son type, dans n’importe quelle Zone habitée.',
+                '3 et au-delà : obtenez 1 Cristal, ou construisez 1 Bâtiment, avec des réductions croissantes.',
+              ],
+              ref: 'Les Forges — p.21',
+            },
+            {
+              id: 'rg-demeure',
+              term: 'La Demeure du grand esprit',
+              tag: 'ordre du tour',
+              body: [
+                'N’importe quel dé peut y aller, quelle que soit sa valeur : le grand esprit est équitablement généreux.',
+                '1 : 1 Amulette +2. 2 : 1 Amulette +1 et 1 carte Vision.',
+                'À 3-4 joueurs : 1 Amulette +1 et 1 ressource, ou 1 Amulette +1 et 1 PM.',
+                'À 2 joueurs : 1 Amulette +1 et, au choix, 1 PM ou 1 ressource.',
+              ],
+              warn: 'C’est la position de vos dés ici qui décide de l’ordre du tour, déterminé en Automne.',
+              ref: 'La Demeure du grand esprit — p.20',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'symboles',
+      title: 'Icônes et symboles',
+      lead: 'Comment lire une case, une tuile ou une carte.',
+      icon: 'markers',
+      groups: [
+        {
+          entries: [
+            {
+              id: 'sy-chiffre',
+              term: 'Chiffre noir à droite d’une icône',
+              body: [
+                'Le nombre de fois que vous pouvez effectuer l’action associée.',
+                'Sans chiffre : une seule fois.',
+              ],
+              ref: 'Icônes et symboles — p.7',
+            },
+            {
+              id: 'sy-main-rouge',
+              term: 'Main rouge',
+              body: ['Vous devez payer la ressource indiquée, remise à la réserve générale.'],
+              ref: 'Icônes et symboles — p.7',
+            },
+            {
+              id: 'sy-main-orange',
+              term: 'Main orange',
+              body: [
+                'Une réduction : le coût baisse du montant indiqué, en ressources de n’importe quel type.',
+                'Une réduction de 2 peut retirer 2 sakés, ou 1 saké et 1 jade.',
+              ],
+              ref: 'Icônes et symboles — p.7',
+            },
+            {
+              id: 'sy-pv',
+              term: 'La couleur d’un Point de Vertu',
+              body: [
+                'Orange : vous gagnez ces PV immédiatement, en effectuant l’action.',
+                'Violet : vous ne les gagnez qu’à la fin de la partie, à l’ascension.',
+                'Gris : c’est une perte de PV.',
+              ],
+              ref: 'Icônes et symboles — p.7',
+            },
+            {
+              id: 'sy-slash',
+              term: 'La barre oblique « / »',
+              body: ['Vous choisissez de quel côté vous bénéficiez. Jamais des deux.'],
+              ref: 'Icônes et symboles — p.7',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'visions',
+      title: 'Cartes Vision et Pèlerins',
+      lead: 'Vos objectifs personnels, et comment les Pèlerins avancent.',
+      icon: 'items',
+      groups: [
+        {
+          title: 'Cartes Vision',
+          entries: [
+            {
+              id: 'vi-obtenir',
+              term: 'Obtenir une carte Vision',
+              body: [
+                'Piochez 2 cartes Vision.',
+                'Gardez-en 1 face visible à côté de votre plateau, et remettez l’autre face cachée sous le paquet.',
+                'Ou n’en gardez aucune : remettez les deux sous le paquet et prenez 1 ressource de votre choix.',
+              ],
+              ref: 'Cartes Vision — p.16',
+            },
+            {
+              id: 'vi-decompte',
+              term: 'Réaliser une Vision',
+              body: [
+                'Toutes les tâches de la carte doivent être accomplies avant le début de l’ascension.',
+                'Réalisée : vous gagnez les PV imprimés. Manquée : vous en perdez 1 ou 2, selon la carte.',
+              ],
+              warn: 'Chaque élément de jeu ne sert qu’à une seule Vision. Deux Visions qui demandent un Cristal demandent deux Cristaux.',
+              ref: 'Cartes Vision — p.16',
+            },
+          ],
+        },
+        {
+          title: 'Les Chemins de la sagesse',
+          lead: 'Ce que vos Pèlerins parcourent, à raison de 1 PM par case.',
+          entries: [
+            {
+              id: 'vi-illumination',
+              term: 'Case Illumination',
+              body: [
+                'Elle accorde des PV et des Amulettes au Pèlerin qui s’y déplace.',
+                'Le Pèlerin est alors retourné face Endormi : il ne bougera plus de la partie, il a atteint son objectif.',
+              ],
+              ref: 'Chemins de la sagesse — p.19',
+            },
+            {
+              id: 'vi-portail',
+              term: 'Case Portail',
+              body: [
+                'Mêmes règles qu’une case Illumination, plus l’action imprimée sur la tuile Portail, à effectuer immédiatement.',
+                'Un nouveau Pèlerinage pourra ensuite démarrer de la case adjacente à ce Portail.',
+              ],
+              ref: 'Chemins de la sagesse — p.19',
+            },
+            {
+              id: 'vi-pont',
+              term: 'Case Pont',
+              body: [
+                '1 PM ne suffit pas : il faut aussi avoir progressé sur votre Chemin de Bitoku.',
+                'Premier Pont : au moins la première carte Bitoku accomplie. Second Pont : au moins la deuxième.',
+              ],
+              ref: 'Chemins de la sagesse — p.19',
+            },
+            {
+              id: 'vi-cases',
+              term: 'Occupation des sentiers',
+              body: [
+                'Une case ne porte qu’un seul Pèlerin à la fois.',
+                'Deux Pèlerins d’un même joueur ne peuvent pas occuper deux cases du même sentier.',
+                'Se déplacer coûte toujours 1 PM par case, occupée par un adversaire ou non.',
+              ],
+              ref: 'Chemins de la sagesse — p.19',
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: 'tengu',
+      title: 'Le Tengu, en solo',
+      lead: 'Ce qui change quand l’adversaire est automatisé.',
+      icon: 'summary',
+      groups: [
+        {
+          title: 'Son tour, étape par étape',
+          entries: [
+            {
+              id: 'tg-a',
+              term: 'A. Lancez les deux dés Volonté',
+              body: ['Les deux dés du Tengu, lancés au début de son tour.'],
+              ref: 'Mode solo — p.28',
+            },
+            {
+              id: 'tg-b',
+              term: 'B. Choisissez sa carte Action',
+              body: [
+                'Selon la valeur la PLUS BASSE des deux dés :',
+                '1 ou 2 : la carte de droite. 3 ou 4 : celle du milieu. 5 ou 6 : celle de gauche.',
+                'Cette carte devient la carte Tengu active.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+            {
+              id: 'tg-c',
+              term: 'C. Suivez le Cycle d’Activation',
+              body: [
+                'Descendez le Cycle d’Activation du Tengu jusqu’à la première étape dont les conditions sont réunies, et effectuez ses actions.',
+                'Le Cycle se lit en fonction de la carte Tengu active, et dit quoi faire des dés et des ressources du Tengu.',
+              ],
+              ref: 'Mode solo — pp.28-29 et p.31',
+            },
+            {
+              id: 'tg-d',
+              term: 'D. Faites glisser les cartes',
+              body: [
+                'Défaussez la carte active, glissez les autres cartes face visible vers la droite, et complétez le vide de gauche par le dessus du paquet.',
+                'Paquet vide : mélangez les 8 cartes de la défausse — pas les 2 encore en rangée — et reformez un paquet face visible.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+          ],
+        },
+        {
+          title: 'Les saisons, revues',
+          entries: [
+            {
+              id: 'tg-printemps',
+              term: 'Printemps',
+              body: [
+                'Le Tengu ne pioche jamais de carte Yōkai.',
+                'À l’étape Récolter les fruits, il gagne et dépense aussitôt 1 PM par Cristal sur son plateau.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+            {
+              id: 'tg-ete',
+              term: 'Été',
+              body: [
+                'Le Tengu et vous alternez, dans l’ordre de la piste Ordre du tour. Il commence toujours la première manche.',
+                'Vous jouez vos tours normalement, avec toutes les limitations habituelles.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+            {
+              id: 'tg-hiver',
+              term: 'Hiver',
+              body: [
+                'Le Tengu ne décompte jamais ses cartes Yōkai et n’interagit jamais avec elles.',
+                'Avant d’avancer le pion Grand esprit, retirez du jeu un Rocher d’Iwakura pris au hasard dans le Jardin des Rochers.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+            {
+              id: 'tg-termes',
+              term: 'Deux termes du Cycle',
+              body: [
+                'Action disponible : aucune case n’est occupée par un dé, ni le vôtre ni celui du Tengu.',
+                'Bitoku le plus rare : celui dont l’indice de rareté est le plus bas parmi ceux en jeu.',
+              ],
+              ref: 'Mode solo — p.28',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+
+  index: [
+    {
+      term: 'Point de Vertu',
+      aliases: ['PV'],
+      body: [
+        'La monnaie unique du jeu. On avance d’autant de cases sur le Chemin de l’esprit, qui borde le plateau.',
+        'Orange : gagné tout de suite. Violet : gagné à l’ascension. Gris : perdu.',
+      ],
+      ref: 'But du jeu — p.2 · Icônes — p.7',
+    },
+    {
+      term: 'Point de mouvement',
+      aliases: ['PM'],
+      body: [
+        'Sert à déplacer un Pèlerin d’une case sur les Chemins de la sagesse, ou votre Bitoku sur son Chemin.',
+        'Les Escaliers de la connaissance sont la région qui en donne le plus.',
+      ],
+      ref: 'Points de mouvement — p.18',
+    },
+    {
+      term: 'Ascension',
+      body: [
+        'Le décompte final, après la phase d’Hiver de la quatrième manche.',
+        'Huit étapes, de A à H. Au-delà de 100 PV, on retourne son drapeau sur sa face « +100 PV ».',
+      ],
+      ref: 'Décompte final — p.14',
+    },
+    {
+      term: 'Piste Ordre du tour',
+      body: [
+        'Elle décide de l’ordre des tours d’Été. Elle est fixée en Automne, selon la position des dés de chacun dans la Demeure du grand esprit.',
+        'La première place rapporte 3 PV à l’ascension, et départage les égalités.',
+      ],
+      ref: 'La Demeure du grand esprit — p.20',
+    },
+    {
+      term: 'Piste Kodama',
+      body: [
+        'Une par région de la forêt. On y avance en posant un dé de valeur 1 ou plus dans la région.',
+        'Le classement final donne les PV de la tuile Trésor du lac de cette région.',
+      ],
+      ref: 'Pistes Kodama — p.23 · Décompte final — p.14',
+    },
+    {
+      term: 'Chemin de Bitoku',
+      body: [
+        'Votre suite personnelle de cartes Bitoku accomplies.',
+        'Il conditionne le franchissement des Ponts sur les Chemins de la sagesse, et le nombre de types différents rapporte des PV à l’ascension.',
+      ],
+      ref: 'Cartes Bitoku — p.12 · Décompte final — p.14',
+    },
+    {
+      term: 'Amulette',
+      body: [
+        'Elle modifie la valeur d’un dé. Une Amulette +1 ajoute 1, une Amulette +2 ajoute 2.',
+        'La Demeure du grand esprit en distribue à chaque case.',
+      ],
+      ref: 'Amulettes — p.9',
+    },
+    {
+      term: 'Option de difficulté accrue',
+      body: [
+        'Quatre restrictions optionnelles au placement des dés : pas plus d’une action Forêt et une action Bâtiment par dé ;',
+        'pas d’action Bâtiment avec un Bâtiment construit le même tour ; pas de dé posé de son plateau vers les Collines de l’autre rive ;',
+        'un dé bloqué s’utilise en défaussant définitivement un Pèlerin disponible.',
+      ],
+      ref: 'Augmenter la difficulté — p.9',
+    },
+    {
+      term: 'Zone habitée',
+      body: ['L’une des zones où se construisent les Bâtiments, chacune liée à une région de la forêt.'],
+      ref: 'Le plateau principal — p.17',
+    },
+    {
+      term: 'Rocher d’Iwakura',
+      body: [
+        'Une tuile posée sur votre plateau individuel. Elle indique des éléments à collectionner.',
+        'À l’ascension, chaque Pèlerin placé à côté rapporte 1 PV par élément possédé.',
+      ],
+      ref: 'Décompte final — p.15',
+    },
+  ],
 
   /* ------------------------------------------------------------ matériel */
 
@@ -322,6 +858,18 @@ export const bitoku: Tutorial = {
           ref: 'But du jeu — p.2',
         },
         {
+          id: 'b2b',
+          kind: 'info',
+          title: 'Où vous êtes, et qui vous êtes',
+          body: [
+            'Une forêt primitive, l’un des Cinq Cœurs du Monde, vieille de plusieurs millénaires.',
+            'Le grand esprit qui la veille arrive au terme de son existence, et doit se choisir un successeur.',
+            'Vous êtes un Bitoku, l’un des candidats. Vous avez quatre ans — quatre manches — pour prouver que vous méritez cet honneur.',
+          ],
+          components: ['plateau'],
+          ref: 'But du jeu — p.2',
+        },
+        {
           id: 'b3',
           kind: 'info',
           title: 'Des Points de Vertu, sur le Chemin de l’esprit',
@@ -330,6 +878,36 @@ export const bitoku: Tutorial = {
             'Lors de l’ascension, des PV supplémentaires viennent des objectifs accomplis. L’esprit le plus avancé devient le nouveau grand esprit.',
           ],
           ref: 'But du jeu — p.2',
+        },
+        {
+          id: 'b3b',
+          kind: 'info',
+          title: 'Ce que vous faites de vos tours',
+          body: [
+            'Un tour d’Été, c’est un dé posé quelque part. Toute la partie tient dans le choix de l’endroit et de la valeur.',
+            'Chaque région de la forêt donne une chose et une seule : Mitamas et Libellules aux Terres des Yomis, points de mouvement aux Escaliers, ressources à la Clairière de Jade, Cristaux et Bâtiments aux Forges.',
+            'Plus le dé est fort, plus l’action est généreuse — mais il doit être au moins aussi fort que tous les autres déjà dans la région.',
+            'Chaque piste que vous montez se transforme en PV à l’ascension : les Kodamas, le Chemin de Bitoku, les Chemins de la sagesse. Rien n’est décoratif.',
+          ],
+          warn: 'Vos ressources et vos dés restants ne rapportent qu’un quart de leur somme à l’ascension, arrondi à l’inférieur. Ce qui n’est pas dépensé est presque perdu.',
+          components: ['des', 'kodamas'],
+          ref: 'But du jeu — p.2 · Décompte final — p.15',
+        },
+        {
+          id: 'b3c',
+          kind: 'info',
+          title: 'Vos premiers tours',
+          ext: true,
+          extSource: 'guides de jeu en ligne',
+          body: [
+            'Lisez votre carte Vision de départ avant votre premier dé : elle vous dit quelle direction prendre dans la forêt.',
+            'Les Escaliers de la connaissance sont la région la plus sous-estimée. Les points de mouvement font avancer les Pèlerins, et les Pèlerins font des PV à l’ascension.',
+            'Montez un Kodama haut plutôt que trois à mi-hauteur : les Trésors du lac récompensent la première place, pas la présence.',
+            'Un Rocher d’Iwakura sans Pèlerin à côté ne rapporte rien. Prévoyez le Pèlerin en même temps que le Rocher.',
+            'L’ordre du tour se décide en Automne, par la position de vos dés dans la Demeure du grand esprit. La première place vaut 3 PV et le premier choix.',
+          ],
+          warn: 'Ces conseils ne sont pas dans le livret de règles : ce sont des habitudes de joueurs, pas des obligations.',
+          ref: 'Aucune — hors livret',
         },
         {
           id: 'b4',
